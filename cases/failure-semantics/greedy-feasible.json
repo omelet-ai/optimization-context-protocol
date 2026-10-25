@@ -1,0 +1,61 @@
+{
+  "format": "ocp-opensource/design-case/v0",
+  "status": "verified_legacy_counterexample_not_product_fix",
+  "resources": [
+    {
+      "id": "r1",
+      "max_capacity": 6
+    },
+    {
+      "id": "r2",
+      "max_capacity": 6
+    }
+  ],
+  "demands": [
+    {
+      "id": "d1",
+      "amount": 3
+    },
+    {
+      "id": "d2",
+      "amount": 3
+    },
+    {
+      "id": "d3",
+      "amount": 2
+    },
+    {
+      "id": "d4",
+      "amount": 2
+    },
+    {
+      "id": "d5",
+      "amount": 2
+    }
+  ],
+  "configuration": {
+    "objectives": [
+      "maximize_allocated"
+    ],
+    "constraints": [
+      "capacity",
+      "all_demands_served"
+    ]
+  },
+  "witness": {
+    "r1": [
+      "d1",
+      "d2"
+    ],
+    "r2": [
+      "d3",
+      "d4",
+      "d5"
+    ]
+  },
+  "expected_legacy_unassigned": [
+    "d5"
+  ],
+  "expected_legacy_objective_value": 10,
+  "meaning": "Heuristic failure is not proof of infeasibility."
+}

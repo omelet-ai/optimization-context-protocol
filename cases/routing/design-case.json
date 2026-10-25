@@ -1,0 +1,64 @@
+{
+  "format": "ocp-opensource/design-case/v0",
+  "status": "synthetic_model_witness_only_not_api_payload",
+  "distance_model": "euclidean_xy_abstract_units",
+  "depot": [
+    0,
+    0
+  ],
+  "vehicles": [
+    {
+      "id": "v1",
+      "capacity": 3
+    },
+    {
+      "id": "v2",
+      "capacity": 3
+    }
+  ],
+  "visits": [
+    {
+      "id": "a",
+      "point": [
+        1,
+        0
+      ],
+      "demand": 1
+    },
+    {
+      "id": "b",
+      "point": [
+        1,
+        1
+      ],
+      "demand": 1
+    },
+    {
+      "id": "c",
+      "point": [
+        0,
+        1
+      ],
+      "demand": 1
+    },
+    {
+      "id": "d",
+      "point": [
+        2,
+        1
+      ],
+      "demand": 1
+    }
+  ],
+  "witness_routes": {
+    "v1": [
+      "a",
+      "b"
+    ],
+    "v2": [
+      "c",
+      "d"
+    ]
+  },
+  "expected": "Each visit once, each load <= capacity, return to depot. No optimality claim."
+}

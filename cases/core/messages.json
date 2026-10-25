@@ -1,0 +1,350 @@
+{
+  "status": "synthetic_contract_fixtures_not_engine_execution",
+  "positive": [
+    {
+      "id": "CORE-CAPABILITY",
+      "message": {
+        "core_version": "0.1.0",
+        "kind": "capability",
+        "capability": {
+          "id": "example.assignment",
+          "version": "0.1.0"
+        },
+        "domain_profile": {
+          "id": "assignment.fixture",
+          "version": "0.1.0"
+        },
+        "execution_profiles": [
+          {
+            "id": "execution.sync",
+            "version": "0.1.0"
+          }
+        ],
+        "bindings": [
+          {
+            "id": "binding.in_process",
+            "version": "0.1.0"
+          }
+        ],
+        "environments": [
+          {
+            "id": "environment.local",
+            "version": "0.1.0"
+          }
+        ],
+        "objectives": [
+          {
+            "id": "cost",
+            "direction": "minimize",
+            "role": "optimized",
+            "definition": "sum of assigned costs",
+            "unit": "cost_unit"
+          }
+        ],
+        "constraints": [
+          {
+            "id": "unique_assignment",
+            "kind": "hard",
+            "role": "enforced",
+            "definition": "each item assigned once",
+            "unit": "count"
+          }
+        ],
+        "configuration_schema": {
+          "type": "object"
+        },
+        "input_schema_id": "urn:ocp:example:assignment:input",
+        "solution_schema_id": "urn:ocp:example:assignment:solution",
+        "defaults": {
+          "objectives": [
+            {
+              "id": "cost",
+              "weight": 1
+            }
+          ],
+          "constraints": [
+            "unique_assignment"
+          ],
+          "parameters": {}
+        },
+        "limitations": [
+          "Synthetic contract example; not a solver"
+        ]
+      }
+    },
+    {
+      "id": "CORE-REQUEST",
+      "message": {
+        "core_version": "0.1.0",
+        "kind": "request",
+        "request_id": "fixture-1",
+        "capability": {
+          "id": "example.assignment",
+          "version": "0.1.0"
+        },
+        "domain_profile": {
+          "id": "assignment.fixture",
+          "version": "0.1.0"
+        },
+        "execution_profile": {
+          "id": "execution.sync",
+          "version": "0.1.0"
+        },
+        "configuration": {
+          "objectives": [
+            {
+              "id": "cost",
+              "weight": 1
+            }
+          ],
+          "constraints": [
+            "unique_assignment"
+          ],
+          "parameters": {}
+        },
+        "input": {
+          "items": [
+            "a"
+          ],
+          "workers": [
+            "w"
+          ],
+          "costs": [
+            [
+              3
+            ]
+          ]
+        },
+        "budget": {
+          "time_limit_ms": 1000
+        }
+      }
+    },
+    {
+      "id": "CORE-REQUIREMENTS",
+      "message": {
+        "core_version": "0.1.0",
+        "kind": "requirements",
+        "capability": {
+          "id": "example.assignment",
+          "version": "0.1.0"
+        },
+        "domain_profile": {
+          "id": "assignment.fixture",
+          "version": "0.1.0"
+        },
+        "effective_configuration": {
+          "objectives": [
+            {
+              "id": "cost",
+              "weight": 1
+            }
+          ],
+          "constraints": [
+            "unique_assignment"
+          ],
+          "parameters": {}
+        },
+        "required_fields": [
+          {
+            "path": "/costs",
+            "reason": "cost objective input",
+            "unit": "cost_unit"
+          }
+        ],
+        "input_schema_id": "urn:ocp:example:assignment:input"
+      }
+    },
+    {
+      "id": "CORE-VALIDATION",
+      "message": {
+        "core_version": "0.1.0",
+        "kind": "validation",
+        "request_id": "fixture-1",
+        "valid": true,
+        "issues": []
+      }
+    },
+    {
+      "id": "CORE-RESULT",
+      "message": {
+        "core_version": "0.1.0",
+        "kind": "result",
+        "request_id": "fixture-1",
+        "capability": {
+          "id": "example.assignment",
+          "version": "0.1.0"
+        },
+        "domain_profile": {
+          "id": "assignment.fixture",
+          "version": "0.1.0"
+        },
+        "execution_profile": {
+          "id": "execution.sync",
+          "version": "0.1.0"
+        },
+        "effective_configuration": {
+          "objectives": [
+            {
+              "id": "cost",
+              "weight": 1
+            }
+          ],
+          "constraints": [
+            "unique_assignment"
+          ],
+          "parameters": {}
+        },
+        "status": "feasible",
+        "termination": "completed",
+        "solution": {
+          "assignments": [
+            [
+              "a",
+              "w"
+            ]
+          ]
+        },
+        "proof": null,
+        "metrics": [
+          {
+            "id": "cost",
+            "role": "optimized",
+            "definition": "sum of assigned costs",
+            "unit": "cost_unit",
+            "source": "independent",
+            "status": "evaluated",
+            "value": 3,
+            "reason": null
+          }
+        ],
+        "constraints": [
+          {
+            "id": "unique_assignment",
+            "role": "enforced",
+            "definition": "each item assigned once",
+            "unit": "count",
+            "source": "independent",
+            "status": "evaluated",
+            "violation": 0,
+            "satisfied": true,
+            "reason": null
+          }
+        ],
+        "provenance": {
+          "implementation": {
+            "id": "contract-example",
+            "version": "0.1.0"
+          },
+          "engine": {
+            "id": "fixture-only",
+            "version": "0.1.0"
+          },
+          "request_id": "fixture-1",
+          "limitations": [
+            "Not an engine execution"
+          ]
+        }
+      }
+    },
+    {
+      "id": "CORE-FAILURE",
+      "message": {
+        "core_version": "0.1.0",
+        "kind": "failure",
+        "request_id": "fixture-1",
+        "error": {
+          "code": "UNSUPPORTED_CONFIGURATION",
+          "message": "Unsupported choice",
+          "retryable": false,
+          "issues": [
+            {
+              "code": "UNSUPPORTED_OBJECTIVE",
+              "path": "/configuration/objectives/0/id",
+              "message": "Unknown objective"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "CORE-EVALUATION",
+      "message": {
+        "core_version": "0.1.0",
+        "kind": "evaluation",
+        "request_id": "fixture-1",
+        "capability": {
+          "id": "example.assignment",
+          "version": "0.1.0"
+        },
+        "domain_profile": {
+          "id": "assignment.fixture",
+          "version": "0.1.0"
+        },
+        "metrics": [
+          {
+            "id": "cost",
+            "role": "optimized",
+            "definition": "sum of assigned costs",
+            "unit": "cost_unit",
+            "source": "independent",
+            "status": "evaluated",
+            "value": 3,
+            "reason": null
+          }
+        ],
+        "constraints": [
+          {
+            "id": "unique_assignment",
+            "role": "enforced",
+            "definition": "each item assigned once",
+            "unit": "count",
+            "source": "independent",
+            "status": "evaluated",
+            "violation": 0,
+            "satisfied": true,
+            "reason": null
+          }
+        ],
+        "evaluator": {
+          "id": "fixture-evaluator",
+          "version": "0.1.0"
+        },
+        "limitations": [
+          "Synthetic fixture only"
+        ]
+      }
+    },
+    {
+      "id": "CORE-CONFORMANCE",
+      "message": {
+        "core_version": "0.1.0",
+        "kind": "conformance",
+        "implementation": {
+          "id": "fixture",
+          "version": "0.1.0"
+        },
+        "artifact": {
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+        },
+        "suite": {
+          "id": "example-suite",
+          "version": "0.1.0"
+        },
+        "profiles": [
+          {
+            "id": "assignment.fixture",
+            "version": "0.1.0"
+          }
+        ],
+        "checks": [
+          {
+            "id": "EXAMPLE-ONLY",
+            "status": "NOT_TESTED",
+            "reason": "Synthetic report shape, no product certification"
+          }
+        ]
+      }
+    }
+  ]
+}

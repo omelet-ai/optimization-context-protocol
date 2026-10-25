@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.46.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ocp-candidate"
+version = "0.1.0"
+description = "Private technical candidate for independent optimization interfaces"
+requires-python = ">=3.12"
+dependencies = ["jsonschema==4.26.0"]
+
+[project.optional-dependencies]
+reference = ["ortools==9.15.6755"]
+mcp = ["mcp==2.3.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ocp_candidate = ["schemas/*.json", "schema-manifest.json"]

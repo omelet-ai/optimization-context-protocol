@@ -1,0 +1,559 @@
+{
+  "schema": "ocp-requirements-traceability/v1",
+  "requirements": [
+    {
+      "id": "REQ-CORE-001",
+      "gate": "H01",
+      "meaning": "strict envelope and exact Core version",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_03_unknown_core_version",
+        "test_04_unknown_envelope_field"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-002",
+      "gate": "H01",
+      "meaning": "versioned independent references",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_06_missing_identity",
+        "test_07_bad_profile_version"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-003",
+      "gate": "H01",
+      "meaning": "domain and product neutrality",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_28_no_domain_or_omelet_requirements_in_core"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-004",
+      "gate": "H01",
+      "meaning": "supported and unsupported extensions",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_08_required_extension_rejected",
+        "test_09_optional_extension_is_advisory",
+        "test_11_duplicate_extension_rejected"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-005",
+      "gate": "H01",
+      "meaning": "explicit unambiguous configuration",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_05_unknown_configuration_field",
+        "test_10_duplicate_objective_rejected",
+        "test_12_negative_weight_rejected"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-006",
+      "gate": "H01",
+      "meaning": "feasibility and proof status",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_17_feasible_needs_solution",
+        "test_18_optimal_needs_proof",
+        "test_19_infeasible_needs_proof",
+        "test_20_timeout_is_not_proof"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-007",
+      "gate": "H01",
+      "meaning": "timeout and unknown distinction",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_21_unknown_after_timeout_has_no_solution_or_proof",
+        "test_22_feasible_at_timeout_is_allowed"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-008",
+      "gate": "H01",
+      "meaning": "null and evaluation consistency",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_23_not_evaluated_is_not_zero",
+        "test_24_not_evaluated_requires_reason",
+        "test_25_evaluated_requires_value",
+        "test_26_constraint_violation_consistency"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-009",
+      "gate": "H01",
+      "meaning": "request provenance correlation",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_27_result_request_link"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-010",
+      "gate": "H01",
+      "meaning": "validation is separate from solve",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_29_validation_false_requires_issue"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-011",
+      "gate": "H01",
+      "meaning": "strict finite lossless JSON",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_13_boolean_budget_rejected",
+        "test_14_nonfinite_number_rejected",
+        "test_15_duplicate_json_key_rejected",
+        "test_16_json_overflow_rejected",
+        "test_34_integer_precision_bound",
+        "test_35_float_integer_precision_bound"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-012",
+      "gate": "H01",
+      "meaning": "provider-owned schema and defaults",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_30_default_configuration_must_match_schema",
+        "test_33_external_schema_reference_is_not_fetched"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-013",
+      "gate": "H01",
+      "meaning": "conformance scope and real checks",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_31_conformance_empty_checks_rejected"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-CORE-014",
+      "gate": "H01",
+      "meaning": "schema and representative consumers",
+      "normative_source": "spec/core/CORE_0_1.md",
+      "implementation": [
+        "spec/schemas/core-0.1.schema.json",
+        "conformance/core_contract.py"
+      ],
+      "checker": "tools/check_h01.py",
+      "tests": [
+        "test_01_schema_is_draft202012",
+        "test_02_all_message_kinds_have_positive_fixture",
+        "test_32_requirements_traceability"
+      ],
+      "consumer": "synthetic assignment contract consumer",
+      "evidence": "latest valid H01 report; not engine execution"
+    },
+    {
+      "id": "REQ-ROUTING-001",
+      "gate": "H02",
+      "meaning": "explicit integer matrix, units and identity",
+      "normative_source": "spec/profiles/ROUTING_BASIC_0_1.md",
+      "implementation": [
+        "spec/schemas/routing-input-0.1.schema.json",
+        "spec/schemas/routing-solution-0.1.schema.json",
+        "conformance/routing.py"
+      ],
+      "checker": "tools/check_h02.py",
+      "tests": [
+        "test_06_unit_mismatch",
+        "test_07_non_integer_distance",
+        "test_09_duplicate_visit",
+        "test_11_missing_matrix_node",
+        "test_12_matrix_shape",
+        "test_13_matrix_diagonal",
+        "test_14_asymmetric_edges_preserved"
+      ],
+      "consumer": "independent synthetic routing checker",
+      "evidence": "latest valid H02 report; no remote API execution"
+    },
+    {
+      "id": "REQ-ROUTING-002",
+      "gate": "H02",
+      "meaning": "capacity and mandatory visits",
+      "normative_source": "spec/profiles/ROUTING_BASIC_0_1.md",
+      "implementation": [
+        "spec/schemas/routing-input-0.1.schema.json",
+        "spec/schemas/routing-solution-0.1.schema.json",
+        "conformance/routing.py"
+      ],
+      "checker": "tools/check_h02.py",
+      "tests": [
+        "test_04_missing_demand",
+        "test_15_missing_visit_not_feasible",
+        "test_16_duplicate_visit_not_feasible",
+        "test_17_over_capacity_not_feasible",
+        "test_18_unknown_visit_is_not_zero",
+        "test_19_missing_vehicle_route"
+      ],
+      "consumer": "independent synthetic routing checker",
+      "evidence": "latest valid H02 report; no remote API execution"
+    },
+    {
+      "id": "REQ-ROUTING-003",
+      "gate": "H02",
+      "meaning": "actual supported configuration and execution",
+      "normative_source": "spec/profiles/ROUTING_BASIC_0_1.md",
+      "implementation": [
+        "spec/schemas/routing-input-0.1.schema.json",
+        "spec/schemas/routing-solution-0.1.schema.json",
+        "conformance/routing.py"
+      ],
+      "checker": "tools/check_h02.py",
+      "tests": [
+        "test_20_unsupported_objective_weight",
+        "test_21_time_window_is_rejected",
+        "test_22_unsupported_combination",
+        "test_23_version_mismatch",
+        "test_24_fake_async_rejected"
+      ],
+      "consumer": "independent synthetic routing checker",
+      "evidence": "latest valid H02 report; no remote API execution"
+    },
+    {
+      "id": "REQ-ROUTING-004",
+      "gate": "H02",
+      "meaning": "independent evaluation and drift rejection",
+      "normative_source": "spec/profiles/ROUTING_BASIC_0_1.md",
+      "implementation": [
+        "spec/schemas/routing-input-0.1.schema.json",
+        "spec/schemas/routing-solution-0.1.schema.json",
+        "conformance/routing.py"
+      ],
+      "checker": "tools/check_h02.py",
+      "tests": [
+        "test_01_known_witness_has_cost_18",
+        "test_25_result_recomputed",
+        "test_26_wrong_engine_objective_caught",
+        "test_27_enforced_constraint_not_downgraded",
+        "test_28_result_identity_mismatch"
+      ],
+      "consumer": "independent synthetic routing checker",
+      "evidence": "latest valid H02 report; no remote API execution"
+    },
+    {
+      "id": "REQ-ROUTING-005",
+      "gate": "H02",
+      "meaning": "independent proof and unknown boundaries",
+      "normative_source": "spec/profiles/ROUTING_BASIC_0_1.md",
+      "implementation": [
+        "spec/schemas/routing-input-0.1.schema.json",
+        "spec/schemas/routing-solution-0.1.schema.json",
+        "conformance/routing.py"
+      ],
+      "checker": "tools/check_h02.py",
+      "tests": [
+        "test_02_exhaustive_oracle_matches_manual_optimum",
+        "test_03_greedy_counterexample_is_feasible",
+        "test_29_false_infeasible_proof_caught",
+        "test_30_unknown_cannot_have_evaluated_metric",
+        "test_31_timeout_unknown_is_preserved",
+        "test_32_oracle_scope_is_bounded",
+        "test_34_capacity_impossible_is_independently_proven"
+      ],
+      "consumer": "independent synthetic routing checker",
+      "evidence": "latest valid H02 report; no remote API execution"
+    },
+    {
+      "id": "REQ-ADAPTER-001",
+      "gate": "H03",
+      "meaning": "real library execution and declaration",
+      "normative_source": "spec/bindings/PYTHON_PORT_0_1.md",
+      "implementation": [
+        "sdk/python/src/ocp_candidate",
+        "adapters/python/ocp_routing"
+      ],
+      "checker": "tools/check_h03.py",
+      "tests": [
+        "test_01_real_library_solve_and_independent_evaluation",
+        "test_02_describe_matches_core",
+        "test_03_requirements_preserve_selection"
+      ],
+      "consumer": "generic Python Client from built wheel",
+      "evidence": "latest valid H03 report; real OR-Tools and explicitly separate injected tests"
+    },
+    {
+      "id": "REQ-ADAPTER-002",
+      "gate": "H03",
+      "meaning": "validate before execution and reject unsupported",
+      "normative_source": "spec/bindings/PYTHON_PORT_0_1.md",
+      "implementation": [
+        "sdk/python/src/ocp_candidate",
+        "adapters/python/ocp_routing"
+      ],
+      "checker": "tools/check_h03.py",
+      "tests": [
+        "test_04_validate_does_not_call_engine",
+        "test_05_weight_rejected_before_solve",
+        "test_06_missing_data_rejected",
+        "test_07_direct_adapter_checks_version",
+        "test_08_async_is_not_emulated",
+        "test_09_required_extension_is_rejected",
+        "test_10_budget_not_silently_clipped"
+      ],
+      "consumer": "generic Python Client from built wheel",
+      "evidence": "latest valid H03 report; real OR-Tools and explicitly separate injected tests"
+    },
+    {
+      "id": "REQ-ADAPTER-003",
+      "gate": "H03",
+      "meaning": "state, objective and error integrity",
+      "normative_source": "spec/bindings/PYTHON_PORT_0_1.md",
+      "implementation": [
+        "sdk/python/src/ocp_candidate",
+        "adapters/python/ocp_routing"
+      ],
+      "checker": "tools/check_h03.py",
+      "tests": [
+        "test_12_engine_exception_is_sanitized",
+        "test_13_search_failure_is_unknown",
+        "test_14_timeout_mapping_is_unknown",
+        "test_15_engine_wrong_cost_is_rejected",
+        "test_16_engine_missing_visit_is_rejected",
+        "test_17_analytic_infeasibility_has_verified_proof"
+      ],
+      "consumer": "generic Python Client from built wheel",
+      "evidence": "latest valid H03 report; real OR-Tools and explicitly separate injected tests"
+    },
+    {
+      "id": "REQ-ADAPTER-004",
+      "gate": "H03",
+      "meaning": "generic consumer preservation",
+      "normative_source": "spec/bindings/PYTHON_PORT_0_1.md",
+      "implementation": [
+        "sdk/python/src/ocp_candidate",
+        "adapters/python/ocp_routing"
+      ],
+      "checker": "tools/check_h03.py",
+      "tests": [
+        "test_11_input_is_not_mutated",
+        "test_18_client_rejects_changed_request_identity",
+        "test_19_client_rejects_changed_configuration",
+        "test_24_empty_request_id_not_silently_replaced"
+      ],
+      "consumer": "generic Python Client from built wheel",
+      "evidence": "latest valid H03 report; real OR-Tools and explicitly separate injected tests"
+    },
+    {
+      "id": "REQ-ADAPTER-005",
+      "gate": "H03",
+      "meaning": "independent candidate artifact boundary",
+      "normative_source": "spec/bindings/PYTHON_PORT_0_1.md",
+      "implementation": [
+        "sdk/python/src/ocp_candidate",
+        "adapters/python/ocp_routing"
+      ],
+      "checker": "tools/check_h03.py",
+      "tests": [
+        "test_20_standalone_wheel_has_no_workspace_import",
+        "test_21_bundled_schemas_match_canonical_hashes"
+      ],
+      "consumer": "generic Python Client from built wheel",
+      "evidence": "latest valid H03 report; real OR-Tools and explicitly separate injected tests"
+    },
+    {
+      "id": "REQ-DX-001",
+      "gate": "H04",
+      "meaning": "No-key App A independent installation and own inputs",
+      "normative_source": "examples/app-a/README.md",
+      "implementation": [
+        "examples/app-a/main.py",
+        "tools/isolated_candidate.py"
+      ],
+      "checker": "tools/check_h04.py",
+      "tests": [
+        "test_01_clean_package_origin",
+        "test_02_offline_no_key_sample",
+        "test_05_single_vehicle_capacity_real",
+        "test_08_seeded_tiny_instances_against_oracle",
+        "test_09_packing_failure_is_unknown_not_infeasible"
+      ],
+      "consumer": "App A installed Python consumer",
+      "evidence": "latest valid H04 report; macOS arm64 CPython3.12, no external-user acceptance"
+    },
+    {
+      "id": "REQ-CONFORMANCE-001",
+      "gate": "H05",
+      "meaning": "Independent scoped verification and second-domain witness",
+      "normative_source": "conformance/README.md",
+      "implementation": [
+        "conformance/runner.py",
+        "conformance/assignment.py"
+      ],
+      "checker": "tools/check_h05.py",
+      "tests": [
+        "test_01_valid_routing_and_bounded_report",
+        "test_02_second_domain_schema_requirements_and_result",
+        "test_17_unknown_optimized_metric",
+        "test_22_cli_real_files_exit_codes"
+      ],
+      "consumer": "provider-neutral offline transcript CLI",
+      "evidence": "latest valid H05 report; fixture semantics, not execution attestation"
+    },
+    {
+      "id": "REQ-BINDING-001",
+      "gate": "H06",
+      "meaning": "HTTP/TS/MCP preserve Core semantics and reject unsupported async",
+      "normative_source": "spec/bindings/HTTP_MCP_0_1.md",
+      "implementation": [
+        "runtime/python/ocp_runtime/http_server.py",
+        "runtime/python/ocp_runtime/mcp_server.py",
+        "sdk/typescript/src/client.ts"
+      ],
+      "checker": "tools/check_h06.py",
+      "tests": [
+        "test_02_python_http_client_real_solve",
+        "test_07_http_async_not_faked",
+        "test_14_typescript_app_b_real_solve",
+        "test_18_mcp_requirements_validate_execute_evaluate",
+        "test_21_typescript_bounds_untrusted_response_stream"
+      ],
+      "consumer": "App B and official MCP SDK subprocess host",
+      "evidence": "latest valid H06; local HTTP and stdio only"
+    },
+    {
+      "id": "REQ-TRIAL-001",
+      "gate": "H07",
+      "meaning": "Durable local identity/entitlement/quota/idempotency isolation",
+      "normative_source": "spec/environments/TRIAL_LOCAL_0_1.md",
+      "implementation": [
+        "runtime/python/ocp_runtime/trial.py"
+      ],
+      "checker": "tools/check_h07.py",
+      "tests": [
+        "test_06_key_rotation_keeps_organization_quota",
+        "test_10_concurrent_duplicates_single_dispatch",
+        "test_15_global_budget_shared_across_principals",
+        "test_19_orphan_reservation_never_auto_retried",
+        "test_26_actual_http_auth_and_idempotency"
+      ],
+      "consumer": "Local gateway with OR-Tools; synthetic principals",
+      "evidence": "latest valid H07; no real issuer/Omelet/monetary billing"
+    },
+    {
+      "id": "REQ-DX-002",
+      "gate": "H11",
+      "meaning": "Selected-source independent builds, clean no-key BYO and checker, bounded distribution claims",
+      "normative_source": "docs/users/GETTING_STARTED.md",
+      "implementation": [
+        "authoring/byo_library.py",
+        "tools/build_review_bundle.py",
+        "tools/build_conformance.py"
+      ],
+      "checker": "tools/check_h11.py",
+      "tests": [
+        "test_02_source_allowlist_and_hashes",
+        "test_04_clean_sdk_and_checker_without_ortools",
+        "test_05_actual_byo_engine_without_account_or_network",
+        "test_07_source_only_python_build",
+        "test_08_source_only_conformance_build",
+        "test_13_source_only_typescript_build",
+        "test_14_wheel_code_matches_selected_sources"
+      ],
+      "consumer": "Fresh Python BYO/checker and npm consumer from selected-source artifacts",
+      "evidence": "latest valid H11 report; private technical candidate only, no external-user acceptance"
+    }
+  ]
+}

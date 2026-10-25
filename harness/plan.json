@@ -1,0 +1,667 @@
+{
+  "schema": "ocp-development-harness/v1",
+  "candidate_scope": "private_local_technical_candidates",
+  "required_tasks": [
+    "BOOT-00",
+    "HARNESS-00",
+    "OSS-00",
+    "OSS-01",
+    "OSS-02",
+    "OSS-03",
+    "OSS-04",
+    "OSS-05",
+    "OSS-06",
+    "OSS-07",
+    "OSS-08",
+    "OSS-09",
+    "OSS-10",
+    "OSS-11",
+    "OSS-12",
+    "OSS-13",
+    "OSS-14"
+  ],
+  "shared_inputs": [
+    "harness/plan.json",
+    "tools/harness.py"
+  ],
+  "stages": [
+    {
+      "id": "H00",
+      "title": "하네스 기반",
+      "tasks": [
+        "BOOT-00",
+        "HARNESS-00"
+      ],
+      "depends_on": [],
+      "mode": "local",
+      "inputs": [
+        "AGENTS.md",
+        "README.md",
+        "TASKS.md",
+        "PUBLIC_RELEASE_CHECKLIST.md",
+        "docs/",
+        "tools/",
+        "harness/",
+        "provenance/",
+        "cases/",
+        "reference/imported-foundry/",
+        ".private/foundry-context/"
+      ],
+      "acceptance": "이관 무결성, 합성 반례, 하네스의 실패·만료·의존성 검증",
+      "checks": [
+        {
+          "id": "workspace-integrity",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/verify_workspace.py"
+          ],
+          "timeout_seconds": 60,
+          "expect": {
+            "status": "PASS",
+            "source_hashes_verified": true,
+            "local_project_links_verified": true,
+            "legacy_greedy_counterexample_reproduced": true,
+            "synthetic_routing_witness_verified": true,
+            "product_build_or_trial_verified": false
+          }
+        },
+        {
+          "id": "harness-regressions",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/tests/test_harness.py"
+          ],
+          "timeout_seconds": 60,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 35
+        }
+      ]
+    },
+    {
+      "id": "D00",
+      "title": "권리와 운영 책임 결정",
+      "tasks": [
+        "OSS-00"
+      ],
+      "depends_on": [
+        "H00"
+      ],
+      "mode": "external",
+      "inputs": [
+        "provenance/"
+      ],
+      "acceptance": "권리·라이선스·특허·실명·가용시간·예산·trial 데이터 조건의 실제 결정",
+      "checks": []
+    },
+    {
+      "id": "H01",
+      "title": "최소 공통 계약",
+      "tasks": [
+        "OSS-01"
+      ],
+      "depends_on": [
+        "H00"
+      ],
+      "mode": "local",
+      "inputs": [
+        "spec/",
+        "docs/decisions/",
+        "conformance/core_contract.py",
+        "cases/core/",
+        "tools/check_h01.py",
+        "tools/requirements-dev.lock"
+      ],
+      "acceptance": "독립 Core/profile/binding 후보, schema·버전·오류·Omelet mapping",
+      "checks": [
+        {
+          "id": "core-contract",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h01.py"
+          ],
+          "timeout_seconds": 120,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 35
+        }
+      ]
+    },
+    {
+      "id": "H02",
+      "title": "Routing 의미와 사례",
+      "tasks": [
+        "OSS-02"
+      ],
+      "depends_on": [
+        "H01"
+      ],
+      "mode": "local",
+      "inputs": [
+        "spec/",
+        "cases/",
+        "conformance/",
+        "tools/check_h02.py",
+        "tools/requirements-dev.lock"
+      ],
+      "acceptance": "단위·목적·제약·상태·평가의 정상/거부/반례 및 독립 기대값",
+      "checks": [
+        {
+          "id": "routing-semantics",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h02.py"
+          ],
+          "timeout_seconds": 120,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 34
+        }
+      ]
+    },
+    {
+      "id": "H03",
+      "title": "Adapter와 Python client",
+      "tasks": [
+        "OSS-03"
+      ],
+      "depends_on": [
+        "H02"
+      ],
+      "mode": "local",
+      "inputs": [
+        "spec/",
+        "sdk/",
+        "adapters/",
+        "runtime/",
+        "conformance/",
+        "cases/",
+        "tools/check_h03.py",
+        "tools/build_candidate.py",
+        "tools/requirements-dev.lock"
+      ],
+      "acceptance": "실제 library adapter·client의 의미 보존과 실패 처리",
+      "checks": [
+        {
+          "id": "adapter-client",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h03.py"
+          ],
+          "timeout_seconds": 120,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 28
+        }
+      ]
+    },
+    {
+      "id": "H04",
+      "title": "No-key reference와 App A",
+      "tasks": [
+        "OSS-04"
+      ],
+      "depends_on": [
+        "H03"
+      ],
+      "mode": "local",
+      "inputs": [
+        "sdk/",
+        "adapters/",
+        "examples/",
+        "cases/",
+        "conformance/",
+        "tools/check_h04.py",
+        "tools/isolated_candidate.py",
+        "tools/build_candidate.py",
+        "tools/dependency-wheels.json",
+        "tools/requirements-dev.lock"
+      ],
+      "acceptance": "OR-Tools 실제 solve·독립 평가·격리 설치와 자기 입력 실행",
+      "checks": [
+        {
+          "id": "installed-no-key-app",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h04.py"
+          ],
+          "timeout_seconds": 180,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 12
+        }
+      ]
+    },
+    {
+      "id": "H05",
+      "title": "독립 conformance와 두 번째 도메인",
+      "tasks": [
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H02",
+        "H04"
+      ],
+      "mode": "local",
+      "inputs": [
+        "spec/",
+        "conformance/",
+        "cases/",
+        "tools/check_h05.py",
+        "tools/check_h02.py",
+        "tools/requirements-dev.lock"
+      ],
+      "acceptance": "독립 runner·결함 검출·두 번째 도메인 fixture와 실행 범위 보고",
+      "checks": [
+        {
+          "id": "independent-conformance",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h05.py"
+          ],
+          "timeout_seconds": 90,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 23
+        }
+      ]
+    },
+    {
+      "id": "H06",
+      "title": "Binding과 App B",
+      "tasks": [
+        "OSS-05",
+        "OSS-03"
+      ],
+      "depends_on": [
+        "H03",
+        "H04"
+      ],
+      "mode": "local",
+      "inputs": [
+        "runtime/",
+        "sdk/",
+        "adapters/",
+        "examples/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "tools/check_h06.py",
+        "tools/check_h02.py",
+        "tools/build_candidate.py",
+        "tools/build_typescript.py",
+        "tools/isolated_candidate.py",
+        "tools/dependency-wheels.json",
+        "tools/requirements-dev.lock"
+      ],
+      "acceptance": "HTTP·MCP·TypeScript App B, 선언한 async의 실제 약속",
+      "checks": [
+        {
+          "id": "real-bindings-and-app-b",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h06.py"
+          ],
+          "timeout_seconds": 180,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 21
+        }
+      ]
+    },
+    {
+      "id": "H07",
+      "title": "Trial 로컬 정책",
+      "tasks": [
+        "OSS-14"
+      ],
+      "depends_on": [
+        "H02",
+        "H03",
+        "H06"
+      ],
+      "mode": "local",
+      "inputs": [
+        "runtime/",
+        "adapters/",
+        "spec/",
+        "conformance/",
+        "sdk/",
+        "cases/",
+        "tools/check_h07.py",
+        "tools/check_h02.py",
+        "tools/build_candidate.py",
+        "tools/requirements-dev.lock"
+      ],
+      "acceptance": "신원·키·기능·quota·만료·회수·동시성·재시도·소유권 검사",
+      "checks": [
+        {
+          "id": "local-trial-policy",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h07.py"
+          ],
+          "timeout_seconds": 120,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 28
+        }
+      ]
+    },
+    {
+      "id": "D01",
+      "title": "외부 환경과 동작 승인",
+      "tasks": [
+        "OSS-14"
+      ],
+      "depends_on": [
+        "H07"
+      ],
+      "mode": "external",
+      "inputs": [
+        "provenance/"
+      ],
+      "acceptance": "환경·테스트 데이터·동작·호출/비용 상한·복구·접근에 대한 실제 승인",
+      "checks": []
+    },
+    {
+      "id": "H08",
+      "title": "실제 Omelet trial",
+      "tasks": [
+        "OSS-14"
+      ],
+      "depends_on": [
+        "H07",
+        "D00",
+        "D01"
+      ],
+      "mode": "external",
+      "inputs": [
+        "adapters/",
+        "runtime/",
+        "conformance/"
+      ],
+      "acceptance": "실제 엔진과 외부 key 경로의 실행·평가·거부·원가 집행",
+      "checks": []
+    },
+    {
+      "id": "H09",
+      "title": "두 앱과 두 엔진",
+      "tasks": [
+        "OSS-06"
+      ],
+      "depends_on": [
+        "H04",
+        "H06",
+        "H08"
+      ],
+      "mode": "external",
+      "inputs": [
+        "examples/",
+        "adapters/",
+        "conformance/",
+        "cases/"
+      ],
+      "acceptance": "네 조합의 실제 실행과 profile 교집합·거리·비용·평가 일치",
+      "checks": []
+    },
+    {
+      "id": "D02",
+      "title": "내부 소비자 저장소 범위 승인",
+      "tasks": [
+        "OSS-07",
+        "OSS-08"
+      ],
+      "depends_on": [
+        "H03"
+      ],
+      "mode": "external",
+      "inputs": [
+        "provenance/"
+      ],
+      "acceptance": "소비자 저장소별 변경·검사·ref 범위에 대한 실제 승인",
+      "checks": []
+    },
+    {
+      "id": "H10",
+      "title": "최소 Studio와 Foundry 소비",
+      "tasks": [
+        "OSS-07",
+        "OSS-08"
+      ],
+      "depends_on": [
+        "H09",
+        "D02"
+      ],
+      "mode": "external",
+      "inputs": [
+        "conformance/",
+        "docs/"
+      ],
+      "acceptance": "같은 candidate의 Studio smoke와 Foundry 조회·resolve 검사",
+      "checks": []
+    },
+    {
+      "id": "H11",
+      "title": "독립 artifact와 저작 경로",
+      "tasks": [
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H04",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "mode": "local",
+      "inputs": [
+        "sdk/",
+        "runtime/",
+        "adapters/",
+        "authoring/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "examples/",
+        "docs/",
+        "provenance/",
+        "CANDIDATE_README.md",
+        "tools/check_h11.py",
+        "tools/build_review_bundle.py",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/build_typescript.py",
+        "tools/isolated_candidate.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json"
+      ],
+      "acceptance": "공개 후보만으로 깨끗한 재설치, 세 입구와 BYO·호환·지원 문서",
+      "checks": [
+        {
+          "id": "independent-artifacts",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h11.py"
+          ],
+          "timeout_seconds": 240,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 14
+        }
+      ]
+    },
+    {
+      "id": "H12",
+      "title": "실제 외부 개발자 과제",
+      "tasks": [
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H09",
+        "H11",
+        "D00"
+      ],
+      "mode": "external",
+      "inputs": [
+        "docs/",
+        "examples/"
+      ],
+      "acceptance": "실제 참여자의 독립 활용·15분 첫 실행·60분 앱 통합·지원 기록",
+      "checks": []
+    },
+    {
+      "id": "H13",
+      "title": "공동 출시 후보",
+      "tasks": [
+        "OSS-12"
+      ],
+      "depends_on": [
+        "H05",
+        "H09",
+        "H10",
+        "H11",
+        "H12",
+        "D00"
+      ],
+      "mode": "external",
+      "inputs": [
+        "provenance/",
+        "docs/",
+        "PUBLIC_RELEASE_CHECKLIST.md"
+      ],
+      "acceptance": "권리·allowlist·artifact·기술·trial·내부·외부 사용자 증거와 지원·복구",
+      "checks": []
+    },
+    {
+      "id": "D03",
+      "title": "정확한 게시 대상 승인",
+      "tasks": [
+        "OSS-12"
+      ],
+      "depends_on": [
+        "H13"
+      ],
+      "mode": "external",
+      "inputs": [
+        "provenance/"
+      ],
+      "acceptance": "repo/ref/registry/환경·동작·artifact hash에 대한 실제 사용자 승인",
+      "checks": []
+    },
+    {
+      "id": "H14",
+      "title": "게시와 사후 확인",
+      "tasks": [
+        "OSS-12"
+      ],
+      "depends_on": [
+        "H13",
+        "D03"
+      ],
+      "mode": "external",
+      "inputs": [
+        "provenance/",
+        "docs/"
+      ],
+      "acceptance": "승인된 artifact 게시·다운로드·재설치·실제 trial·복구 기록",
+      "checks": []
+    },
+    {
+      "id": "F01",
+      "title": "공개 후 30일 점검",
+      "tasks": [
+        "OSS-11",
+        "OSS-12"
+      ],
+      "depends_on": [
+        "H14"
+      ],
+      "mode": "external",
+      "inputs": [
+        "docs/"
+      ],
+      "acceptance": "실제 사용·장애·반복 사용·지원 원가의 30일 기록",
+      "checks": []
+    },
+    {
+      "id": "F02",
+      "title": "공개 후 90일 투자 판단",
+      "tasks": [
+        "OSS-00",
+        "OSS-12"
+      ],
+      "depends_on": [
+        "F01"
+      ],
+      "mode": "external",
+      "inputs": [
+        "docs/"
+      ],
+      "acceptance": "실제 사업 지표·예산과 권한자의 지속/수정/추가 투자 결정",
+      "checks": []
+    },
+    {
+      "id": "F03",
+      "title": "Application Spec과 AppKit 후속",
+      "tasks": [
+        "OSS-13"
+      ],
+      "depends_on": [
+        "H14"
+      ],
+      "mode": "deferred",
+      "inputs": [
+        "docs/"
+      ],
+      "acceptance": "별도 범위 승인과 consumer migration; 첫 출시 범위 밖",
+      "checks": []
+    }
+  ]
+}

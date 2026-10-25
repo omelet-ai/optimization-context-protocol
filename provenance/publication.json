@@ -1,0 +1,18 @@
+{
+  "schema": "ocp-opensource/publication-review/v0",
+  "status": "pending",
+  "rights_approved": false,
+  "license_approved": false,
+  "patent_disclosure_approved": false,
+  "independent_build_verified": false,
+  "publication_authorized": false,
+  "public_allowlist": [],
+  "never_export_prefixes": [
+    ".private/",
+    ".harness/",
+    "reference/imported-foundry/",
+    "provenance/source-manifest.json",
+    "provenance/copy-report.json",
+    "docs/plans/"
+  ]
+}
