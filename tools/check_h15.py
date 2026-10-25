@@ -46,6 +46,44 @@ def fake_backend():
 
 
 class CoordinateTests(unittest.TestCase):
+    def test_24_main_catalog_requires_explicit_selection(self):
+        catalog=dict(CATALOG,catalogVersion="1.3.0")
+        with patch.object(FoundryBackend,"_call",return_value=catalog):
+            with self.assertRaises(OCPError) as error:
+                FoundryBackend("http://127.0.0.1:9","test-secret","a"*64,document_hash(catalog))
+            self.assertEqual(error.exception.code,"UPSTREAM_VERSION_MISMATCH")
+            backend=FoundryBackend("http://127.0.0.1:9","test-secret","a"*64,document_hash(catalog),catalog_version="1.3.0")
+        self.assertEqual(backend.scoped("owner","request").catalog_version,"1.3.0")
+        self.assertEqual(backend.payload(FIXTURE["input"],1000),fake_backend().payload(FIXTURE["input"],1000))
+
+    def test_25_selected_catalog_never_falls_forward(self):
+        with patch.object(FoundryBackend,"_call",return_value=CATALOG):
+            with self.assertRaises(OCPError) as error:
+                FoundryBackend("http://127.0.0.1:9","test-secret","a"*64,document_hash(CATALOG),catalog_version="1.3.0")
+            self.assertEqual(error.exception.code,"UPSTREAM_VERSION_MISMATCH")
+
+    def test_26_unreviewed_version_rejected_without_network(self):
+        with patch.object(FoundryBackend,"_call") as call:
+            for version in ("1.2.0","1.5.0","latest",None,True):
+                with self.assertRaises(ValueError):
+                    FoundryBackend("http://127.0.0.1:9","test-secret","a"*64,"b"*64,catalog_version=version)
+            call.assert_not_called()
+
+    def test_27_main_catalog_full_pin_is_still_mandatory(self):
+        catalog=dict(CATALOG,catalogVersion="1.3.0")
+        with patch.object(FoundryBackend,"_call",return_value=catalog):
+            backend=FoundryBackend("http://127.0.0.1:9","test-secret","a"*64,document_hash(catalog),catalog_version="1.3.0")
+        for change in ({"catalogDigest":"c"*64},{"newSemanticField":True},{"compilerVersion":"1.3.0"}):
+            with patch.object(backend,"_call",return_value=dict(catalog,**change)):
+                with self.assertRaises(OCPError) as error:backend.check_catalog()
+                self.assertEqual(error.exception.code,"CATALOG_CHANGED")
+
+    def test_28_legacy_default_identity_is_unchanged(self):
+        legacy=fake_backend()
+        with patch.object(FoundryBackend,"_call",return_value=CATALOG):
+            explicit=FoundryBackend("http://127.0.0.1:9","test-service-secret","a"*64,document_hash(CATALOG),catalog_version="1.4.0")
+        self.assertEqual(FoundryCoordinatesAdapter(legacy).describe(),FoundryCoordinatesAdapter(explicit).describe())
+
     def test_01_manual_witness_and_exhaustive_oracle(self):
         self.assertEqual(coordinates.evaluate(FIXTURE["input"],FIXTURE["witness"])["total_cost"],11358)
         self.assertEqual(coordinates.exhaustive_optimum(FIXTURE["input"])["optimal_cost"],11358)
@@ -200,7 +238,7 @@ class CoordinateTests(unittest.TestCase):
 
 if __name__=="__main__":
     result=unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromTestCase(CoordinateTests))
-    passed=result.wasSuccessful() and result.testsRun>=23 and not result.skipped
+    passed=result.wasSuccessful() and result.testsRun>=28 and not result.skipped
     print(json.dumps({"status":"PASS" if passed else "FAIL","tests_run":result.testsRun,"failures":len(result.failures),
                       "errors":len(result.errors),"skipped":len(result.skipped),"artifact_sha256":ARTIFACT["sha256"],
                       "versions":{"profile":"routing.coordinates@0.1.0"},

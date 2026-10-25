@@ -31,4 +31,12 @@ python3 -B tools/harness.py run H00
 
 이 실행기는 승인 우회 기능, 자동 게시·배포, 백그라운드 개발, 사람이 실제 과제를 완료했다고 판정하는 기능을 제공하지 않는다. 외부 단계는 검증기와 실제 출처가 준비될 때까지 WAITING_EXTERNAL 또는 선행 BLOCKED로 남는다.
 
+`decision` 모드는 이미 받은 결정의 원문 출처와 정확한 scope를 모두 검사하는 D 단계에만 사용한다. D02는 로컬 원래 user message와 보존한 receipt를 대조하며, 현재 승인 범위는 Foundry의 지정 branch에서 최소 소비자 구현·검사·commit/push/draft PR까지다. 단순 `status: PASS`, 승인 boolean 또는 assistant의 재인용으로 대체할 수 없다. 해당 로컬 원문이 없으면 실패하며 다른 환경에 receipt를 복사해 새 권한을 부여하는 기능이 아니다. 이후 사용자 변경 지시가 우선한다. D00/D01/D03은 여전히 외부 결정 대기다.
+
+H11의 DX 계측 검사는 시간·지원·재시도·자동 실행 제외 규칙만 확인한다. [외부 과제지](../docs/users/EXTERNAL_DX_STUDY.md)의 실제 참여자·신원·동의·독립 활용을 증명하지 않으며 H12를 자동 통과시키지 않는다.
+
 H15~H17은 [좌표/실제 로컬 연결 결정](../docs/decisions/0003_COORDINATES_AND_LOCAL_TRIAL.md)에 따른 독립 기술 후보다. H16/H17은 명시적으로 승인된 loopback 설정과 실제 엔진을 요구하며 환경이 없으면 실패한다. H08/H09 및 D00/D01의 전체 외부 운영 조건은 유지한다.
+
+H18은 [catalog 호환성 결정](../docs/decisions/0004_EXPLICIT_FOUNDRY_CATALOG_COMPATIBILITY.md)에 따른 로컬 소비자 검사다. H17·D02의 현재 PASS, 기록된 main 기반 실제 API, source identity와 private client package hash를 요구한다. 이전 1.4.0 실제 경로도 검사하며 H10을 자동 승격하지 않는다.
+
+H04가 실패하면 검사 번호·실패 유형·소요시간을 제한된 `failure_diagnostics`로 남긴다. 하네스는 허용된 숫자·분류만 보존하고 원문 로그·예외 메시지·입력·자격 증명은 저장하지 않는다. 진단 정보는 PASS 근거가 아니며 nonzero exit는 계속 FAIL이다. 자동 재시도로 실패를 덮어쓰지 않는다.

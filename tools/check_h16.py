@@ -185,7 +185,7 @@ if __name__=="__main__":
     settings() # Recheck external source identity after the actual calls.
     passed=result.wasSuccessful() and result.testsRun>=13 and not result.skipped
     report={"status":"PASS" if passed else "FAIL","tests_run":result.testsRun,"failures":len(result.failures),"errors":len(result.errors),"skipped":len(result.skipped),
-            "artifact_sha256":ARTIFACT["sha256"],"versions":{"profile":"routing.coordinates@0.1.0","catalog":"1.4.0","catalog_digest":UPSTREAM.catalog_digest},
+            "artifact_sha256":ARTIFACT["sha256"],"versions":{"profile":"routing.coordinates@0.1.0","catalog":UPSTREAM.catalog_version,"catalog_digest":UPSTREAM.catalog_digest},
             "scope":"Actual loopback Foundry + separate issued trial keys + durable policy and real HTTP; synthetic operator-provisioned principals, injected expiry clock; no public signup, monetary billing or external-user acceptance"}
     evidence=ROOT/".harness/work/live-trial";evidence.mkdir(parents=True,exist_ok=True)
     (evidence/(uuid.uuid4().hex+".json")).write_text(json.dumps({"report":report,"calls":UPSTREAM.calls},indent=2))

@@ -11,8 +11,9 @@
 | assignment.fixture | 0.1.0 | schema/requirements/feasible witness only; no solver |
 | local trial policy | 0.1.0 local candidate | SQLite + operator-provisioned synthetic principal/key; no public signup |
 | routing.coordinates | 0.1.0 candidate | Haversine R=6371000 m, ceil; independent reference and checker |
-| actual local Omelet adapter | catalog 1.4.0 / compiler 1.2.0 / API 1.0, exact document pin | H16 real loopback engine through trial keys; external operations unverified |
+| actual local Omelet adapter | explicit catalog 1.3.0 or 1.4.0 (default) / compiler 1.2.0 / API 1.0, exact document pin | H16 real loopback engine through trial keys; no automatic version fallback; external operations unverified |
 | Python/TypeScript × reference/Omelet | H17 local candidate | four installed-app combinations on routing.coordinates; no external human acceptance |
+| installed Foundry client + TMS resolver | H18 local candidate / Node 22.23.3 | recorded main-based catalog 1.3.0, independent evaluation, original 1.4.0 smoke; see [scope](../decisions/0004_EXPLICIT_FOUNDRY_CATALOG_COMPATIBILITY.md) |
 
 공개 전 candidate 0.1.0은 아직 동결되지 않았다. 사용할 때 artifact SHA-256과 schema hash를 고정한다. 공개 후 계약·의미가 바뀌면 version 갱신, migration 문서, provider/consumer/conformance 재검증이 필요하며 기존 버전을 덮어쓰지 않는다.
 

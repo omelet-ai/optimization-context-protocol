@@ -6,30 +6,41 @@ import sqlite3
 import subprocess
 
 ROOT=Path(__file__).resolve().parents[1]
-SETTINGS=ROOT/".private/local-foundry-api/adapter-settings.json"
+SETTINGS=ROOT/".private/foundry-verification/settings.json"
 
 
-def settings():
-    value=json.loads(SETTINGS.read_text())
-    if value["base_url"]!="http://127.0.0.1:8188" or value["scope"]!="user_authorized_local_synthetic_only":
+def settings(path=SETTINGS):
+    path=Path(path)
+    value=json.loads(path.read_text())
+    if value["base_url"] not in {"http://127.0.0.1:8188","http://127.0.0.1:8288"} or value["scope"]!="user_authorized_local_synthetic_only":
         raise RuntimeError("Only the explicitly authorized local environment may run this check")
-    identity=json.loads((SETTINGS.parent/value["source_identity_file"]).read_text())
+    identity=json.loads((path.parent/value["source_identity_file"]).read_text())
     checkout=Path(value["source_checkout"])
     for name,sha in identity["loaded_source_sha256"].items():
         if hashlib.sha256((checkout/name).read_bytes()).hexdigest()!=sha:
             raise RuntimeError("Upstream source changed; review and restart before accepting evidence")
     head=subprocess.check_output(["git","rev-parse","HEAD"],cwd=checkout,text=True).strip()
     if head!=identity["head"]: raise RuntimeError("Upstream checkout identity changed")
-    credential=SETTINGS.parent/value["credential_file"]
+    if value.get("unchanged_engine_base"):
+        subprocess.run(["git","diff","--exit-code",value["unchanged_engine_base"],"--",
+                        "ocps/routing/engine/optimization-suite/server",
+                        "ocps/routing/engine/optimization-suite/uv.lock",
+                        "shared/ocp-contracts/capability-contract/python/src"],cwd=checkout,
+                       check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+    credential=path.parent/value["credential_file"]
     if credential.is_symlink() or credential.stat().st_mode & 0o077: raise RuntimeError("Credential file must be private")
     secret=json.loads(credential.read_text())["service_token"]
     return value,secret,identity["aggregate_sha256"]
 
 
-def backend():
+def backend(path=SETTINGS):
     from ocp_routing.foundry import FoundryBackend
-    value,secret,_=settings()
-    ledger=ROOT/".harness/work/local-foundry-submissions.sqlite"
+    value,secret,_=settings(path)
+    ledger_name=value.get("submission_ledger","local-foundry-submissions.sqlite")
+    if ledger_name not in {"local-foundry-submissions.sqlite","main-catalog-1-3-submissions.sqlite",
+                           "main-catalog-1-3-h04-recheck.sqlite"}:
+        raise ValueError("Unknown bounded local verification campaign")
+    ledger=ROOT/".harness/work"/ledger_name
     ledger.parent.mkdir(parents=True,exist_ok=True)
     class ObservedBackend(FoundryBackend):
         # Observation is restricted to test tooling; production implementation is unchanged.
@@ -47,4 +58,5 @@ def backend():
                                "job_id":result.get("jobId"),"status":result.get("status"),
                                "solver_seconds":body.get("solverParameters",{}).get("timeLimitSeconds") if isinstance(body,dict) else None})
             return result
-    return ObservedBackend(value["base_url"],secret,value["catalog_digest"],value["catalog_document_sha256"])
+    return ObservedBackend(value["base_url"],secret,value["catalog_digest"],value["catalog_document_sha256"],
+                           catalog_version=value.get("catalog_version","1.4.0"))

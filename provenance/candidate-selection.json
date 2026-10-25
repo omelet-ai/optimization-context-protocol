@@ -25,8 +25,10 @@
     "conformance/routing.py",
     "conformance/runner.py",
     "docs/decisions/0003_COORDINATES_AND_LOCAL_TRIAL.md",
+    "docs/decisions/0004_EXPLICIT_FOUNDRY_CATALOG_COMPATIBILITY.md",
     "docs/users/COMPATIBILITY.md",
     "docs/users/CONTRIBUTING_SUPPORT.md",
+    "docs/users/EXTERNAL_DX_STUDY.md",
     "docs/users/GETTING_STARTED.md",
     "examples/app-a/README.md",
     "examples/app-a/main.py",
@@ -66,6 +68,7 @@
     "tools/build_candidate.py",
     "tools/build_conformance.py",
     "tools/build_typescript.py",
+    "tools/dx_study.py",
     "tools/requirements-dev.lock"
   ]
 }

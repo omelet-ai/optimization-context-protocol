@@ -98,6 +98,23 @@ class HarnessTests(unittest.TestCase):
         with self.assertRaises(HarnessError):
             harness.run("D00")
 
+    def test_decision_requires_real_source_and_scope_check(self):
+        check = {"id": "receipt", "argv": ["{python}", "-B", "checks/check.py"],
+                 "timeout_seconds": 5, "expect": {"status": "PASS", "authorization_source_verified": True,
+                                                   "scope_verified": True}}
+        self.add_stage("D02", "decision", [check])
+        harness = self.harness(); harness.run("H00")
+        # Generic technical PASS cannot satisfy an approval-source gate.
+        self.assertEqual(harness.run("D02")["result"], "FAIL")
+
+    def test_decision_without_verifier_is_invalid(self):
+        self.add_stage("D02", "decision")
+        with self.assertRaises(HarnessError): self.harness()
+
+    def test_decision_cannot_be_a_technical_stage(self):
+        self.plan["stages"][0]["mode"] = "decision"
+        with self.assertRaises(HarnessError): self.harness()
+
     def test_deferred_gate_never_runs(self):
         self.add_stage("F03", "deferred")
         harness = self.harness()
@@ -268,6 +285,37 @@ class HarnessTests(unittest.TestCase):
         report=self.harness().run("H00")
         self.assertEqual(report["checks"][0]["verified_report"],{"tests_run":1})
         self.assertNotIn("synthetic-secret",json.dumps(report))
+
+    def test_failed_check_keeps_only_bounded_diagnostics(self):
+        value={"status":"PASS","tests_run":1,"token":"synthetic-secret",
+               "failure_diagnostics":[{"test_number":12,"kind":"error","category":"subprocess_timeout",
+                                       "elapsed_ms":15000,"message":"synthetic-secret"}]}
+        self.write_check("import json\nprint(json.dumps("+repr(value)+"))\nraise SystemExit(1)")
+        self.add_stage(checks=self.plan["stages"][0]["checks"])
+        harness=self.harness();report=harness.run("H00")
+        self.assertEqual(report["result"],"FAIL")
+        self.assertEqual(report["checks"][0]["failure_diagnostics"],
+                         [{"test_number":12,"kind":"error","category":"subprocess_timeout","elapsed_ms":15000}])
+        self.assertNotIn("verified_report",report["checks"][0])
+        self.assertNotIn("synthetic-secret",json.dumps(report))
+        self.assertEqual(self.state(harness,"H01"),"BLOCKED")
+
+    def test_invalid_diagnostics_are_dropped_without_weakening_failure(self):
+        valid={"test_number":1,"kind":"error","category":"exception","elapsed_ms":1}
+        malformed=[None,"synthetic-secret",[],dict(valid,test_number=True),dict(valid,test_number=0),
+                   dict(valid,test_number=10001),dict(valid,elapsed_ms=True),dict(valid,elapsed_ms=-1),
+                   dict(valid,elapsed_ms=3600001),dict(valid,category="synthetic-secret"),
+                   dict(valid,kind="synthetic-secret"),{}]
+        self.write_check("import json\nprint(json.dumps("+repr({"failure_diagnostics":malformed})+"))\nraise SystemExit(1)")
+        report=self.harness().run("H00")
+        self.assertEqual(report["result"],"FAIL")
+        self.assertNotIn("failure_diagnostics",report["checks"][0])
+        for data in (b"not JSON",b"\xff",b"[]",b"null",b'{"failure_diagnostics":null}',b"["*2000+b"]"*2000):
+            self.assertEqual(module.failure_diagnostics(data),[])
+
+    def test_diagnostic_list_is_bounded(self):
+        item={"test_number":1,"kind":"failure","category":"assertion","elapsed_ms":0}
+        self.assertEqual(len(module.failure_diagnostics(json.dumps({"failure_diagnostics":[item]*101}))),100)
 
 
 if __name__ == "__main__":

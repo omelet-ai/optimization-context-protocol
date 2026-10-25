@@ -28,6 +28,27 @@ def now():
     return datetime.now(timezone.utc).isoformat()
 
 
+def failure_diagnostics(stdout):
+    """Keep numeric test locations and fixed categories, never arbitrary check output."""
+    try:
+        report=json.loads(stdout)
+    except (ValueError, UnicodeError, RecursionError):
+        return []
+    if not isinstance(report,dict) or not isinstance(report.get("failure_diagnostics"),list):
+        return []
+    safe=[]
+    for value in report["failure_diagnostics"][:100]:
+        if not isinstance(value,dict):continue
+        number=value.get("test_number");elapsed=value.get("elapsed_ms")
+        if (type(number) is not int or not 1<=number<=10000 or
+                type(elapsed) is not int or not 0<=elapsed<=3600000 or
+                value.get("kind") not in ("failure","error") or
+                value.get("category") not in ("subprocess_timeout","invalid_json","contract","assertion","exception")):
+            continue
+        safe.append({key:value[key] for key in ("test_number","kind","category","elapsed_ms")})
+    return safe
+
+
 def relative_path(value):
     if not isinstance(value, str) or not value or "\\" in value:
         raise HarnessError("Invalid project-relative path")
@@ -63,7 +84,7 @@ class Harness:
         for path in plan.get("shared_inputs", []):
             relative_path(path)
         for stage in stages:
-            if stage.get("mode") not in {"local", "external", "deferred"}:
+            if stage.get("mode") not in {"local", "decision", "external", "deferred"}:
                 raise HarnessError("Invalid mode: " + stage["id"])
             if not stage.get("title") or not stage.get("acceptance") or not stage.get("tasks"):
                 raise HarnessError("Title, acceptance and task mapping are required")
@@ -78,8 +99,12 @@ class Harness:
             checks = stage.get("checks")
             if not isinstance(checks, list):
                 raise HarnessError("Checks must be a list")
-            if stage["mode"] != "local" and checks:
+            if stage["mode"] not in {"local", "decision"} and checks:
                 raise HarnessError("External evidence verification is not implemented")
+            if stage["mode"] == "decision" and (not stage["id"].startswith("D") or not checks or any(
+                    c.get("expect", {}).get("authorization_source_verified") is not True or
+                    c.get("expect", {}).get("scope_verified") is not True for c in checks)):
+                raise HarnessError("Decision gates require source and scope verification")
             check_ids = set()
             for check in checks:
                 cid = check.get("id")
@@ -253,6 +278,8 @@ class Harness:
                           stderr_sha256=hashlib.sha256(stderr).hexdigest())
             if process.returncode != 0:
                 result["reason"] = "nonzero_exit"
+                diagnostic=failure_diagnostics(stdout)
+                if diagnostic:result["failure_diagnostics"]=diagnostic
             else:
                 try:
                     payload = json.loads(stdout)

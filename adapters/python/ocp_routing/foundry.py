@@ -23,7 +23,13 @@ class FoundryBackend:
     name = "omelet.standard-vrp"
     version = "0.0.0-unreported"  # Upstream has no independently identified native solver build version.
 
-    def __init__(self, base_url, service_token, catalog_digest, catalog_document_sha256, *, deadline_grace_ms=3000):
+    def __init__(self, base_url, service_token, catalog_digest, catalog_document_sha256, *,
+                 catalog_version="1.4.0", deadline_grace_ms=3000):
+        # Selection is operator configuration, never inferred from a response or
+        # retried with a different version. Both revisions use the same narrow
+        # distance/weight mapping; their complete catalog pins remain distinct.
+        if catalog_version not in ("1.3.0", "1.4.0"):
+            raise ValueError("Unreviewed upstream catalog version")
         endpoint = urlparse(base_url)
         if (endpoint.scheme != "https" and not (endpoint.scheme == "http" and endpoint.hostname == "127.0.0.1")) or endpoint.username or endpoint.password or endpoint.query or endpoint.fragment or endpoint.path not in {"","/"}:
             raise ValueError("Explicit HTTPS or loopback origin required")
@@ -36,6 +42,7 @@ class FoundryBackend:
         self.base_url = base_url.rstrip("/")
         self._token = service_token
         self.catalog_digest, self.catalog_document_sha256 = catalog_digest,catalog_document_sha256
+        self.catalog_version = catalog_version
         self.grace_ms = deadline_grace_ms
         self._tenant = self._idem = None
         self.opener = build_opener(NoRedirect(),ProxyHandler({}))
@@ -75,7 +82,7 @@ class FoundryBackend:
         catalog = self._call("GET","/capabilities")
         if catalog.get("catalogDigest") != self.catalog_digest or document_hash(catalog) != self.catalog_document_sha256:
             raise OCPError("CATALOG_CHANGED")
-        if any(catalog.get(k)!=v for k,v in {"contractVersion":"1","problemType":"standard-routing","apiVersion":"1.0","catalogVersion":"1.4.0","compilerVersion":"1.2.0","solver":"standard-vrp"}.items()):
+        if any(catalog.get(k)!=v for k,v in {"contractVersion":"1","problemType":"standard-routing","apiVersion":"1.0","catalogVersion":self.catalog_version,"compilerVersion":"1.2.0","solver":"standard-vrp"}.items()):
             raise OCPError("UPSTREAM_VERSION_MISMATCH")
         return catalog
 

@@ -31,6 +31,7 @@ npm ci --prefix /tmp/ocp-ts-deps --ignore-scripts --no-audit --no-fund --cache /
 /tmp/ocp-dev/bin/python -B tools/check_h06.py
 /tmp/ocp-dev/bin/python -B tools/check_h07.py
 /tmp/ocp-dev/bin/python -B tools/check_h11.py
+/tmp/ocp-dev/bin/python -B tools/check_dx_study.py
 ```
 
 H04·H06·H07·H11은 system-site-packages 없는 임시 Python 환경에 hash를 확인한 wheel만 설치한다. H06/H07은 실제 127.0.0.1 HTTP와 stdio 통신을 사용하므로 해당 로컬 실행 권한이 필요하다. 공개 서버 배포 검사가 아니다. MCP host는 공식 Python SDK Client이며 Claude Code/Desktop의 실제 trial 연결은 미검증이다.
@@ -48,4 +49,8 @@ python3 -B tools/harness.py run H00
 
 run/status는 동일한 Python 3.12 환경을 사용한다. H00의 `verify_workspace.py`는 로컬 원본 snapshot·내부 이관 목록·legacy 반례까지 엄격하게 검사한다. 원본이 없는 Git clone에서 이 검사를 PASS로 바꾸지 않는다. 위 독립 검사의 성공은 H00 원본 이관 검증이나 H08 실제 trial, 공개·외부 사용자 승인으로 승격하지 않는다. 하네스 보고서는 `.harness/runs/`에 보존하고 원격 추적에서 제외한다.
 
-좌표 계약·reference·upstream 결함 검사는 같은 Python으로 `tools/check_h15.py`를 실행한다. 실제 로컬 엔진 검사는 `tools/check_h16.py`, 설치 앱 네 조합은 `tools/check_h17.py`다. 뒤의 두 검사는 승인된 로컬 환경 설정이 있어야 하며 없는 clone에서 skip/PASS로 만들지 않는다. 하네스 실행 시 H15→H16→H17과 각 단계의 기존 선행을 따른다.
+다른 Python으로 조회하면 환경 식별이 달라 STALE이 될 수 있다. 실행 명령의 `-B`를 유지해 소스 아래 `__pycache__`가 생성되지 않게 한다. 생성물이 입력 폴더에 들어가면 숨기거나 입력에서 임의 제외하지 말고 workspace 밖으로 옮긴 뒤 실제 소스와 현재 환경을 다시 확인한다. D02는 원래 사용자 승인 메시지의 로컬 출처도 필요하므로 clone의 자동 성공 대상이 아니다.
+
+좌표 계약·reference·upstream 결함 검사는 같은 Python으로 `tools/check_h15.py`를 실행한다. 실제 로컬 엔진 검사는 `tools/check_h16.py`, 설치 앱 네 조합은 `tools/check_h17.py`, 기록된 main 기반 엔진과 Foundry 소비자는 `tools/check_h18.py`다. 실제 엔진 검사는 승인된 로컬 환경 설정이 있어야 하며 없는 clone에서 skip/PASS로 만들지 않는다. 하네스 실행 시 H15→H16→H17→H18과 각 단계의 기존 선행을 따른다. H18은 D02도 요구한다.
+
+H16/H17은 `.private/foundry-verification/settings.json`의 명시적인 버전·문서 pin과 source identity를 사용한다. H18은 승인된 별도 Foundry worktree와 그곳에서 만든 private client package의 정확한 hash도 요구하며, 기존 1.4.0 환경을 별도로 검사한다. 설정의 source·package·예산 값을 추측해서 채우지 않는다. 외부 SDK 사용자가 이 로컬 검증 설정이나 Foundry checkout을 설치할 필요는 없다. 자세한 범위는 [catalog 호환성 결정](../decisions/0004_EXPLICIT_FOUNDRY_CATALOG_COMPATIBILITY.md)을 따른다.

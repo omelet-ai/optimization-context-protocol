@@ -2,6 +2,7 @@
 
 from copy import deepcopy
 import hashlib
+import io
 import json
 from pathlib import Path
 import random
@@ -9,13 +10,16 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import time
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from build_candidate import build
 from isolated_candidate import install
 from conformance.routing import CONFIGURATION, exhaustive_optimum, verify_result
+from conformance.core_contract import ContractError
 
 FIXTURE = json.loads((ROOT / "cases/routing/basic-matrix.json").read_text())
 WORK = tempfile.TemporaryDirectory(prefix="ocp-h04-clean-")
@@ -51,6 +55,36 @@ def run(problem, budget=1000, raw=None):
     if (result["kind"] == "failure") != (output.returncode == 2):
         raise AssertionError("CLI failure exit code mismatch")
     return result
+
+
+class DiagnosticResult(unittest.TextTestResult):
+    """Record bounded failure metadata; never retain tracebacks, inputs or messages."""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.diagnostics=[]
+
+    def startTest(self, test):
+        self.started=time.monotonic()
+        super().startTest(test)
+
+    def record(self, test, err, kind):
+        category="exception"
+        for cls,label in ((subprocess.TimeoutExpired,"subprocess_timeout"),
+                          (json.JSONDecodeError,"invalid_json"),(ContractError,"contract"),
+                          (AssertionError,"assertion")):
+            if issubclass(err[0],cls):
+                category=label;break
+        self.diagnostics.append({"test_number":int(test._testMethodName.split("_")[1]),
+                                 "kind":kind,"category":category,
+                                 "elapsed_ms":round((time.monotonic()-self.started)*1000)})
+
+    def addFailure(self, test, err):
+        self.record(test,err,"failure")
+        super().addFailure(test,err)
+
+    def addError(self, test, err):
+        self.record(test,err,"error")
+        super().addError(test,err)
 
 
 class InstalledAppTests(unittest.TestCase):
@@ -143,15 +177,36 @@ class InstalledAppTests(unittest.TestCase):
         self.assertIsNone(result["proof"])
         verify_result(request(problem, 1), result)
 
+    def test_13_failure_diagnostics_preserve_location_without_data(self):
+        marker="synthetic-sensitive-input"
+        class Faults(unittest.TestCase):
+            def test_01_assertion(self):self.fail(marker)
+            def test_02_timeout(self):
+                with patch.object(subprocess,"run",side_effect=subprocess.TimeoutExpired(marker,15)):
+                    run(FIXTURE["input"])
+            def test_03_json(self):
+                response=subprocess.CompletedProcess([],0,marker,"")
+                with patch.object(subprocess,"run",return_value=response):run(FIXTURE["input"])
+            def test_04_contract(self):raise ContractError(marker)
+        result=unittest.TextTestRunner(stream=io.StringIO(),resultclass=DiagnosticResult).run(
+            unittest.defaultTestLoader.loadTestsFromTestCase(Faults))
+        self.assertFalse(result.wasSuccessful())
+        self.assertEqual([(d["test_number"],d["kind"],d["category"]) for d in result.diagnostics],
+                         [(1,"failure","assertion"),(2,"error","subprocess_timeout"),
+                          (3,"error","invalid_json"),(4,"error","contract")])
+        self.assertNotIn(marker,json.dumps(result.diagnostics))
+        self.assertTrue(all(type(d["elapsed_ms"]) is int and d["elapsed_ms"]>=0 for d in result.diagnostics))
+
 
 if __name__ == "__main__":
     try:
-        result = unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromTestCase(InstalledAppTests))
-        passed = result.wasSuccessful() and not result.skipped and result.testsRun >= 12
+        result = unittest.TextTestRunner(resultclass=DiagnosticResult).run(unittest.defaultTestLoader.loadTestsFromTestCase(InstalledAppTests))
+        passed = result.wasSuccessful() and not result.skipped and result.testsRun >= 13
         print(json.dumps({"status":"PASS" if passed else "FAIL", "tests_run":result.testsRun,
                           "failures":len(result.failures), "errors":len(result.errors), "skipped":len(result.skipped),
+                          "failure_diagnostics":result.diagnostics,
                           "artifact_sha256":ARTIFACT["sha256"], "versions":{"core":"0.1.0","routing.basic":"0.1.0","ortools":"9.15.6755","seed":"20261024"},
-                          "scope":"Clean offline wheel install, App A with caller inputs, socket-denied no-key OR-Tools and tiny oracle; no remote engine or external-user acceptance"}))
+                          "scope":"Clean offline wheel install, App A with caller inputs, socket-denied no-key OR-Tools, tiny oracle and injected diagnostic failures; no remote engine or external-user acceptance"}))
     finally:
         WORK.cleanup()
     sys.exit(0 if passed else 1)

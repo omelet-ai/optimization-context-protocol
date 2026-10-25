@@ -12,7 +12,7 @@ gateway는 기능·크기·solver budget 검증 후 SQLite transaction에서 조
 
 ## 실제 엔진 연결
 
-adapter는 외부 소스를 import하지 않고 Capability Contract HTTP만 호출한다. 시작 시 설정한 catalogDigest와 전체 JSON 문서의 SHA-256을 모두 고정하고 매 solve 전에 확인한다. 지원 검증 범위는 API 1.0, catalog 1.4.0, compiler 1.2.0, standard-routing이다. 다른 버전은 명시적 검토 없이 진행하지 않는다. `describe`에는 endpoint·비밀값 없이 이 pin을 선택적 extension으로 기록한다.
+adapter는 외부 소스를 import하지 않고 Capability Contract HTTP만 호출한다. 시작 시 설정한 catalogDigest와 전체 JSON 문서의 SHA-256을 모두 고정하고 매 solve 전에 확인한다. 지원 검증 범위는 API 1.0, compiler 1.2.0, standard-routing과 명시적으로 선택한 catalog 1.3.0 또는 1.4.0이다. `FoundryBackend(..., catalog_version="1.3.0")`으로 선택하며 기본값은 기존 1.4.0을 유지한다. 두 버전 사이의 자동 선택·전환은 없다. 다른 버전은 명시적 검토 없이 진행하지 않는다. `describe`에는 endpoint·비밀값 없이 이 pin을 선택적 extension으로 기록한다. [검토 근거와 소비자 검증](../../docs/decisions/0004_EXPLICIT_FOUNDRY_CATALOG_COMPATIBILITY.md)을 따른다.
 
 Foundry `euclidean`은 이 profile의 구면 Haversine/edge ceil 식에 대응한다. 변환은 좌표·ID·kg·왕복·필수 배정·목적 계수를 보존하며, arbitrary matrix를 좌표로 복원하지 않는다. Foundry의 generated result는 OCP route로 변환한 뒤 비용과 제약을 다시 계산한다. 잘못된 결과는 실패하며 engine 성공 코드만으로 feasible을 만들지 않는다. native solver 버전이 API에 없으므로 `0.0.0-unreported`는 명시적인 미보고 sentinel이고, 실제 버전 추정값이 아니다.
 

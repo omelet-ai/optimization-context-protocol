@@ -92,7 +92,7 @@ if __name__=="__main__":
         settings()
         passed=result.wasSuccessful() and result.testsRun>=7 and len(OUTPUTS)==4 and not result.skipped
         report={"status":"PASS" if passed else "FAIL","tests_run":result.testsRun,"failures":len(result.failures),"errors":len(result.errors),"skipped":len(result.skipped),
-            "artifact_sha256":ARTIFACT["sha256"],"versions":{"typescript_tarball_sha256":TS["sha256"],"profile":"routing.coordinates@0.1.0","combinations":4},
+            "artifact_sha256":ARTIFACT["sha256"],"versions":{"typescript_tarball_sha256":TS["sha256"],"profile":"routing.coordinates@0.1.0","catalog":UPSTREAM.catalog_version,"combinations":4},
             "scope":"Clean installed Python/TypeScript apps x actual OR-Tools/loopback Foundry; same coordinate contract and independent evaluation; no external human acceptance or hosted release"}
         evidence=ROOT/".harness/work/coordinate-app-matrix";evidence.mkdir(parents=True,exist_ok=True)
         (evidence/(uuid.uuid4().hex+".json")).write_text(json.dumps({"report":report,"outputs":OUTPUTS},indent=2))

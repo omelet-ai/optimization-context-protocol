@@ -42,3 +42,4 @@
 - LICENSE를 임의로 적용하거나 기존 package의 MIT 표기를 전체 공개 권한으로 해석하지 않는다.
 - 원격 저장소·branch·commit/push·PR·release·workflow·registry 게시·배포는 정확한 대상과 동작에 대한 사용자 승인을 별도로 확인한다.
 - 사용자는 2026-10-25에 `omelet-ai/optimization-context-protocol` 비공개 저장소 생성과 내부 자료·원본 snapshot을 제외한 첫 commit/push를 승인했다. [추적 목록](provenance/repository-selection.json)과 `tools/verify_repository.py --index`로 실제 포함 파일을 검사한다. 이 승인은 인터넷 공개·라이선스 확정·서비스 배포 승인이 아니다.
+- 사용자는 같은 날 H04의 일회성 실패 조사와 필요한 수정 검증 후, 내부 자료·키·실행 증거를 제외한 후속 코드·문서를 같은 비공개 저장소에 commit/push하도록 승인했다. 외부 trial 담당자·환경·예산은 별도 결정으로 남는다.

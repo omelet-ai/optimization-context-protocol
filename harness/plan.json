@@ -45,7 +45,9 @@
         "provenance/",
         "cases/",
         "reference/imported-foundry/",
-        ".private/foundry-context/"
+        ".private/foundry-context/",
+        "tools/check_d02.py",
+        "tools/tests/test_decision_receipt.py"
       ],
       "acceptance": "이관 무결성, 합성 반례, 하네스의 실패·만료·의존성 검증",
       "checks": [
@@ -80,7 +82,23 @@
             "errors": 0,
             "skipped": 0
           },
-          "min_tests": 35
+          "min_tests": 41
+        },
+        {
+          "id": "decision-provenance-regressions",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/tests/test_decision_receipt.py"
+          ],
+          "timeout_seconds": 30,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 8
         }
       ]
     },
@@ -254,7 +272,7 @@
             "errors": 0,
             "skipped": 0
           },
-          "min_tests": 12
+          "min_tests": 13
         }
       ]
     },
@@ -456,12 +474,28 @@
       "depends_on": [
         "H03"
       ],
-      "mode": "external",
+      "mode": "decision",
       "inputs": [
-        "provenance/"
+        ".private/authorizations/foundry-consumer.json",
+        "tools/check_d02.py"
       ],
-      "acceptance": "소비자 저장소별 변경·검사·ref 범위에 대한 실제 승인",
-      "checks": []
+      "acceptance": "실제 사용자 지시 원문과 repo/main/feat/ocp-consumer-integration/최소 연동/commit/push/draft PR 범위 대조. merge·배포·외부 trial·provider migration 제외",
+      "checks": [
+        {
+          "id": "received-consumer-authorization",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_d02.py"
+          ],
+          "timeout_seconds": 30,
+          "expect": {
+            "status": "PASS",
+            "authorization_source_verified": true,
+            "scope_verified": true
+          }
+        }
+      ]
     },
     {
       "id": "H10",
@@ -515,7 +549,9 @@
         "tools/build_typescript.py",
         "tools/isolated_candidate.py",
         "tools/requirements-dev.lock",
-        "tools/dependency-wheels.json"
+        "tools/dependency-wheels.json",
+        "tools/dx_study.py",
+        "tools/check_dx_study.py"
       ],
       "acceptance": "공개 후보만으로 깨끗한 재설치, 세 입구와 BYO·호환·지원 문서",
       "checks": [
@@ -534,6 +570,22 @@
             "skipped": 0
           },
           "min_tests": 14
+        },
+        {
+          "id": "dx-observation-regressions",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_dx_study.py"
+          ],
+          "timeout_seconds": 30,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 20
         }
       ]
     },
@@ -699,7 +751,7 @@
             "errors": 0,
             "skipped": 0
           },
-          "min_tests": 23
+          "min_tests": 28
         }
       ]
     },
@@ -721,8 +773,8 @@
         "tools/check_h15.py",
         "tools/check_h16.py",
         "tools/live_foundry.py",
-        ".private/local-foundry-api/adapter-settings.json",
-        ".private/local-foundry-api/source-identity.json"
+        ".private/foundry-verification/settings.json",
+        ".private/foundry-verification/source-identity.json"
       ],
       "acceptance": "승인된 loopback 실제 엔진에 별도 trial key·조직 신원·한도·만료·회수·deadline 취소 연결. 외부 신원/운영 승인 제외",
       "checks": [
@@ -765,8 +817,8 @@
         "tools/check_h15.py",
         "tools/check_h17.py",
         "tools/live_foundry.py",
-        ".private/local-foundry-api/adapter-settings.json",
-        ".private/local-foundry-api/source-identity.json"
+        ".private/foundry-verification/settings.json",
+        ".private/foundry-verification/source-identity.json"
       ],
       "acceptance": "설치 Python/TypeScript 앱 × 실제 OR-Tools/로컬 Omelet 네 조합. 같은 좌표 profile·독립 검산. 외부 수락 제외",
       "checks": [
@@ -785,6 +837,55 @@
             "skipped": 0
           },
           "min_tests": 7
+        }
+      ]
+    },
+    {
+      "id": "H18",
+      "title": "main 기반 provider와 설치 Foundry 소비자",
+      "tasks": [
+        "OSS-03",
+        "OSS-07",
+        "OSS-08"
+      ],
+      "depends_on": [
+        "H17",
+        "D02"
+      ],
+      "mode": "local",
+      "inputs": [
+        "sdk/",
+        "adapters/",
+        "runtime/",
+        "conformance/",
+        "cases/",
+        "tools/check_h18.py",
+        "tools/check_h15.py",
+        "tools/build_candidate.py",
+        "tools/live_foundry.py",
+        ".private/foundry-verification/settings.json",
+        ".private/foundry-verification/source-identity.json",
+        ".private/foundry-main-compatibility/consumer-settings.json",
+        ".private/local-foundry-api/adapter-settings.json",
+        ".private/local-foundry-api/source-identity.json"
+      ],
+      "acceptance": "기록된 main의 native engine 변경 없이 명시 catalog 1.3.0 연결, 독립 설치 private client와 TMS resolver 실행·평가·재호출, 기존 1.4.0 smoke. 외부 trial·Studio browser·merge·H10 전체 제외",
+      "checks": [
+        {
+          "id": "h18-main-consumers",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h18.py"
+          ],
+          "timeout_seconds": 180,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 8
         }
       ]
     }
