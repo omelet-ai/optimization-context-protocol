@@ -38,6 +38,7 @@ class Policy:
     total_reserved_ms: int = 2100000
     global_reserved_ms: int = 2100000
     concurrent: int = 1
+    global_concurrent: int = 1
     lifetime_seconds: int = 14 * 86400
     result_retention_seconds: int = 86400
 
@@ -141,6 +142,8 @@ class TrialGateway:
                 return owner,json.loads(previous["response"])
             active=db.execute("SELECT count(*) FROM runs WHERE owner=? AND state IN ('running','uncertain')",(owner,)).fetchone()[0]
             if active>=self.policy.concurrent: raise OCPError("CONCURRENCY_LIMIT")
+            global_active=db.execute("SELECT count(*) FROM runs WHERE state IN ('running','uncertain')").fetchone()[0]
+            if global_active>=self.policy.global_concurrent: raise OCPError("CONCURRENCY_LIMIT")
             day=int(self.clock()//86400)
             row=db.execute("SELECT count(*) AS calls,coalesce(sum(reserved_ms),0) AS budget FROM runs WHERE owner=?",(owner,)).fetchone()
             daily=db.execute("SELECT count(*) AS calls,coalesce(sum(reserved_ms),0) AS budget FROM runs WHERE owner=? AND day=?",(owner,day)).fetchone()
@@ -160,7 +163,11 @@ class TrialGateway:
             if replay is not None: return replay
             start=time.monotonic()
             try:
-                response=self.adapter.execute(deepcopy(request)); envelope(response)
+                if hasattr(self.adapter,"execute_scoped"):
+                    response=self.adapter.execute_scoped(deepcopy(request),owner,idem)
+                else:
+                    response=self.adapter.execute(deepcopy(request))
+                envelope(response)
                 if response["kind"] not in {"result","failure"} or response["request_id"]!=rid: raise OCPError("INVALID_RESPONSE")
                 if response["kind"]=="result":
                     for field in ("capability","domain_profile","execution_profile"):

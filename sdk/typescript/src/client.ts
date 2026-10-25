@@ -1,7 +1,7 @@
 import Ajv2020 from "ajv/dist/2020";
 import { visit } from "jsonc-parser";
 import { isDeepStrictEqual } from "node:util";
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHash } from "node:crypto";
 
 export type Message = Record<string, any>;
 const schema = require("./schemas/core-0.1.schema.json");
@@ -70,12 +70,13 @@ export function envelope(value: Message): Message {
 }
 
 export class Client {
-  private constructor(private base: string, private capability: Message) {}
-  static async connect(base: string): Promise<Client> {
+  private constructor(private base: string, private capability: Message, private token?: string) {}
+  static async connect(base: string, options: {token?: string}={}): Promise<Client> {
     const url = new URL(base);
     if (url.protocol!=="https:" && !(url.protocol==="http:" && url.hostname==="127.0.0.1")) throw new Error("HTTPS_REQUIRED");
     if (url.username || url.password || url.search || url.hash || url.pathname!=="/") throw new Error("INVALID_ENDPOINT");
-    const client = new Client(url.origin, {});
+    if (options.token!==undefined && (!options.token || /[\r\n]/.test(options.token))) throw new Error("INVALID_CREDENTIAL");
+    const client = new Client(url.origin, {}, options.token);
     client.capability=await client.call("/v1/capability");
     if (client.capability.kind!=="capability") throw new Error("INVALID_RESPONSE");
     return client;
@@ -83,8 +84,11 @@ export class Client {
   describe(): Message { return structuredClone(this.capability); }
   private async call(path: string, payload?: Message): Promise<Message> {
     if (payload!==undefined) jsonValues(payload);
+    const headers: Record<string,string>={"Content-Type":"application/json"};
+    if (this.token) headers.Authorization="Bearer "+this.token;
+    if (this.token && path==="/v1/execute" && payload) headers["Idempotency-Key"]=createHash("sha256").update(payload.request_id,"utf8").digest("hex");
     const response = await fetch(this.base+path, {method:payload===undefined?"GET":"POST", redirect:"error",
-      headers:{"Content-Type":"application/json"}, body:payload===undefined?undefined:JSON.stringify(payload), signal:AbortSignal.timeout(10000)});
+      headers, body:payload===undefined?undefined:JSON.stringify(payload), signal:AbortSignal.timeout(10000)});
     if (!response.headers.get("content-type")?.startsWith("application/json")) throw new Error("INVALID_CONTENT_TYPE");
     const message = envelope(strictParse(await responseText(response)));
     if (!response.ok && message.kind!=="failure") throw new Error("INVALID_HTTP_RESPONSE");

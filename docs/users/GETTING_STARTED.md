@@ -1,10 +1,10 @@
 # Start with the path you need
 
-현재는 비공개 기술 후보이며 실제 Omelet trial 발급·배포는 준비 중이다. 공개 registry에 존재한다고 가정해 `pip install ocp-candidate`를 실행하지 않는다. 검증한 로컬 wheel/tarball을 사용한다. Python 3.12/macOS arm64, Node 24에서 검사했다.
+현재는 비공개 기술 후보이며 외부 사용자를 위한 Omelet trial 발급·배포는 준비 중이다. 공개 registry에 존재한다고 가정해 `pip install ocp-candidate`를 실행하지 않는다. 검증한 로컬 wheel/tarball을 사용한다. Python 3.12/macOS arm64, Node 24에서 검사했다.
 
 ## Try Omelet
 
-권장 첫 체험은 제한된 실제 Omelet Routing Engine이다. 환경·키 발급·한도·데이터 조건이 확정되고 실제 경로가 통과하면 연결 절차를 제공한다. 현재 reference 결과를 Omelet trial 성공으로 안내하지 않는다. 키 만료·한도 초과 시 다른 엔진으로 자동 전환하지 않는다.
+권장 첫 체험은 제한된 실제 Omelet Routing Engine이다. 승인된 로컬 비운영 환경에서는 [좌표 profile](../../spec/profiles/ROUTING_COORDINATES_0_1.md)의 실제 엔진을 별도 trial key와 한도 정책으로 연결한다. 운영자가 endpoint와 안전한 key 전달 경로를 제공한 경우 App A의 `--endpoint` 또는 App B의 endpoint 인자와 `OCP_TRIAL_TOKEN` 환경변수로 사용한다. key 값을 명령행·URL·로그에 넣지 않는다. 공개 가입·외부 사용자 운영은 아직 제공하지 않는다. 키 만료·한도 초과 시 다른 엔진으로 자동 전환하지 않는다. 상세 범위는 [로컬 연결 계약](../../spec/environments/OMELET_LOCAL_TRIAL_0_1.md)을 따른다.
 
 ## Run locally
 
@@ -29,3 +29,5 @@ wheel 기본 설치만으로 `python authoring/byo_library.py my-input.json`을 
 독립 checker wheel은 `python -B -m conformance.runner --bundle transcript.json --artifact candidate.whl`로 실행한다. bundle 형식과 범위는 [conformance](../../conformance/README.md)를 따른다. 잘못된 fixture가 통과하면 제품 완료로 보고하지 말고 재현 사례를 추가한다.
 
 15분 첫 실행·60분 앱 통합은 실제 외부 개발자에게 측정할 목표다. 위 자동 검사의 소요시간을 사용자 성공률로 바꾸지 않는다.
+
+좌표 입력은 `cases/routing/coordinates.json`의 `input`을 별도 JSON 파일로 저장하고 App A에 `--profile coordinates`를 추가한다. 좌표 모드도 계정 없이 OR-Tools로 실행할 수 있다. 기본 모드의 임의 거리행렬 입력과 구분한다.

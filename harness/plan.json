@@ -662,6 +662,131 @@
       ],
       "acceptance": "별도 범위 승인과 consumer migration; 첫 출시 범위 밖",
       "checks": []
+    },
+    {
+      "id": "H15",
+      "title": "좌표 profile와 독립 adapter 후보",
+      "tasks": [
+        "OSS-02",
+        "OSS-03",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H03",
+        "H05"
+      ],
+      "mode": "local",
+      "inputs": [
+        "spec/",
+        "cases/routing/coordinates.json",
+        "adapters/",
+        "conformance/",
+        "tools/check_h15.py"
+      ],
+      "acceptance": "좌표 의미·독립 평가·실제 reference 및 upstream 결함 검출",
+      "checks": [
+        {
+          "id": "h15-candidate",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h15.py"
+          ],
+          "timeout_seconds": 120,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 23
+        }
+      ]
+    },
+    {
+      "id": "H16",
+      "title": "실제 로컬 Omelet trial 연결 후보",
+      "tasks": [
+        "OSS-14"
+      ],
+      "depends_on": [
+        "H07",
+        "H15"
+      ],
+      "mode": "local",
+      "inputs": [
+        "adapters/",
+        "runtime/",
+        "sdk/",
+        "tools/check_h15.py",
+        "tools/check_h16.py",
+        "tools/live_foundry.py",
+        ".private/local-foundry-api/adapter-settings.json",
+        ".private/local-foundry-api/source-identity.json"
+      ],
+      "acceptance": "승인된 loopback 실제 엔진에 별도 trial key·조직 신원·한도·만료·회수·deadline 취소 연결. 외부 신원/운영 승인 제외",
+      "checks": [
+        {
+          "id": "h16-candidate",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h16.py"
+          ],
+          "timeout_seconds": 180,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 13
+        }
+      ]
+    },
+    {
+      "id": "H17",
+      "title": "로컬 두 앱과 두 엔진 후보",
+      "tasks": [
+        "OSS-06"
+      ],
+      "depends_on": [
+        "H04",
+        "H06",
+        "H11",
+        "H16"
+      ],
+      "mode": "local",
+      "inputs": [
+        "examples/",
+        "adapters/",
+        "sdk/",
+        "runtime/",
+        "tools/check_h15.py",
+        "tools/check_h17.py",
+        "tools/live_foundry.py",
+        ".private/local-foundry-api/adapter-settings.json",
+        ".private/local-foundry-api/source-identity.json"
+      ],
+      "acceptance": "설치 Python/TypeScript 앱 × 실제 OR-Tools/로컬 Omelet 네 조합. 같은 좌표 profile·독립 검산. 외부 수락 제외",
+      "checks": [
+        {
+          "id": "h17-candidate",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h17.py"
+          ],
+          "timeout_seconds": 180,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 7
+        }
+      ]
     }
   ]
 }

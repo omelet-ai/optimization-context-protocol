@@ -4,7 +4,7 @@ import { Client, strictParse } from "ocp-candidate";
 async function main() {
   const [endpoint, inputFile] = process.argv.slice(2);
   if (!endpoint || !inputFile) throw new Error("Usage: app-b <endpoint> <input.json>");
-  const client = await Client.connect(endpoint);
+  const client = await Client.connect(endpoint, {token:process.env.OCP_TRIAL_TOKEN});
   const request=client.request(strictParse(readFileSync(inputFile,"utf8")),undefined,"app-b");
   const result=await client.execute(request);
   console.log(JSON.stringify(result));

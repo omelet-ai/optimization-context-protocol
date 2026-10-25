@@ -1,6 +1,7 @@
 """Optional HTTP port. Transport uncertainty never triggers a solve retry."""
 
 import json
+import hashlib
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, build_opener, HTTPRedirectHandler, ProxyHandler
@@ -13,20 +14,27 @@ class NoRedirect(HTTPRedirectHandler):
 
 
 class HTTPAdapter:
-    def __init__(self, endpoint, timeout=10):
+    def __init__(self, endpoint, timeout=10, token=None):
         parsed=urlparse(endpoint)
         if parsed.scheme!="https" and not (parsed.scheme=="http" and parsed.hostname=="127.0.0.1"):
             raise OCPError("INVALID_ENDPOINT",message="HTTPS required outside loopback")
         if parsed.username or parsed.password or parsed.query or parsed.fragment or parsed.path not in {"","/"}:
             raise OCPError("INVALID_ENDPOINT")
         self.endpoint=endpoint.rstrip("/")
+        if token is not None and (not isinstance(token,str) or not token or any(c in token for c in "\r\n")):
+            raise OCPError("INVALID_CREDENTIAL")
+        self._token=token
         self.timeout=timeout
         self.opener=build_opener(NoRedirect(),ProxyHandler({}))
 
     def call(self, operation, payload=None):
+        headers={"Content-Type":"application/json"}
+        if self._token: headers["Authorization"]="Bearer "+self._token
+        if operation=="execute" and self._token and isinstance(payload,dict):
+            headers["Idempotency-Key"]=hashlib.sha256(payload["request_id"].encode()).hexdigest()
         request=Request(self.endpoint+"/v1/"+operation,
                         data=None if payload is None else json.dumps(payload,allow_nan=False).encode(),
-                        headers={"Content-Type":"application/json"})
+                        headers=headers)
         try:
             try: response=self.opener.open(request,timeout=self.timeout)
             except HTTPError as error: response=error

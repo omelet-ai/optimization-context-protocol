@@ -47,3 +47,5 @@ python3 -B tools/harness.py run H00
 ```
 
 run/status는 동일한 Python 3.12 환경을 사용한다. H00의 `verify_workspace.py`는 로컬 원본 snapshot·내부 이관 목록·legacy 반례까지 엄격하게 검사한다. 원본이 없는 Git clone에서 이 검사를 PASS로 바꾸지 않는다. 위 독립 검사의 성공은 H00 원본 이관 검증이나 H08 실제 trial, 공개·외부 사용자 승인으로 승격하지 않는다. 하네스 보고서는 `.harness/runs/`에 보존하고 원격 추적에서 제외한다.
+
+좌표 계약·reference·upstream 결함 검사는 같은 Python으로 `tools/check_h15.py`를 실행한다. 실제 로컬 엔진 검사는 `tools/check_h16.py`, 설치 앱 네 조합은 `tools/check_h17.py`다. 뒤의 두 검사는 승인된 로컬 환경 설정이 있어야 하며 없는 clone에서 skip/PASS로 만들지 않는다. 하네스 실행 시 H15→H16→H17과 각 단계의 기존 선행을 따른다.

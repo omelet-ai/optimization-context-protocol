@@ -10,4 +10,6 @@ python -B main.py --input my-routing-input.json --time-limit-ms 1000
 
 `--configuration`으로 선택 JSON을 명시할 수 있다. 지원하지 않는 목적·weight·제약 조합은 오류다. 출력은 Core result/failure JSON이며 failure는 종료 코드 2다. `unknown`은 실행 응답이고 infeasible 증명이 아니다. 실제 OR-Tools Routing library를 사용하며 계정·API key·원격 서버를 요구하지 않는다.
 
-직접 제공한 정수 meter 거리 행렬과 kg demand/capacity를 사용한다. 주소 geocoding·시간창·멀티트립은 지원하지 않는다. 최적성은 주장하지 않는다. 단일 차량 capacity를 포함한 구현 범위는 H04에서 실제 실행으로 검사한다. Omelet engine과의 교환성은 H09 전까지 미검증이다.
+직접 제공한 정수 meter 거리 행렬과 kg demand/capacity를 사용한다. 주소 geocoding·시간창·멀티트립은 지원하지 않는다. 최적성은 주장하지 않는다. 단일 차량 capacity를 포함한 구현 범위는 H04에서 실제 실행으로 검사한다. 임의 행렬을 Omelet 좌표 입력으로 자동 변환하지 않는다.
+
+[좌표 profile](../../spec/profiles/ROUTING_COORDINATES_0_1.md)의 JSON은 `--profile coordinates`로 로컬 reference에서 실행한다. 승인된 trial endpoint는 `--endpoint`로 선택하며 key는 `OCP_TRIAL_TOKEN` 환경변수로 전달한다. HTTP provider의 profile은 capability에서 읽는다. 같은 앱의 이 두 경로와 App B를 H17의 로컬 네 조합으로 검사하며 H09 전체·실제 외부 사용자 수락과 구분한다.

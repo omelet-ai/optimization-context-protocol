@@ -1,0 +1,81 @@
+{
+  "input": {
+    "depot": {
+      "id": "depot",
+      "location": {
+        "latitude": 37.5,
+        "longitude": 127
+      }
+    },
+    "load_unit": "kg",
+    "distance": {
+      "model": "haversine",
+      "earth_radius_m": 6371000,
+      "rounding": "ceil",
+      "unit": "meter"
+    },
+    "vehicles": [
+      {
+        "id": "van-a",
+        "capacity": 20
+      },
+      {
+        "id": "van-b",
+        "capacity": 20
+      }
+    ],
+    "visits": [
+      {
+        "id": "visit-1",
+        "demand": 10,
+        "location": {
+          "latitude": 37.51,
+          "longitude": 127.01
+        }
+      },
+      {
+        "id": "visit-2",
+        "demand": 10,
+        "location": {
+          "latitude": 37.52,
+          "longitude": 127.02
+        }
+      },
+      {
+        "id": "visit-3",
+        "demand": 10,
+        "location": {
+          "latitude": 37.49,
+          "longitude": 126.99
+        }
+      },
+      {
+        "id": "visit-4",
+        "demand": 10,
+        "location": {
+          "latitude": 37.48,
+          "longitude": 126.98
+        }
+      }
+    ]
+  },
+  "witness": {
+    "routes": [
+      {
+        "vehicle_id": "van-a",
+        "visits": [
+          "visit-1",
+          "visit-2"
+        ]
+      },
+      {
+        "vehicle_id": "van-b",
+        "visits": [
+          "visit-3",
+          "visit-4"
+        ]
+      }
+    ]
+  },
+  "expected_total_m": 11358
+}

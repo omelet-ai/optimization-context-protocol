@@ -554,6 +554,62 @@
       ],
       "consumer": "Fresh Python BYO/checker and npm consumer from selected-source artifacts",
       "evidence": "latest valid H11 report; private technical candidate only, no external-user acceptance"
+    },
+    {
+      "id": "REQ-COORD-001",
+      "gate": "H15",
+      "meaning": "Explicit spherical coordinates and independent semantics",
+      "normative_source": "spec/profiles/ROUTING_COORDINATES_0_1.md",
+      "implementation": [
+        "adapters/python/ocp_routing/coordinates.py",
+        "conformance/coordinates.py"
+      ],
+      "checker": "tools/check_h15.py",
+      "tests": [
+        "test_01_manual_witness_and_exhaustive_oracle",
+        "test_04_random_and_extreme_distance_implementations",
+        "test_20_malformed_poll_requires_confirmed_stop"
+      ],
+      "consumer": "OR-Tools coordinates adapter and independent evaluator",
+      "evidence": "latest valid H15 report; private local technical evidence, not external operating approval"
+    },
+    {
+      "id": "REQ-TRIAL-002",
+      "gate": "H16",
+      "meaning": "Real local upstream execution behind trial identity, budgets and cancellation",
+      "normative_source": "spec/environments/OMELET_LOCAL_TRIAL_0_1.md",
+      "implementation": [
+        "adapters/python/ocp_routing/foundry.py",
+        "runtime/python/ocp_runtime/trial.py"
+      ],
+      "checker": "tools/check_h16.py",
+      "tests": [
+        "test_01_real_key_to_engine_and_independent_evaluation",
+        "test_04_real_concurrent_duplicate_and_global_slot",
+        "test_09_real_deadline_cancels_upstream_process",
+        "test_13_real_maximum_trial_size_and_budget"
+      ],
+      "consumer": "actual local Foundry via trial HTTP",
+      "evidence": "latest valid H16 report; private local technical evidence, not external operating approval"
+    },
+    {
+      "id": "REQ-DX-003",
+      "gate": "H17",
+      "meaning": "Installed apps use either actual engine with identical profile semantics",
+      "normative_source": "docs/decisions/0003_COORDINATES_AND_LOCAL_TRIAL.md",
+      "implementation": [
+        "examples/app-a/main.py",
+        "examples/app-b/main.ts"
+      ],
+      "checker": "tools/check_h17.py",
+      "tests": [
+        "test_01_app_a_local_reference",
+        "test_02_app_b_http_reference",
+        "test_03_app_a_http_trial_real_foundry",
+        "test_04_app_b_http_trial_real_foundry"
+      ],
+      "consumer": "fresh Python/TypeScript apps",
+      "evidence": "latest valid H17 report; private local technical evidence, not external operating approval"
     }
   ]
 }
