@@ -40,3 +40,7 @@ H15~H17은 [좌표/실제 로컬 연결 결정](../docs/decisions/0003_COORDINAT
 H18은 [catalog 호환성 결정](../docs/decisions/0004_EXPLICIT_FOUNDRY_CATALOG_COMPATIBILITY.md)에 따른 로컬 소비자 검사다. H17·D02의 현재 PASS, 기록된 main 기반 실제 API, source identity와 private client package hash를 요구한다. 이전 1.4.0 실제 경로도 검사하며 H10을 자동 승격하지 않는다.
 
 H04가 실패하면 검사 번호·실패 유형·소요시간을 제한된 `failure_diagnostics`로 남긴다. 하네스는 허용된 숫자·분류만 보존하고 원문 로그·예외 메시지·입력·자격 증명은 저장하지 않는다. 진단 정보는 PASS 근거가 아니며 nonzero exit는 계속 FAIL이다. 자동 재시도로 실패를 덮어쓰지 않는다.
+
+H19는 [초대 운영 준비](../docs/decisions/0005_INVITATION_PREPARATION.md)를 검사한다. H07/H11/H18 선행 후 운영/장애 회귀와 설치된 MCP-only client→실제 로컬 Foundry를 확인한다. 사용자 담당 배정은 기록했으나 D00 전체 권리 검토와 D01 실제 외부 경로, Claude Code host 및 외부 참여자 수락은 별도다.
+
+H20은 H19 이후 새 설치 꾸러미에서 U01~U09 사용성 회귀를 검사한다. Node/npm은 PATH, cache는 OCP_NPM_CACHE, offline 모드는 OCP_NPM_OFFLINE=1로 명시한다. 첫 온라인 준비는 [소스 빌드 안내](../docs/development/BUILD_FROM_SOURCE.md)를 따른다. 자동 소비자 검사는 실제 외부 사람이나 Claude Code host 수락이 아니다.

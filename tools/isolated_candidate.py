@@ -12,9 +12,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def clean_env(home):
-    return {"PATH": os.defpath, "HOME": str(home), "PYTHONDONTWRITEBYTECODE": "1",
+    env={"PATH": os.defpath, "HOME": str(home), "PYTHONDONTWRITEBYTECODE": "1",
             "PIP_CONFIG_FILE": os.devnull, "PIP_DISABLE_PIP_VERSION_CHECK": "1",
             "LC_ALL": "C.UTF-8"}
+    for name in ("OCP_NPM_CACHE","OCP_NPM_OFFLINE","OCP_NPM"):
+        if name in os.environ:env[name]=os.environ[name]
+    return env
 
 
 def install(directory, wheel, extras="reference"):

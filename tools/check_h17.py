@@ -18,6 +18,7 @@ from ocp_routing.foundry import FoundryCoordinatesAdapter
 from ocp_runtime.trial import Policy, TrialGateway, digest
 from ocp_runtime.http_server import create_server
 from live_foundry import backend, settings, ROOT
+from safe_test_result import DiagnosticResult
 
 DIRECTORY=Path(WORK.name)
 PYTHON,ENV=install(DIRECTORY,ARTIFACT["wheel"],"reference")
@@ -59,7 +60,7 @@ class MatrixTests(unittest.TestCase):
         self.verify(result,REFERENCE,"app-a")
 
     def test_02_app_b_http_reference(self):
-        result=run([NODE,APP/"dist/main.js",URLS[0],DIRECTORY/"input.json"],dict(ENV,PATH=str(NODE.parent)+os.pathsep+os.defpath),APP)
+        result=run([NODE,APP/"dist/main.js",URLS[0],DIRECTORY/"input.json","--request-id","app-b"],dict(ENV,PATH=str(NODE.parent)+os.pathsep+os.defpath),APP)
         self.verify(result,REFERENCE,"app-b")
 
     def test_03_app_a_http_trial_real_foundry(self):
@@ -67,7 +68,7 @@ class MatrixTests(unittest.TestCase):
         self.verify(result,OMELET,"app-a")
 
     def test_04_app_b_http_trial_real_foundry(self):
-        result=run([NODE,APP/"dist/main.js",URLS[1],DIRECTORY/"input.json"],dict(ENV,PATH=str(NODE.parent)+os.pathsep+os.defpath,OCP_TRIAL_TOKEN=TOKEN),APP)
+        result=run([NODE,APP/"dist/main.js",URLS[1],DIRECTORY/"input.json","--request-id","app-b"],dict(ENV,PATH=str(NODE.parent)+os.pathsep+os.defpath,OCP_TRIAL_TOKEN=TOKEN),APP)
         self.verify(result,OMELET,"app-b")
 
     def test_05_installed_module_origin(self):
@@ -77,21 +78,21 @@ class MatrixTests(unittest.TestCase):
     def test_06_typescript_trial_retry_is_single_upstream_execution(self):
         # Repeat the same App B request identity: replay must not solve or charge twice.
         before=len([c for c in UPSTREAM.calls if c["path"]=="/jobs" and c["method"]=="POST"])
-        result=run([NODE,APP/"dist/main.js",URLS[1],DIRECTORY/"input.json"],dict(ENV,PATH=str(NODE.parent)+os.pathsep+os.defpath,OCP_TRIAL_TOKEN=TOKEN),APP)
+        result=run([NODE,APP/"dist/main.js",URLS[1],DIRECTORY/"input.json","--request-id","app-b"],dict(ENV,PATH=str(NODE.parent)+os.pathsep+os.defpath,OCP_TRIAL_TOKEN=TOKEN),APP)
         self.assertEqual(result["kind"],"result")
         self.assertEqual(len([c for c in UPSTREAM.calls if c["path"]=="/jobs" and c["method"]=="POST"]),before)
 
     def test_07_unauthorized_typescript_client_is_rejected(self):
-        result=subprocess.run([str(NODE),str(APP/"dist/main.js"),URLS[1],str(DIRECTORY/"input.json")],env=ENV,cwd=APP,capture_output=True,text=True,timeout=10)
+        result=subprocess.run([str(NODE),str(APP/"dist/main.js"),URLS[1],str(DIRECTORY/"input.json"),"--request-id","unauthorized"],env=ENV,cwd=APP,capture_output=True,text=True,timeout=10)
         self.assertNotEqual(result.returncode,0);self.assertNotIn(TOKEN,result.stdout+result.stderr)
 
 
 if __name__=="__main__":
     try:
-        result=unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromTestCase(MatrixTests))
+        result=unittest.TextTestRunner(resultclass=DiagnosticResult).run(unittest.defaultTestLoader.loadTestsFromTestCase(MatrixTests))
         settings()
         passed=result.wasSuccessful() and result.testsRun>=7 and len(OUTPUTS)==4 and not result.skipped
-        report={"status":"PASS" if passed else "FAIL","tests_run":result.testsRun,"failures":len(result.failures),"errors":len(result.errors),"skipped":len(result.skipped),
+        report={"status":"PASS" if passed else "FAIL","tests_run":result.testsRun,"failures":len(result.failures),"errors":len(result.errors),"skipped":len(result.skipped),"failure_diagnostics":result.diagnostics,
             "artifact_sha256":ARTIFACT["sha256"],"versions":{"typescript_tarball_sha256":TS["sha256"],"profile":"routing.coordinates@0.1.0","catalog":UPSTREAM.catalog_version,"combinations":4},
             "scope":"Clean installed Python/TypeScript apps x actual OR-Tools/loopback Foundry; same coordinate contract and independent evaluation; no external human acceptance or hosted release"}
         evidence=ROOT/".harness/work/coordinate-app-matrix";evidence.mkdir(parents=True,exist_ok=True)

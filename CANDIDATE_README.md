@@ -9,3 +9,5 @@ Start with [Getting started](docs/users/GETTING_STARTED.md), [Compatibility](doc
 - Bring your engine: actual small library example and an HTTP adapter. No Omelet account is required.
 
 Core/profile semantics and conformance are independent of the commercial trial. Fixtures are synthetic. An offline transcript PASS checks only the submitted semantics. It does not attest engine execution, public rights or a hosted service.
+
+처음 설치·자기 앱·엔진 연결은 [개발자 시작 안내](docs/users/DEVELOPER_QUICKSTART.md), 새 환경의 빌드는 [소스 빌드 안내](docs/development/BUILD_FROM_SOURCE.md)를 따른다.

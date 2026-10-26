@@ -14,6 +14,8 @@ OCP는 목적·제약·데이터 요구·실행·결과·평가를 공통 의미
 
 [사용 안내](docs/users/GETTING_STARTED.md), [호환 범위](docs/users/COMPATIBILITY.md), [기여·지원](docs/users/CONTRIBUTING_SUPPORT.md)을 참고한다. Python/TypeScript package는 로컬 build 후보이며 공개 registry에서 설치할 수 있다고 가정하지 않는다.
 
+초대 시험 후보에는 [개인별 키·설치·MCP 안내](docs/users/INVITED_TRIAL.md)와 [운영 명령·복구 절차](docs/development/INVITATION_OPERATIONS.md)를 제공한다. H19로 설치 패키지와 실제 로컬 엔진 연결을 확인하며 외부 주소와 참가자 접근은 별도 운영 결정 후 제공한다.
+
 ## 구현과 검증
 
 | 영역 | 구현 범위 |
@@ -36,3 +38,5 @@ python3 -B tools/verify_repository.py --index
 ```
 
 첫 명령은 선정 소스와 문서 링크를, 두 번째는 실제 Git index의 파일 목록·내용을 검사한다. 공개 권리의 판정은 별도 [publication 정책](provenance/publication.json)과 [체크리스트](PUBLIC_RELEASE_CHECKLIST.md)를 따른다. 비공개 저장소 생성·push 승인이 인터넷 공개나 서비스 배포를 허용하지 않는다.
+
+처음 설치·자기 앱·엔진 연결은 [개발자 시작 안내](docs/users/DEVELOPER_QUICKSTART.md), 새 환경의 빌드는 [소스 빌드 안내](docs/development/BUILD_FROM_SOURCE.md)를 따른다.

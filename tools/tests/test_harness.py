@@ -231,6 +231,17 @@ class HarnessTests(unittest.TestCase):
         with patch.dict(os.environ, {"OCP_HARNESS_TEST_SECRET": "synthetic-marker"}):
             self.assertEqual(self.harness().run("H00")["result"], "PASS")
 
+    def test_explicit_build_options_are_forwarded_and_expire_evidence(self):
+        self.write_check("import os\nassert os.environ['OCP_NPM_CACHE']=='/tmp/ocp-test-cache'\n"
+                         "assert os.environ['OCP_NPM_OFFLINE']=='1'\n"
+                         "print('{\"status\": \"PASS\", \"tests_run\": 1}')")
+        with patch.dict(os.environ,{"OCP_NPM_CACHE":"/tmp/ocp-test-cache","OCP_NPM_OFFLINE":"1"}):
+            harness=self.harness()
+            self.assertEqual(harness.run("H00")["result"],"PASS")
+            self.assertEqual(self.state(harness),"PASS")
+            with patch.dict(os.environ,{"OCP_NPM_OFFLINE":"0"}):
+                self.assertEqual(self.state(harness),"STALE")
+
     def test_symlink_input_is_rejected(self):
         (self.root / "src/link").symlink_to(self.root / "checks/check.py")
         with self.assertRaises(HarnessError):

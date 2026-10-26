@@ -47,9 +47,9 @@ runpy.run_path(sys.argv[0],run_name="__main__")
 ''')
 
 
-def python(argv):
+def python(argv,expected=0):
     completed=subprocess.run([str(PYTHON),"-I","-B",*map(str,argv)],cwd=DIRECTORY,env=ENV,capture_output=True,text=True,timeout=30)
-    if completed.returncode: raise AssertionError(completed.stderr+completed.stdout)
+    if completed.returncode!=expected: raise AssertionError(completed.stderr+completed.stdout)
     return json.loads(completed.stdout)
 
 
@@ -96,7 +96,8 @@ class ArtifactTests(unittest.TestCase):
         problem=deepcopy(FIXTURE["input"])
         problem["vehicles"]=[{"id":"v"+str(i),"capacity":4} for i in range(4)]
         (DIRECTORY/"large.json").write_text(json.dumps(problem))
-        result=python(["offline_run.py",SOURCE/"authoring/byo_library.py","large.json"])
+        result=python(["offline_run.py",SOURCE/"authoring/byo_library.py","large.json"],expected=2)
+        self.assertEqual(result["kind"],"failure")
         self.assertEqual(result["error"]["code"],"LIMIT_EXCEEDED")
 
     def test_07_source_only_python_build(self):

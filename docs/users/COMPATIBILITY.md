@@ -18,3 +18,5 @@
 공개 전 candidate 0.1.0은 아직 동결되지 않았다. 사용할 때 artifact SHA-256과 schema hash를 고정한다. 공개 후 계약·의미가 바뀌면 version 갱신, migration 문서, provider/consumer/conformance 재검증이 필요하며 기존 버전을 덮어쓰지 않는다.
 
 알 수 없는 Core/profile/capability 버전과 필수 extension은 거절한다. optional extension은 advisory이며 목적·제약 의미를 바꾸지 않는다. 다른 엔진으로 교환할 때는 profile 교집합·단위·행렬·반올림·cost coefficient를 대조한다. 같은 해와 동일 실행 시간을 보장하지 않는다. 공개 후의 지원 기간·폐기 일정은 실제 maintainer 결정이 필요하다.
+
+2026-10-26 onboarding candidate: Core/profile wire 버전은 유지하고 TypeScript evaluate 및 MCP request-guide resource를 추가했다. App B는 --request-id가 필수다. [변경·migration](../decisions/0006_DEVELOPER_ONBOARDING.md)과 새 artifact hash를 함께 사용한다.

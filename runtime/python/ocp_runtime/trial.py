@@ -96,6 +96,9 @@ class TrialGateway:
         with self.transaction() as db:
             db.execute("INSERT OR IGNORE INTO principals(id,expires) VALUES(?,?)",(owner,self.clock()+self.policy.lifetime_seconds))
             principal=db.execute("SELECT * FROM principals WHERE id=?",(owner,)).fetchone()
+            maximum=getattr(self.policy,"max_principals",None)
+            if maximum is not None and db.execute("SELECT count(*) FROM principals").fetchone()[0]>maximum:
+                raise OCPError("INVITATION_LIMIT")
             if principal["revoked"] or principal["expires"]<=self.clock(): raise OCPError("TRIAL_EXPIRED")
             db.execute("INSERT INTO keys(hash,owner) VALUES(?,?)",(hashlib.sha256(token.encode()).hexdigest(),owner))
         return token
@@ -140,6 +143,7 @@ class TrialGateway:
                 if previous["state"]!="done": raise OCPError("EXECUTION_UNCERTAIN",message="Execution reserved; never automatically resubmit")
                 if previous["created"]+self.policy.result_retention_seconds<=self.clock(): raise OCPError("RESULT_EXPIRED")
                 return owner,json.loads(previous["response"])
+            self._check_admission(db)
             active=db.execute("SELECT count(*) FROM runs WHERE owner=? AND state IN ('running','uncertain')",(owner,)).fetchone()[0]
             if active>=self.policy.concurrent: raise OCPError("CONCURRENCY_LIMIT")
             global_active=db.execute("SELECT count(*) FROM runs WHERE state IN ('running','uncertain')").fetchone()[0]
@@ -155,6 +159,9 @@ class TrialGateway:
             db.execute("INSERT INTO runs VALUES(?,?,?,?,?,?,'running',NULL,NULL)",(owner,idem,digest(request),day,self.clock(),amount))
             return owner,None
 
+    def _check_admission(self, db):
+        """Optional environment policy, inside the same atomic reservation."""
+
     def execute(self, token, request, idem):
         request=deepcopy(request)
         rid=request.get("request_id") if isinstance(request,dict) else None
@@ -163,7 +170,10 @@ class TrialGateway:
             if replay is not None: return replay
             start=time.monotonic()
             try:
-                if hasattr(self.adapter,"execute_scoped"):
+                if hasattr(self,"record_job") and hasattr(self.adapter,"execute_tracked"):
+                    response=self.adapter.execute_tracked(deepcopy(request),owner,idem,
+                        lambda job: self.record_job(owner,idem,job))
+                elif hasattr(self.adapter,"execute_scoped"):
                     response=self.adapter.execute_scoped(deepcopy(request),owner,idem)
                 else:
                     response=self.adapter.execute(deepcopy(request))

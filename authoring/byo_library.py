@@ -71,5 +71,16 @@ if __name__=="__main__":
     from pathlib import Path
     from ocp_candidate import parse_json
     parser=argparse.ArgumentParser(description=__doc__); parser.add_argument("input")
+    parser.add_argument("--trace",help="Save request/response to a new file for independent conformance")
     args=parser.parse_args()
-    print(json.dumps(Client(OwnLibraryAdapter()).execute(parse_json(Path(args.input).read_text()),request_id="byo-library")))
+    try:
+        problem=parse_json(Path(args.input).read_text())
+        client=Client(OwnLibraryAdapter())
+        request=client.request(problem,request_id="byo-library")
+        result=client.execute(problem,request_id="byo-library")
+        if args.trace:
+            with open(args.trace,"x") as stream:json.dump({"request":request,"response":result},stream)
+    except (OSError, UnicodeError, OCPError) as error:
+        result=failure("byo-library",error if isinstance(error,OCPError) else OCPError("INPUT_UNREADABLE",message="Check the UTF-8 JSON input path"))
+    print(json.dumps(result))
+    raise SystemExit(2 if result["kind"]=="failure" else 0)

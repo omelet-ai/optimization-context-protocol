@@ -38,7 +38,7 @@ def backend(path=SETTINGS):
     value,secret,_=settings(path)
     ledger_name=value.get("submission_ledger","local-foundry-submissions.sqlite")
     if ledger_name not in {"local-foundry-submissions.sqlite","main-catalog-1-3-submissions.sqlite",
-                           "main-catalog-1-3-h04-recheck.sqlite"}:
+                           "main-catalog-1-3-h04-recheck.sqlite","main-invitation-preparation-20261026.sqlite"}:
         raise ValueError("Unknown bounded local verification campaign")
     ledger=ROOT/".harness/work"/ledger_name
     ledger.parent.mkdir(parents=True,exist_ok=True)

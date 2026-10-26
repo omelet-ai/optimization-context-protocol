@@ -16,10 +16,14 @@ class ORToolsBackend:
     name = "ortools.routing"
 
     def __init__(self):
+        # Load the native solver before a provider advertises readiness. A cold
+        # import must not consume the first caller's HTTP response deadline.
+        from ortools.constraint_solver import pywrapcp, routing_enums_pb2
+        self._routing, self._enums = pywrapcp, routing_enums_pb2
         self.version = version("ortools")
 
     def solve(self, problem, time_limit_ms):
-        from ortools.constraint_solver import pywrapcp, routing_enums_pb2
+        pywrapcp, routing_enums_pb2 = self._routing, self._enums
         names = problem["matrix"]["node_ids"]
         matrix = problem["matrix"]["values"]
         depot = names.index(problem["depot"])

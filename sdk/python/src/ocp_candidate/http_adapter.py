@@ -16,6 +16,7 @@ class NoRedirect(HTTPRedirectHandler):
 class HTTPAdapter:
     def __init__(self, endpoint, timeout=10, token=None):
         parsed=urlparse(endpoint)
+        if not parsed.hostname: raise OCPError("INVALID_ENDPOINT")
         if parsed.scheme!="https" and not (parsed.scheme=="http" and parsed.hostname=="127.0.0.1"):
             raise OCPError("INVALID_ENDPOINT",message="HTTPS required outside loopback")
         if parsed.username or parsed.password or parsed.query or parsed.fragment or parsed.path not in {"","/"}:

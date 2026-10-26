@@ -20,6 +20,7 @@ from build_candidate import build
 from isolated_candidate import install
 from conformance.routing import CONFIGURATION, exhaustive_optimum, verify_result
 from conformance.core_contract import ContractError
+from safe_test_result import DiagnosticResult
 
 FIXTURE = json.loads((ROOT / "cases/routing/basic-matrix.json").read_text())
 WORK = tempfile.TemporaryDirectory(prefix="ocp-h04-clean-")
@@ -55,36 +56,6 @@ def run(problem, budget=1000, raw=None):
     if (result["kind"] == "failure") != (output.returncode == 2):
         raise AssertionError("CLI failure exit code mismatch")
     return result
-
-
-class DiagnosticResult(unittest.TextTestResult):
-    """Record bounded failure metadata; never retain tracebacks, inputs or messages."""
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.diagnostics=[]
-
-    def startTest(self, test):
-        self.started=time.monotonic()
-        super().startTest(test)
-
-    def record(self, test, err, kind):
-        category="exception"
-        for cls,label in ((subprocess.TimeoutExpired,"subprocess_timeout"),
-                          (json.JSONDecodeError,"invalid_json"),(ContractError,"contract"),
-                          (AssertionError,"assertion")):
-            if issubclass(err[0],cls):
-                category=label;break
-        self.diagnostics.append({"test_number":int(test._testMethodName.split("_")[1]),
-                                 "kind":kind,"category":category,
-                                 "elapsed_ms":round((time.monotonic()-self.started)*1000)})
-
-    def addFailure(self, test, err):
-        self.record(test,err,"failure")
-        super().addFailure(test,err)
-
-    def addError(self, test, err):
-        self.record(test,err,"error")
-        super().addError(test,err)
 
 
 class InstalledAppTests(unittest.TestCase):
@@ -177,6 +148,12 @@ class InstalledAppTests(unittest.TestCase):
         self.assertIsNone(result["proof"])
         verify_result(request(problem, 1), result)
 
+    def test_14_native_backend_ready_before_first_request(self):
+        command = "import sys; from ocp_routing import ORToolsBackend; assert 'ortools.constraint_solver.pywrapcp' not in sys.modules; backend=ORToolsBackend(); assert 'ortools.constraint_solver.pywrapcp' in sys.modules; print('ready')"
+        result=subprocess.run([str(PYTHON),"-I","-B","-c",command],cwd=DIRECTORY,env=ENV,capture_output=True,text=True,timeout=30)
+        self.assertEqual(result.returncode,0)
+        self.assertEqual(result.stdout.strip(),"ready")
+
     def test_13_failure_diagnostics_preserve_location_without_data(self):
         marker="synthetic-sensitive-input"
         class Faults(unittest.TestCase):
@@ -201,7 +178,7 @@ class InstalledAppTests(unittest.TestCase):
 if __name__ == "__main__":
     try:
         result = unittest.TextTestRunner(resultclass=DiagnosticResult).run(unittest.defaultTestLoader.loadTestsFromTestCase(InstalledAppTests))
-        passed = result.wasSuccessful() and not result.skipped and result.testsRun >= 13
+        passed = result.wasSuccessful() and not result.skipped and result.testsRun >= 14
         print(json.dumps({"status":"PASS" if passed else "FAIL", "tests_run":result.testsRun,
                           "failures":len(result.failures), "errors":len(result.errors), "skipped":len(result.skipped),
                           "failure_diagnostics":result.diagnostics,

@@ -45,7 +45,7 @@ def build(output_dir=None):
             if hashlib.sha256(target.read_bytes()).hexdigest()!=expected: raise RuntimeError("Source changed during selection")
         with tarfile.open(source_archive,"w:gz") as archive:
             for name in sorted(hashes): archive.add(stage/name,arcname="ocp-candidate/"+name,recursive=False)
-        env=dict(os.environ,PYTHONDONTWRITEBYTECODE="1",OCP_NODE=os.environ.get("OCP_NODE",str(Path.home()/".local/bin/node")))
+        env=dict(os.environ,PYTHONDONTWRITEBYTECODE="1")
         for builder in ("build_candidate.py","build_conformance.py","build_typescript.py"):
             completed=subprocess.run([sys.executable,"-B",str(stage/"tools"/builder)],cwd=stage,env=env,capture_output=True,text=True,timeout=120)
             if completed.returncode: raise RuntimeError("Selected-source build failed: "+builder+"\n"+completed.stderr)

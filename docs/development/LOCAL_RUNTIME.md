@@ -10,12 +10,12 @@ python3.12 -m venv /tmp/ocp-dev
 /tmp/ocp-dev/bin/python -m pip download --only-binary=:all: --no-cache-dir --dest .harness/work/wheels -r tools/requirements-dev.lock
 ```
 
-TypeScript는 `sdk/typescript/package-lock.json`을 사용한다. Node와 같은 디렉터리에 npm이 있어야 한다. 기본 Node 위치는 `~/.local/bin/node`이며 직접 검사에서는 `OCP_NODE`로 지정할 수 있다. compiler dependency는 source tree 밖에서 먼저 준비한다.
+TypeScript 첫 온라인 빌드와 Python build prerequisite는 [소스 빌드 안내](BUILD_FROM_SOURCE.md)를 따른다. Node/npm을 PATH에서 찾고, OCP_NODE/OCP_NPM으로 명시 경로를 선택할 수 있다. 하네스는 준비한 cache를 명시해 오프라인으로 실행한다.
 
 ```sh
-mkdir -p /tmp/ocp-ts-deps
-cp sdk/typescript/package.json sdk/typescript/package-lock.json /tmp/ocp-ts-deps/
-npm ci --prefix /tmp/ocp-ts-deps --ignore-scripts --no-audit --no-fund --cache /private/tmp/ocp-npm-cache
+export OCP_NPM_CACHE=/tmp/ocp-npm-cache
+/tmp/ocp-dev/bin/python -B tools/build_typescript.py
+export OCP_NPM_OFFLINE=1
 ```
 
 ## Clone에서 실행하는 독립 검사
@@ -54,3 +54,5 @@ run/status는 동일한 Python 3.12 환경을 사용한다. H00의 `verify_works
 좌표 계약·reference·upstream 결함 검사는 같은 Python으로 `tools/check_h15.py`를 실행한다. 실제 로컬 엔진 검사는 `tools/check_h16.py`, 설치 앱 네 조합은 `tools/check_h17.py`, 기록된 main 기반 엔진과 Foundry 소비자는 `tools/check_h18.py`다. 실제 엔진 검사는 승인된 로컬 환경 설정이 있어야 하며 없는 clone에서 skip/PASS로 만들지 않는다. 하네스 실행 시 H15→H16→H17→H18과 각 단계의 기존 선행을 따른다. H18은 D02도 요구한다.
 
 H16/H17은 `.private/foundry-verification/settings.json`의 명시적인 버전·문서 pin과 source identity를 사용한다. H18은 승인된 별도 Foundry worktree와 그곳에서 만든 private client package의 정확한 hash도 요구하며, 기존 1.4.0 환경을 별도로 검사한다. 설정의 source·package·예산 값을 추측해서 채우지 않는다. 외부 SDK 사용자가 이 로컬 검증 설정이나 Foundry checkout을 설치할 필요는 없다. 자세한 범위는 [catalog 호환성 결정](../decisions/0004_EXPLICIT_FOUNDRY_CATALOG_COMPATIBILITY.md)을 따른다.
+
+하네스는 OCP_NODE/OCP_NPM/OCP_NPM_CACHE/OCP_NPM_OFFLINE을 검사용 자식 프로세스에 전달하고 증거의 환경 식별에 포함한다. run/status/next에는 동일한 export를 유지한다. 값이 달라지면 이전 증거는 STALE이다. 서비스 token 등 다른 비밀 환경변수는 전달하지 않는다.

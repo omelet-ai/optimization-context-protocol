@@ -4,6 +4,9 @@ import { isDeepStrictEqual } from "node:util";
 import { randomUUID, createHash } from "node:crypto";
 
 export type Message = Record<string, any>;
+export class OCPClientError extends Error {
+  constructor(public readonly code: string) { super(code); this.name="OCPClientError"; }
+}
 const schema = require("./schemas/core-0.1.schema.json");
 const validator = new Ajv2020({strict:false, allErrors:false}).compile(schema);
 const MAX_RESPONSE_BYTES = 1048576;
@@ -78,6 +81,7 @@ export class Client {
     if (options.token!==undefined && (!options.token || /[\r\n]/.test(options.token))) throw new Error("INVALID_CREDENTIAL");
     const client = new Client(url.origin, {}, options.token);
     client.capability=await client.call("/v1/capability");
+    if (client.capability.kind==="failure") throw new OCPClientError(client.capability.error.code);
     if (client.capability.kind!=="capability") throw new Error("INVALID_RESPONSE");
     return client;
   }
@@ -117,6 +121,15 @@ export class Client {
     if (result.kind==="result") {
       for (const key of ["capability","domain_profile","execution_profile"]) if (!isDeepStrictEqual(result[key],request[key])) throw new Error("INVALID_RESPONSE");
       if (!isDeepStrictEqual(result.effective_configuration,request.configuration)) throw new Error("INVALID_RESPONSE");
+    }
+    return result;
+  }
+  async evaluate(request: Message, solution: Message): Promise<Message> {
+    envelope(request); jsonValues(solution);
+    const result=await this.call("/v1/evaluate",{request,solution});
+    if (!["evaluation","failure"].includes(result.kind) || result.request_id!==request.request_id) throw new Error("INVALID_RESPONSE");
+    if (result.kind==="evaluation") {
+      for (const key of ["capability","domain_profile"]) if (!isDeepStrictEqual(result[key],request[key])) throw new Error("INVALID_RESPONSE");
     }
     return result;
   }

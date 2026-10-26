@@ -18,7 +18,7 @@ python3.12 -m venv /tmp/ocp-example
 
 첫 입력은 `cases/routing/basic-matrix.json`의 `input` 객체를 JSON 파일로 저장한다. 직접 입력할 때 depot·visit/vehicle ID·kg demand/capacity·방향별 정수 meter 행렬을 제공한다. 행/열은 node_ids 순서이며 좌표 변환과 반올림은 없다. 결과의 kind/status, metrics의 evaluated 여부와 단위, constraints를 확인한다. `feasible`은 최적성 증명이 아니며 `unknown`은 불가능 판정이 아니다.
 
-선택 HTTP: `python -B -m ocp_runtime.http_server --port 8765`. App B는 npm tarball을 설치하고 `main.ts`를 컴파일한 다음 `node dist/main.js http://127.0.0.1:8765 my-input.json`으로 실행한다. HTTP 서버는 loopback 전용이다.
+선택 HTTP: `python -B -m ocp_runtime.http_server --port 8765`. App B는 npm tarball을 설치하고 `main.ts`를 컴파일한 다음 `node dist/main.js http://127.0.0.1:8765 my-input.json --request-id my-job-1`으로 실행한다. HTTP 서버는 loopback 전용이다.
 
 선택 MCP: wheel의 `[reference,mcp]`를 설치하고 host의 stdio command를 해당 환경의 Python, args를 `-I -B -m ocp_runtime.mcp_server`로 설정한다. 검증한 host는 공식 MCP Python Client 2.3.0이다. Claude Code 첫 공식 데모는 실제 trial 연결과 함께 별도로 검증할 예정이다. global 설정을 자동 변경하지 않는다.
 
@@ -31,3 +31,5 @@ wheel 기본 설치만으로 `python authoring/byo_library.py my-input.json`을 
 15분 첫 실행·60분 앱 통합은 실제 외부 개발자에게 측정할 목표다. 위 자동 검사의 소요시간을 사용자 성공률로 바꾸지 않는다.
 
 좌표 입력은 `cases/routing/coordinates.json`의 `input`을 별도 JSON 파일로 저장하고 App A에 `--profile coordinates`를 추가한다. 좌표 모드도 계정 없이 OR-Tools로 실행할 수 있다. 기본 모드의 임의 거리행렬 입력과 구분한다.
+
+설치 꾸러미의 복사 실행 가능한 앱·엔진·transcript 명령은 [개발자 시작 안내](DEVELOPER_QUICKSTART.md), 원본 소스 빌드는 [빌드 안내](../development/BUILD_FROM_SOURCE.md)를 따른다.

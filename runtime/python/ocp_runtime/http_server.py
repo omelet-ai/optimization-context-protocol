@@ -15,6 +15,25 @@ def create_server(adapter, port=0, service=None):
     service = Service(adapter) if service is None else service
     slots = threading.BoundedSemaphore(4)
 
+    class BoundedServer(ThreadingHTTPServer):
+        # Limit threads before accepting request headers; handler-level slots
+        # alone cannot bound slow or unauthenticated connections.
+        connections = threading.BoundedSemaphore(8)
+
+        def process_request(self, request, client_address):
+            if not self.connections.acquire(blocking=False):
+                self.shutdown_request(request); return
+            try: super().process_request(request,client_address)
+            except BaseException:
+                self.connections.release(); raise
+
+        def process_request_thread(self, request, client_address):
+            try: super().process_request_thread(request,client_address)
+            finally: self.connections.release()
+
+        def handle_error(self,request,client_address):
+            pass  # No raw request, exception, or key in serving logs.
+
     class Handler(BaseHTTPRequestHandler):
         protocol_version = "HTTP/1.0"
 
@@ -39,7 +58,8 @@ def create_server(adapter, port=0, service=None):
 
         def allowed(self):
             # No browser ambient authority, DNS rebinding or cross-origin invocation.
-            if self.headers.get("Host") != "127.0.0.1:" + str(self.server.server_port) or self.headers.get("Origin"):
+            if (self.headers.get_all("Host",[]) != ["127.0.0.1:" + str(self.server.server_port)]
+                or self.headers.get("Origin") or any(len(self.headers.get_all(name,[]))>1 for name in ("Authorization","Idempotency-Key"))):
                 self.error(403,"FORBIDDEN"); return False
             return True
 
@@ -76,7 +96,7 @@ def create_server(adapter, port=0, service=None):
             finally:
                 slots.release()
 
-    server = ThreadingHTTPServer(("127.0.0.1",port),Handler)
+    server = BoundedServer(("127.0.0.1",port),Handler)
     server.daemon_threads = True
     return server
 

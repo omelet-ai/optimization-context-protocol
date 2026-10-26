@@ -19,3 +19,5 @@ MCP 도구는 `ocp_describe`, `ocp_requirements`, `ocp_validate`, `ocp_execute`,
 검증 host는 별도 프로세스를 실행하는 공식 Python MCP Client 2.3.0, protocol 2026-07-28이다. Claude Desktop·다른 host·다른 protocol 조합은 미검증이다. 실제 OR-Tools를 호출한 HTTP/TypeScript/MCP 결과를 독립 평가한다. 예외·인증정보·요청 본문은 서버 로그에 출력하지 않는다.
 
 참고: [MCP SDK](https://py.sdk.modelcontextprotocol.io/), [공식 Client](https://py.sdk.modelcontextprotocol.io/client/), [Ajv schema language](https://ajv.js.org/guide/schema-language.html), [JSON parser](https://github.com/microsoft/node-jsonc-parser). 패키지 이름·버전은 비공개 후보이며 registry 게시 승인과 별도다.
+
+후보 추가 기능: MCP는 선택적 `ocp://request-guide/0.1.0` JSON resource로 Core schema, 알려진 input profile schema, provider defaults가 반영된 request template을 제공한다. resource 읽기는 solve하지 않는다. 기존 다섯 도구·Core wire schema는 유지한다. TypeScript Client.evaluate(request, solution)는 기존 /v1/evaluate를 호출하고 request ID·capability·profile을 대조한다. CLI migration은 [개발자 연결 변경](../../docs/decisions/0006_DEVELOPER_ONBOARDING.md)을 따른다.

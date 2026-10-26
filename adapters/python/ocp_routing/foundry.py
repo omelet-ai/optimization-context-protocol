@@ -45,6 +45,7 @@ class FoundryBackend:
         self.catalog_version = catalog_version
         self.grace_ms = deadline_grace_ms
         self._tenant = self._idem = None
+        self._record_job = None
         self.opener = build_opener(NoRedirect(),ProxyHandler({}))
         self.check_catalog()
 
@@ -132,6 +133,9 @@ class FoundryBackend:
             job = accepted.get("jobId")
             if not isinstance(job,str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,128}",job):
                 raise OCPError("EXECUTION_UNCERTAIN")
+            if self._record_job is not None:
+                try: self._record_job(job)
+                except Exception: raise OCPError("EXECUTION_UNCERTAIN") from None
             while time.monotonic()<end:
                 status = self._call("GET","/jobs/"+job,timeout=min(1,end-time.monotonic()))
                 if status.get("jobId") != job: raise OCPError("EXECUTION_UNCERTAIN")
@@ -206,13 +210,29 @@ class FoundryCoordinatesAdapter(CoordinatesAdapter):
         return failure(request.get("request_id") if isinstance(request,dict) else None,OCPError("TRUSTED_CONTEXT_REQUIRED"))
 
     def execute_scoped(self, request, owner, idempotency_key):
+        return self.execute_tracked(request,owner,idempotency_key,None)
+
+    def execute_tracked(self, request, owner, idempotency_key, record_job):
         checked = self.validate(request)
         if not checked["valid"]:
             issue = checked["issues"][0]
             return failure(checked["request_id"],OCPError(issue["code"],issue["path"],issue["message"]))
-        scoped = CoordinatesAdapter(self.backend.scoped(owner,idempotency_key),deepcopy(self.identity))
+        backend = self.backend.scoped(owner,idempotency_key)
+        backend._record_job = record_job
+        scoped = CoordinatesAdapter(backend,deepcopy(self.identity))
         result = scoped.execute(request)
         if result["kind"] == "result":
             result["extensions"] = deepcopy(self.describe()["extensions"])
             result["provenance"]["limitations"].append("Native solver build version is unreported; 0.0.0-unreported is a sentinel. Catalog/compiler are pinned by the catalog extension.")
         return result
+
+    def stop_recorded_job(self, owner, idempotency_key, job):
+        """Operator recovery: GET before DELETE; never submit/retry a solve."""
+        if not isinstance(job,str) or not re.fullmatch(r"[A-Za-z0-9_-]{1,128}",job):
+            raise OCPError("INVALID_REQUEST")
+        backend = self.backend.scoped(owner,idempotency_key)
+        status = backend._call("GET","/jobs/"+job)
+        if status.get("jobId") != job: raise OCPError("EXECUTION_UNCERTAIN")
+        if status.get("status") in {"cancelled","succeeded","failed","infeasible"}: return True
+        if status.get("status") not in {"queued","running"}: raise OCPError("EXECUTION_UNCERTAIN")
+        return backend._stop(job)

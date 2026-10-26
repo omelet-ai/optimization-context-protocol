@@ -42,7 +42,7 @@ command([NODE,APP/"node_modules/typescript/bin/tsc","--types","node","--target",
 (APP/"input.json").write_text(json.dumps(FIXTURE["input"]))
 
 SERVER=subprocess.Popen([str(PYTHON),"-I","-B","-m","ocp_runtime.http_server"],cwd=DIRECTORY,env=ENV,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
-if not select.select([SERVER.stdout],[],[],10)[0]:
+if not select.select([SERVER.stdout],[],[],30)[0]:
     SERVER.terminate(); raise RuntimeError("HTTP server did not start")
 line=SERVER.stdout.readline()
 if not line:
@@ -66,7 +66,9 @@ class BindingTests(unittest.TestCase):
 
     def test_02_python_http_client_real_solve(self):
         client=Client(HTTPAdapter(URL)); req=client.request(FIXTURE["input"],request_id="http-real")
-        self.assertEqual(verify_result(req,client.execute(FIXTURE["input"],request_id="http-real"))["total_cost"],18)
+        result=client.execute(FIXTURE["input"],request_id="http-real")
+        self.assertEqual(result["kind"],"result",result.get("error",{}).get("code"))
+        self.assertEqual(verify_result(req,result)["total_cost"],18)
 
     def test_03_http_requirements(self):
         _,value=http("POST","/v1/requirements",{"configuration":FIXTURE["configuration"]})
@@ -109,7 +111,7 @@ class BindingTests(unittest.TestCase):
         _,value=http("POST","/v1/execute",req); self.assertEqual(value["error"]["code"],"VERSION_MISMATCH")
 
     def test_14_typescript_app_b_real_solve(self):
-        out=command([NODE,"dist/main.js",URL,"input.json"],APP)
+        out=command([NODE,"dist/main.js",URL,"input.json","--request-id","app-b"],APP)
         value=json.loads(out); req=request(); req["request_id"]="app-b"
         self.assertEqual(verify_result(req,value)["total_cost"],18)
 
@@ -155,7 +157,7 @@ const {Client}=require('ocp-candidate');
 
 def mcp_session(test):
     async def wrapped(self):
-        async with MCPClient(StdioServerParameters(command=str(PYTHON),args=["-I","-B","-m","ocp_runtime.mcp_server"],env=ENV,cwd=str(DIRECTORY)),read_timeout_seconds=10) as client:
+        async with MCPClient(StdioServerParameters(command=str(PYTHON),args=["-I","-B","-m","ocp_runtime.mcp_server"],env=ENV,cwd=str(DIRECTORY)),read_timeout_seconds=30) as client:
             self.client=client
             await test(self)
     return wrapped

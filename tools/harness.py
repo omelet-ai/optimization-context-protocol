@@ -14,6 +14,7 @@ import sys
 import time
 import uuid
 
+BUILD_ENV = ("OCP_NODE", "OCP_NPM", "OCP_NPM_CACHE", "OCP_NPM_OFFLINE")
 
 class HarnessError(ValueError):
     pass
@@ -192,7 +193,8 @@ class Harness:
         return {
             "files": self.snapshot(stage),
             "stage_definition": stage,
-            "environment": {"python": sys.version, "platform": platform.platform()},
+            "environment": {"python": sys.version, "platform": platform.platform(),
+                            "build_options": {key:os.environ[key] for key in BUILD_ENV if key in os.environ}},
             "dependencies": {d: states[d]["evidence_sha256"] for d in stage["depends_on"]},
         }
 
@@ -254,7 +256,7 @@ class Harness:
 
     def execute_check(self, check):
         argv = [sys.executable if x == "{python}" else x for x in check["argv"]]
-        env = {key: os.environ[key] for key in ("PATH", "HOME", "TMPDIR", "LANG", "LC_ALL", "SYSTEMROOT") if key in os.environ}
+        env = {key: os.environ[key] for key in ("PATH", "HOME", "TMPDIR", "LANG", "LC_ALL", "SYSTEMROOT")+BUILD_ENV if key in os.environ}
         env.update(PYTHONDONTWRITEBYTECODE="1", PYTHONHASHSEED="0")
         started = time.monotonic()
         result = {"id": check["id"], "argv": check["argv"], "result": "FAIL", "timed_out": False}

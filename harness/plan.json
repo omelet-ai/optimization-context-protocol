@@ -254,7 +254,8 @@
         "tools/isolated_candidate.py",
         "tools/build_candidate.py",
         "tools/dependency-wheels.json",
-        "tools/requirements-dev.lock"
+        "tools/requirements-dev.lock",
+        "tools/safe_test_result.py"
       ],
       "acceptance": "OR-Tools 실제 solve·독립 평가·격리 설치와 자기 입력 실행",
       "checks": [
@@ -818,7 +819,8 @@
         "tools/check_h17.py",
         "tools/live_foundry.py",
         ".private/foundry-verification/settings.json",
-        ".private/foundry-verification/source-identity.json"
+        ".private/foundry-verification/source-identity.json",
+        "tools/safe_test_result.py"
       ],
       "acceptance": "설치 Python/TypeScript 앱 × 실제 OR-Tools/로컬 Omelet 네 조합. 같은 좌표 profile·독립 검산. 외부 수락 제외",
       "checks": [
@@ -886,6 +888,127 @@
             "skipped": 0
           },
           "min_tests": 8
+        }
+      ]
+    },
+    {
+      "id": "H19",
+      "title": "초대 운영·설치 MCP 준비",
+      "tasks": [
+        "OSS-11",
+        "OSS-14"
+      ],
+      "depends_on": [
+        "H07",
+        "H11",
+        "H18"
+      ],
+      "mode": "local",
+      "inputs": [
+        "runtime/",
+        "adapters/",
+        "sdk/",
+        "conformance/",
+        "cases/",
+        "examples/invited-trial/",
+        "docs/users/INVITED_TRIAL.md",
+        "docs/development/INVITATION_OPERATIONS.md",
+        "tools/check_h19.py",
+        "tools/check_invitation_live.py",
+        "tools/build_invitation_kit.py",
+        "tools/build_candidate.py",
+        "tools/isolated_candidate.py",
+        "tools/live_foundry.py",
+        ".private/foundry-verification/settings.json",
+        ".private/foundry-verification/source-identity.json"
+      ],
+      "acceptance": "초대 5명/전체 50회·복구·키/파일 보호·연결 제한 및 설치 MCP client→실제 로컬 엔진→독립 검산. 외부 HTTPS/Claude Code/사용자 수락 제외",
+      "checks": [
+        {
+          "id": "invitation-operations",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h19.py"
+          ],
+          "timeout_seconds": 120,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 19
+        },
+        {
+          "id": "installed-live-invitation",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_invitation_live.py"
+          ],
+          "timeout_seconds": 120,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 6
+        }
+      ]
+    },
+    {
+      "id": "H20",
+      "title": "외부 개발자 설치·앱·엔진 사용성 회귀",
+      "tasks": [
+        "OSS-03",
+        "OSS-10",
+        "OSS-11",
+        "OSS-14"
+      ],
+      "depends_on": [
+        "H19"
+      ],
+      "mode": "local",
+      "inputs": [
+        "sdk/",
+        "adapters/",
+        "runtime/",
+        "examples/",
+        "authoring/",
+        "conformance/",
+        "spec/",
+        "docs/",
+        "cases/",
+        "tools/check_h20.py",
+        "tools/build_invitation_kit.py",
+        "tools/build_review_bundle.py",
+        "tools/build_typescript.py",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/isolated_candidate.py",
+        "tools/dependency-wheels.json",
+        "tools/requirements-dev.lock",
+        "provenance/candidate-selection.json"
+      ],
+      "acceptance": "U01-U09: 새 꾸러미 설치, strict 입력, 명시 요청 ID/재시도, 오류 복구, BYO 실패와 transcript, TypeScript 평가/정체성, MCP schema/template 소비, PATH/cache 빌드. 실제 사람·Claude host 수락은 제외",
+      "checks": [
+        {
+          "id": "clean-developer-journey",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h20.py"
+          ],
+          "timeout_seconds": 180,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 13
         }
       ]
     }
