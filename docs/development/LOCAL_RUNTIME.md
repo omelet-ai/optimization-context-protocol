@@ -55,4 +55,6 @@ run/status는 동일한 Python 3.12 환경을 사용한다. H00의 `verify_works
 
 H16/H17은 `.private/foundry-verification/settings.json`의 명시적인 버전·문서 pin과 source identity를 사용한다. H18은 승인된 별도 Foundry worktree와 그곳에서 만든 private client package의 정확한 hash도 요구하며, 기존 1.4.0 환경을 별도로 검사한다. 설정의 source·package·예산 값을 추측해서 채우지 않는다. 외부 SDK 사용자가 이 로컬 검증 설정이나 Foundry checkout을 설치할 필요는 없다. 자세한 범위는 [catalog 호환성 결정](../decisions/0004_EXPLICIT_FOUNDRY_CATALOG_COMPATIBILITY.md)을 따른다.
 
+H17의 새 Python 환경 첫 로컬 실행은 OR-Tools 네이티브 모듈 로딩까지 포함해 프로세스를 최대 60초로 제한한다. 요청의 1,000ms 계산 예산은 유지하며, 사전 실행이나 자동 재시도로 첫 실행을 숨기지 않는다. HTTP 소비자는 기존 20초 제한을 유지하고 각 프로세스의 경과 시간을 내부 검사 보고서에 남긴다.
+
 하네스는 OCP_NODE/OCP_NPM/OCP_NPM_CACHE/OCP_NPM_OFFLINE을 검사용 자식 프로세스에 전달하고 증거의 환경 식별에 포함한다. run/status/next에는 동일한 export를 유지한다. 값이 달라지면 이전 증거는 STALE이다. 서비스 token 등 다른 비밀 환경변수는 전달하지 않는다.

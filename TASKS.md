@@ -56,3 +56,5 @@
 초대 시험은 [운영 절차](docs/development/INVITATION_OPERATIONS.md)와 [초대자 안내](docs/users/INVITED_TRIAL.md)를 사용한다. 5명·전체 50회·각 하루 5회/총 10회·14일, 기존 로컬 엔진과 단기 HTTPS 경로를 준비한다. H19는 [결정 기록](docs/decisions/0005_INVITATION_PREPARATION.md)의 설치·로컬 검사이며 외부 호스팅·실제 Claude Code·외부 참여자 증거는 별도다.
 
 H20은 외부 엔지니어 자동 리허설에서 발견한 U01~U09의 회귀 단계다. strict JSON, 명시 request ID, BYO 실패 종료, 새 환경의 build·설치·진단, MCP request-guide, TypeScript 평가와 transcript 예제를 새 꾸러미로 검사한다. [변경 기록](docs/decisions/0006_DEVELOPER_ONBOARDING.md)을 따르며 현재 판정은 하네스에서 확인한다. 실제 외부 사람의 H12 및 게시 승인은 별도다.
+
+H21은 [공개 사이트의 로컬 후보](site/README.md)를 추적한다. 영문 중심 10개 페이지·한국어 소개·세 시작 경로·실제 계산 예제·명령 복사와 설치 꾸러미를 구현했다. 명시 파일/링크/해시와 새 설치·Python/TypeScript/BYO 실행은 H21에서 검사하고, 브라우저 화면·입력 관찰은 정확한 site manifest에 별도 기록한다. 잠금 등으로 수행하지 못한 UI 검사를 PASS로 대신하지 않는다. 공개 주소·권리·라이선스·게시와 실제 외부 사람 수락은 미완료다.

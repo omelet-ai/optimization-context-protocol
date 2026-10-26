@@ -40,3 +40,5 @@ python3 -B tools/verify_repository.py --index
 첫 명령은 선정 소스와 문서 링크를, 두 번째는 실제 Git index의 파일 목록·내용을 검사한다. 공개 권리의 판정은 별도 [publication 정책](provenance/publication.json)과 [체크리스트](PUBLIC_RELEASE_CHECKLIST.md)를 따른다. 비공개 저장소 생성·push 승인이 인터넷 공개나 서비스 배포를 허용하지 않는다.
 
 처음 설치·자기 앱·엔진 연결은 [개발자 시작 안내](docs/users/DEVELOPER_QUICKSTART.md), 새 환경의 빌드는 [소스 빌드 안내](docs/development/BUILD_FROM_SOURCE.md)를 따른다.
+
+영문 중심 소개·예제·세 시작 경로와 한국어 소개를 제공하는 [웹사이트 로컬 후보](site/README.md)를 추가했다. 사이트의 설치 명령은 실행 검사와 같은 원본을 사용하며 실제 로컬 엔진의 합성 예제를 표시한다. H21의 기술 검사와 브라우저 관찰, 외부 공개 승인을 구분한다.

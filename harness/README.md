@@ -44,3 +44,5 @@ H04가 실패하면 검사 번호·실패 유형·소요시간을 제한된 `fai
 H19는 [초대 운영 준비](../docs/decisions/0005_INVITATION_PREPARATION.md)를 검사한다. H07/H11/H18 선행 후 운영/장애 회귀와 설치된 MCP-only client→실제 로컬 Foundry를 확인한다. 사용자 담당 배정은 기록했으나 D00 전체 권리 검토와 D01 실제 외부 경로, Claude Code host 및 외부 참여자 수락은 별도다.
 
 H20은 H19 이후 새 설치 꾸러미에서 U01~U09 사용성 회귀를 검사한다. Node/npm은 PATH, cache는 OCP_NPM_CACHE, offline 모드는 OCP_NPM_OFFLINE=1로 명시한다. 첫 온라인 준비는 [소스 빌드 안내](../docs/development/BUILD_FROM_SOURCE.md)를 따른다. 자동 소비자 검사는 실제 외부 사람이나 Claude Code host 수락이 아니다.
+
+H21은 H11/H20 뒤에 [사이트 로컬 후보](../site/README.md)의 명시 출력·링크·꾸러미 해시와 사이트에서 내려받은 새 설치·실제 Python/Node/BYO 실행을 검사한다. 브라우저 렌더링·상호작용은 별도 관찰이며 H21 자동 PASS가 이를 대신하지 않는다. 공개 사이트 게시와 실제 외부 개발자 수락도 별도다.

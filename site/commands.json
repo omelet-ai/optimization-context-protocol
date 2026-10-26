@@ -1,0 +1,13 @@
+{
+  "unpack": {"label": "Unpack the developer kit", "language": "sh", "code": "unzip ocp-developer-kit.zip\ncd ocp-developer-kit"},
+  "local-install": {"label": "Install the local reference", "language": "sh", "code": "python3.12 -m venv .local\n.local/bin/python -m pip install --no-compile -c constraints.txt './ocp_candidate-0.1.0-py3-none-any.whl[reference]' ./ocp_conformance_candidate-0.1.0-py3-none-any.whl"},
+  "local-run": {"label": "Run and independently check a route", "language": "sh", "code": ".local/bin/python -B own_app.py --input basic-input.json --request-id local-first --trace local-first.json"},
+  "byo-install": {"label": "Install without a bundled solver", "language": "sh", "code": "python3.12 -m venv .byo\n.byo/bin/python -m pip install --no-compile -c constraints.txt ./ocp_candidate-0.1.0-py3-none-any.whl ./ocp_conformance_candidate-0.1.0-py3-none-any.whl"},
+  "byo-run": {"label": "Run your library and check its transcript", "language": "sh", "code": ".byo/bin/python -B byo_library.py basic-input.json --trace own-engine-trace.json\n.byo/bin/python -B export_transcript.py --trace own-engine-trace.json --artifact byo_library.py --out own-engine-transcript.json\n.byo/bin/python -B -m conformance.runner --bundle own-engine-transcript.json --artifact byo_library.py"},
+  "trial-install": {"label": "Prepare an invited session", "language": "sh", "code": "python3.12 install.py --check\npython3.12 install.py --venv .venv\nchmod 600 session.json\n.venv/bin/python -B -m ocp_runtime.trial_client --session session.json doctor"},
+  "trial-run": {"label": "Run one invited problem", "language": "sh", "code": ".venv/bin/python -B main.py --session session.json --input input.json --request-id trial-first"},
+  "python-app": {"label": "Connect your Python application", "language": "sh", "code": ".local/bin/python -B own_app.py --input basic-input.json --request-id my-app-1 --trace my-app-1.json"},
+  "ts-install": {"label": "Install and build the TypeScript example", "language": "sh", "code": "npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund ./ocp-candidate-0.1.0.tgz\nnpm run build"},
+  "http-provider": {"label": "Terminal A: start a local provider", "language": "sh", "code": ".local/bin/python -B -m ocp_runtime.http_server --port 8765"},
+  "ts-run": {"label": "Terminal B: call from Node", "language": "sh", "code": "node dist/main.js http://127.0.0.1:8765 basic-input.json --request-id my-ts-job-1"}
+}

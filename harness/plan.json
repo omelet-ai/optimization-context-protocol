@@ -1011,6 +1011,63 @@
           "min_tests": 13
         }
       ]
+    },
+    {
+      "id": "H21",
+      "title": "공개 사이트 로컬 후보와 설치 경로",
+      "tasks": [
+        "OSS-10",
+        "OSS-11",
+        "OSS-12"
+      ],
+      "depends_on": [
+        "H11",
+        "H20"
+      ],
+      "mode": "local",
+      "inputs": [
+        "sdk/",
+        "adapters/",
+        "runtime/",
+        "examples/",
+        "authoring/",
+        "conformance/",
+        "spec/",
+        "docs/",
+        "cases/",
+        "tools/check_h20.py",
+        "tools/build_invitation_kit.py",
+        "tools/build_review_bundle.py",
+        "tools/build_typescript.py",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/isolated_candidate.py",
+        "tools/dependency-wheels.json",
+        "tools/requirements-dev.lock",
+        "provenance/candidate-selection.json",
+        "site/",
+        "tools/build_site.py",
+        "tools/check_h21.py"
+      ],
+      "acceptance": "영문·한국어 소개, 세 시작 경로, 명시 파일/링크/해시, 실제 계산 예제, 사이트 다운로드 새 설치와 Python/Node/BYO 실행. 브라우저 관찰은 별도 증거이며 외부 trial·사람 수락·게시 승인 아님",
+      "checks": [
+        {
+          "id": "site-and-installed-journeys",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h21.py"
+          ],
+          "timeout_seconds": 240,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 13
+        }
+      ]
     }
   ]
 }
