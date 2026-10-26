@@ -1,14 +1,19 @@
 """Generate the website's synthetic example using installed packages, never fixtures as outputs."""
 from copy import deepcopy
+import argparse
 import json
 from pathlib import Path
-import sys
 from ocp_candidate import Client
 from ocp_routing import RoutingAdapter, ORToolsBackend
 from conformance.routing import verify_result
 
-problem=json.loads(Path(sys.argv[1]).read_text())
+parser=argparse.ArgumentParser(description=__doc__)
+parser.add_argument("input")
+parser.add_argument("--report-ready",action="store_true",help=argparse.SUPPRESS)
+args=parser.parse_args()
+problem=json.loads(Path(args.input).read_text())
 adapter=RoutingAdapter(ORToolsBackend())
+if args.report_ready:print("OCP_SITE_ENGINE_READY",flush=True)
 client=Client(adapter)
 request=client.request(problem,request_id="site-routing-example")
 result=client.execute(problem,request_id="site-routing-example")

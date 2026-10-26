@@ -16,16 +16,21 @@ import sys
 import tempfile
 import threading
 import unittest
+from unittest.mock import patch
 import uuid
 from urllib.parse import unquote, urlsplit
 from urllib.request import urlopen
 import zipfile
 
-from build_site import build
+from build_site import build, run_example
 from build_typescript import NODE
 from isolated_candidate import clean_env
 
 ROOT=Path(__file__).resolve().parents[1]
+# Harness diagnostics use the local conformance exception type. Installed
+# consumer subprocesses retain their separate clean environment and paths.
+sys.path.insert(0,str(ROOT))
+from safe_test_result import DiagnosticResult
 
 
 class Page(HTMLParser):
@@ -50,7 +55,9 @@ class Quiet(SimpleHTTPRequestHandler):
 class SiteJourney(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        cls.runtime=None;cls.server=None;cls.thread=None;cls.output=None
         cls.temp=tempfile.TemporaryDirectory(prefix='ocp-site-test-')
+        cls.addClassCleanup(cls.cleanup)
         cls.work=Path(cls.temp.name).resolve();cls.output=cls.work/'site'
         cls.built=build(cls.output)
         cls.manifest=json.loads((cls.output/'site-manifest.json').read_text())
@@ -81,7 +88,6 @@ class SiteJourney(unittest.TestCase):
         cls.kit=current
         cls.run_block('local-install')
         cls.run_block('byo-install')
-        cls.runtime=None
 
     @classmethod
     def run_block(cls,key,expected=0):
@@ -93,16 +99,21 @@ class SiteJourney(unittest.TestCase):
         return outputs[-1]
 
     @classmethod
-    def tearDownClass(cls):
+    def cleanup(cls):
         if cls.runtime:
             cls.runtime.terminate()
             try:cls.runtime.wait(timeout=10)
             except subprocess.TimeoutExpired:cls.runtime.kill();cls.runtime.wait()
-        cls.server.shutdown();cls.server.server_close();cls.thread.join()
+            if cls.runtime.stderr:cls.runtime.stderr.close()
+        if cls.server:
+            if cls.thread and cls.thread.is_alive():cls.server.shutdown()
+            cls.server.server_close()
+        if cls.thread:cls.thread.join()
         # Retain the exact downloaded-and-installed site for separate browser review.
         # This is private harness output, never a source or publication selection.
-        cls.review=ROOT/'.harness/work/site-reviewed'/uuid.uuid4().hex
-        shutil.copytree(cls.output,cls.review)
+        if cls.output and (cls.output/'site-manifest.json').is_file():
+            cls.review=ROOT/'.harness/work/site-reviewed'/uuid.uuid4().hex
+            shutil.copytree(cls.output,cls.review)
         cls.temp.cleanup()
 
     def test_01_page_metadata_and_landmarks(self):
@@ -159,6 +170,9 @@ class SiteJourney(unittest.TestCase):
         self.assertEqual(demo['routing']['result']['provenance']['engine']['id'],'ortools.routing')
         self.assertEqual(demo['routing']['result']['status'],'feasible')
         self.assertEqual(demo['routing']['independent_check']['total_cost'],18)
+        self.assertEqual(demo['routing']['request']['budget']['time_limit_ms'],1000)
+        self.assertEqual(self.built['example_timings']['startup_timeout_seconds'],60)
+        self.assertEqual(self.built['example_timings']['execution_timeout_seconds'],30)
         self.assertEqual(demo['rejected']['result']['kind'],'failure')
         self.assertIsNone(demo['rejected']['evaluation'])
         self.assertIn('Precomputed at site build',(self.output/'examples/index.html').read_text())
@@ -204,6 +218,9 @@ class SiteJourney(unittest.TestCase):
         for line in lines[:2]:
             r=subprocess.run(shlex.split(line),cwd=self.kit,env=self.env,capture_output=True,text=True,timeout=90)
             self.assertEqual(r.returncode,0,r.stderr)
+            if '--venv' in shlex.split(line):
+                self.assertIn('Looking in links:',r.stdout)
+                self.assertNotIn('Looking in indexes:',r.stdout)
         r=subprocess.run(shlex.split(lines[-1]),cwd=self.kit,env=self.env,capture_output=True,text=True,timeout=20)
         self.assertNotEqual(r.returncode,0)
         self.assertEqual(json.loads(r.stderr)['code'],'INVITATION_NOT_FOUND')
@@ -224,12 +241,68 @@ class SiteJourney(unittest.TestCase):
         r=subprocess.run([str(self.kit/'.local/bin/python'),'-B','own_app.py','--input','unsupported.json','--request-id','unsupported'],cwd=self.kit,env=self.env,capture_output=True,text=True,timeout=20)
         self.assertNotEqual(r.returncode,0);self.assertFalse(json.loads(r.stdout)['valid'])
 
+    def test_14_setup_failure_is_reported_and_cleaned_up(self):
+        class FailedSetup(SiteJourney):
+            pass
+        marker='synthetic-sensitive-command'
+        with patch(__name__+'.build',side_effect=subprocess.TimeoutExpired(marker,30)):
+            result=unittest.TextTestRunner(stream=io.StringIO(),resultclass=DiagnosticResult).run(
+                unittest.TestSuite([FailedSetup('test_01_page_metadata_and_landmarks')]))
+        self.assertEqual(result.testsRun,0)
+        self.assertEqual(len(result.errors),1)
+        self.assertFalse(FailedSetup.work.exists())
+        self.assertEqual(result.diagnostics[0]['test_number'],10000)
+        self.assertEqual(result.diagnostics[0]['category'],'subprocess_timeout')
+        self.assertNotIn(marker,json.dumps(result.diagnostics))
+
+    def test_15_cold_start_has_its_own_budget_and_preserves_fast_output(self):
+        # A real delayed child verifies startup is not charged to execution.
+        # This exercises the supervisor only, not a substitute optimization run.
+        code='import time;time.sleep(1.2);print("OCP_SITE_ENGINE_READY",flush=True);print("{\\"checked\\":true}")'
+        result,timings=run_example([sys.executable,'-B','-c',code],cwd=self.work,env=self.env,
+                                  startup_timeout=5,execution_timeout=0.5)
+        self.assertEqual(result.returncode,0)
+        self.assertEqual(json.loads(result.stdout),{'checked':True})
+        self.assertGreaterEqual(timings['startup_ms'],1200)
+
+    def test_16_startup_and_execution_timeouts_fail_once_and_reap_child(self):
+        for phase,ready in [('site_engine_startup',''),('site_example_execution','print("OCP_SITE_ENGINE_READY",flush=True);')]:
+            with self.subTest(phase=phase):
+                children=[];launch=subprocess.Popen
+                def capture(*args,**kwargs):
+                    child=launch(*args,**kwargs);children.append(child);return child
+                code='import time;'+ready+'time.sleep(10)'
+                with patch('build_site.subprocess.Popen',side_effect=capture):
+                    with self.assertRaises(subprocess.TimeoutExpired) as caught:
+                        run_example([sys.executable,'-B','-c',code],cwd=self.work,env=self.env,
+                                    startup_timeout=5 if ready else 0.2,execution_timeout=0.2)
+                self.assertEqual(len(children),1)
+                self.assertIsNotNone(children[0].poll())
+                error=caught.exception
+                self.assertEqual(error.ocp_phase,phase)
+                diagnostics=DiagnosticResult(io.StringIO(),True,1)
+                diagnostics.record(self,(type(error),error,error.__traceback__),'error')
+                self.assertEqual(diagnostics.diagnostics[0]['phase'],phase)
+                self.assertEqual(diagnostics.diagnostics[0]['timeout_seconds'],0.2)
+                self.assertNotIn(code,json.dumps(diagnostics.diagnostics))
+
+    def test_17_readiness_never_substitutes_for_successful_execution(self):
+        for code in ('raise SystemExit(9)','print("WRONG_READY",flush=True)'):
+            with self.subTest(code=code), self.assertRaises(RuntimeError):
+                run_example([sys.executable,'-B','-c',code],cwd=self.work,env=self.env,
+                            startup_timeout=5,execution_timeout=1)
+        result,_=run_example([sys.executable,'-B','-c','print("OCP_SITE_ENGINE_READY",flush=True);raise SystemExit(9)'],
+                             cwd=self.work,env=self.env,startup_timeout=5,execution_timeout=1)
+        self.assertEqual(result.returncode,9)
+
 
 if __name__=='__main__':
-    result=unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromTestCase(SiteJourney))
-    passed=result.wasSuccessful() and result.testsRun>=13 and not result.skipped
+    result=unittest.TextTestRunner(resultclass=DiagnosticResult).run(unittest.defaultTestLoader.loadTestsFromTestCase(SiteJourney))
+    passed=result.wasSuccessful() and result.testsRun>=17 and not result.skipped
     print(json.dumps({'status':'PASS' if passed else 'FAIL','tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),'skipped':len(result.skipped),
+        'failure_diagnostics':result.diagnostics,
         'site_manifest_sha256':getattr(SiteJourney,'built',{}).get('manifest_sha256'),
+        'example_timings':getattr(SiteJourney,'built',{}).get('example_timings'),
         'review_directory':str(getattr(SiteJourney,'review','')),
         'scope':'Static site selection, downloaded artifact, exact documented offline installs, real reference/BYO/Python/Node execution; browser review separate; no external trial or publication'}))
     sys.exit(0 if passed else 1)

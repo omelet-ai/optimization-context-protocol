@@ -46,7 +46,13 @@ def failure_diagnostics(stdout):
                 value.get("kind") not in ("failure","error") or
                 value.get("category") not in ("subprocess_timeout","invalid_json","contract","assertion","exception")):
             continue
-        safe.append({key:value[key] for key in ("test_number","kind","category","elapsed_ms")})
+        item={key:value[key] for key in ("test_number","kind","category","elapsed_ms")}
+        limit=value.get("timeout_seconds")
+        if (value["category"]=="subprocess_timeout" and
+                value.get("phase") in ("site_engine_startup","site_example_execution") and
+                type(limit) in (int,float) and 0<limit<=3600):
+            item.update(phase=value["phase"],timeout_seconds=limit)
+        safe.append(item)
     return safe
 
 

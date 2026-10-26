@@ -173,6 +173,17 @@ class InstalledAppTests(unittest.TestCase):
                           (3,"error","invalid_json"),(4,"error","contract")])
         self.assertNotIn(marker,json.dumps(result.diagnostics))
         self.assertTrue(all(type(d["elapsed_ms"]) is int and d["elapsed_ms"]>=0 for d in result.diagnostics))
+        class FixtureFault(unittest.TestCase):
+            @classmethod
+            def setUpClass(cls):raise subprocess.TimeoutExpired(marker,30)
+            def test_01_never_runs(self):self.fail("Fixture failure must prevent execution")
+        fixture=unittest.TextTestRunner(stream=io.StringIO(),resultclass=DiagnosticResult).run(
+            unittest.defaultTestLoader.loadTestsFromTestCase(FixtureFault))
+        self.assertEqual(fixture.testsRun,0)
+        self.assertEqual(len(fixture.errors),1)
+        self.assertEqual(fixture.diagnostics[0]["test_number"],10000)
+        self.assertEqual(fixture.diagnostics[0]["category"],"subprocess_timeout")
+        self.assertNotIn(marker,json.dumps(fixture.diagnostics))
 
 
 if __name__ == "__main__":

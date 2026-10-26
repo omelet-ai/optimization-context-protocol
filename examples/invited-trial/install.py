@@ -34,6 +34,15 @@ def main():
     if not args.venv: parser.error("--venv is required unless --check is used")
     destination=Path(args.venv).absolute()
     if destination.exists():raise InstallError("ENVIRONMENT_EXISTS","Use the existing environment's Python for doctor, or choose a different --venv path. No files were overwritten.")
+    wheelhouse=args.offline_wheelhouse
+    if os.environ.get("PIP_NO_INDEX", "").lower() in {"1", "true", "yes", "on"}:
+        wheelhouse=wheelhouse or os.environ.get("PIP_FIND_LINKS")
+        if not wheelhouse:
+            raise InstallError("OFFLINE_WHEELHOUSE_REQUIRED","Offline mode requires --offline-wheelhouse or PIP_FIND_LINKS pointing to one local wheel directory.")
+    if wheelhouse:
+        wheelhouse=Path(wheelhouse).expanduser().resolve()
+        if not wheelhouse.is_dir():
+            raise InstallError("OFFLINE_WHEELHOUSE_INVALID","Use one existing local wheel directory. Remote URLs are not accepted in offline mode.")
     # Match `python -m venv` on POSIX. Copying a relocatable Python invoked
     # through a PATH symlink can lose its standard-library location.
     venv.EnvBuilder(with_pip=True,symlinks=True).create(destination)
@@ -41,7 +50,7 @@ def main():
     env={"PATH":os.defpath,"HOME":str(Path.home()),"PYTHONDONTWRITEBYTECODE":"1","PIP_CONFIG_FILE":os.devnull,
          "PIP_DISABLE_PIP_VERSION_CHECK":"1"}
     command=[str(python),"-B","-m","pip","install","--no-compile","--no-cache-dir","-c",str(root/"constraints.txt")]
-    if args.offline_wheelhouse:command += ["--no-index","--find-links",str(Path(args.offline_wheelhouse).resolve())]
+    if wheelhouse:command += ["--no-index","--find-links",str(wheelhouse)]
     command += [str(root/"ocp_candidate-0.1.0-py3-none-any.whl")+"[mcp]",str(root/"ocp_conformance_candidate-0.1.0-py3-none-any.whl")]
     subprocess.run(command,env=env,check=True)
     subprocess.run([str(python),"-B","-m","pip","check"],env=env,check=True)

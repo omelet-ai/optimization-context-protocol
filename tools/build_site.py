@@ -8,11 +8,14 @@ from html import escape
 import importlib.util
 import json
 from pathlib import Path
+import queue
 import shutil
 from string import Template
 import subprocess
 import sys
 import tempfile
+import threading
+import time
 import zipfile
 
 from build_invitation_kit import build as build_kit
@@ -38,6 +41,43 @@ def source(name):
     return p
 
 
+def run_example(argv, *, env, cwd, startup_timeout=60, execution_timeout=30):
+    """One cold process: bound native startup separately from example execution.
+
+    The readiness line is emitted only after ORToolsBackend finishes loading.
+    It never substitutes for a zero exit and a verified example JSON result.
+    """
+    started=time.monotonic();phase="site_engine_startup";limit=startup_timeout
+    with tempfile.TemporaryFile() as errors:
+        # Unbuffered stdout prevents readline from consuming JSON bytes that
+        # communicate must read after the readiness line (including fast exits).
+        process=subprocess.Popen(argv,env=env,cwd=cwd,stdout=subprocess.PIPE,
+                                 stderr=errors,bufsize=0)
+        ready=queue.Queue(maxsize=1)
+        reader=threading.Thread(target=lambda:ready.put(process.stdout.readline()),daemon=True)
+        reader.start()
+        try:
+            try:line=ready.get(timeout=startup_timeout)
+            except queue.Empty:raise subprocess.TimeoutExpired(argv,startup_timeout) from None
+            if line!=b"OCP_SITE_ENGINE_READY\n":
+                raise RuntimeError("Site example exited or returned invalid engine readiness")
+            loaded=time.monotonic();phase="site_example_execution";limit=execution_timeout
+            stdout,_=process.communicate(timeout=execution_timeout)
+            errors.seek(0);stderr=errors.read().decode(errors="replace")
+            timings={"startup_ms":round((loaded-started)*1000),
+                     "execution_ms":round((time.monotonic()-loaded)*1000),
+                     "startup_timeout_seconds":startup_timeout,"execution_timeout_seconds":execution_timeout}
+            return subprocess.CompletedProcess(argv,process.returncode,stdout.decode(),stderr),timings
+        except subprocess.TimeoutExpired as exc:
+            # Fixed identifiers only; no argv, output, paths or arbitrary messages
+            # enter the shared harness failure diagnostics.
+            exc.ocp_phase=phase;exc.ocp_timeout_seconds=limit
+            raise
+        finally:
+            if process.poll() is None:process.kill()
+            process.wait();reader.join();process.stdout.close()
+
+
 def build(output):
     target=Path(output).absolute()
     if any(p.is_symlink() for p in [target,*target.parents]):raise ValueError("Symlink output is not allowed")
@@ -59,7 +99,7 @@ def build(output):
         python,env=install(envdir,kit/"ocp_candidate-0.1.0-py3-none-any.whl")
         checked=subprocess.run([str(python),"-B","-m","pip","install","--no-index","--no-cache-dir","--no-compile","--find-links",str(ROOT/".harness/work/wheels"),str(kit/"ocp_conformance_candidate-0.1.0-py3-none-any.whl")],env=env,cwd=scratch,capture_output=True,text=True,timeout=60)
         if checked.returncode:raise RuntimeError("Site checker install failed")
-        example=subprocess.run([str(python),"-B",str(source("site/example.py")),str(kit/"basic-input.json")],env=env,cwd=scratch,capture_output=True,text=True,timeout=30)
+        example,timings=run_example([str(python),"-B",str(source("site/example.py")),str(kit/"basic-input.json"),"--report-ready"],env=env,cwd=scratch)
         if example.returncode:raise RuntimeError("Site real-engine example failed: "+example.stderr[-1500:])
         demo=json.loads(example.stdout)
         shutil.copyfile(kit/"basic-input.json",target/"assets/basic-input.json")
@@ -91,7 +131,7 @@ def build(output):
               "example_scope":"Real installed OR-Tools on synthetic input, independent checker; precomputed, no external trial",
               "external_calls":0}
     (target/"site-manifest.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\n")
-    return {"directory":str(target),"pages":len(pages),"kit_sha256":kit_hash,"manifest_sha256":sha(target/"site-manifest.json"),"publication_authorized":False}
+    return {"directory":str(target),"pages":len(pages),"kit_sha256":kit_hash,"manifest_sha256":sha(target/"site-manifest.json"),"publication_authorized":False,"example_timings":timings}
 
 
 if __name__=="__main__":

@@ -87,6 +87,20 @@ class DeveloperJourney(unittest.TestCase):
         self.cli(sys.executable,"-B","install.py","--check")
         result=self.cli(sys.executable,"-B","install.py","--venv",DIRECTORY/"client",expected=1)
         self.assertEqual(json.loads(result.stderr)["code"],"ENVIRONMENT_EXISTS")
+        for i,links in enumerate([None,'https://invalid.example/wheels']):
+            env=dict(ENV,PIP_NO_INDEX='true')
+            if links:env['PIP_FIND_LINKS']=links
+            destination=DIRECTORY/('invalid-offline-'+str(i))
+            result=self.cli(BOOTSTRAP,'-B','install.py','--venv',destination,expected=1,env=env)
+            self.assertEqual(json.loads(result.stderr)['code'],
+                             'OFFLINE_WHEELHOUSE_INVALID' if links else 'OFFLINE_WHEELHOUSE_REQUIRED')
+            self.assertFalse(destination.exists())
+        empty=DIRECTORY/'empty-python-wheels';empty.mkdir()
+        result=self.cli(BOOTSTRAP,'-B','install.py','--venv',DIRECTORY/'offline-missing-dependency',expected=1,
+                        env=dict(ENV,PIP_NO_INDEX='1',PIP_FIND_LINKS=str(empty)))
+        self.assertEqual(json.loads(result.stderr.splitlines()[-1])['code'],'INSTALL_FAILED')
+        self.assertIn('Looking in links:',result.stdout)
+        self.assertNotIn('Looking in indexes:',result.stdout)
 
     def test_03_session_diagnosis_and_recovery(self):
         before=GATEWAY.summary()["calls"]

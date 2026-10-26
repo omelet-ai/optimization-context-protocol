@@ -328,6 +328,17 @@ class HarnessTests(unittest.TestCase):
         item={"test_number":1,"kind":"failure","category":"assertion","elapsed_ms":0}
         self.assertEqual(len(module.failure_diagnostics(json.dumps({"failure_diagnostics":[item]*101}))),100)
 
+    def test_timeout_phase_is_fixed_and_bounded(self):
+        base={"test_number":10000,"kind":"error","category":"subprocess_timeout","elapsed_ms":60000}
+        for phase in ("site_engine_startup","site_example_execution"):
+            value=dict(base,phase=phase,timeout_seconds=60)
+            self.assertEqual(module.failure_diagnostics(json.dumps({"failure_diagnostics":[value]})),[value])
+        for phase,limit in [("synthetic-secret",60),("site_engine_startup",True),
+                            ("site_engine_startup",-1),("site_engine_startup",3601),
+                            ("site_engine_startup",float('inf')),("site_engine_startup",float('nan'))]:
+            value=dict(base,phase=phase,timeout_seconds=limit)
+            self.assertEqual(module.failure_diagnostics(json.dumps({"failure_diagnostics":[value]})),[base])
+
 
 if __name__ == "__main__":
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(HarnessTests)

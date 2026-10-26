@@ -13,6 +13,8 @@ chmod 600 session.json
 
 `doctor`는 인증·계약 일치만 확인하고 계산 횟수를 사용하지 않는다. `session.json`의 키를 대화·스크린샷·Git에 붙이지 않는다. 키는 다른 사람과 공유하지 않고 운영자에게서 직접 받는다. 꾸러미의 hash 확인은 전송 중 변경 검출이며 발행자 신원 서명을 대신하지 않는다.
 
+인터넷 없이 설치하려면 신뢰할 수 있는 로컬 dependency wheel 폴더를 준비하고 `python3.12 install.py --venv .venv --offline-wheelhouse /absolute/path/to/wheels`를 사용한다. `PIP_NO_INDEX=1`과 `PIP_FIND_LINKS`로 같은 로컬 폴더를 지정해도 된다. 오프라인 설정에 폴더가 없거나 원격 URL이면 설치 전에 거절한다. 필요한 dependency가 빠져 있으면 공개 registry로 전환하지 않고 실패한다.
+
 2. 합성 예제를 1회 실행하고 결과·독립 검산·평가를 확인한다.
 
 ```sh

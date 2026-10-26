@@ -45,6 +45,20 @@ under `.harness/work/site-reviewed/` and reports its path and manifest hash, so
 browser review can use the very same downloaded-and-installed artifact.
 Neither test is external-human acceptance.
 
+H21 records bounded error categories for individual checks and class setup/cleanup
+failures (reserved diagnostic number `10000`). It cleans up its temporary server,
+provider, and install directory even if preparation fails. A later passing run
+does not erase earlier failure evidence or establish its cause.
+
+The build runs the real example once in a newly installed environment. Native
+engine startup has a 60-second bound; after the engine reports readiness, the
+example has a separate 30-second process bound. Its solve budget stays at 1,000 ms.
+This accommodates variable first-load library validation on macOS without warming
+the engine or retrying a failed example. Readiness alone is never a successful
+example: exit status, real result, evaluation, and independent verification still
+have to pass. Timeouts retain only the fixed `site_engine_startup` or
+`site_example_execution` phase and numeric limit in harness diagnostics.
+
 For browser review, inspect desktop, tablet, and mobile widths; check navigation,
 keyboard focus, the collapsed menu, code copying, both example states, stage tabs,
 Korean text, downloadable files, console errors, and horizontal overflow. The

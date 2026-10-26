@@ -11,6 +11,7 @@ class DiagnosticResult(unittest.TextTestResult):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.diagnostics=[]
+        self.started=time.monotonic()
 
     def startTest(self, test):
         self.started=time.monotonic()
@@ -23,9 +24,19 @@ class DiagnosticResult(unittest.TextTestResult):
                           (AssertionError,"assertion")):
             if issubclass(err[0],cls):
                 category=label;break
-        self.diagnostics.append({"test_number":int(test._testMethodName.split("_")[1]),
+        # unittest reports setUpClass/tearDownClass errors as _ErrorHolder,
+        # without a test method. Reserve 10000 for fixture failures so a setup
+        # error cannot crash the reporter or disappear from harness evidence.
+        method=getattr(test,"_testMethodName",None)
+        number=int(method.split("_")[1]) if method else 10000
+        diagnostic={"test_number":number,
                                  "kind":kind,"category":category,
-                                 "elapsed_ms":round((time.monotonic()-self.started)*1000)})
+                                 "elapsed_ms":round((time.monotonic()-self.started)*1000)}
+        phase=getattr(err[1],"ocp_phase",None);limit=getattr(err[1],"ocp_timeout_seconds",None)
+        if (category=="subprocess_timeout" and phase in ("site_engine_startup","site_example_execution")
+                and type(limit) in (int,float) and 0<limit<=3600):
+            diagnostic.update(phase=phase,timeout_seconds=limit)
+        self.diagnostics.append(diagnostic)
 
     def addFailure(self, test, err):
         self.record(test,err,"failure")
