@@ -225,11 +225,26 @@ try{await c.evaluate(r,s.solution);process.exitCode=1}catch(e){if(e.message!=='I
         result=self.cli(sys.executable,"-B",ROOT/"tools/build_typescript.py","--offline","--output",DIRECTORY/"must-fail",expected=1,env=empty)
         self.assertIn("ENOTCACHED",result.stderr)
 
+    def test_14_trace_errors_do_not_contact_provider_or_overwrite_output(self):
+        before=GATEWAY.summary()["calls"]
+        existing=KIT/"preserved-trace.json";existing.write_text("preserve this evidence")
+        alias=KIT/"dangling-trace.json";alias.symlink_to(KIT/"absent-target.json")
+        for session in [[],["--session",str(SESSION)]]:
+            for target,code in [(existing,"TRACE_EXISTS"),(alias,"TRACE_EXISTS"),
+                                (KIT/"absent-directory/trace.json","TRACE_DIRECTORY_MISSING")]:
+                result=self.cli(PYTHON,"-B","own_app.py",*session,"--input","input.json",
+                                "--request-id","trace-preflight","--trace",target,expected=1)
+                value=json.loads(result.stdout);self.assertEqual(value["code"],code)
+                self.assertNotIn("session.json",value["hint"])
+        self.assertEqual(existing.read_text(),"preserve this evidence")
+        self.assertFalse((KIT/"absent-target.json").exists())
+        self.assertEqual(GATEWAY.summary()["calls"],before)
+
 
 if __name__=="__main__":
     try:
         result=unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromTestCase(DeveloperJourney))
-        passed=result.wasSuccessful() and result.testsRun>=13 and not result.skipped
+        passed=result.wasSuccessful() and result.testsRun>=14 and not result.skipped
         print(json.dumps({"status":"PASS" if passed else "FAIL","tests_run":result.testsRun,"failures":len(result.failures),"errors":len(result.errors),"skipped":len(result.skipped),
             "findings":["U%02d"%i for i in range(1,10)],"artifact_sha256":BUILT["files"][WHEEL.name],
             "scope":"Fresh kit, real reference engine, Python/TypeScript/MCP/BYO consumer regression; no external humans, Claude host or new deployment"}))

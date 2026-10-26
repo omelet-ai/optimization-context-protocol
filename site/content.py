@@ -7,11 +7,18 @@ TITLE = 'Optimization Context Protocol'
 
 def diagram():
     return '''<div class="protocol-art" aria-label="Apps and agents connect through OCP to independent engines"><div class="art-title"><span><i class="live-dot"></i> ONE CONTRACT. YOUR STACK.</span><span>v0.1 / CANDIDATE</span></div>
-<svg viewBox="0 0 460 350" role="img" aria-labelledby="diagram-title"><title id="diagram-title">An application and an AI agent share the OCP interface with a local solver, Omelet, or your engine.</title><defs><pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="#c8d4bc"/></pattern></defs><rect width="460" height="350" fill="url(#dots)"/>
+<svg class="protocol-diagram" viewBox="0 0 460 350" role="img" aria-labelledby="diagram-title"><title id="diagram-title">An application and an AI agent share the OCP interface with a local solver, Omelet, or your engine.</title><defs><pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="#c8d4bc"/></pattern></defs><rect width="460" height="350" fill="url(#dots)"/>
 <g fill="none" stroke="#9eaf95" stroke-width="1.4"><path d="M115 70v40q0 12 12 12h91v28M345 70v40q0 12-12 12h-91v28M230 219v33M80 295v-27q0-12 12-12h276q12 0 12 12v27M230 256v39"/></g>
 <g fill="#fbfcf8" stroke="#cad5c0"><rect x="40" y="20" width="150" height="50" rx="6"/><rect x="270" y="20" width="150" height="50" rx="6"/><rect x="20" y="295" width="120" height="42" rx="5"/><rect x="170" y="295" width="120" height="42" rx="5"/><rect x="320" y="295" width="120" height="42" rx="5"/></g>
 <g fill="#304e3e" font-family="sans-serif" font-size="12" text-anchor="middle"><text x="115" y="50">Your application</text><text x="345" y="50">Your AI agent</text><text x="80" y="321">Local reference</text><text x="230" y="321">Omelet</text><text x="380" y="321">Your engine</text></g>
 <rect x="98" y="150" width="264" height="69" rx="8" fill="#17573e"/><text x="230" y="181" text-anchor="middle" font-size="22" font-family="sans-serif" fill="#e2efaa" letter-spacing="2">OCP</text><text x="230" y="202" text-anchor="middle" font-size="9" font-family="monospace" fill="#d4e6c5">DISCOVER · VALIDATE · EXECUTE · EVALUATE</text><g fill="#17573e" stroke="#edf1e6" stroke-width="3"><circle cx="230" cy="256" r="5"/><circle cx="115" cy="95" r="4"/><circle cx="345" cy="95" r="4"/></g></svg>
+<div class="protocol-compact" role="img" aria-label="An application and an AI agent share the OCP interface with a local solver, Omelet, or your engine.">
+<div class="protocol-clients" aria-hidden="true"><span>Your application</span><span>Your AI agent</span></div>
+<div class="protocol-connector" aria-hidden="true">↓</div>
+<div class="protocol-core" aria-hidden="true"><strong>OCP</strong><div><span>Discover</span><span>Validate</span><span>Execute</span><span>Evaluate</span></div></div>
+<div class="protocol-connector" aria-hidden="true">↓</div>
+<div class="protocol-engines" aria-hidden="true"><span>Local reference</span><span>Omelet</span><span>Your engine</span></div>
+</div>
 <div class="art-footer"><span><strong>01</strong>Common interface</span><span><strong>03</strong>Ways to start</span><span><strong>Your choice</strong>App + engine</span></div></div>'''
 
 
@@ -80,11 +87,11 @@ def pages(commands, demo, kit_hash):
 
 
 def route_svg(demo):
-    points={'hub':(230,140),'a':(100,55),'b':(63,185),'c':(360,55),'d':(390,202)}
+    points={'hub':(160,110),'a':(70,40),'b':(45,155),'c':(250,40),'d':(270,170)}
     paths=[]
     for i,route in enumerate(demo['routing']['result']['solution']['routes']):
         nodes=['hub']+route['visits']+['hub']
         path=' '.join(('M' if j==0 else 'L')+str(points[n][0])+','+str(points[n][1]) for j,n in enumerate(nodes))
         paths.append(f'<path d="{path}" fill="none" stroke="{["#17573e","#8d6622"][i%2]}" stroke-width="2.5" stroke-dasharray="6 4"/>')
-    nodes=''.join(f'<circle cx="{x}" cy="{y}" r="{20 if n=="hub" else 14}" fill="{"#17573e" if n=="hub" else "#fff"}" stroke="#17573e"/><text x="{x}" y="{y+4}" text-anchor="middle" font-size="11" font-family="sans-serif" fill="{"#fff" if n=="hub" else "#17573e"}">{n}</text>' for n,(x,y) in points.items())
-    return '<svg viewBox="0 0 460 270" role="img" aria-label="Schematic of the returned vehicle routes">'+''.join(paths)+nodes+'</svg>'
+    nodes=''.join(f'<circle cx="{x}" cy="{y}" r="{24 if n=="hub" else 18}" fill="{"#17573e" if n=="hub" else "#fff"}" stroke="#17573e"/><text x="{x}" y="{y+5}" text-anchor="middle" font-size="16" font-family="sans-serif" fill="{"#fff" if n=="hub" else "#17573e"}">{n}</text>' for n,(x,y) in points.items())
+    return '<svg viewBox="0 0 320 220" role="img" aria-label="Schematic of the returned vehicle routes">'+''.join(paths)+nodes+'</svg>'

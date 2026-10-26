@@ -8,6 +8,14 @@ from conformance.coordinates import verify_result as verify_coordinates
 from conformance.routing import verify_result as verify_basic
 
 
+def trace_error(code):
+    hints={"TRACE_EXISTS":"Choose a new --trace filename. Existing output was preserved; do not rerun an uncertain job with a new request ID.",
+           "TRACE_DIRECTORY_MISSING":"Create the parent directory or choose an existing directory for --trace.",
+           "TRACE_WRITE_FAILED":"Check --trace directory permissions. If execution already succeeded, preserve its request ID before retrying."}
+    print(json.dumps({"status":"FAIL","code":code,"hint":hints[code]}))
+    return 1
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input",required=True)
@@ -18,6 +26,12 @@ def main():
     try:problem=parse_json(Path(args.input).read_text())
     except (OSError,UnicodeError,OCPError):
         print(json.dumps({"status":"FAIL","code":"INPUT_INVALID","hint":"Check --input is readable UTF-8 JSON with unique keys and finite numbers."}));return 1
+    trace=Path(args.trace) if args.trace else None
+    if trace is not None:
+        try:
+            if trace.exists() or trace.is_symlink():return trace_error("TRACE_EXISTS")
+            if not trace.parent.is_dir():return trace_error("TRACE_DIRECTORY_MISSING")
+        except OSError:return trace_error("TRACE_WRITE_FAILED")
     try:
         if args.session:adapter=InvitationClient(args.session)
         else:
@@ -34,8 +48,11 @@ def main():
         checker={"routing.basic":verify_basic,"routing.coordinates":verify_coordinates}[request["domain_profile"]["id"]]
         checked=checker(request,result)
         evaluation=adapter.evaluate(request,result["solution"]) if result["solution"] is not None else None
-        if args.trace:
-            with open(args.trace,"x") as stream:json.dump({"request":request,"response":result},stream)
+        if trace is not None:
+            try:
+                with open(trace,"x") as stream:json.dump({"request":request,"response":result},stream)
+            except FileExistsError:return trace_error("TRACE_EXISTS")
+            except OSError:return trace_error("TRACE_WRITE_FAILED")
         # evaluated is a status string, never a boolean field; preserve null values.
         metrics=[] if evaluation is None or evaluation["kind"]!="evaluation" else evaluation["metrics"]
         print(json.dumps({"result":result,"evaluation":evaluation,"independent_check":checked,

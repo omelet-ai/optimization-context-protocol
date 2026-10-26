@@ -1,4 +1,136 @@
-# OCP 초대 시험 시작하기
+# OCP developer kit
+
+Use OCP from your own application or connect your own optimization engine. This is
+a private evaluation candidate, not a published registry release. A trial account
+or `session.json` is **not required** for the local and bring-your-engine paths.
+한국어 초대 시험 안내는 이 문서 아래에, 앱·엔진 개발 안내는 `DEVELOPER_GUIDE.md`에 있습니다.
+
+## Choose your starting path
+
+| Path | What you need | Start here |
+| --- | --- | --- |
+| Try Omelet — recommended when an invitation is available | An active invitation and a private `session.json` from your inviter | Invited trial below |
+| Run locally | Python 3.12; public Python dependency downloads | Local reference below |
+| Bring your engine | Python 3.12; your calculation code | Your own engine below; no Omelet, OR-Tools or MCP required |
+
+Run every command from the directory where you extracted this kit. The verified
+platform is Python 3.12 on macOS Apple Silicon. Node 24 is needed only for the
+TypeScript example. Other platforms require separate verification; the installer
+does not support Windows. If `python3.12` is unavailable, install Python 3.12 or
+use its absolute executable path. Check the version before continuing.
+
+```sh
+python3.12 --version
+python3.12 install.py --check
+```
+
+The check verifies the included files, not installation or a running engine.
+Compare the ZIP's SHA-256 with the value supplied through your trusted delivery
+channel. A checksum detects changes; it does not authenticate the publisher.
+Verify and install before editing included files. Create new files for your work.
+
+## Local reference: no key or session file
+
+```sh
+python3.12 -m venv .local
+.local/bin/python -m pip install --no-compile -c constraints.txt './ocp_candidate-0.1.0-py3-none-any.whl[reference]' ./ocp_conformance_candidate-0.1.0-py3-none-any.whl
+.local/bin/python -B own_app.py --input basic-input.json --request-id local-first --trace local-first.json
+```
+
+The actual OR-Tools engine solves two vehicles and four visits. Expect a feasible
+result, an evaluated total cost of 18 meters, and an independent capacity/visit
+check. Feasible does not mean proven optimal.
+
+Copy `basic-input.json` to a new file and change demands or capacities. Added or
+renamed visits also require matching `matrix.node_ids` and matrix rows/columns.
+The profile uses kg and an explicit integer meter matrix. Unsupported units,
+constraints and objectives are rejected. `input.json` is a different coordinate
+profile for the invited trial; do not substitute it in the local example.
+
+## Your own engine: replace the calculation
+
+```sh
+python3.12 -m venv .byo
+.byo/bin/python -m pip install --no-compile -c constraints.txt ./ocp_candidate-0.1.0-py3-none-any.whl ./ocp_conformance_candidate-0.1.0-py3-none-any.whl
+.byo/bin/python -B byo_library.py basic-input.json --trace own-engine-trace.json
+.byo/bin/python -B export_transcript.py --trace own-engine-trace.json --artifact byo_library.py --out own-engine-transcript.json
+.byo/bin/python -B -m conformance.runner --bundle own-engine-transcript.json --artifact byo_library.py
+```
+
+Copy `byo_library.py` to `my_engine.py` and replace `EnumeratingLibrary.solve(problem,
+time_limit_ms)` with your algorithm. Preserve `name`, `version` and the
+`Outcome(solution, termination, objective)` return shape. A solution contains
+`routes`, each with a `vehicle_id` and an ordered list of visit IDs. Extend
+`OwnLibraryAdapter.validate` to reject unsupported inputs. The teaching adapter
+supports at most six visits and three vehicles.
+
+Run your changed file on a new synthetic input and a deliberately unsupported
+case. Export the new trace with `--artifact my_engine.py`; the checker verifies
+that transcript against the exact artifact hash. It does not certify every engine
+behavior or prove that a particular artifact produced a transcript. A heuristic
+that finds no solution must retain unknown; it has not proved infeasibility.
+
+## Your own application
+
+`own_app.py` shows discovery → requirements → validation → execution → evaluation
+→ independent checking. Replace its input loading and presentation with your app
+logic. Keep response kinds, result statuses and metric statuses; an unevaluated
+null value must not become zero. Only evaluate a non-null solution.
+
+For Node, complete the local reference install above, then:
+
+```sh
+node --version
+npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund ./ocp-candidate-0.1.0.tgz
+npm run build
+```
+
+Terminal A:
+
+```sh
+.local/bin/python -B -m ocp_runtime.http_server --port 8765
+```
+
+Terminal B:
+
+```sh
+node dist/main.js http://127.0.0.1:8765 basic-input.json --request-id my-ts-job-1
+```
+
+In your Node code, use `Client.connect(endpoint)`, `request(input, configuration,
+requestId)`, `validate(request)`, `execute(request)`, and
+`evaluate(request, result.solution)`. Check response kinds at each step. The SDK
+is for server-side Node; do not expose a trial key in browser code.
+
+## Output files and recovery
+
+Use a new trace/transcript filename for each run. Existing files are preserved.
+`TRACE_EXISTS` means choose a new `--trace` filename; `TRACE_DIRECTORY_MISSING`
+means create its parent directory or choose an existing directory.
+`TRACE_WRITE_FAILED` means check directory permissions. These are local file
+problems, not invitation errors. If execution may already have happened, preserve
+the request ID. Use a new ID only for a genuinely new problem, not to automatically
+retry an uncertain request. Stop a local provider with Ctrl+C when finished.
+
+## Invited trial
+
+Only this path needs the inviter's private `session.json`. Check the supplied
+endpoint, active period and usage limits with the inviter. Never paste keys into
+chat, screenshots or Git. Do not invent an endpoint or reuse an internal token.
+
+```sh
+python3.12 install.py --venv .venv
+chmod 600 session.json
+.venv/bin/python -B -m ocp_runtime.trial_client --session session.json doctor
+.venv/bin/python -B main.py --session session.json --input input.json --request-id first-synthetic-run
+```
+
+Doctor checks authenticated discovery without consuming a solve. The trial uses
+synthetic coordinate inputs and bounded usage. Do not submit customer or personal
+data. An inactive or missing invitation does not block the independent local and
+own-engine paths. The detailed invitation policy and MCP setup follow in Korean.
+
+## OCP 초대 시험 시작하기 — 한국어
 
 운영자에게 받은 시험용 설치 꾸러미와 개인별 `session.json`을 사용한다. 공개 registry에 올라간 정식 제품은 아니다. 운영자가 접근 주소·기간·지원 창구를 안내한 초대 시험에만 사용한다. 최초 검증 환경은 Python 3.12 / macOS Apple Silicon이며 다른 OS는 별도 검증 대상이다.
 
