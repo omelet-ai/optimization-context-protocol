@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:candidate:routing.basic:0.1.0:input",
+  "type": "object",
+  "properties": {
+    "depot": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$"
+    },
+    "load_unit": {
+      "const": "kg"
+    },
+    "visits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$"
+          },
+          "demand": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000
+          }
+        },
+        "required": [
+          "id",
+          "demand"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 64
+    },
+    "vehicles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$"
+          },
+          "capacity": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 1000000000
+          }
+        },
+        "required": [
+          "id",
+          "capacity"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 16
+    },
+    "matrix": {
+      "type": "object",
+      "properties": {
+        "node_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$"
+          },
+          "minItems": 2,
+          "maxItems": 65
+        },
+        "unit": {
+          "const": "meter"
+        },
+        "model": {
+          "const": "explicit_matrix"
+        },
+        "rounding": {
+          "const": "none"
+        },
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 1000000000
+            },
+            "minItems": 2,
+            "maxItems": 65
+          },
+          "minItems": 2,
+          "maxItems": 65
+        }
+      },
+      "required": [
+        "node_ids",
+        "unit",
+        "model",
+        "rounding",
+        "values"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "depot",
+    "load_unit",
+    "visits",
+    "vehicles",
+    "matrix"
+  ],
+  "additionalProperties": false
+}

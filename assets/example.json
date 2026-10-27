@@ -1,0 +1,481 @@
+{
+  "routing": {
+    "input": {
+      "depot": "hub",
+      "load_unit": "kg",
+      "visits": [
+        {
+          "id": "a",
+          "demand": 1
+        },
+        {
+          "id": "b",
+          "demand": 1
+        },
+        {
+          "id": "c",
+          "demand": 1
+        },
+        {
+          "id": "d",
+          "demand": 1
+        }
+      ],
+      "vehicles": [
+        {
+          "id": "v1",
+          "capacity": 2
+        },
+        {
+          "id": "v2",
+          "capacity": 2
+        }
+      ],
+      "matrix": {
+        "node_ids": [
+          "hub",
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "unit": "meter",
+        "model": "explicit_matrix",
+        "rounding": "none",
+        "values": [
+          [
+            0,
+            2,
+            3,
+            4,
+            6
+          ],
+          [
+            2,
+            0,
+            1,
+            3,
+            5
+          ],
+          [
+            3,
+            1,
+            0,
+            2,
+            3
+          ],
+          [
+            4,
+            3,
+            2,
+            0,
+            2
+          ],
+          [
+            6,
+            5,
+            3,
+            2,
+            0
+          ]
+        ]
+      }
+    },
+    "request": {
+      "core_version": "0.1.0",
+      "kind": "request",
+      "request_id": "site-routing-example",
+      "capability": {
+        "id": "routing.reference",
+        "version": "0.1.0"
+      },
+      "domain_profile": {
+        "id": "routing.basic",
+        "version": "0.1.0"
+      },
+      "execution_profile": {
+        "id": "execution.sync",
+        "version": "0.1.0"
+      },
+      "configuration": {
+        "objectives": [
+          {
+            "id": "minimize_total_route_cost",
+            "weight": 1
+          }
+        ],
+        "constraints": [
+          "weight_capacity"
+        ],
+        "parameters": {
+          "distance_coefficient": 1,
+          "time_coefficient": 0,
+          "fixed_cost": 0
+        }
+      },
+      "input": {
+        "depot": "hub",
+        "load_unit": "kg",
+        "visits": [
+          {
+            "id": "a",
+            "demand": 1
+          },
+          {
+            "id": "b",
+            "demand": 1
+          },
+          {
+            "id": "c",
+            "demand": 1
+          },
+          {
+            "id": "d",
+            "demand": 1
+          }
+        ],
+        "vehicles": [
+          {
+            "id": "v1",
+            "capacity": 2
+          },
+          {
+            "id": "v2",
+            "capacity": 2
+          }
+        ],
+        "matrix": {
+          "node_ids": [
+            "hub",
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "unit": "meter",
+          "model": "explicit_matrix",
+          "rounding": "none",
+          "values": [
+            [
+              0,
+              2,
+              3,
+              4,
+              6
+            ],
+            [
+              2,
+              0,
+              1,
+              3,
+              5
+            ],
+            [
+              3,
+              1,
+              0,
+              2,
+              3
+            ],
+            [
+              4,
+              3,
+              2,
+              0,
+              2
+            ],
+            [
+              6,
+              5,
+              3,
+              2,
+              0
+            ]
+          ]
+        }
+      },
+      "budget": {
+        "time_limit_ms": 1000
+      }
+    },
+    "result": {
+      "core_version": "0.1.0",
+      "kind": "result",
+      "request_id": "site-routing-example",
+      "capability": {
+        "id": "routing.reference",
+        "version": "0.1.0"
+      },
+      "domain_profile": {
+        "id": "routing.basic",
+        "version": "0.1.0"
+      },
+      "execution_profile": {
+        "id": "execution.sync",
+        "version": "0.1.0"
+      },
+      "effective_configuration": {
+        "objectives": [
+          {
+            "id": "minimize_total_route_cost",
+            "weight": 1
+          }
+        ],
+        "constraints": [
+          "weight_capacity"
+        ],
+        "parameters": {
+          "distance_coefficient": 1,
+          "time_coefficient": 0,
+          "fixed_cost": 0
+        }
+      },
+      "status": "feasible",
+      "termination": "completed",
+      "solution": {
+        "routes": [
+          {
+            "vehicle_id": "v1",
+            "visits": [
+              "b",
+              "a"
+            ]
+          },
+          {
+            "vehicle_id": "v2",
+            "visits": [
+              "c",
+              "d"
+            ]
+          }
+        ]
+      },
+      "proof": null,
+      "metrics": [
+        {
+          "id": "minimize_total_route_cost",
+          "role": "optimized",
+          "definition": "routing.basic.total_distance.v1",
+          "unit": "meter",
+          "source": "engine",
+          "status": "evaluated",
+          "value": 18,
+          "reason": null
+        }
+      ],
+      "constraints": [
+        {
+          "id": "weight_capacity",
+          "role": "enforced",
+          "definition": "routing.basic.weight_capacity.v1",
+          "unit": "kg",
+          "source": "independent",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "all_visits_once",
+          "role": "enforced",
+          "definition": "routing.basic.all_visits_once.v1",
+          "unit": "count",
+          "source": "independent",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        }
+      ],
+      "provenance": {
+        "implementation": {
+          "id": "ocp-candidate.routing-adapter",
+          "version": "0.1.0"
+        },
+        "engine": {
+          "id": "ortools.routing",
+          "version": "9.15.6755"
+        },
+        "request_id": "site-routing-example",
+        "limitations": [
+          "Found solutions are feasible, not certified optimal"
+        ]
+      }
+    },
+    "evaluation": {
+      "core_version": "0.1.0",
+      "kind": "evaluation",
+      "request_id": "site-routing-example",
+      "capability": {
+        "id": "routing.reference",
+        "version": "0.1.0"
+      },
+      "domain_profile": {
+        "id": "routing.basic",
+        "version": "0.1.0"
+      },
+      "metrics": [
+        {
+          "id": "minimize_total_route_cost",
+          "role": "optimized",
+          "definition": "routing.basic.total_distance.v1",
+          "unit": "meter",
+          "source": "independent",
+          "status": "evaluated",
+          "value": 18,
+          "reason": null
+        }
+      ],
+      "constraints": [
+        {
+          "id": "weight_capacity",
+          "role": "enforced",
+          "definition": "routing.basic.weight_capacity.v1",
+          "unit": "kg",
+          "source": "independent",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "all_visits_once",
+          "role": "enforced",
+          "definition": "routing.basic.all_visits_once.v1",
+          "unit": "count",
+          "source": "independent",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        }
+      ],
+      "evaluator": {
+        "id": "ocp-candidate.routing-evaluator",
+        "version": "0.1.0"
+      },
+      "limitations": [
+        "Feasibility and cost evaluation; no optimality proof"
+      ]
+    },
+    "independent_check": {
+      "feasible": true,
+      "total_cost": 18,
+      "route_costs": {
+        "v1": 6,
+        "v2": 12
+      },
+      "loads": {
+        "v1": 2,
+        "v2": 2
+      },
+      "violations": {
+        "weight_capacity": 0,
+        "all_visits_once": 0
+      }
+    },
+    "summary": "Feasible route · total cost 18 meters · capacity and visit coverage independently checked. No optimality claim."
+  },
+  "rejected": {
+    "input": {
+      "depot": "hub",
+      "load_unit": "lb",
+      "visits": [
+        {
+          "id": "a",
+          "demand": 1
+        },
+        {
+          "id": "b",
+          "demand": 1
+        },
+        {
+          "id": "c",
+          "demand": 1
+        },
+        {
+          "id": "d",
+          "demand": 1
+        }
+      ],
+      "vehicles": [
+        {
+          "id": "v1",
+          "capacity": 2
+        },
+        {
+          "id": "v2",
+          "capacity": 2
+        }
+      ],
+      "matrix": {
+        "node_ids": [
+          "hub",
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "unit": "meter",
+        "model": "explicit_matrix",
+        "rounding": "none",
+        "values": [
+          [
+            0,
+            2,
+            3,
+            4,
+            6
+          ],
+          [
+            2,
+            0,
+            1,
+            3,
+            5
+          ],
+          [
+            3,
+            1,
+            0,
+            2,
+            3
+          ],
+          [
+            4,
+            3,
+            2,
+            0,
+            2
+          ],
+          [
+            6,
+            5,
+            3,
+            2,
+            0
+          ]
+        ]
+      }
+    },
+    "result": {
+      "core_version": "0.1.0",
+      "kind": "failure",
+      "request_id": "site-unsupported-unit",
+      "error": {
+        "code": "INVALID_DATA",
+        "message": "Value does not match routing-input contract",
+        "retryable": false,
+        "issues": [
+          {
+            "code": "INVALID_DATA",
+            "path": "/load_unit",
+            "message": "Value does not match routing-input contract"
+          }
+        ]
+      }
+    },
+    "evaluation": null,
+    "summary": "INVALID_DATA · unsupported load unit rejected before solving. No result to evaluate."
+  }
+}

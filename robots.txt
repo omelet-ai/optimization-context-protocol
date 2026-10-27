@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://omelet-ai.github.io/optimization-context-protocol/sitemap.xml

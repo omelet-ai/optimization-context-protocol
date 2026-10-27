@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A routing example you can inspect · OCP</title>
+<meta name="description" content="Explore the real input, result, and evaluation of a tiny synthetic routing problem.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://omelet-ai.github.io/optimization-context-protocol/examples/"><meta property="og:url" content="https://omelet-ai.github.io/optimization-context-protocol/examples/">
+<meta name="theme-color" content="#f7f8f2">
+<meta property="og:title" content="A routing example you can inspect · Optimization Context Protocol">
+<meta property="og:description" content="Explore the real input, result, and evaluation of a tiny synthetic routing problem.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/site.css">
+<script src="../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<a class="brand" href="../index.html" aria-label="OCP home"><img src="../assets/mark.svg" width="33" height="33" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
+<button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
+<nav id="primary-nav" aria-label="Main navigation"><a href="../start/index.html">Get started</a><a href="../examples/index.html" aria-current="page">Examples</a><a href="../reference/index.html">Docs</a><a href="../ko/index.html">한국어</a><a class="nav-cta" href="https://github.com/omelet-ai/optimization-context-protocol">GitHub ↗</a></nav>
+</header>
+<main id="main" tabindex="-1"><div class="wrap page-head "><p class="breadcrumbs"><a href="../index.html">OCP</a> / Worked example</p><p class="eyebrow">Worked example</p><h1>Small problem.<br><em>Visible reasoning.</em></h1><p class="lead">Two vehicles. Four visits. Explicit distances and capacities. Follow the input through to a result you can check.</p></div><section class="wrap" data-example><div class="example-shell"><div class="example-toolbar"><strong>Routing / 0.1 candidate</strong><button class="example-toggle" data-scenario="routing" aria-pressed="true">Valid problem</button><button class="example-toggle" data-scenario="rejected" aria-pressed="false">Unsupported unit</button></div><div class="example-body"><div class="example-canvas"><div id="route-picture"><svg viewBox="0 0 320 220" role="img" aria-label="Schematic of the returned vehicle routes"><path d="M160,110 L45,155 L70,40 L160,110" fill="none" stroke="#17573e" stroke-width="2.5" stroke-dasharray="6 4"/><path d="M160,110 L250,40 L270,170 L160,110" fill="none" stroke="#8d6622" stroke-width="2.5" stroke-dasharray="6 4"/><circle cx="160" cy="110" r="24" fill="#17573e" stroke="#17573e"/><text x="160" y="115" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#fff">hub</text><circle cx="70" cy="40" r="18" fill="#fff" stroke="#17573e"/><text x="70" y="45" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">a</text><circle cx="45" cy="155" r="18" fill="#fff" stroke="#17573e"/><text x="45" y="160" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">b</text><circle cx="250" cy="40" r="18" fill="#fff" stroke="#17573e"/><text x="250" y="45" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">c</text><circle cx="270" cy="170" r="18" fill="#fff" stroke="#17573e"/><text x="270" y="175" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">d</text></svg><p class="small-note">Schematic only. Distances come from the explicit matrix, not this drawing.</p></div><div id="rejection-picture" hidden><p class="eyebrow">Validation stops the request</p><h2>“lb” is not “kg”.</h2><p>This profile declares kg. A different unit is rejected before calculation instead of being silently converted.</p></div><p class="result-summary" id="example-summary">Feasible route · total cost 18 meters · capacity and visit coverage independently checked. No optimality claim.</p></div><div class="example-data"><div class="tabs" role="tablist" aria-label="Example stages"><button role="tab" id="tab-input" data-view="input" aria-selected="true" aria-controls="example-panel">Input</button><button role="tab" id="tab-result" data-view="result" aria-selected="false" aria-controls="example-panel" tabindex="-1">Result</button><button role="tab" id="tab-evaluation" data-view="evaluation" aria-selected="false" aria-controls="example-panel" tabindex="-1">Evaluation</button></div><pre id="example-panel" role="tabpanel" tabindex="0" aria-labelledby="tab-input">{
+  &quot;depot&quot;: &quot;hub&quot;,
+  &quot;load_unit&quot;: &quot;kg&quot;,
+  &quot;visits&quot;: [
+    {
+      &quot;id&quot;: &quot;a&quot;,
+      &quot;demand&quot;: 1
+    },
+    {
+      &quot;id&quot;: &quot;b&quot;,
+      &quot;demand&quot;: 1
+    },
+    {
+      &quot;id&quot;: &quot;c&quot;,
+      &quot;demand&quot;: 1
+    },
+    {
+      &quot;id&quot;: &quot;d&quot;,
+      &quot;demand&quot;: 1
+    }
+  ],
+  &quot;vehicles&quot;: [
+    {
+      &quot;id&quot;: &quot;v1&quot;,
+      &quot;capacity&quot;: 2
+    },
+    {
+      &quot;id&quot;: &quot;v2&quot;,
+      &quot;capacity&quot;: 2
+    }
+  ],
+  &quot;matrix&quot;: {
+    &quot;node_ids&quot;: [
+      &quot;hub&quot;,
+      &quot;a&quot;,
+      &quot;b&quot;,
+      &quot;c&quot;,
+      &quot;d&quot;
+    ],
+    &quot;unit&quot;: &quot;meter&quot;,
+    &quot;model&quot;: &quot;explicit_matrix&quot;,
+    &quot;rounding&quot;: &quot;none&quot;,
+    &quot;values&quot;: [
+      [
+        0,
+        2,
+        3,
+        4,
+        6
+      ],
+      [
+        2,
+        0,
+        1,
+        3,
+        5
+      ],
+      [
+        3,
+        1,
+        0,
+        2,
+        3
+      ],
+      [
+        4,
+        3,
+        2,
+        0,
+        2
+      ],
+      [
+        6,
+        5,
+        3,
+        2,
+        0
+      ]
+    ]
+  }
+}</pre></div></div></div><p class="small-note">Precomputed at site build using the real OR-Tools reference, checked independently. These controls inspect saved synthetic outputs; they do not call an engine.</p><noscript><p>The complete example is available as <a href="../assets/example.json">downloadable JSON</a>. JavaScript enables the stage selector.</p></noscript><script id="example-data" type="application/json">{"routing": {"input": {"depot": "hub", "load_unit": "kg", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "request": {"core_version": "0.1.0", "kind": "request", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "configuration": {"objectives": [{"id": "minimize_total_route_cost", "weight": 1}], "constraints": ["weight_capacity"], "parameters": {"distance_coefficient": 1, "time_coefficient": 0, "fixed_cost": 0}}, "input": {"depot": "hub", "load_unit": "kg", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "budget": {"time_limit_ms": 1000}}, "result": {"core_version": "0.1.0", "kind": "result", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "effective_configuration": {"objectives": [{"id": "minimize_total_route_cost", "weight": 1}], "constraints": ["weight_capacity"], "parameters": {"distance_coefficient": 1, "time_coefficient": 0, "fixed_cost": 0}}, "status": "feasible", "termination": "completed", "solution": {"routes": [{"vehicle_id": "v1", "visits": ["b", "a"]}, {"vehicle_id": "v2", "visits": ["c", "d"]}]}, "proof": null, "metrics": [{"id": "minimize_total_route_cost", "role": "optimized", "definition": "routing.basic.total_distance.v1", "unit": "meter", "source": "engine", "status": "evaluated", "value": 18, "reason": null}], "constraints": [{"id": "weight_capacity", "role": "enforced", "definition": "routing.basic.weight_capacity.v1", "unit": "kg", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "all_visits_once", "role": "enforced", "definition": "routing.basic.all_visits_once.v1", "unit": "count", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "provenance": {"implementation": {"id": "ocp-candidate.routing-adapter", "version": "0.1.0"}, "engine": {"id": "ortools.routing", "version": "9.15.6755"}, "request_id": "site-routing-example", "limitations": ["Found solutions are feasible, not certified optimal"]}}, "evaluation": {"core_version": "0.1.0", "kind": "evaluation", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "metrics": [{"id": "minimize_total_route_cost", "role": "optimized", "definition": "routing.basic.total_distance.v1", "unit": "meter", "source": "independent", "status": "evaluated", "value": 18, "reason": null}], "constraints": [{"id": "weight_capacity", "role": "enforced", "definition": "routing.basic.weight_capacity.v1", "unit": "kg", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "all_visits_once", "role": "enforced", "definition": "routing.basic.all_visits_once.v1", "unit": "count", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "evaluator": {"id": "ocp-candidate.routing-evaluator", "version": "0.1.0"}, "limitations": ["Feasibility and cost evaluation; no optimality proof"]}, "independent_check": {"feasible": true, "total_cost": 18, "route_costs": {"v1": 6, "v2": 12}, "loads": {"v1": 2, "v2": 2}, "violations": {"weight_capacity": 0, "all_visits_once": 0}}, "summary": "Feasible route · total cost 18 meters · capacity and visit coverage independently checked. No optimality claim."}, "rejected": {"input": {"depot": "hub", "load_unit": "lb", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "result": {"core_version": "0.1.0", "kind": "failure", "request_id": "site-unsupported-unit", "error": {"code": "INVALID_DATA", "message": "Value does not match routing-input contract", "retryable": false, "issues": [{"code": "INVALID_DATA", "path": "/load_unit", "message": "Value does not match routing-input contract"}]}}, "evaluation": null, "summary": "INVALID_DATA · unsupported load unit rejected before solving. No result to evaluate."}}</script><div class="file-links"><a href="../assets/example.json" download>Download the complete example</a><a href="../assets/basic-input.json" download>Download the input</a><a href="../start/local/index.html">Reproduce locally →</a></div></section>
+<section class="wrap section"><div class="principles"><article><h3>What is optimized?</h3><p>Total route cost with distance coefficient 1, time coefficient 0, fixed cost 0, and weight capacity enforced.</p></article><article><h3>What is checked?</h3><p>Visit coverage, vehicle capacity, route distances, result semantics, and the independent total cost.</p></article><article><h3>What is not claimed?</h3><p>A production benchmark, road-network distance, all-industry compatibility, or optimality certification.</p></article></div></section></main>
+<footer class="site-footer"><div><a class="footer-brand" href="../index.html">OCP<span class="dot">●</span></a><p>A common language for optimization.</p></div><div><a href="../reference/index.html">Protocol & compatibility</a><a href="../project/index.html">Project status & access</a><a href="../ko/index.html" lang="ko">한국어 소개</a></div><p class="footer-note">0.1 candidate · Initiated by Omelet<br>Open-source developer preview · Apache-2.0</p></footer>
+<p id="copy-status" class="sr-only" aria-live="polite"></p>
+</body>
+</html>

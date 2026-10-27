@@ -1,0 +1,19 @@
+OCP candidate compatibility and versioning
+
+Core and routing profiles use 0.1.0 candidate versions. They are not frozen releases.
+Pin the exact artifact SHA-256 and schema hashes used for an integration.
+
+Core, domain profile, execution profile, binding, SDK, engine, catalog, and checker
+versions are separate. A shared package version does not establish compatibility.
+Unknown mandatory versions, capabilities, and required extensions are rejected.
+
+Changes to public meaning require a version update, migration documentation,
+and renewed provider, consumer, and independent-checker verification. A new
+standard version must not silently change an already pinned application.
+
+Engine replacement is claimed only in the intersection of supported profiles.
+Compare units, distance model, rounding, objective coefficients, constraints,
+and evaluation behavior. Matching route choices or running time is not promised.
+
+This introduction summarizes candidate policy. A public support lifetime,
+redistribution license, and deprecation schedule are not yet established.

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bring your engine · OCP</title>
+<meta name="description" content="Keep your algorithm and declare its supported inputs, constraints and result meaning.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://omelet-ai.github.io/optimization-context-protocol/start/engine/"><meta property="og:url" content="https://omelet-ai.github.io/optimization-context-protocol/start/engine/">
+<meta name="theme-color" content="#f7f8f2">
+<meta property="og:title" content="Bring your engine · Optimization Context Protocol">
+<meta property="og:description" content="Keep your algorithm and declare its supported inputs, constraints and result meaning.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<a class="brand" href="../../index.html" aria-label="OCP home"><img src="../../assets/mark.svg" width="33" height="33" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
+<button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
+<nav id="primary-nav" aria-label="Main navigation"><a href="../../start/index.html">Get started</a><a href="../../examples/index.html">Examples</a><a href="../../reference/index.html">Docs</a><a href="../../ko/index.html">한국어</a><a class="nav-cta" href="https://github.com/omelet-ai/optimization-context-protocol">GitHub ↗</a></nav>
+</header>
+<main id="main" tabindex="-1"><div class="wrap page-head "><p class="breadcrumbs"><a href="../../index.html">OCP</a> / Bring your engine</p><p class="eyebrow">Bring your engine</p><h1>Your solver.<br><em>A shared interface.</em></h1><p class="lead">Keep your algorithm and declare its supported inputs, constraints and result meaning.</p></div><div class="wrap page-layout"><aside class="sidebar" aria-label="Documentation navigation"><strong>Developer guide</strong><a href="../../start/index.html">Choose a path</a><a href="../../start/omelet/index.html">Try Omelet</a><a href="../../start/local/index.html">Run locally</a><a href="../../start/engine/index.html" aria-current="page">Bring your engine</a><a href="../../guides/apps/index.html">Connect your app</a><a href="../../examples/index.html">Examples</a><a href="../../reference/index.html">Protocol reference</a><a href="../../project/index.html">Status & access</a></aside><article class="prose"><p>Complete <a href="../local/index.html">Run locally</a>. Its first-success command already substitutes OR-Tools and a separate enumerating library behind the same app. In the generated kit, inspect <code>byo_library.py</code>.</p><h2>1. Run the teaching engine</h2><div class="code-window"><div class="code-caption"><span>Run and check your engine adapter</span><button class="copy-button" data-copy="code-public-byo" aria-label="Copy Run and check your engine adapter">Copy</button></div><pre><code id="code-public-byo" data-command="public-byo">.agent/bin/python -B byo_library.py basic-input.json --trace own-engine-trace.json
+.agent/bin/python -B export_transcript.py --trace own-engine-trace.json --artifact byo_library.py --out own-engine-transcript.json
+.agent/bin/python -B -m conformance.runner --bundle own-engine-transcript.json --artifact byo_library.py</code></pre></div><h2>2. Replace the calculation</h2><p>Replace <code>EnumeratingLibrary.solve(problem, time_limit_ms)</code> with your implementation. Preserve <code>name</code>, <code>version</code> and the <code>Outcome(solution, termination, objective)</code> result. The teaching example supports at most 6 visits and 3 vehicles. Use validation to reject unsupported behavior.</p><h2>3. Declare and check meaning</h2><p>Routing uses explicit integer meter distances and kg loads. Engine substitution is valid only within intersecting profiles, units, costs and constraints. Do not label a timeout infeasible or a feasible result optimal without proof. Generate a new trace after a change; existing traces are not overwritten.</p><p><a href="https://github.com/omelet-ai/optimization-context-protocol/blob/main/authoring/README.md">Read the engine authoring guide</a> and <a href="https://github.com/omelet-ai/optimization-context-protocol/blob/main/docs/users/COMPATIBILITY.md">compatibility boundaries</a>.</p></article></div></main>
+<footer class="site-footer"><div><a class="footer-brand" href="../../index.html">OCP<span class="dot">●</span></a><p>A common language for optimization.</p></div><div><a href="../../reference/index.html">Protocol & compatibility</a><a href="../../project/index.html">Project status & access</a><a href="../../ko/index.html" lang="ko">한국어 소개</a></div><p class="footer-note">0.1 candidate · Initiated by Omelet<br>Open-source developer preview · Apache-2.0</p></footer>
+<p id="copy-status" class="sr-only" aria-live="polite"></p>
+</body>
+</html>

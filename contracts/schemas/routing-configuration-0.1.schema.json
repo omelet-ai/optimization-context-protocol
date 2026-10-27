@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:candidate:routing.basic:0.1.0:configuration",
+  "const": {
+    "objectives": [
+      {
+        "id": "minimize_total_route_cost",
+        "weight": 1
+      }
+    ],
+    "constraints": [
+      "weight_capacity"
+    ],
+    "parameters": {
+      "distance_coefficient": 1,
+      "time_coefficient": 0,
+      "fixed_cost": 0
+    }
+  }
+}

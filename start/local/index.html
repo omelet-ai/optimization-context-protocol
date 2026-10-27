@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run locally · OCP</title>
+<meta name="description" content="Build from public GitHub source, then execute and independently check three problems.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://omelet-ai.github.io/optimization-context-protocol/start/local/"><meta property="og:url" content="https://omelet-ai.github.io/optimization-context-protocol/start/local/">
+<meta name="theme-color" content="#f7f8f2">
+<meta property="og:title" content="Run locally · Optimization Context Protocol">
+<meta property="og:description" content="Build from public GitHub source, then execute and independently check three problems.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<a class="brand" href="../../index.html" aria-label="OCP home"><img src="../../assets/mark.svg" width="33" height="33" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
+<button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
+<nav id="primary-nav" aria-label="Main navigation"><a href="../../start/index.html">Get started</a><a href="../../examples/index.html">Examples</a><a href="../../reference/index.html">Docs</a><a href="../../ko/index.html">한국어</a><a class="nav-cta" href="https://github.com/omelet-ai/optimization-context-protocol">GitHub ↗</a></nav>
+</header>
+<main id="main" tabindex="-1"><div class="wrap page-head "><p class="breadcrumbs"><a href="../../index.html">OCP</a> / Run locally</p><p class="eyebrow">Run locally</p><h1>A real solver.<br><em>On your machine.</em></h1><p class="lead">Build from public GitHub source, then execute and independently check three problems.</p></div><div class="wrap page-layout"><aside class="sidebar" aria-label="Documentation navigation"><strong>Developer guide</strong><a href="../../start/index.html">Choose a path</a><a href="../../start/omelet/index.html">Try Omelet</a><a href="../../start/local/index.html" aria-current="page">Run locally</a><a href="../../start/engine/index.html">Bring your engine</a><a href="../../guides/apps/index.html">Connect your app</a><a href="../../examples/index.html">Examples</a><a href="../../reference/index.html">Protocol reference</a><a href="../../project/index.html">Status & access</a></aside><article class="prose"><p>OCP is an Apache-2.0 open-source developer preview. Start from the public source: no account, trial key or model call is required. Package registries and hosted trial enrollment are not open.</p><h2>1. Prepare your machine</h2><p>Use Git, Python 3.12 and Node 24/npm on PATH. Full local regression is on macOS Apple Silicon; a limited Linux x86_64 container path was checked. Native Linux and Windows are not fully verified. The installer rejects Windows.</p><h2>2. Build and install</h2><p>Run both blocks in the same terminal. Public PyPI/npm dependencies are downloaded. The final command runs two real routing engines and checks both results, plus deliberate invalid inputs and outputs.</p><div class="code-window"><div class="code-caption"><span>Clone the public source</span><button class="copy-button" data-copy="code-github-clone" aria-label="Copy Clone the public source">Copy</button></div><pre><code id="code-github-clone" data-command="github-clone">git clone https://github.com/omelet-ai/optimization-context-protocol.git
+cd optimization-context-protocol</code></pre></div><div class="code-window"><div class="code-caption"><span>Build, install, solve and independently check</span><button class="copy-button" data-copy="code-readme-build" aria-label="Copy Build, install, solve and independently check">Copy</button></div><pre><code id="code-readme-build" data-command="readme-build">OCP_WORK=&quot;$(mktemp -d)&quot;
+python3.12 -m venv &quot;$OCP_WORK/build&quot;
+&quot;$OCP_WORK/build/bin/python&quot; -m pip install --no-compile build==1.4.0 setuptools==80.9.0 wheel==0.46.3
+&quot;$OCP_WORK/build/bin/python&quot; -B tools/build_invitation_kit.py --output &quot;$OCP_WORK/kit&quot;
+cd &quot;$OCP_WORK/kit&quot;
+python3.12 start.py --mcp --venv .agent</code></pre></div><p><code>start.py</code> and sample files are generated inside the kit. Keep the terminal there. For a lasting installation, replace <code>mktemp -d</code> with a new directory outside the checkout and retain it. To rerun without reinstalling, use <code>.agent/bin/python -B demo.py --diagnostics</code>.</p><h2>3. Solve three problems</h2><div class="code-window"><div class="code-caption"><span>Use the same app across three domains</span><button class="copy-button" data-copy="code-readme-examples" aria-label="Copy Use the same app across three domains">Copy</button></div><pre><code id="code-readme-examples" data-command="readme-examples">.agent/bin/python -I -B multi_app.py --profile routing.basic --input basic-input.json --request-id first-routing
+.agent/bin/python -I -B multi_app.py --profile worker.scheduling --input worker-input.json --request-id first-worker
+.agent/bin/python -I -B multi_app.py --profile inventory.replenishment --input inventory-input.json --request-id first-inventory</code></pre></div><p>Expected checked costs: 18 meter, 7 cost_unit and 16 cost_unit. Also inspect <code>solution_found</code> and <code>response.status</code>. PASS is a transcript check, not a guarantee of optimality.</p><p>Copy a sample before editing it and use a new request ID for changed input. <a href="https://github.com/omelet-ai/optimization-context-protocol/blob/main/docs/users/MULTI_DOMAIN_QUICKSTART.md">See changes with known answers and supported limits</a>.</p><h2>4. Connect an agent</h2><p><a href="../../guides/apps/index.html#mcp">Continue to MCP setup →</a></p><h2>Troubleshooting</h2><p>If a sample is missing, change to the generated kit directory. If <code>ENVIRONMENT_EXISTS</code> appears, reuse its Python rather than reinstalling. If a dependency download fails, check public registry access. <a href="https://github.com/omelet-ai/optimization-context-protocol/blob/main/README.md">The README includes recovery steps</a>.</p></article></div></main>
+<footer class="site-footer"><div><a class="footer-brand" href="../../index.html">OCP<span class="dot">●</span></a><p>A common language for optimization.</p></div><div><a href="../../reference/index.html">Protocol & compatibility</a><a href="../../project/index.html">Project status & access</a><a href="../../ko/index.html" lang="ko">한국어 소개</a></div><p class="footer-note">0.1 candidate · Initiated by Omelet<br>Open-source developer preview · Apache-2.0</p></footer>
+<p id="copy-status" class="sr-only" aria-live="polite"></p>
+</body>
+</html>

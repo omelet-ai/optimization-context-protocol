@@ -1,0 +1,9 @@
+Optimization Context Protocol (OCP)
+Copyright 2026 Omelet and OCP contributors.
+
+This project's original source code, specifications, examples and documentation
+are licensed under the Apache License, Version 2.0. See LICENSE.
+
+Third-party dependencies retain their own licenses. See THIRD_PARTY_NOTICES.md.
+The proprietary Omelet engine, internal snapshots and private operating materials
+are not included in this repository. The license does not grant trademark rights.

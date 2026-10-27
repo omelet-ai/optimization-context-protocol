@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:candidate:routing.basic:0.1.0:solution",
+  "type": "object",
+  "properties": {
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "vehicle_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$"
+          },
+          "visits": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$"
+            },
+            "minItems": 0,
+            "maxItems": 64
+          }
+        },
+        "required": [
+          "vehicle_id",
+          "visits"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 16
+    }
+  },
+  "required": [
+    "routes"
+  ],
+  "additionalProperties": false
+}

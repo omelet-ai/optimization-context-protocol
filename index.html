@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Optimization, connected · OCP</title>
+<meta name="description" content="A common interface connecting optimization engines with applications and AI agents.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://omelet-ai.github.io/optimization-context-protocol/"><meta property="og:url" content="https://omelet-ai.github.io/optimization-context-protocol/">
+<meta name="theme-color" content="#f7f8f2">
+<meta property="og:title" content="Optimization, connected · Optimization Context Protocol">
+<meta property="og:description" content="A common interface connecting optimization engines with applications and AI agents.">
+<meta property="og:type" content="website">
+<link rel="icon" href="./assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./assets/site.css">
+<script src="./assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<a class="brand" href="./index.html" aria-label="OCP home"><img src="./assets/mark.svg" width="33" height="33" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
+<button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
+<nav id="primary-nav" aria-label="Main navigation"><a href="./start/index.html">Get started</a><a href="./examples/index.html">Examples</a><a href="./reference/index.html">Docs</a><a href="./ko/index.html">한국어</a><a class="nav-cta" href="https://github.com/omelet-ai/optimization-context-protocol">GitHub ↗</a></nav>
+</header>
+<main id="main" tabindex="-1"><section class="wrap hero"><div><p class="eyebrow">Optimization Context Protocol · Developer preview</p><h1>Optimization,<br><em>connected.</em></h1><p class="lead">A common language between your application and your optimization engine. Discover what’s supported. Send a problem. Understand the result.</p><div class="buttons"><a class="button" href="./start/index.html">Start building <span aria-hidden="true">↗</span></a><a class="button secondary" href="./examples/index.html">Explore an example <span aria-hidden="true">→</span></a></div><p class="small-note">Independent apps. Independent engines. One explicit contract.</p></div><div class="protocol-art" aria-label="Apps and agents connect through OCP to independent engines"><div class="art-title"><span><i class="live-dot"></i> ONE CONTRACT. YOUR STACK.</span><span>v0.1 / CANDIDATE</span></div>
+<svg class="protocol-diagram" viewBox="0 0 460 350" role="img" aria-labelledby="diagram-title"><title id="diagram-title">An application and an AI agent share the OCP interface with a local solver, Omelet, or your engine.</title><defs><pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="#c8d4bc"/></pattern></defs><rect width="460" height="350" fill="url(#dots)"/>
+<g fill="none" stroke="#9eaf95" stroke-width="1.4"><path d="M115 70v40q0 12 12 12h91v28M345 70v40q0 12-12 12h-91v28M230 219v33M80 295v-27q0-12 12-12h276q12 0 12 12v27M230 256v39"/></g>
+<g fill="#fbfcf8" stroke="#cad5c0"><rect x="40" y="20" width="150" height="50" rx="6"/><rect x="270" y="20" width="150" height="50" rx="6"/><rect x="20" y="295" width="120" height="42" rx="5"/><rect x="170" y="295" width="120" height="42" rx="5"/><rect x="320" y="295" width="120" height="42" rx="5"/></g>
+<g fill="#304e3e" font-family="sans-serif" font-size="12" text-anchor="middle"><text x="115" y="50">Your application</text><text x="345" y="50">Your AI agent</text><text x="80" y="321">Local reference</text><text x="230" y="321">Omelet</text><text x="380" y="321">Your engine</text></g>
+<rect x="98" y="150" width="264" height="69" rx="8" fill="#17573e"/><text x="230" y="181" text-anchor="middle" font-size="22" font-family="sans-serif" fill="#e2efaa" letter-spacing="2">OCP</text><text x="230" y="202" text-anchor="middle" font-size="9" font-family="monospace" fill="#d4e6c5">DISCOVER · VALIDATE · EXECUTE · EVALUATE</text><g fill="#17573e" stroke="#edf1e6" stroke-width="3"><circle cx="230" cy="256" r="5"/><circle cx="115" cy="95" r="4"/><circle cx="345" cy="95" r="4"/></g></svg>
+<div class="protocol-compact" role="img" aria-label="An application and an AI agent share the OCP interface with a local solver, Omelet, or your engine.">
+<div class="protocol-clients" aria-hidden="true"><span>Your application</span><span>Your AI agent</span></div>
+<div class="protocol-connector" aria-hidden="true">↓</div>
+<div class="protocol-core" aria-hidden="true"><strong>OCP</strong><div><span>Discover</span><span>Validate</span><span>Execute</span><span>Evaluate</span></div></div>
+<div class="protocol-connector" aria-hidden="true">↓</div>
+<div class="protocol-engines" aria-hidden="true"><span>Local reference</span><span>Omelet</span><span>Your engine</span></div>
+</div>
+<div class="art-footer"><span><strong>01</strong>Common interface</span><span><strong>03</strong>Ways to start</span><span><strong>Your choice</strong>App + engine</span></div></div></section>
+<div class="wrap path-ribbon"><span>FROM PROBLEM TO A RESULT YOU CAN CHECK</span><b>Discover</b><span class="arrow">→</span><b>Validate</b><span class="arrow">→</span><b>Execute</b><span class="arrow">→</span><b>Evaluate</b></div>
+<section class="wrap section"><div class="section-heading"><div><p class="eyebrow">Start where you are</p><h2>Three ways in.<br><em>One common interface.</em></h2></div><p>Try an engine, work entirely on your machine, or connect a solver you already own.</p></div><div class="route-list"><a class="route-row recommended" href="./start/omelet/index.html"><span class="route-num">01</span><div><h3>Try Omelet</h3><span class="tag">Recommended first experience</span></div><p>Explore a limited engine trial with a personal invitation.</p><span class="route-arrow" aria-hidden="true">↗</span></a><a class="route-row " href="./start/local/index.html"><span class="route-num">02</span><div><h3>Run locally</h3><span class="tag">No account or key</span></div><p>Solve a small routing problem on your machine with OR-Tools.</p><span class="route-arrow" aria-hidden="true">↗</span></a><a class="route-row " href="./start/engine/index.html"><span class="route-num">03</span><div><h3>Bring your engine</h3><span class="tag">Your library. Your implementation.</span></div><p>Connect your solver, declare its limits, and check its results.</p><span class="route-arrow" aria-hidden="true">↗</span></a></div></section>
+<section class="section section-tint"><div class="wrap split"><div><p class="eyebrow">A contract with meaning</p><h2>The result is more<br>than a route.</h2><p class="lead">A solver result should tell your app what was requested, what was enforced, and what was actually evaluated.</p><p>OCP keeps units, constraints, failure states, and implementation provenance explicit. Your app can make an informed next move.</p><a href="./reference/index.html">Explore the protocol →</a></div><div class="code-window"><div class="code-caption"><span>RESULT SEMANTICS</span><span>illustrative excerpt</span></div><pre><code>{
+  <span class="hl">"status"</span>: "feasible",
+  "termination": "time_limit",
+  "solution": { "routes": […] },
+  "metrics": [{
+    "id": "minimize_total_route_cost",
+    <span class="hl">"status"</span>: "evaluated",
+    "value": 18
+  }]
+}
+<span class="dim">// A feasible route is not proof of optimality.</span></code></pre></div></div></section>
+<section class="wrap section"><p class="eyebrow">Built for independent adoption</p><h2>Keep your app. Keep your engine.</h2><div class="principles"><article><h3>Application developers</h3><p>Use a small Python or TypeScript client. Connect from a backend, notebook, batch job, or agent.</p><a href="./guides/apps/index.html">Build an application →</a></article><article><h3>Engine developers</h3><p>Expose the capabilities you actually support. Keep your implementation and its deployment under your control.</p><a href="./start/engine/index.html">Connect an engine →</a></article><article><h3>People checking results</h3><p>Inspect the request, result, and evaluation. Check a transcript independently of the engine that produced it.</p><a href="./examples/index.html">Inspect a worked example →</a></article></div></section>
+<section class="wrap"><div class="closing"><div><p class="eyebrow" style="color:#e2efaa">START SMALL</p><h2>One problem. A real result.</h2><p>Begin with a tiny routing example you can inspect end to end.</p></div><a class="button" href="./start/local/index.html">Run it locally <span aria-hidden="true">↗</span></a></div></section><section class="wrap section"><h2>Three problems. One application flow.</h2><p>OCP is an Apache-2.0 open-source developer preview. Start from the public source: no account, trial key or model call is required. Package registries and hosted trial enrollment are not open.</p><div class="table-scroll"><table><tr><th>Profile</th><th>Problem</th><th>Reference and check</th></tr><tr><td>routing.basic</td><td>Visits, vehicles, explicit meter distances and kg capacity</td><td>OR-Tools and a separate enumerating teaching engine; independent route checker</td></tr><tr><td>worker.scheduling</td><td>Assign fixed-time tasks to available workers</td><td>Bounded exact solver; independent availability, overlap and cost checks</td></tr><tr><td>inventory.replenishment</td><td>Choose orders over periods with deterministic demand and lead time</td><td>Bounded exact solver; independent stock balance and cost checks</td></tr></table></div><p><a class="button" href="https://github.com/omelet-ai/optimization-context-protocol">View source on GitHub ↗</a></p></section></main>
+<footer class="site-footer"><div><a class="footer-brand" href="./index.html">OCP<span class="dot">●</span></a><p>A common language for optimization.</p></div><div><a href="./reference/index.html">Protocol & compatibility</a><a href="./project/index.html">Project status & access</a><a href="./ko/index.html" lang="ko">한국어 소개</a></div><p class="footer-note">0.1 candidate · Initiated by Omelet<br>Open-source developer preview · Apache-2.0</p></footer>
+<p id="copy-status" class="sr-only" aria-live="polite"></p>
+</body>
+</html>
