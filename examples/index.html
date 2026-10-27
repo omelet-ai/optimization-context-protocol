@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A routing example you can inspect · OCP</title>
-<meta name="description" content="Explore the real input, result, and evaluation of a tiny synthetic routing problem.">
+<title>Three optimization examples you can inspect · OCP</title>
+<meta name="description" content="Inspect real routing, worker assignment and inventory results with separate independent checks.">
 <meta name="robots" content="index, follow"><link rel="canonical" href="https://omelet-ai.github.io/optimization-context-protocol/examples/"><meta property="og:url" content="https://omelet-ai.github.io/optimization-context-protocol/examples/">
 <meta name="theme-color" content="#f7f8f2">
-<meta property="og:title" content="A routing example you can inspect · Optimization Context Protocol">
-<meta property="og:description" content="Explore the real input, result, and evaluation of a tiny synthetic routing problem.">
+<meta property="og:title" content="Three optimization examples you can inspect · Optimization Context Protocol">
+<meta property="og:description" content="Inspect real routing, worker assignment and inventory results with separate independent checks.">
 <meta property="og:type" content="website">
 <link rel="icon" href="../assets/mark.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/site.css">
@@ -19,9 +19,9 @@
 <header class="site-header">
 <a class="brand" href="../index.html" aria-label="OCP home"><img src="../assets/mark.svg" width="33" height="33" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
 <button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
-<nav id="primary-nav" aria-label="Main navigation"><a href="../start/index.html">Get started</a><a href="../examples/index.html" aria-current="page">Examples</a><a href="../reference/index.html">Docs</a><a href="../ko/index.html">한국어</a><a class="nav-cta" href="https://github.com/omelet-ai/optimization-context-protocol">GitHub ↗</a></nav>
+<nav id="primary-nav" aria-label="Main navigation"><a href="../start/index.html">Get started</a><a href="../examples/index.html" aria-current="page">Examples</a><a href="../guides/apps/index.html#mcp">AI agents</a><a href="../reference/index.html">Docs</a><a href="../ko/index.html">한국어 소개</a><a class="nav-cta" href="https://github.com/omelet-ai/optimization-context-protocol">GitHub ↗</a></nav>
 </header>
-<main id="main" tabindex="-1"><div class="wrap page-head "><p class="breadcrumbs"><a href="../index.html">OCP</a> / Worked example</p><p class="eyebrow">Worked example</p><h1>Small problem.<br><em>Visible reasoning.</em></h1><p class="lead">Two vehicles. Four visits. Explicit distances and capacities. Follow the input through to a result you can check.</p></div><section class="wrap" data-example><div class="example-shell"><div class="example-toolbar"><strong>Routing / 0.1 candidate</strong><button class="example-toggle" data-scenario="routing" aria-pressed="true">Valid problem</button><button class="example-toggle" data-scenario="rejected" aria-pressed="false">Unsupported unit</button></div><div class="example-body"><div class="example-canvas"><div id="route-picture"><svg viewBox="0 0 320 220" role="img" aria-label="Schematic of the returned vehicle routes"><path d="M160,110 L45,155 L70,40 L160,110" fill="none" stroke="#17573e" stroke-width="2.5" stroke-dasharray="6 4"/><path d="M160,110 L250,40 L270,170 L160,110" fill="none" stroke="#8d6622" stroke-width="2.5" stroke-dasharray="6 4"/><circle cx="160" cy="110" r="24" fill="#17573e" stroke="#17573e"/><text x="160" y="115" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#fff">hub</text><circle cx="70" cy="40" r="18" fill="#fff" stroke="#17573e"/><text x="70" y="45" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">a</text><circle cx="45" cy="155" r="18" fill="#fff" stroke="#17573e"/><text x="45" y="160" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">b</text><circle cx="250" cy="40" r="18" fill="#fff" stroke="#17573e"/><text x="250" y="45" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">c</text><circle cx="270" cy="170" r="18" fill="#fff" stroke="#17573e"/><text x="270" y="175" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">d</text></svg><p class="small-note">Schematic only. Distances come from the explicit matrix, not this drawing.</p></div><div id="rejection-picture" hidden><p class="eyebrow">Validation stops the request</p><h2>“lb” is not “kg”.</h2><p>This profile declares kg. A different unit is rejected before calculation instead of being silently converted.</p></div><p class="result-summary" id="example-summary">Feasible route · total cost 18 meters · capacity and visit coverage independently checked. No optimality claim.</p></div><div class="example-data"><div class="tabs" role="tablist" aria-label="Example stages"><button role="tab" id="tab-input" data-view="input" aria-selected="true" aria-controls="example-panel">Input</button><button role="tab" id="tab-result" data-view="result" aria-selected="false" aria-controls="example-panel" tabindex="-1">Result</button><button role="tab" id="tab-evaluation" data-view="evaluation" aria-selected="false" aria-controls="example-panel" tabindex="-1">Evaluation</button></div><pre id="example-panel" role="tabpanel" tabindex="0" aria-labelledby="tab-input">{
+<main id="main" tabindex="-1"><div class="wrap page-head "><p class="breadcrumbs"><a href="../index.html">OCP</a> / Worked examples</p><p class="eyebrow">Worked examples</p><h1>Three problems.<br><em>Checked results.</em></h1><p class="lead">Inspect routing, fixed-time worker assignment and inventory replenishment. Every result below was calculated and checked at build time.</p></div><section class="wrap" data-example id="routing"><h2>Routing: visits and capacity</h2><div class="example-shell"><div class="example-toolbar"><strong>Routing / 0.1 candidate</strong><button class="example-toggle" data-scenario="routing" aria-pressed="true">Valid problem</button><button class="example-toggle" data-scenario="rejected" aria-pressed="false">Unsupported unit</button></div><div class="example-body"><div class="example-canvas"><div id="route-picture"><svg viewBox="0 0 320 220" role="img" aria-label="Schematic of the returned vehicle routes"><path d="M160,110 L45,155 L70,40 L160,110" fill="none" stroke="#17573e" stroke-width="2.5" stroke-dasharray="6 4"/><path d="M160,110 L250,40 L270,170 L160,110" fill="none" stroke="#8d6622" stroke-width="2.5" stroke-dasharray="6 4"/><circle cx="160" cy="110" r="24" fill="#17573e" stroke="#17573e"/><text x="160" y="115" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#fff">hub</text><circle cx="70" cy="40" r="18" fill="#fff" stroke="#17573e"/><text x="70" y="45" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">a</text><circle cx="45" cy="155" r="18" fill="#fff" stroke="#17573e"/><text x="45" y="160" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">b</text><circle cx="250" cy="40" r="18" fill="#fff" stroke="#17573e"/><text x="250" y="45" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">c</text><circle cx="270" cy="170" r="18" fill="#fff" stroke="#17573e"/><text x="270" y="175" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#17573e">d</text></svg><p class="small-note">Schematic only. Distances come from the explicit matrix, not this drawing.</p></div><div id="rejection-picture" hidden><p class="eyebrow">Validation stops the request</p><h2>“lb” is not “kg”.</h2><p>This profile declares kg. A different unit is rejected before calculation instead of being silently converted.</p></div><p class="result-summary" id="example-summary">Feasible route · total cost 18 meters · capacity and visit coverage independently checked. No optimality claim.</p></div><div class="example-data"><div class="tabs" role="tablist" aria-label="Example stages"><button role="tab" id="tab-input" data-view="input" aria-selected="true" aria-controls="example-panel">Input</button><button role="tab" id="tab-result" data-view="result" aria-selected="false" aria-controls="example-panel" tabindex="-1">Result</button><button role="tab" id="tab-evaluation" data-view="evaluation" aria-selected="false" aria-controls="example-panel" tabindex="-1">Evaluation</button></div><pre id="example-panel" role="tabpanel" tabindex="0" aria-labelledby="tab-input">{
   &quot;depot&quot;: &quot;hub&quot;,
   &quot;load_unit&quot;: &quot;kg&quot;,
   &quot;visits&quot;: [
@@ -101,8 +101,590 @@
       ]
     ]
   }
-}</pre></div></div></div><p class="small-note">Precomputed at site build using the real OR-Tools reference, checked independently. These controls inspect saved synthetic outputs; they do not call an engine.</p><noscript><p>The complete example is available as <a href="../assets/example.json">downloadable JSON</a>. JavaScript enables the stage selector.</p></noscript><script id="example-data" type="application/json">{"routing": {"input": {"depot": "hub", "load_unit": "kg", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "request": {"core_version": "0.1.0", "kind": "request", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "configuration": {"objectives": [{"id": "minimize_total_route_cost", "weight": 1}], "constraints": ["weight_capacity"], "parameters": {"distance_coefficient": 1, "time_coefficient": 0, "fixed_cost": 0}}, "input": {"depot": "hub", "load_unit": "kg", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "budget": {"time_limit_ms": 1000}}, "result": {"core_version": "0.1.0", "kind": "result", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "effective_configuration": {"objectives": [{"id": "minimize_total_route_cost", "weight": 1}], "constraints": ["weight_capacity"], "parameters": {"distance_coefficient": 1, "time_coefficient": 0, "fixed_cost": 0}}, "status": "feasible", "termination": "completed", "solution": {"routes": [{"vehicle_id": "v1", "visits": ["b", "a"]}, {"vehicle_id": "v2", "visits": ["c", "d"]}]}, "proof": null, "metrics": [{"id": "minimize_total_route_cost", "role": "optimized", "definition": "routing.basic.total_distance.v1", "unit": "meter", "source": "engine", "status": "evaluated", "value": 18, "reason": null}], "constraints": [{"id": "weight_capacity", "role": "enforced", "definition": "routing.basic.weight_capacity.v1", "unit": "kg", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "all_visits_once", "role": "enforced", "definition": "routing.basic.all_visits_once.v1", "unit": "count", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "provenance": {"implementation": {"id": "ocp-candidate.routing-adapter", "version": "0.1.0"}, "engine": {"id": "ortools.routing", "version": "9.15.6755"}, "request_id": "site-routing-example", "limitations": ["Found solutions are feasible, not certified optimal"]}}, "evaluation": {"core_version": "0.1.0", "kind": "evaluation", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "metrics": [{"id": "minimize_total_route_cost", "role": "optimized", "definition": "routing.basic.total_distance.v1", "unit": "meter", "source": "independent", "status": "evaluated", "value": 18, "reason": null}], "constraints": [{"id": "weight_capacity", "role": "enforced", "definition": "routing.basic.weight_capacity.v1", "unit": "kg", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "all_visits_once", "role": "enforced", "definition": "routing.basic.all_visits_once.v1", "unit": "count", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "evaluator": {"id": "ocp-candidate.routing-evaluator", "version": "0.1.0"}, "limitations": ["Feasibility and cost evaluation; no optimality proof"]}, "independent_check": {"feasible": true, "total_cost": 18, "route_costs": {"v1": 6, "v2": 12}, "loads": {"v1": 2, "v2": 2}, "violations": {"weight_capacity": 0, "all_visits_once": 0}}, "summary": "Feasible route · total cost 18 meters · capacity and visit coverage independently checked. No optimality claim."}, "rejected": {"input": {"depot": "hub", "load_unit": "lb", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "result": {"core_version": "0.1.0", "kind": "failure", "request_id": "site-unsupported-unit", "error": {"code": "INVALID_DATA", "message": "Value does not match routing-input contract", "retryable": false, "issues": [{"code": "INVALID_DATA", "path": "/load_unit", "message": "Value does not match routing-input contract"}]}}, "evaluation": null, "summary": "INVALID_DATA · unsupported load unit rejected before solving. No result to evaluate."}}</script><div class="file-links"><a href="../assets/example.json" download>Download the complete example</a><a href="../assets/basic-input.json" download>Download the input</a><a href="../start/local/index.html">Reproduce locally →</a></div></section>
-<section class="wrap section"><div class="principles"><article><h3>What is optimized?</h3><p>Total route cost with distance coefficient 1, time coefficient 0, fixed cost 0, and weight capacity enforced.</p></article><article><h3>What is checked?</h3><p>Visit coverage, vehicle capacity, route distances, result semantics, and the independent total cost.</p></article><article><h3>What is not claimed?</h3><p>A production benchmark, road-network distance, all-industry compatibility, or optimality certification.</p></article></div></section></main>
+}</pre></div></div></div><p class="small-note">Precomputed at site build using the real OR-Tools reference, checked independently. These controls inspect saved synthetic outputs; they do not call an engine.</p><noscript><p>The complete example is available as <a href="../assets/example.json">downloadable JSON</a>. JavaScript enables the stage selector.</p></noscript><script id="example-data" type="application/json">{"routing": {"input": {"depot": "hub", "load_unit": "kg", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "request": {"core_version": "0.1.0", "kind": "request", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "configuration": {"objectives": [{"id": "minimize_total_route_cost", "weight": 1}], "constraints": ["weight_capacity"], "parameters": {"distance_coefficient": 1, "time_coefficient": 0, "fixed_cost": 0}}, "input": {"depot": "hub", "load_unit": "kg", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "budget": {"time_limit_ms": 1000}}, "result": {"core_version": "0.1.0", "kind": "result", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "effective_configuration": {"objectives": [{"id": "minimize_total_route_cost", "weight": 1}], "constraints": ["weight_capacity"], "parameters": {"distance_coefficient": 1, "time_coefficient": 0, "fixed_cost": 0}}, "status": "feasible", "termination": "completed", "solution": {"routes": [{"vehicle_id": "v1", "visits": ["b", "a"]}, {"vehicle_id": "v2", "visits": ["c", "d"]}]}, "proof": null, "metrics": [{"id": "minimize_total_route_cost", "role": "optimized", "definition": "routing.basic.total_distance.v1", "unit": "meter", "source": "engine", "status": "evaluated", "value": 18, "reason": null}], "constraints": [{"id": "weight_capacity", "role": "enforced", "definition": "routing.basic.weight_capacity.v1", "unit": "kg", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "all_visits_once", "role": "enforced", "definition": "routing.basic.all_visits_once.v1", "unit": "count", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "provenance": {"implementation": {"id": "ocp-candidate.routing-adapter", "version": "0.1.0"}, "engine": {"id": "ortools.routing", "version": "9.15.6755"}, "request_id": "site-routing-example", "limitations": ["Found solutions are feasible, not certified optimal"]}}, "evaluation": {"core_version": "0.1.0", "kind": "evaluation", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "metrics": [{"id": "minimize_total_route_cost", "role": "optimized", "definition": "routing.basic.total_distance.v1", "unit": "meter", "source": "independent", "status": "evaluated", "value": 18, "reason": null}], "constraints": [{"id": "weight_capacity", "role": "enforced", "definition": "routing.basic.weight_capacity.v1", "unit": "kg", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "all_visits_once", "role": "enforced", "definition": "routing.basic.all_visits_once.v1", "unit": "count", "source": "independent", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "evaluator": {"id": "ocp-candidate.routing-evaluator", "version": "0.1.0"}, "limitations": ["Feasibility and cost evaluation; no optimality proof"]}, "independent_check": {"feasible": true, "total_cost": 18, "route_costs": {"v1": 6, "v2": 12}, "loads": {"v1": 2, "v2": 2}, "violations": {"weight_capacity": 0, "all_visits_once": 0}}, "summary": "Feasible route · total cost 18 meters · capacity and visit coverage independently checked. No optimality claim."}, "rejected": {"input": {"depot": "hub", "load_unit": "lb", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "result": {"core_version": "0.1.0", "kind": "failure", "request_id": "site-unsupported-unit", "error": {"code": "INVALID_DATA", "message": "Value does not match routing-input contract", "retryable": false, "issues": [{"code": "INVALID_DATA", "path": "/load_unit", "message": "Value does not match routing-input contract"}]}}, "evaluation": null, "summary": "INVALID_DATA · unsupported load unit rejected before solving. No result to evaluate."}, "worker": {"input": {"time_unit": "minute", "cost_unit": "cost_unit", "workers": [{"id": "alice", "availability": [{"start": 0, "end": 180}], "max_minutes": 120}, {"id": "bob", "availability": [{"start": 0, "end": 180}], "max_minutes": 120}], "tasks": [{"id": "pack", "start": 0, "end": 60, "eligible_workers": ["alice", "bob"], "costs": {"alice": 2, "bob": 5}}, {"id": "inspect", "start": 30, "end": 90, "eligible_workers": ["alice", "bob"], "costs": {"alice": 1, "bob": 3}}, {"id": "ship", "start": 90, "end": 150, "eligible_workers": ["alice", "bob"], "costs": {"alice": 2, "bob": 4}}]}, "request": {"core_version": "0.1.0", "kind": "request", "request_id": "site-worker-example", "capability": {"id": "worker.scheduling.reference", "version": "0.1.0"}, "domain_profile": {"id": "worker.scheduling", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "configuration": {"objectives": [{"id": "total_cost", "weight": 1}], "constraints": ["task_coverage", "eligibility", "availability", "no_overlap", "workload"], "parameters": {}}, "input": {"time_unit": "minute", "cost_unit": "cost_unit", "workers": [{"id": "alice", "availability": [{"start": 0, "end": 180}], "max_minutes": 120}, {"id": "bob", "availability": [{"start": 0, "end": 180}], "max_minutes": 120}], "tasks": [{"id": "pack", "start": 0, "end": 60, "eligible_workers": ["alice", "bob"], "costs": {"alice": 2, "bob": 5}}, {"id": "inspect", "start": 30, "end": 90, "eligible_workers": ["alice", "bob"], "costs": {"alice": 1, "bob": 3}}, {"id": "ship", "start": 90, "end": 150, "eligible_workers": ["alice", "bob"], "costs": {"alice": 2, "bob": 4}}]}, "budget": {"time_limit_ms": 1000}}, "result": {"core_version": "0.1.0", "kind": "result", "request_id": "site-worker-example", "capability": {"id": "worker.scheduling.reference", "version": "0.1.0"}, "domain_profile": {"id": "worker.scheduling", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "effective_configuration": {"objectives": [{"id": "total_cost", "weight": 1}], "constraints": ["task_coverage", "eligibility", "availability", "no_overlap", "workload"], "parameters": {}}, "status": "optimal", "termination": "completed", "solution": {"assignments": [{"task_id": "pack", "worker_id": "alice"}, {"task_id": "inspect", "worker_id": "bob"}, {"task_id": "ship", "worker_id": "alice"}]}, "proof": {"claim": "optimal", "method": "bounded-assignment-enumeration", "scope": "worker.scheduling:0.1.0", "evidence": {"objective": 7}}, "metrics": [{"id": "total_cost", "role": "optimized", "definition": "worker.scheduling.total_cost.v1", "unit": "cost_unit", "source": "engine", "status": "evaluated", "value": 7, "reason": null}], "constraints": [{"id": "task_coverage", "role": "enforced", "definition": "worker.scheduling.task_coverage.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "eligibility", "role": "enforced", "definition": "worker.scheduling.eligibility.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "availability", "role": "enforced", "definition": "worker.scheduling.availability.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "no_overlap", "role": "enforced", "definition": "worker.scheduling.no_overlap.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "workload", "role": "enforced", "definition": "worker.scheduling.workload.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "provenance": {"implementation": {"id": "ocp-candidate.planning-adapter", "version": "0.1.0"}, "engine": {"id": "ocp.worker-branch-and-bound", "version": "0.1.0"}, "request_id": "site-worker-example", "limitations": ["1-8 fixed-time tasks, 1-4 workers; half-open integer minute intervals; one worker per task", "No shift generation, overtime, breaks, travel, fairness or automatic constraint relaxation", "Budget 1-5000 ms; optimal/infeasible proof requires independent bounded enumeration"]}}, "evaluation": {"core_version": "0.1.0", "kind": "evaluation", "request_id": "site-worker-example", "capability": {"id": "worker.scheduling.reference", "version": "0.1.0"}, "domain_profile": {"id": "worker.scheduling", "version": "0.1.0"}, "metrics": [{"id": "total_cost", "role": "optimized", "definition": "worker.scheduling.total_cost.v1", "unit": "cost_unit", "source": "engine", "status": "evaluated", "value": 7, "reason": null}], "constraints": [{"id": "task_coverage", "role": "enforced", "definition": "worker.scheduling.task_coverage.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "eligibility", "role": "enforced", "definition": "worker.scheduling.eligibility.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "availability", "role": "enforced", "definition": "worker.scheduling.availability.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "no_overlap", "role": "enforced", "definition": "worker.scheduling.no_overlap.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "workload", "role": "enforced", "definition": "worker.scheduling.workload.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "evaluator": {"id": "ocp-candidate.planning-evaluator", "version": "0.1.0"}, "limitations": ["Provider evaluation reuses provider logic; use the separately packaged independent checker."]}, "independent_check": {"feasible": true, "total_cost": 7, "violations": {"task_coverage": 0, "eligibility": 0, "availability": 0, "no_overlap": 0, "workload": 0}}}, "inventory": {"input": {"quantity_unit": "item", "period_unit": "day", "cost_unit": "cost_unit", "periods": 4, "products": [{"id": "widget", "demand": [2, 1, 3, 2], "scheduled_receipts": [0, 0, 0, 0], "initial_inventory": 2, "lead_time": 1, "max_order_quantity": 5, "storage_capacity": 8, "terminal_min_inventory": 0, "unit_order_cost": 1, "fixed_order_cost": 4, "holding_cost": 1}]}, "request": {"core_version": "0.1.0", "kind": "request", "request_id": "site-inventory-example", "capability": {"id": "inventory.replenishment.reference", "version": "0.1.0"}, "domain_profile": {"id": "inventory.replenishment", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "configuration": {"objectives": [{"id": "total_cost", "weight": 1}], "constraints": ["inventory_balance", "no_stockout", "storage_capacity", "order_limit", "terminal_inventory"], "parameters": {}}, "input": {"quantity_unit": "item", "period_unit": "day", "cost_unit": "cost_unit", "periods": 4, "products": [{"id": "widget", "demand": [2, 1, 3, 2], "scheduled_receipts": [0, 0, 0, 0], "initial_inventory": 2, "lead_time": 1, "max_order_quantity": 5, "storage_capacity": 8, "terminal_min_inventory": 0, "unit_order_cost": 1, "fixed_order_cost": 4, "holding_cost": 1}]}, "budget": {"time_limit_ms": 1000}}, "result": {"core_version": "0.1.0", "kind": "result", "request_id": "site-inventory-example", "capability": {"id": "inventory.replenishment.reference", "version": "0.1.0"}, "domain_profile": {"id": "inventory.replenishment", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "effective_configuration": {"objectives": [{"id": "total_cost", "weight": 1}], "constraints": ["inventory_balance", "no_stockout", "storage_capacity", "order_limit", "terminal_inventory"], "parameters": {}}, "status": "optimal", "termination": "completed", "solution": {"plans": [{"product_id": "widget", "orders": [1, 5, 0, 0], "ending_inventory": [0, 0, 2, 0]}]}, "proof": {"claim": "optimal", "method": "bounded-order-enumeration", "scope": "inventory.replenishment:0.1.0", "evidence": {"objective": 16}}, "metrics": [{"id": "total_cost", "role": "optimized", "definition": "inventory.replenishment.total_cost.v1", "unit": "cost_unit", "source": "engine", "status": "evaluated", "value": 16, "reason": null}], "constraints": [{"id": "inventory_balance", "role": "enforced", "definition": "inventory.replenishment.inventory_balance.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "no_stockout", "role": "enforced", "definition": "inventory.replenishment.no_stockout.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "storage_capacity", "role": "enforced", "definition": "inventory.replenishment.storage_capacity.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "order_limit", "role": "enforced", "definition": "inventory.replenishment.order_limit.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "terminal_inventory", "role": "enforced", "definition": "inventory.replenishment.terminal_inventory.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "provenance": {"implementation": {"id": "ocp-candidate.planning-adapter", "version": "0.1.0"}, "engine": {"id": "ocp.inventory-dynamic-programming", "version": "0.1.0"}, "request_id": "site-inventory-example", "limitations": ["1-4 independent products, 1-6 daily periods; integer items; orders \u003c=5, capacity \u003c=50", "Demand is an explicit forecast, not inferred; no backlog, lost sales, uncertainty or shared capacity", "Receipts before demand, holding cost on ending stock; late-horizon orders must be zero", "Budget 1-5000 ms; independent enumeration required to verify optimal/infeasible proofs"]}}, "evaluation": {"core_version": "0.1.0", "kind": "evaluation", "request_id": "site-inventory-example", "capability": {"id": "inventory.replenishment.reference", "version": "0.1.0"}, "domain_profile": {"id": "inventory.replenishment", "version": "0.1.0"}, "metrics": [{"id": "total_cost", "role": "optimized", "definition": "inventory.replenishment.total_cost.v1", "unit": "cost_unit", "source": "engine", "status": "evaluated", "value": 16, "reason": null}], "constraints": [{"id": "inventory_balance", "role": "enforced", "definition": "inventory.replenishment.inventory_balance.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "no_stockout", "role": "enforced", "definition": "inventory.replenishment.no_stockout.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "storage_capacity", "role": "enforced", "definition": "inventory.replenishment.storage_capacity.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "order_limit", "role": "enforced", "definition": "inventory.replenishment.order_limit.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "terminal_inventory", "role": "enforced", "definition": "inventory.replenishment.terminal_inventory.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "evaluator": {"id": "ocp-candidate.planning-evaluator", "version": "0.1.0"}, "limitations": ["Provider evaluation reuses provider logic; use the separately packaged independent checker."]}, "independent_check": {"feasible": true, "total_cost": 16, "violations": {"inventory_balance": 0, "no_stockout": 0, "storage_capacity": 0, "order_limit": 0, "terminal_inventory": 0}}}}</script><div class="file-links"><a href="../assets/example.json" download>Download the complete example</a><a href="../assets/basic-input.json" download>Download the input</a><a href="../start/local/index.html">Reproduce locally →</a></div></section>
+<section class="wrap section"><div class="principles"><article><h3>What is optimized?</h3><p>Total route cost with distance coefficient 1, time coefficient 0, fixed cost 0, and weight capacity enforced.</p></article><article><h3>What is checked?</h3><p>Visit coverage, vehicle capacity, route distances, result semantics, and the independent total cost.</p></article><article><h3>What is not claimed?</h3><p>A production benchmark, road-network distance, all-industry compatibility, or optimality certification.</p></article></div></section><section class="wrap section" id="worker"><p class="eyebrow">worker.scheduling · 0.1.0</p><h2>Worker assignment: respect time and availability.</h2><p class="lead">Three fixed-time tasks, two workers. Minimize assignment cost while preserving eligibility, availability and workload.</p><p><strong>optimal · 7 cost_unit</strong></p><div class="table-scroll"><table><thead><tr><th>Task</th><th>Fixed time</th><th>Assigned worker</th></tr></thead><tbody><tr><td>pack</td><td>0–60 min</td><td>alice</td></tr><tr><td>inspect</td><td>30–90 min</td><td>bob</td></tr><tr><td>ship</td><td>90–150 min</td><td>alice</td></tr></tbody></table></div><p>Availability, eligibility, overlap and workload are checked independently. This assigns existing fixed-time tasks; it does not generate shifts. The bounded optimum is checked by a separate exhaustive oracle.</p><details><summary>Input JSON</summary><div class="code-window"><pre><code>{
+  &quot;time_unit&quot;: &quot;minute&quot;,
+  &quot;cost_unit&quot;: &quot;cost_unit&quot;,
+  &quot;workers&quot;: [
+    {
+      &quot;id&quot;: &quot;alice&quot;,
+      &quot;availability&quot;: [
+        {
+          &quot;start&quot;: 0,
+          &quot;end&quot;: 180
+        }
+      ],
+      &quot;max_minutes&quot;: 120
+    },
+    {
+      &quot;id&quot;: &quot;bob&quot;,
+      &quot;availability&quot;: [
+        {
+          &quot;start&quot;: 0,
+          &quot;end&quot;: 180
+        }
+      ],
+      &quot;max_minutes&quot;: 120
+    }
+  ],
+  &quot;tasks&quot;: [
+    {
+      &quot;id&quot;: &quot;pack&quot;,
+      &quot;start&quot;: 0,
+      &quot;end&quot;: 60,
+      &quot;eligible_workers&quot;: [
+        &quot;alice&quot;,
+        &quot;bob&quot;
+      ],
+      &quot;costs&quot;: {
+        &quot;alice&quot;: 2,
+        &quot;bob&quot;: 5
+      }
+    },
+    {
+      &quot;id&quot;: &quot;inspect&quot;,
+      &quot;start&quot;: 30,
+      &quot;end&quot;: 90,
+      &quot;eligible_workers&quot;: [
+        &quot;alice&quot;,
+        &quot;bob&quot;
+      ],
+      &quot;costs&quot;: {
+        &quot;alice&quot;: 1,
+        &quot;bob&quot;: 3
+      }
+    },
+    {
+      &quot;id&quot;: &quot;ship&quot;,
+      &quot;start&quot;: 90,
+      &quot;end&quot;: 150,
+      &quot;eligible_workers&quot;: [
+        &quot;alice&quot;,
+        &quot;bob&quot;
+      ],
+      &quot;costs&quot;: {
+        &quot;alice&quot;: 2,
+        &quot;bob&quot;: 4
+      }
+    }
+  ]
+}</code></pre></div></details><details><summary>Engine result</summary><div class="code-window"><pre><code>{
+  &quot;core_version&quot;: &quot;0.1.0&quot;,
+  &quot;kind&quot;: &quot;result&quot;,
+  &quot;request_id&quot;: &quot;site-worker-example&quot;,
+  &quot;capability&quot;: {
+    &quot;id&quot;: &quot;worker.scheduling.reference&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;domain_profile&quot;: {
+    &quot;id&quot;: &quot;worker.scheduling&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;execution_profile&quot;: {
+    &quot;id&quot;: &quot;execution.sync&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;effective_configuration&quot;: {
+    &quot;objectives&quot;: [
+      {
+        &quot;id&quot;: &quot;total_cost&quot;,
+        &quot;weight&quot;: 1
+      }
+    ],
+    &quot;constraints&quot;: [
+      &quot;task_coverage&quot;,
+      &quot;eligibility&quot;,
+      &quot;availability&quot;,
+      &quot;no_overlap&quot;,
+      &quot;workload&quot;
+    ],
+    &quot;parameters&quot;: {}
+  },
+  &quot;status&quot;: &quot;optimal&quot;,
+  &quot;termination&quot;: &quot;completed&quot;,
+  &quot;solution&quot;: {
+    &quot;assignments&quot;: [
+      {
+        &quot;task_id&quot;: &quot;pack&quot;,
+        &quot;worker_id&quot;: &quot;alice&quot;
+      },
+      {
+        &quot;task_id&quot;: &quot;inspect&quot;,
+        &quot;worker_id&quot;: &quot;bob&quot;
+      },
+      {
+        &quot;task_id&quot;: &quot;ship&quot;,
+        &quot;worker_id&quot;: &quot;alice&quot;
+      }
+    ]
+  },
+  &quot;proof&quot;: {
+    &quot;claim&quot;: &quot;optimal&quot;,
+    &quot;method&quot;: &quot;bounded-assignment-enumeration&quot;,
+    &quot;scope&quot;: &quot;worker.scheduling:0.1.0&quot;,
+    &quot;evidence&quot;: {
+      &quot;objective&quot;: 7
+    }
+  },
+  &quot;metrics&quot;: [
+    {
+      &quot;id&quot;: &quot;total_cost&quot;,
+      &quot;role&quot;: &quot;optimized&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.total_cost.v1&quot;,
+      &quot;unit&quot;: &quot;cost_unit&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;value&quot;: 7,
+      &quot;reason&quot;: null
+    }
+  ],
+  &quot;constraints&quot;: [
+    {
+      &quot;id&quot;: &quot;task_coverage&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.task_coverage.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;eligibility&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.eligibility.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;availability&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.availability.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;no_overlap&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.no_overlap.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;workload&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.workload.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    }
+  ],
+  &quot;provenance&quot;: {
+    &quot;implementation&quot;: {
+      &quot;id&quot;: &quot;ocp-candidate.planning-adapter&quot;,
+      &quot;version&quot;: &quot;0.1.0&quot;
+    },
+    &quot;engine&quot;: {
+      &quot;id&quot;: &quot;ocp.worker-branch-and-bound&quot;,
+      &quot;version&quot;: &quot;0.1.0&quot;
+    },
+    &quot;request_id&quot;: &quot;site-worker-example&quot;,
+    &quot;limitations&quot;: [
+      &quot;1-8 fixed-time tasks, 1-4 workers; half-open integer minute intervals; one worker per task&quot;,
+      &quot;No shift generation, overtime, breaks, travel, fairness or automatic constraint relaxation&quot;,
+      &quot;Budget 1-5000 ms; optimal/infeasible proof requires independent bounded enumeration&quot;
+    ]
+  }
+}</code></pre></div></details><details><summary>Provider evaluation</summary><div class="code-window"><pre><code>{
+  &quot;core_version&quot;: &quot;0.1.0&quot;,
+  &quot;kind&quot;: &quot;evaluation&quot;,
+  &quot;request_id&quot;: &quot;site-worker-example&quot;,
+  &quot;capability&quot;: {
+    &quot;id&quot;: &quot;worker.scheduling.reference&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;domain_profile&quot;: {
+    &quot;id&quot;: &quot;worker.scheduling&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;metrics&quot;: [
+    {
+      &quot;id&quot;: &quot;total_cost&quot;,
+      &quot;role&quot;: &quot;optimized&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.total_cost.v1&quot;,
+      &quot;unit&quot;: &quot;cost_unit&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;value&quot;: 7,
+      &quot;reason&quot;: null
+    }
+  ],
+  &quot;constraints&quot;: [
+    {
+      &quot;id&quot;: &quot;task_coverage&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.task_coverage.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;eligibility&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.eligibility.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;availability&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.availability.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;no_overlap&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.no_overlap.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;workload&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;worker.scheduling.workload.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    }
+  ],
+  &quot;evaluator&quot;: {
+    &quot;id&quot;: &quot;ocp-candidate.planning-evaluator&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;limitations&quot;: [
+    &quot;Provider evaluation reuses provider logic; use the separately packaged independent checker.&quot;
+  ]
+}</code></pre></div></details><details><summary>Independent check</summary><div class="code-window"><pre><code>{
+  &quot;feasible&quot;: true,
+  &quot;total_cost&quot;: 7,
+  &quot;violations&quot;: {
+    &quot;task_coverage&quot;: 0,
+    &quot;eligibility&quot;: 0,
+    &quot;availability&quot;: 0,
+    &quot;no_overlap&quot;: 0,
+    &quot;workload&quot;: 0
+  }
+}</code></pre></div></details><p><a href="../start/local/index.html">Reproduce all three examples locally →</a></p></section><section class="wrap section" id="inventory"><p class="eyebrow">inventory.replenishment · 0.1.0</p><h2>Inventory: order before demand arrives.</h2><p class="lead">One product over four days. Balance order, setup and holding costs while respecting lead time and storage.</p><p><strong>optimal · 16 cost_unit</strong></p><div class="table-scroll"><table><thead><tr><th>Product</th><th>Orders by day</th><th>Ending stock by day</th></tr></thead><tbody><tr><td>widget</td><td>1, 5, 0, 0</td><td>0, 0, 2, 0</td></tr></tbody></table></div><p>Stock balance, capacity, terminal stock and cost are checked independently. Demand is supplied input; the engine does not forecast demand. The bounded optimum is checked by a separate exhaustive oracle.</p><details><summary>Input JSON</summary><div class="code-window"><pre><code>{
+  &quot;quantity_unit&quot;: &quot;item&quot;,
+  &quot;period_unit&quot;: &quot;day&quot;,
+  &quot;cost_unit&quot;: &quot;cost_unit&quot;,
+  &quot;periods&quot;: 4,
+  &quot;products&quot;: [
+    {
+      &quot;id&quot;: &quot;widget&quot;,
+      &quot;demand&quot;: [
+        2,
+        1,
+        3,
+        2
+      ],
+      &quot;scheduled_receipts&quot;: [
+        0,
+        0,
+        0,
+        0
+      ],
+      &quot;initial_inventory&quot;: 2,
+      &quot;lead_time&quot;: 1,
+      &quot;max_order_quantity&quot;: 5,
+      &quot;storage_capacity&quot;: 8,
+      &quot;terminal_min_inventory&quot;: 0,
+      &quot;unit_order_cost&quot;: 1,
+      &quot;fixed_order_cost&quot;: 4,
+      &quot;holding_cost&quot;: 1
+    }
+  ]
+}</code></pre></div></details><details><summary>Engine result</summary><div class="code-window"><pre><code>{
+  &quot;core_version&quot;: &quot;0.1.0&quot;,
+  &quot;kind&quot;: &quot;result&quot;,
+  &quot;request_id&quot;: &quot;site-inventory-example&quot;,
+  &quot;capability&quot;: {
+    &quot;id&quot;: &quot;inventory.replenishment.reference&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;domain_profile&quot;: {
+    &quot;id&quot;: &quot;inventory.replenishment&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;execution_profile&quot;: {
+    &quot;id&quot;: &quot;execution.sync&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;effective_configuration&quot;: {
+    &quot;objectives&quot;: [
+      {
+        &quot;id&quot;: &quot;total_cost&quot;,
+        &quot;weight&quot;: 1
+      }
+    ],
+    &quot;constraints&quot;: [
+      &quot;inventory_balance&quot;,
+      &quot;no_stockout&quot;,
+      &quot;storage_capacity&quot;,
+      &quot;order_limit&quot;,
+      &quot;terminal_inventory&quot;
+    ],
+    &quot;parameters&quot;: {}
+  },
+  &quot;status&quot;: &quot;optimal&quot;,
+  &quot;termination&quot;: &quot;completed&quot;,
+  &quot;solution&quot;: {
+    &quot;plans&quot;: [
+      {
+        &quot;product_id&quot;: &quot;widget&quot;,
+        &quot;orders&quot;: [
+          1,
+          5,
+          0,
+          0
+        ],
+        &quot;ending_inventory&quot;: [
+          0,
+          0,
+          2,
+          0
+        ]
+      }
+    ]
+  },
+  &quot;proof&quot;: {
+    &quot;claim&quot;: &quot;optimal&quot;,
+    &quot;method&quot;: &quot;bounded-order-enumeration&quot;,
+    &quot;scope&quot;: &quot;inventory.replenishment:0.1.0&quot;,
+    &quot;evidence&quot;: {
+      &quot;objective&quot;: 16
+    }
+  },
+  &quot;metrics&quot;: [
+    {
+      &quot;id&quot;: &quot;total_cost&quot;,
+      &quot;role&quot;: &quot;optimized&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.total_cost.v1&quot;,
+      &quot;unit&quot;: &quot;cost_unit&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;value&quot;: 16,
+      &quot;reason&quot;: null
+    }
+  ],
+  &quot;constraints&quot;: [
+    {
+      &quot;id&quot;: &quot;inventory_balance&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.inventory_balance.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;no_stockout&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.no_stockout.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;storage_capacity&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.storage_capacity.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;order_limit&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.order_limit.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;terminal_inventory&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.terminal_inventory.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    }
+  ],
+  &quot;provenance&quot;: {
+    &quot;implementation&quot;: {
+      &quot;id&quot;: &quot;ocp-candidate.planning-adapter&quot;,
+      &quot;version&quot;: &quot;0.1.0&quot;
+    },
+    &quot;engine&quot;: {
+      &quot;id&quot;: &quot;ocp.inventory-dynamic-programming&quot;,
+      &quot;version&quot;: &quot;0.1.0&quot;
+    },
+    &quot;request_id&quot;: &quot;site-inventory-example&quot;,
+    &quot;limitations&quot;: [
+      &quot;1-4 independent products, 1-6 daily periods; integer items; orders &lt;=5, capacity &lt;=50&quot;,
+      &quot;Demand is an explicit forecast, not inferred; no backlog, lost sales, uncertainty or shared capacity&quot;,
+      &quot;Receipts before demand, holding cost on ending stock; late-horizon orders must be zero&quot;,
+      &quot;Budget 1-5000 ms; independent enumeration required to verify optimal/infeasible proofs&quot;
+    ]
+  }
+}</code></pre></div></details><details><summary>Provider evaluation</summary><div class="code-window"><pre><code>{
+  &quot;core_version&quot;: &quot;0.1.0&quot;,
+  &quot;kind&quot;: &quot;evaluation&quot;,
+  &quot;request_id&quot;: &quot;site-inventory-example&quot;,
+  &quot;capability&quot;: {
+    &quot;id&quot;: &quot;inventory.replenishment.reference&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;domain_profile&quot;: {
+    &quot;id&quot;: &quot;inventory.replenishment&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;metrics&quot;: [
+    {
+      &quot;id&quot;: &quot;total_cost&quot;,
+      &quot;role&quot;: &quot;optimized&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.total_cost.v1&quot;,
+      &quot;unit&quot;: &quot;cost_unit&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;value&quot;: 16,
+      &quot;reason&quot;: null
+    }
+  ],
+  &quot;constraints&quot;: [
+    {
+      &quot;id&quot;: &quot;inventory_balance&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.inventory_balance.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;no_stockout&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.no_stockout.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;storage_capacity&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.storage_capacity.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;order_limit&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.order_limit.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    },
+    {
+      &quot;id&quot;: &quot;terminal_inventory&quot;,
+      &quot;role&quot;: &quot;enforced&quot;,
+      &quot;definition&quot;: &quot;inventory.replenishment.terminal_inventory.v1&quot;,
+      &quot;unit&quot;: &quot;count&quot;,
+      &quot;source&quot;: &quot;engine&quot;,
+      &quot;status&quot;: &quot;evaluated&quot;,
+      &quot;violation&quot;: 0,
+      &quot;satisfied&quot;: true,
+      &quot;reason&quot;: null
+    }
+  ],
+  &quot;evaluator&quot;: {
+    &quot;id&quot;: &quot;ocp-candidate.planning-evaluator&quot;,
+    &quot;version&quot;: &quot;0.1.0&quot;
+  },
+  &quot;limitations&quot;: [
+    &quot;Provider evaluation reuses provider logic; use the separately packaged independent checker.&quot;
+  ]
+}</code></pre></div></details><details><summary>Independent check</summary><div class="code-window"><pre><code>{
+  &quot;feasible&quot;: true,
+  &quot;total_cost&quot;: 16,
+  &quot;violations&quot;: {
+    &quot;inventory_balance&quot;: 0,
+    &quot;no_stockout&quot;: 0,
+    &quot;storage_capacity&quot;: 0,
+    &quot;order_limit&quot;: 0,
+    &quot;terminal_inventory&quot;: 0
+  }
+}</code></pre></div></details><p><a href="../start/local/index.html">Reproduce all three examples locally →</a></p></section><section class="wrap section"><p class="small-note">Costs in different profiles are not comparable. These saved synthetic examples are not live browser solves or production benchmarks. <a href="../reference/index.html#profile-limits">Read the current profile limits.</a></p></section><section class="wrap section"><h2>From CSV to a checked worker assignment</h2><p>Use a separate CSV dataset to compare baseline, changed assignment cost and changed availability. Expected synthetic outcomes are costs 12 and 14, followed by a proven infeasible scenario with no cost. The command writes assignment tables and exact transcripts.</p><div class="code-window"><div class="code-caption"><span>Run the worker scenario analysis locally</span><button class="copy-button" data-copy="code-worker-analysis" aria-label="Copy Run the worker scenario analysis locally">Copy</button></div><pre><code id="code-worker-analysis" data-command="worker-analysis">.agent/bin/python -I -B worker_analysis.py --workers worker-workers.csv --tasks worker-tasks.csv --costs worker-costs.csv --scenarios worker-scenarios.json --output worker-analysis-first --run-id worker-first</code></pre></div><p><a href="https://github.com/omelet-ai/optimization-context-protocol/blob/main/docs/users/WORKER_ANALYSIS.md">Read the CSV contract and analysis walkthrough</a>. These are local commands, not live browser solver calls.</p></section></main>
 <footer class="site-footer"><div><a class="footer-brand" href="../index.html">OCP<span class="dot">●</span></a><p>A common language for optimization.</p></div><div><a href="../reference/index.html">Protocol & compatibility</a><a href="../project/index.html">Project status & access</a><a href="../ko/index.html" lang="ko">한국어 소개</a></div><p class="footer-note">0.1 candidate · Initiated by Omelet<br>Open-source developer preview · Apache-2.0</p></footer>
 <p id="copy-status" class="sr-only" aria-live="polite"></p>
 </body>

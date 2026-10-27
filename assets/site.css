@@ -13,3 +13,12 @@
 .protocol-core div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 12px;font-size:12px;line-height:1.5}
 @media(max-width:1000px){.protocol-art .protocol-diagram{display:none}.protocol-compact{display:block}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+.agent-flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 40px;padding-left:24px;margin:28px 0}
+.agent-flow li{padding-left:6px;color:var(--muted);font-size:15px}
+.agent-flow strong{display:block;color:var(--ink);margin-bottom:5px}
+.agent-flow code{overflow-wrap:anywhere}
+table caption{text-align:left;font-size:12px;color:var(--muted);padding:0 15px 10px}
+section[id]{scroll-margin-top:25px}
+section details .code-window{margin-top:18px}
+section details pre{max-height:360px}
+@media(max-width:680px){.agent-flow{grid-template-columns:1fr;gap:20px}.principles article a{display:inline-block;margin-top:12px}}

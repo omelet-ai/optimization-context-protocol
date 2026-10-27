@@ -477,5 +477,769 @@
     },
     "evaluation": null,
     "summary": "INVALID_DATA · unsupported load unit rejected before solving. No result to evaluate."
+  },
+  "worker": {
+    "input": {
+      "time_unit": "minute",
+      "cost_unit": "cost_unit",
+      "workers": [
+        {
+          "id": "alice",
+          "availability": [
+            {
+              "start": 0,
+              "end": 180
+            }
+          ],
+          "max_minutes": 120
+        },
+        {
+          "id": "bob",
+          "availability": [
+            {
+              "start": 0,
+              "end": 180
+            }
+          ],
+          "max_minutes": 120
+        }
+      ],
+      "tasks": [
+        {
+          "id": "pack",
+          "start": 0,
+          "end": 60,
+          "eligible_workers": [
+            "alice",
+            "bob"
+          ],
+          "costs": {
+            "alice": 2,
+            "bob": 5
+          }
+        },
+        {
+          "id": "inspect",
+          "start": 30,
+          "end": 90,
+          "eligible_workers": [
+            "alice",
+            "bob"
+          ],
+          "costs": {
+            "alice": 1,
+            "bob": 3
+          }
+        },
+        {
+          "id": "ship",
+          "start": 90,
+          "end": 150,
+          "eligible_workers": [
+            "alice",
+            "bob"
+          ],
+          "costs": {
+            "alice": 2,
+            "bob": 4
+          }
+        }
+      ]
+    },
+    "request": {
+      "core_version": "0.1.0",
+      "kind": "request",
+      "request_id": "site-worker-example",
+      "capability": {
+        "id": "worker.scheduling.reference",
+        "version": "0.1.0"
+      },
+      "domain_profile": {
+        "id": "worker.scheduling",
+        "version": "0.1.0"
+      },
+      "execution_profile": {
+        "id": "execution.sync",
+        "version": "0.1.0"
+      },
+      "configuration": {
+        "objectives": [
+          {
+            "id": "total_cost",
+            "weight": 1
+          }
+        ],
+        "constraints": [
+          "task_coverage",
+          "eligibility",
+          "availability",
+          "no_overlap",
+          "workload"
+        ],
+        "parameters": {}
+      },
+      "input": {
+        "time_unit": "minute",
+        "cost_unit": "cost_unit",
+        "workers": [
+          {
+            "id": "alice",
+            "availability": [
+              {
+                "start": 0,
+                "end": 180
+              }
+            ],
+            "max_minutes": 120
+          },
+          {
+            "id": "bob",
+            "availability": [
+              {
+                "start": 0,
+                "end": 180
+              }
+            ],
+            "max_minutes": 120
+          }
+        ],
+        "tasks": [
+          {
+            "id": "pack",
+            "start": 0,
+            "end": 60,
+            "eligible_workers": [
+              "alice",
+              "bob"
+            ],
+            "costs": {
+              "alice": 2,
+              "bob": 5
+            }
+          },
+          {
+            "id": "inspect",
+            "start": 30,
+            "end": 90,
+            "eligible_workers": [
+              "alice",
+              "bob"
+            ],
+            "costs": {
+              "alice": 1,
+              "bob": 3
+            }
+          },
+          {
+            "id": "ship",
+            "start": 90,
+            "end": 150,
+            "eligible_workers": [
+              "alice",
+              "bob"
+            ],
+            "costs": {
+              "alice": 2,
+              "bob": 4
+            }
+          }
+        ]
+      },
+      "budget": {
+        "time_limit_ms": 1000
+      }
+    },
+    "result": {
+      "core_version": "0.1.0",
+      "kind": "result",
+      "request_id": "site-worker-example",
+      "capability": {
+        "id": "worker.scheduling.reference",
+        "version": "0.1.0"
+      },
+      "domain_profile": {
+        "id": "worker.scheduling",
+        "version": "0.1.0"
+      },
+      "execution_profile": {
+        "id": "execution.sync",
+        "version": "0.1.0"
+      },
+      "effective_configuration": {
+        "objectives": [
+          {
+            "id": "total_cost",
+            "weight": 1
+          }
+        ],
+        "constraints": [
+          "task_coverage",
+          "eligibility",
+          "availability",
+          "no_overlap",
+          "workload"
+        ],
+        "parameters": {}
+      },
+      "status": "optimal",
+      "termination": "completed",
+      "solution": {
+        "assignments": [
+          {
+            "task_id": "pack",
+            "worker_id": "alice"
+          },
+          {
+            "task_id": "inspect",
+            "worker_id": "bob"
+          },
+          {
+            "task_id": "ship",
+            "worker_id": "alice"
+          }
+        ]
+      },
+      "proof": {
+        "claim": "optimal",
+        "method": "bounded-assignment-enumeration",
+        "scope": "worker.scheduling:0.1.0",
+        "evidence": {
+          "objective": 7
+        }
+      },
+      "metrics": [
+        {
+          "id": "total_cost",
+          "role": "optimized",
+          "definition": "worker.scheduling.total_cost.v1",
+          "unit": "cost_unit",
+          "source": "engine",
+          "status": "evaluated",
+          "value": 7,
+          "reason": null
+        }
+      ],
+      "constraints": [
+        {
+          "id": "task_coverage",
+          "role": "enforced",
+          "definition": "worker.scheduling.task_coverage.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "eligibility",
+          "role": "enforced",
+          "definition": "worker.scheduling.eligibility.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "availability",
+          "role": "enforced",
+          "definition": "worker.scheduling.availability.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "no_overlap",
+          "role": "enforced",
+          "definition": "worker.scheduling.no_overlap.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "workload",
+          "role": "enforced",
+          "definition": "worker.scheduling.workload.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        }
+      ],
+      "provenance": {
+        "implementation": {
+          "id": "ocp-candidate.planning-adapter",
+          "version": "0.1.0"
+        },
+        "engine": {
+          "id": "ocp.worker-branch-and-bound",
+          "version": "0.1.0"
+        },
+        "request_id": "site-worker-example",
+        "limitations": [
+          "1-8 fixed-time tasks, 1-4 workers; half-open integer minute intervals; one worker per task",
+          "No shift generation, overtime, breaks, travel, fairness or automatic constraint relaxation",
+          "Budget 1-5000 ms; optimal/infeasible proof requires independent bounded enumeration"
+        ]
+      }
+    },
+    "evaluation": {
+      "core_version": "0.1.0",
+      "kind": "evaluation",
+      "request_id": "site-worker-example",
+      "capability": {
+        "id": "worker.scheduling.reference",
+        "version": "0.1.0"
+      },
+      "domain_profile": {
+        "id": "worker.scheduling",
+        "version": "0.1.0"
+      },
+      "metrics": [
+        {
+          "id": "total_cost",
+          "role": "optimized",
+          "definition": "worker.scheduling.total_cost.v1",
+          "unit": "cost_unit",
+          "source": "engine",
+          "status": "evaluated",
+          "value": 7,
+          "reason": null
+        }
+      ],
+      "constraints": [
+        {
+          "id": "task_coverage",
+          "role": "enforced",
+          "definition": "worker.scheduling.task_coverage.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "eligibility",
+          "role": "enforced",
+          "definition": "worker.scheduling.eligibility.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "availability",
+          "role": "enforced",
+          "definition": "worker.scheduling.availability.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "no_overlap",
+          "role": "enforced",
+          "definition": "worker.scheduling.no_overlap.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "workload",
+          "role": "enforced",
+          "definition": "worker.scheduling.workload.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        }
+      ],
+      "evaluator": {
+        "id": "ocp-candidate.planning-evaluator",
+        "version": "0.1.0"
+      },
+      "limitations": [
+        "Provider evaluation reuses provider logic; use the separately packaged independent checker."
+      ]
+    },
+    "independent_check": {
+      "feasible": true,
+      "total_cost": 7,
+      "violations": {
+        "task_coverage": 0,
+        "eligibility": 0,
+        "availability": 0,
+        "no_overlap": 0,
+        "workload": 0
+      }
+    }
+  },
+  "inventory": {
+    "input": {
+      "quantity_unit": "item",
+      "period_unit": "day",
+      "cost_unit": "cost_unit",
+      "periods": 4,
+      "products": [
+        {
+          "id": "widget",
+          "demand": [
+            2,
+            1,
+            3,
+            2
+          ],
+          "scheduled_receipts": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "initial_inventory": 2,
+          "lead_time": 1,
+          "max_order_quantity": 5,
+          "storage_capacity": 8,
+          "terminal_min_inventory": 0,
+          "unit_order_cost": 1,
+          "fixed_order_cost": 4,
+          "holding_cost": 1
+        }
+      ]
+    },
+    "request": {
+      "core_version": "0.1.0",
+      "kind": "request",
+      "request_id": "site-inventory-example",
+      "capability": {
+        "id": "inventory.replenishment.reference",
+        "version": "0.1.0"
+      },
+      "domain_profile": {
+        "id": "inventory.replenishment",
+        "version": "0.1.0"
+      },
+      "execution_profile": {
+        "id": "execution.sync",
+        "version": "0.1.0"
+      },
+      "configuration": {
+        "objectives": [
+          {
+            "id": "total_cost",
+            "weight": 1
+          }
+        ],
+        "constraints": [
+          "inventory_balance",
+          "no_stockout",
+          "storage_capacity",
+          "order_limit",
+          "terminal_inventory"
+        ],
+        "parameters": {}
+      },
+      "input": {
+        "quantity_unit": "item",
+        "period_unit": "day",
+        "cost_unit": "cost_unit",
+        "periods": 4,
+        "products": [
+          {
+            "id": "widget",
+            "demand": [
+              2,
+              1,
+              3,
+              2
+            ],
+            "scheduled_receipts": [
+              0,
+              0,
+              0,
+              0
+            ],
+            "initial_inventory": 2,
+            "lead_time": 1,
+            "max_order_quantity": 5,
+            "storage_capacity": 8,
+            "terminal_min_inventory": 0,
+            "unit_order_cost": 1,
+            "fixed_order_cost": 4,
+            "holding_cost": 1
+          }
+        ]
+      },
+      "budget": {
+        "time_limit_ms": 1000
+      }
+    },
+    "result": {
+      "core_version": "0.1.0",
+      "kind": "result",
+      "request_id": "site-inventory-example",
+      "capability": {
+        "id": "inventory.replenishment.reference",
+        "version": "0.1.0"
+      },
+      "domain_profile": {
+        "id": "inventory.replenishment",
+        "version": "0.1.0"
+      },
+      "execution_profile": {
+        "id": "execution.sync",
+        "version": "0.1.0"
+      },
+      "effective_configuration": {
+        "objectives": [
+          {
+            "id": "total_cost",
+            "weight": 1
+          }
+        ],
+        "constraints": [
+          "inventory_balance",
+          "no_stockout",
+          "storage_capacity",
+          "order_limit",
+          "terminal_inventory"
+        ],
+        "parameters": {}
+      },
+      "status": "optimal",
+      "termination": "completed",
+      "solution": {
+        "plans": [
+          {
+            "product_id": "widget",
+            "orders": [
+              1,
+              5,
+              0,
+              0
+            ],
+            "ending_inventory": [
+              0,
+              0,
+              2,
+              0
+            ]
+          }
+        ]
+      },
+      "proof": {
+        "claim": "optimal",
+        "method": "bounded-order-enumeration",
+        "scope": "inventory.replenishment:0.1.0",
+        "evidence": {
+          "objective": 16
+        }
+      },
+      "metrics": [
+        {
+          "id": "total_cost",
+          "role": "optimized",
+          "definition": "inventory.replenishment.total_cost.v1",
+          "unit": "cost_unit",
+          "source": "engine",
+          "status": "evaluated",
+          "value": 16,
+          "reason": null
+        }
+      ],
+      "constraints": [
+        {
+          "id": "inventory_balance",
+          "role": "enforced",
+          "definition": "inventory.replenishment.inventory_balance.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "no_stockout",
+          "role": "enforced",
+          "definition": "inventory.replenishment.no_stockout.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "storage_capacity",
+          "role": "enforced",
+          "definition": "inventory.replenishment.storage_capacity.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "order_limit",
+          "role": "enforced",
+          "definition": "inventory.replenishment.order_limit.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "terminal_inventory",
+          "role": "enforced",
+          "definition": "inventory.replenishment.terminal_inventory.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        }
+      ],
+      "provenance": {
+        "implementation": {
+          "id": "ocp-candidate.planning-adapter",
+          "version": "0.1.0"
+        },
+        "engine": {
+          "id": "ocp.inventory-dynamic-programming",
+          "version": "0.1.0"
+        },
+        "request_id": "site-inventory-example",
+        "limitations": [
+          "1-4 independent products, 1-6 daily periods; integer items; orders <=5, capacity <=50",
+          "Demand is an explicit forecast, not inferred; no backlog, lost sales, uncertainty or shared capacity",
+          "Receipts before demand, holding cost on ending stock; late-horizon orders must be zero",
+          "Budget 1-5000 ms; independent enumeration required to verify optimal/infeasible proofs"
+        ]
+      }
+    },
+    "evaluation": {
+      "core_version": "0.1.0",
+      "kind": "evaluation",
+      "request_id": "site-inventory-example",
+      "capability": {
+        "id": "inventory.replenishment.reference",
+        "version": "0.1.0"
+      },
+      "domain_profile": {
+        "id": "inventory.replenishment",
+        "version": "0.1.0"
+      },
+      "metrics": [
+        {
+          "id": "total_cost",
+          "role": "optimized",
+          "definition": "inventory.replenishment.total_cost.v1",
+          "unit": "cost_unit",
+          "source": "engine",
+          "status": "evaluated",
+          "value": 16,
+          "reason": null
+        }
+      ],
+      "constraints": [
+        {
+          "id": "inventory_balance",
+          "role": "enforced",
+          "definition": "inventory.replenishment.inventory_balance.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "no_stockout",
+          "role": "enforced",
+          "definition": "inventory.replenishment.no_stockout.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "storage_capacity",
+          "role": "enforced",
+          "definition": "inventory.replenishment.storage_capacity.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "order_limit",
+          "role": "enforced",
+          "definition": "inventory.replenishment.order_limit.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        },
+        {
+          "id": "terminal_inventory",
+          "role": "enforced",
+          "definition": "inventory.replenishment.terminal_inventory.v1",
+          "unit": "count",
+          "source": "engine",
+          "status": "evaluated",
+          "violation": 0,
+          "satisfied": true,
+          "reason": null
+        }
+      ],
+      "evaluator": {
+        "id": "ocp-candidate.planning-evaluator",
+        "version": "0.1.0"
+      },
+      "limitations": [
+        "Provider evaluation reuses provider logic; use the separately packaged independent checker."
+      ]
+    },
+    "independent_check": {
+      "feasible": true,
+      "total_cost": 16,
+      "violations": {
+        "inventory_balance": 0,
+        "no_stockout": 0,
+        "storage_capacity": 0,
+        "order_limit": 0,
+        "terminal_inventory": 0
+      }
+    }
   }
 }

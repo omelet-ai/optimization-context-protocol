@@ -1,6 +1,6 @@
 # Routing basic 0.1 계약 후보
 
-상태: 비공개 기술 후보 `routing.basic@0.1.0`. [Core](../core/CORE_0_1.md)와 [sync](../execution/SYNC_0_1.md)를 소비한다. [입력 schema](../schemas/routing-input-0.1.schema.json), [해 schema](../schemas/routing-solution-0.1.schema.json), [구성 schema](../schemas/routing-configuration-0.1.schema.json)가 이 후보의 구조 정본이다.
+상태: 공개 개발자 프리뷰 계약 `routing.basic@0.1.0`. [Core](../core/CORE_0_1.md)와 [sync](../execution/SYNC_0_1.md)를 소비한다. [입력 schema](../schemas/routing-input-0.1.schema.json), [해 schema](../schemas/routing-solution-0.1.schema.json), [구성 schema](../schemas/routing-configuration-0.1.schema.json)가 이 후보의 구조 정본이다.
 
 ## 입력과 비용
 

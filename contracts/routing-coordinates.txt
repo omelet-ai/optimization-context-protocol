@@ -18,4 +18,4 @@
 
 공통 solver budget 범위는 1000~5000 ms다. 실제 엔진의 적용 단위와 전체 호출 deadline은 구현 제한에 선언한다. Omelet 연결의 검증 범위는 차량 2~3대·방문 20개 이하며 local reference가 더 큰 입력을 받는다고 Omelet도 받는 것으로 추정하지 않는다.
 
-새 profile 추가는 기존 Core/basic 메시지·버전을 변경하지 않는다. private package 0.1.0은 아직 동결되지 않은 후보이고 exact artifact hash로 구별한다. 공개 전 배포 버전 동결과 권리 검토는 별도다. profile 변경은 새 버전/호환 검증이 필요하다.
+새 profile 추가는 기존 Core/basic 메시지·버전을 변경하지 않는다. 공개 소스에서 빌드하는 0.1.0 package는 아직 안정판으로 동결되지 않은 후보이고 exact artifact hash로 구별한다. 소스의 Apache-2.0 공개와 배포 버전 동결·레지스트리 게시는 별개다. profile 변경은 새 버전/호환 검증이 필요하다.
