@@ -30,7 +30,7 @@ def selected_sources():
     return hashes
 
 
-def build(output_dir=None):
+def build(output_dir=None, *, python_only=False):
     output=Path(output_dir or ROOT/".harness/work/review-candidate").resolve(); output.mkdir(parents=True,exist_ok=True)
     hashes=selected_sources()
     source_archive=output/"ocp-source-candidate-0.1.0.tar.gz"
@@ -46,7 +46,8 @@ def build(output_dir=None):
         with tarfile.open(source_archive,"w:gz") as archive:
             for name in sorted(hashes): archive.add(stage/name,arcname="ocp-candidate/"+name,recursive=False)
         env=dict(os.environ,PYTHONDONTWRITEBYTECODE="1")
-        for builder in ("build_candidate.py","build_conformance.py","build_typescript.py"):
+        builders=("build_candidate.py","build_conformance.py") + (() if python_only else ("build_typescript.py",))
+        for builder in builders:
             timeout=540 if builder=="build_typescript.py" and env.get("OCP_NPM_OFFLINE")!="1" else 120
             completed=subprocess.run([sys.executable,"-B",str(stage/"tools"/builder)],cwd=stage,env=env,capture_output=True,text=True,timeout=timeout)
             if completed.returncode: raise RuntimeError("Selected-source build failed: "+builder+"\n"+completed.stderr)

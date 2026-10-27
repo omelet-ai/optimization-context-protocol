@@ -1997,6 +1997,198 @@
           "min_tests": 7
         }
       ]
+    },
+    {
+      "id": "H33",
+      "title": "Public documentation status consistency",
+      "tasks": [
+        "OSS-05",
+        "OSS-09",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H32"
+      ],
+      "mode": "local",
+      "inputs": [
+        "README.md",
+        "TASKS.md",
+        "docs/",
+        "site/",
+        "spec/",
+        "sdk/",
+        "runtime/",
+        "adapters/",
+        "conformance/",
+        "examples/",
+        "cases/",
+        "provenance/",
+        "tools/"
+      ],
+      "acceptance": "Public documentation status consistency; installed local execution and bounded checks, no model, external-human trial or publication",
+      "checks": [
+        {
+          "id": "h33-regression",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h33.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 12
+        }
+      ]
+    },
+    {
+      "id": "H34",
+      "title": "Python and MCP installation without Node",
+      "tasks": [
+        "OSS-05",
+        "OSS-09",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H33"
+      ],
+      "mode": "local",
+      "inputs": [
+        "README.md",
+        "TASKS.md",
+        "docs/",
+        "site/",
+        "spec/",
+        "sdk/",
+        "runtime/",
+        "adapters/",
+        "conformance/",
+        "examples/",
+        "cases/",
+        "provenance/",
+        "tools/"
+      ],
+      "acceptance": "Python and MCP installation without Node; installed local execution and bounded checks, no model, external-human trial or publication",
+      "checks": [
+        {
+          "id": "h34-regression",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h34.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 11
+        }
+      ]
+    },
+    {
+      "id": "H35",
+      "title": "Worker CSV scenario analysis",
+      "tasks": [
+        "OSS-05",
+        "OSS-09",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H34"
+      ],
+      "mode": "local",
+      "inputs": [
+        "README.md",
+        "TASKS.md",
+        "docs/",
+        "site/",
+        "spec/",
+        "sdk/",
+        "runtime/",
+        "adapters/",
+        "conformance/",
+        "examples/",
+        "cases/",
+        "provenance/",
+        "tools/"
+      ],
+      "acceptance": "Worker CSV scenario analysis; installed local execution and bounded checks, no model, external-human trial or publication",
+      "checks": [
+        {
+          "id": "h35-regression",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h35.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 12
+        }
+      ]
+    },
+    {
+      "id": "H36",
+      "title": "Explicit independent verification scope",
+      "tasks": [
+        "OSS-05",
+        "OSS-09",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H35"
+      ],
+      "mode": "local",
+      "inputs": [
+        "README.md",
+        "TASKS.md",
+        "docs/",
+        "site/",
+        "spec/",
+        "sdk/",
+        "runtime/",
+        "adapters/",
+        "conformance/",
+        "examples/",
+        "cases/",
+        "provenance/",
+        "tools/"
+      ],
+      "acceptance": "Explicit independent verification scope; installed local execution and bounded checks, no model, external-human trial or publication",
+      "checks": [
+        {
+          "id": "h36-regression",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h36.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 18
+        }
+      ]
     }
   ]
 }

@@ -1,11 +1,14 @@
-# OCP website — local review candidate
+# OCP website
 
 A static, English-first site with a Korean introduction, three starting paths,
 worked examples, installation commands, application guidance, and protocol reference.
 No remote service or frontend framework is required to serve it.
 
-The site is a local candidate for a future public website. Building does not
-publish, issue keys, change repository visibility, or grant distribution rights.
+The public documentation is hosted at
+[GitHub Pages](https://omelet-ai.github.io/optimization-context-protocol/).
+The two builders below produce local artifacts; neither deploys, issues keys,
+changes repository visibility, or publishes packages. The review builder retains
+its kit download for local testing. The public builder emits documentation only.
 
 ## Build and preview
 
@@ -26,7 +29,7 @@ Generated output stays out of Git. Stop the preview server after review.
 
 ## Sources and checks
 
-- `content.py`: English pages and Korean introduction; rendered without a CMS.
+- `content.py`: English pages and Korean introduction, including `public_pages` for the public edition. Shared route labels, scope tables and agent guidance live here rather than in the build tool.
 - `commands.json`: canonical CLI blocks used both by the site and executable tests.
 - `example.py`: actual installed SDK/reference/checker calculation on the canonical synthetic fixture.
 - `templates/`, `assets/`: semantic HTML, responsive CSS, menu, copy, and accessible example tabs.
@@ -77,3 +80,27 @@ review-edition text, canonical origin, indexing/sitemap settings, public reposit
 or download links, and any approved trial enrollment. Rebuild, recheck, and verify
 the published URLs. A domain purchase, hosting change, public source release,
 registry upload, and live trial each require the corresponding scoped approval.
+
+## Documentation-only public build
+
+```sh
+python3.12 -B tools/build_public_site.py --output .harness/work/public-site-new --base-url https://omelet-ai.github.io/optimization-context-protocol/
+python3.12 -B tools/check_public_site.py --directory .harness/work/public-site-new --base-url https://omelet-ai.github.io/optimization-context-protocol/
+```
+
+The public builder takes install/MCP commands from README, includes the synthetic
+worked examples and license notices, and excludes kits, manifests and private
+evidence. Check the exact output before any separately authorized deployment.
+The source approval inventory does not grant new deployment authority.
+
+The public homepage links directly to local setup and AI agent setup. Omelet
+remains the recommended first experience **when invited**; public signup is not
+open. Profile limits describe current contracts, with narrower engine limits
+identified separately. `example.py` executes routing, worker and inventory
+engines in a fresh installed environment, independently checks each result and
+emits their saved inputs/results/evaluations. No browser control invokes a solver.
+Agent conversation steps are illustrative guidance, not model acceptance evidence.
+
+Keep README command blocks and the referenced source revision available together
+when publishing a future update. A local preview may include source changes that
+have not yet reached public `main`; building it does not publish those changes.

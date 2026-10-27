@@ -5,6 +5,7 @@ from pathlib import Path
 from ocp_candidate import Client, parse_json
 from ocp_runtime.providers import PROVIDERS, make_provider
 from conformance.runner import CHECKERS
+from conformance.assessment import assess
 
 def run(profile, problem, request_id):
     adapter=make_provider(profile);client=Client(adapter)
@@ -17,7 +18,7 @@ def run(profile, problem, request_id):
     ref=request['domain_profile'];checked=CHECKERS[(ref['id'],ref['version'])](request,response)
     evaluation=adapter.evaluate(request,response['solution']) if response['solution'] is not None else None
     return {'status':'PASS','requirements':requirements,'request':request,'response':response,
-            'evaluation':evaluation,'independent_check':checked,'execute_calls':1,'model_calls':0,
+            'evaluation':evaluation,'independent_check':checked,'verification':assess(request,response),'execute_calls':1,'model_calls':0,
             'solution_found':response['solution'] is not None,'scope':'Local solve and independent check; not model or human acceptance'}
 
 def main():

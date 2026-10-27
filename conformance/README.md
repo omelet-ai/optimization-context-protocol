@@ -1,6 +1,8 @@
 # Independent conformance candidate
 
-Core의 구조·상태 의미, `routing.basic@0.1.0` 결과, 두 번째 도메인 `assignment.fixture@0.1.0`의 합성 witness를 독립 검사한다. runtime SDK나 solver 코드를 import하지 않는다.
+Core 구조·상태 의미와 routing.basic/coordinates, worker.scheduling, inventory.replenishment 결과를 독립 검사한다. assignment.fixture는 feasible witness만 검사한다. runtime SDK나 solver 코드를 import하지 않는다.
+
+앱과 MCP smoke 결과의 `verification`은 해의 유효성·목적값 재계산·최적성·불가능 증명·실행 입증 여부를 구분한다. [검증 범위 안내](../docs/users/VERIFICATION_SCOPE.md)의 별도 보고서와 `conformance.assessment`를 사용한다. 기존의 엄격한 `CHECKERS`/runner 동작은 유지한다.
 
 ```sh
 python -B -m conformance.runner --bundle transcript.json --artifact candidate.whl

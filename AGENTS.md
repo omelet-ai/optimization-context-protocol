@@ -37,7 +37,7 @@
 
 ## 파일과 공개
 
-- 2026-10-27 사용자는 `omelet-ai/optimization-context-protocol`의 공개 전환과, 검토한 main `a83573d`의 202개 파일·10개 커밋에 대한 회사 공개·Apache-2.0 배포 권한 및 특허 관점 공개 가능 여부를 확인했다. LICENSE·고지·공개 상태 문서와 검증을 반영한 소스 공개가 승인 범위다. [공개 기록](provenance/PUBLICATION_APPROVAL.md)과 최종 명시 목록을 따른다. 사이트·trial 배포, 레지스트리·릴리스 자산 게시, 비용 및 추가 모델 실행은 승인되지 않았다. 아래 비공개 저장소 관련 항목은 당시 승인 이력이다.
+- 2026-10-27 사용자는 `omelet-ai/optimization-context-protocol`의 공개 전환과, 검토한 main `a83573d`의 202개 파일·10개 커밋에 대한 회사 공개·Apache-2.0 배포 권한 및 특허 관점 공개 가능 여부를 확인했다. LICENSE·고지·공개 상태 문서와 검증을 반영한 소스 공개가 승인 범위다. [공개 기록](provenance/PUBLICATION_APPROVAL.md)과 최종 명시 목록을 따른다. 이 소스 승인 자체는 사이트·trial 배포, 레지스트리·릴리스 자산 게시, 비용 및 추가 모델 실행을 승인하지 않는다. 2026-10-27 사용자는 별도로 GitHub Pages 설명 사이트 배포를 승인했고 gh-pages에 배포했다. 후속 로컬 개발 승인은 새 배포·게시·모델 실행을 뜻하지 않는다. 아래 비공개 저장소 관련 항목은 당시 승인 이력이다.
 
 - 원본을 삭제하지 않는다. source snapshot에 `.env*`, 인증정보, 운영 데이터, 비공개 solver 구현·배포 설정을 추가하지 않는다.
 - `.gitignore`만으로 공개 안전을 판단하지 않는다. `provenance/publication.json`의 명시적 allowlist와 P0 권리·라이선스·특허 검토가 필요하다.

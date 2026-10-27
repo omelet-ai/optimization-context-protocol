@@ -35,6 +35,7 @@ def block(text, marker):
 
 
 class ReadmeJourney(unittest.TestCase):
+    include_node = True
     @classmethod
     def setUpClass(cls):
         cls.temp = tempfile.TemporaryDirectory(prefix="ocp-readme-")
@@ -51,8 +52,9 @@ class ReadmeJourney(unittest.TestCase):
         bindir = cls.work / "bin"
         bindir.mkdir()
         (bindir / "python3.12").symlink_to(sys._base_executable)
-        (bindir / "node").symlink_to(NODE.resolve())
-        (bindir / "npm").symlink_to(NPM.resolve())
+        if cls.include_node:
+            (bindir / "node").symlink_to(NODE.resolve())
+            (bindir / "npm").symlink_to(NPM.resolve())
         scratch = cls.work / "scratch"
         scratch.mkdir()
         cls.env = clean_env(cls.home)
@@ -184,8 +186,13 @@ asyncio.run(main())
             self.assertNotIn("ocp_execute", report["tool_calls"])
 
     def test_06_documented_node_install_and_application(self):
+        # Node is optional. Build its full kit separately from the primary
+        # Python-only installation, then exercise the unchanged Node consumer.
+        full = self.work / 'node-kit'
+        self.run_ok([self.kit.parent / 'build/bin/python', '-B',
+                     self.source / 'tools/build_invitation_kit.py', '--output', full], self.source)
         guide = (self.source / "docs/users/MULTI_DOMAIN_QUICKSTART.md").read_text()
-        self.run_ok(["/bin/sh", "-eu", "-c", block(guide, "node-install")])
+        self.run_ok(["/bin/sh", "-eu", "-c", block(guide, "node-install")], full)
         child = subprocess.Popen([str(self.python), "-I", "-B", "-m", "ocp_runtime.http_server", "--profile", "worker.scheduling"],
                                  cwd=self.home, env=self.env, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
         try:
@@ -193,7 +200,7 @@ asyncio.run(main())
                 selector.register(child.stdout, selectors.EVENT_READ)
                 self.assertTrue(selector.select(60), "Provider startup timed out")
             url = json.loads(child.stdout.readline())["url"]
-            result = json.loads(self.run_ok([NODE, "own_app.cjs", url, "worker-input.json", "readme-node"]).stdout)
+            result = json.loads(self.run_ok([NODE, "own_app.cjs", url, "worker-input.json", "readme-node"], full).stdout)
             self.assertEqual(result["status"], "PASS")
             self.assertEqual(result["evaluation"]["metrics"][0]["value"], 7)
         finally:

@@ -7,110 +7,14 @@ actually enforced, and how to check the result. Applications can use their own
 engines independently of Omelet, Foundry, Studio, or a particular transport.
 
 **Status: open-source developer preview, licensed under [Apache-2.0](LICENSE).**
-Source code is available in this GitHub repository. Package-registry releases,
-a hosted public website and open trial enrollment are not available yet.
+Source code is available in this GitHub repository. Visit the
+[public documentation site](https://omelet-ai.github.io/optimization-context-protocol/)
+and [한국어 소개](https://omelet-ai.github.io/optimization-context-protocol/ko/).
+Package-registry releases and open trial enrollment are not available yet.
 A passing local check is not engine certification
 or evidence of unaided external adoption.
 
-## First success from GitHub
-
-Prerequisites: **Git, Python 3.12 and Node 24/npm on PATH**, on macOS or Linux.
-Check `python3.12 --version`, `node --version` and `npm --version` first.
-Node is required to **build this kit from source**, even if you only use its Python
-examples. Once built, Python/MCP users do not need Node. Windows is not supported
-by this installer. No Omelet account, trial key or model call is needed.
-
-```sh
-git clone https://github.com/omelet-ai/optimization-context-protocol.git
-cd optimization-context-protocol
-```
-
-From that repository root, run this complete block in one terminal. It downloads
-public PyPI/npm dependencies and builds a local kit; it publishes nothing.
-
-<!-- ocp:readme-build -->
-```sh
-OCP_WORK="$(mktemp -d)"
-python3.12 -m venv "$OCP_WORK/build"
-"$OCP_WORK/build/bin/python" -m pip install --no-compile build==1.4.0 setuptools==80.9.0 wheel==0.46.3
-"$OCP_WORK/build/bin/python" -B tools/build_invitation_kit.py --output "$OCP_WORK/kit"
-cd "$OCP_WORK/kit"
-python3.12 start.py --mcp --venv .agent
-```
-
-Keep this terminal in the kit directory for the commands below. `start.py` and
-the sample JSON files are **generated kit files**, not files in the repository root.
-The temporary directory keeps generated environments out of your checkout. For
-a lasting installation, choose a new directory outside the checkout instead of
-`mktemp -d`, keep it in place, and regenerate host configuration if you move it.
-
-The final command installs the engines, independent checker and MCP server, then
-runs **the same application and input through two real engines**: OR-Tools and an
-independent enumerating teaching library. Expect JSON with `status: "PASS"` and
-checked baseline costs of **18 meters**. It also demonstrates rejected units,
-intentionally corrupted results, and a real execution deadline. Progress is on
-stderr; the final result is on stdout. No language model is called.
-
-To rerun, use `.agent/bin/python -B demo.py --diagnostics`; do not install over the
-existing `.agent`. For separate wheel builds or offline setup, see the
-[source build guide](docs/development/BUILD_FROM_SOURCE.md).
-
-## Run your first three problems
-
-From the **same kit directory**, use the same application with each profile:
-
-<!-- ocp:readme-examples -->
-```sh
-.agent/bin/python -I -B multi_app.py --profile routing.basic --input basic-input.json --request-id first-routing
-.agent/bin/python -I -B multi_app.py --profile worker.scheduling --input worker-input.json --request-id first-worker
-.agent/bin/python -I -B multi_app.py --profile inventory.replenishment --input inventory-input.json --request-id first-inventory
-```
-
-The independently checked total costs are **18 meter**, **7 cost_unit** and
-**16 cost_unit**, respectively. Check `solution_found` and `response.status` too;
-PASS describes the transcript check, not a guarantee of a solution or optimality.
-Copy a sample to a new JSON file before editing it, and use a new request ID for
-a changed problem. [Three-domain examples](docs/users/MULTI_DOMAIN_QUICKSTART.md)
-show changes with known answers and the supported size/constraint limits.
-
-## Connect MCP without calling a model
-
-The installation above already includes MCP. From the same kit directory:
-
-<!-- ocp:readme-mcp -->
-```sh
-.agent/bin/python -I -B local_agent.py doctor --profile all
-.agent/bin/python -I -B local_agent.py smoke --input basic-input.json --request-id first-mcp
-.agent/bin/python -I -B local_agent.py config --profile all --format json
-.agent/bin/python -I -B local_agent.py config --profile all --format codex
-```
-
-Doctor discovers six tools and checks context for all three domains with **zero
-solve calls**. Smoke performs one real routing solve and an independent check;
-expect cost 18. Config prints absolute executable paths for review, without
-editing host settings. Use the JSON or Codex TOML form appropriate for your host,
-on the machine where that host runs. Then reload its MCP configuration and check
-that `ocp-local` exposes the six tools. Host/model usage is separate from these
-local checks. The [MCP guide](docs/users/LLM_QUICKSTART.md) covers host setup,
-single-domain configuration and troubleshooting.
-
-| If you get stuck | Recovery |
-| --- | --- |
-| `python3.12`, `node` or `npm` is missing | Install the prerequisite version, or put its executable on PATH. These instructions do not install system runtimes. |
-| `start.py` or a sample is missing | Complete the kit build, then `cd "$OCP_WORK/kit"` in the same terminal. Do not run kit commands from the repository root. |
-| `ENVIRONMENT_EXISTS` | Reuse `.agent/bin/python` to run examples; choose a new path only for a fresh install. |
-| A download/build fails | Preserve the failure output and check public PyPI/npm access. Run the build block again to create a new temporary directory. No automatic retry occurs. |
-| MCP config works here but not on another machine | Install the kit on the host machine and generate its configuration there; local paths do not transfer between machines. |
-
-The full local regression environment is Python 3.12 on macOS Apple Silicon.
-The first-success command also ran on Python 3.12.15 in a Linux x86_64 container
-under Docker Desktop on that Mac. Additional Python/MCP/Node checks are recorded for each exact ZIP using the
-[evaluation rehearsal](docs/development/NO_KEY_EVALUATION.md). Native Linux machines
-and the full Linux trial integration remain separate work; the installer rejects
-Windows. Node 24 is also used by the optional Node/TypeScript consumer.
-
-See [first-use instructions](docs/users/INVITED_TRIAL.md) and
-[connect your app or engine](docs/users/DEVELOPER_QUICKSTART.md).
+See [project status and verification boundaries](docs/users/PROJECT_STATUS.md).
 
 ## Why add OCP to a solver?
 
@@ -137,12 +41,150 @@ bound model size so optimality/infeasibility can be checked independently.
 
 | Path | Use it when | Instructions |
 | --- | --- | --- |
-| Try Omelet | You have an invitation to a limited real engine trial | [Invited trial](docs/users/INVITED_TRIAL.md) |
-| Run locally | You want a first success with no key | [Developer quickstart](docs/users/DEVELOPER_QUICKSTART.md) |
-| Bring your engine | You want to connect your own library or service | [Engine authoring](authoring/README.md) |
+| Try Omelet | **Recommended when invited**; public signup is not open | [Invited trial](docs/users/INVITED_TRIAL.md) |
+| Run locally | **Start now** without an invitation, account or key | [Developer quickstart](docs/users/DEVELOPER_QUICKSTART.md) |
+| Bring your engine | Implement an existing profile, or define a new problem profile | [Engine authoring](https://omelet-ai.github.io/optimization-context-protocol/start/engine/) |
+| Connect your AI agent | Give your host explicit context through the optional MCP binding | [MCP setup](#connect-mcp-without-calling-a-model) |
 
 Omelet trial is the recommended introduction when an invitation is available.
 It is optional; Core compliance never requires an Omelet account.
+
+## First success from GitHub
+
+Prerequisites: **Git and Python 3.12 on PATH**, on macOS or Linux.
+Check `python3.12 --version` first. **Python and MCP installation need no Node or
+npm.** Node 24/npm are needed only for the optional Node/TypeScript kit.
+Windows is not supported by this installer. No Omelet account, trial key or
+model call is needed.
+
+```sh
+git clone https://github.com/omelet-ai/optimization-context-protocol.git
+cd optimization-context-protocol
+```
+
+From that repository root, run this complete block in one terminal. It downloads
+public PyPI dependencies and builds a local kit; it publishes nothing.
+
+<!-- ocp:readme-build -->
+```sh
+OCP_WORK="$(mktemp -d)"
+python3.12 -B tools/quickstart.py --directory "$OCP_WORK"
+cd "$OCP_WORK/kit"
+```
+
+Keep this terminal in the kit directory for the commands below. `start.py` and
+the sample JSON files are **generated kit files**, not files in the repository root.
+The temporary directory keeps generated environments out of your checkout. For
+a lasting installation, choose a new directory outside the checkout instead of
+`mktemp -d`, keep it in place, and regenerate host configuration if you move it.
+
+The setup command installs the engines, independent checker and MCP server, then
+runs **the same application and input through two real engines**: OR-Tools and an
+independent enumerating teaching library. Expect JSON with `status: "PASS"` and
+checked baseline costs of **18 meters**. It also demonstrates rejected units,
+intentionally corrupted results, and a real execution deadline. Progress is on
+stderr; the final result is on stdout. No language model is called.
+
+To rerun, use `.agent/bin/python -B demo.py --diagnostics`; do not install over the
+existing `.agent`. For separate wheel builds or offline setup, see the
+[source build guide](docs/development/BUILD_FROM_SOURCE.md).
+
+## Run your first three problems
+
+From the **same kit directory**, use the same application with each profile:
+
+<!-- ocp:readme-examples -->
+```sh
+.agent/bin/python -I -B multi_app.py --profile routing.basic --input basic-input.json --request-id first-routing
+.agent/bin/python -I -B multi_app.py --profile worker.scheduling --input worker-input.json --request-id first-worker
+.agent/bin/python -I -B multi_app.py --profile inventory.replenishment --input inventory-input.json --request-id first-inventory
+```
+
+The independently checked total costs are **18 meter**, **7 cost_unit** and
+**16 cost_unit**, respectively. Check `solution_found` and `response.status` too;
+PASS describes the transcript check, not a guarantee of a solution or optimality.
+The `verification` field separates feasibility, cost recomputation, optimality,
+infeasibility and unverified execution provenance. Read the
+[verification scope guide](docs/users/VERIFICATION_SCOPE.md) before interpreting PASS.
+Copy a sample to a new JSON file before editing it, and use a new request ID for
+a changed problem. [Three-domain examples](docs/users/MULTI_DOMAIN_QUICKSTART.md)
+show changes with known answers and the supported size/constraint limits.
+
+For a complete data → scenario → solve → check → explanation example, follow
+the [worker assignment analysis](docs/users/WORKER_ANALYSIS.md). It reads CSVs,
+compares changed costs and availability, and writes assignment tables plus exact
+OCP transcripts. The sample costs are 12, 14 and unavailable for a proven
+infeasible scenario; missing costs are never converted to zero.
+
+## Current profile limits
+
+These are limits of the current **0.1.0 profile contracts**, not universal limits
+of OCP Core. A selected engine may advertise a narrower scope.
+
+| Profile | Current contract | Not supported by this profile |
+| --- | --- | --- |
+| `routing.basic` | 1–64 visits, 1–16 vehicles, one depot, integer meter matrix and kg capacity | Time windows, multiple trips, soft constraints |
+| `worker.scheduling` | 1–8 fixed-time tasks, 1–4 workers | Shift generation, breaks, travel, fairness objectives |
+| `inventory.replenishment` | 1–4 independent products, 1–6 daily periods, orders ≤5 items per product/period, capacity ≤50 items | Demand forecasting, shortages, shared capacity or budgets |
+
+The routing teaching engine has a narrower limit of 6 visits and 3 vehicles.
+Consult [the contracts and compatibility rules](docs/users/COMPATIBILITY.md)
+and discover the engine's actual capabilities before building a request.
+
+## Connect MCP without calling a model
+
+OCP defines optimization request and result semantics. The optional MCP binding
+makes that context and those operations available to an AI host; OCP also works
+through library and HTTP bindings without MCP.
+
+For a request such as “reduce delivery distance while respecting capacity”, the
+recommended agent flow is:
+
+1. Call `ocp_context()`, select an advertised profile, and inspect its schema and request template.
+2. Ask for missing capacities or distances instead of inventing them.
+3. Validate supported requirements before executing a solve.
+4. Evaluate a returned solution, run the independent checker, and explain its actual status and verification scope.
+
+This is recommended behavior, not a recorded model conversation or a guarantee
+for every model/host. Provider evaluation and independent checking are separate.
+
+The installation above already includes MCP. From the same kit directory:
+
+<!-- ocp:readme-mcp -->
+```sh
+.agent/bin/python -I -B local_agent.py doctor --profile all
+.agent/bin/python -I -B local_agent.py smoke --input basic-input.json --request-id first-mcp
+.agent/bin/python -I -B local_agent.py config --profile all --format json
+.agent/bin/python -I -B local_agent.py config --profile all --format codex
+```
+
+Doctor discovers six tools and checks context for all three domains with **zero
+solve calls**. Smoke performs one real routing solve and an independent check;
+expect cost 18. Config prints absolute executable paths for review, without
+editing host settings. Use the JSON or Codex TOML form appropriate for your host,
+on the machine where that host runs. Then reload its MCP configuration and check
+that `ocp-local` exposes the six tools. Host/model usage is separate from these
+local checks. The [MCP guide](docs/users/LLM_QUICKSTART.md) covers host setup,
+single-domain configuration and troubleshooting.
+
+| If you get stuck | Recovery |
+| --- | --- |
+| `python3.12` is missing | Install the prerequisite version, or put its executable on PATH. These instructions do not install system runtimes. |
+| `start.py` or a sample is missing | Complete the kit build, then `cd "$OCP_WORK/kit"` in the same terminal. Do not run kit commands from the repository root. |
+| `ENVIRONMENT_EXISTS` | Reuse `.agent/bin/python` to run examples; choose a new path only for a fresh install. |
+| A download/build fails | Preserve the failure output and check public PyPI access. Run the build block again to create a new temporary directory. No automatic retry occurs. |
+| MCP config works here but not on another machine | Install the kit on the host machine and generate its configuration there; local paths do not transfer between machines. |
+
+The full local regression environment is Python 3.12 on macOS Apple Silicon.
+An earlier complete-kit installation ran on Python 3.12.15 in a Linux x86_64
+container under Docker Desktop on that Mac; this is not verification of every
+subsequent installer change. Additional Python/MCP/Node checks are recorded for each exact ZIP using the
+[evaluation rehearsal](docs/development/NO_KEY_EVALUATION.md). Native Linux machines
+and the full Linux trial integration remain separate work; the installer rejects
+Windows. Node 24 is also used by the optional Node/TypeScript consumer.
+
+See [first-use instructions](docs/users/INVITED_TRIAL.md) and
+[connect your app or engine](docs/users/DEVELOPER_QUICKSTART.md).
 
 ## Scope and contributing
 
@@ -159,5 +201,5 @@ original snapshots and execution evidence stay outside it. Hosted services,
 registry packages and release assets require separate scoped authorization.
 
 한국어: OCP는 앱·AI 에이전트와 최적화 엔진 사이의 지원 기능·요청·결과·검증을
-명시하는 인터페이스입니다. Apache-2.0으로 공개된 개발자 프리뷰이며, 사이트·trial 배포와 패키지 레지스트리 출시는 별도입니다.
+명시하는 인터페이스입니다. Apache-2.0으로 소스와 설명 사이트가 공개된 개발자 프리뷰이며, trial 운영과 패키지 레지스트리 출시는 별도입니다.
 [한국어 시작 안내](docs/users/GETTING_STARTED.md)를 참고하세요.

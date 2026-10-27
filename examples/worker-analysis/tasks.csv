@@ -1,0 +1,7 @@
+task_id,start,end,eligible_workers
+receive,0,60,alice|bob
+inspect,30,90,alice|bob
+pack,60,120,alice|bob|casey
+label,90,150,alice|bob|casey
+dispatch,120,180,alice|bob|casey
+returns,150,210,alice|bob|casey

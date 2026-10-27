@@ -25,31 +25,38 @@ def source_provenance(hashes):
             "source_tree_sha256":hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest(),"sources":hashes}
 
 
-def build(output=None):
+def build(output=None, *, target_kind="full"):
+    if target_kind not in ("full", "python"):raise ValueError("Unknown kit target")
     target=Path(output or ROOT/".harness/work/invitation-kit").resolve()
     target.mkdir(parents=True,exist_ok=True)
     if list(target.iterdir()):raise ValueError("Invitation kit output must be empty")
     with tempfile.TemporaryDirectory(prefix="ocp-invite-artifacts-") as directory:
-        bundle=build_review(directory)
-        for name in ("ocp_candidate-0.1.0-py3-none-any.whl","ocp_conformance_candidate-0.1.0-py3-none-any.whl","ocp-candidate-0.1.0.tgz"):
+        bundle=build_review(directory,python_only=target_kind=="python")
+        packages=("ocp_candidate-0.1.0-py3-none-any.whl","ocp_conformance_candidate-0.1.0-py3-none-any.whl")
+        for name in packages + (("ocp-candidate-0.1.0.tgz",) if target_kind=="full" else ()):
             shutil.copy2(Path(bundle["directory"])/name,target/name)
     for source,dest in [("LICENSE","LICENSE"),("NOTICE","NOTICE"),("THIRD_PARTY_NOTICES.md","THIRD_PARTY_NOTICES.md"),
                         ("examples/invited-trial/install.py","install.py"),("examples/invited-trial/main.py","main.py"),
                         ("docs/users/INVITED_TRIAL.md","README.md"),("tools/requirements-dev.lock","constraints.txt"),
                         ("docs/users/DEVELOPER_QUICKSTART.md","DEVELOPER_GUIDE.md"),
                         ("docs/users/LLM_QUICKSTART.md","LLM_QUICKSTART.md"),
+                        ("docs/users/VERIFICATION_SCOPE.md","VERIFICATION_SCOPE.md"),
                         ("docs/users/EVALUATION_TASKS.md","EVALUATION_TASKS.md"),
                         ("docs/users/FEEDBACK_TEMPLATE.md","FEEDBACK_TEMPLATE.md"),
                         ("examples/invited-trial/own_app.py","own_app.py"),
                         ("examples/invited-trial/start.py","start.py"),("examples/invited-trial/demo.py","demo.py"),
                         ("examples/invited-trial/local_agent.py","local_agent.py"),
                         ("examples/multi-domain/main.py","multi_app.py"),("docs/users/MULTI_DOMAIN_QUICKSTART.md","MULTI_DOMAIN_QUICKSTART.md"),
+                        ("examples/worker-analysis/main.py","worker_analysis.py"),("docs/users/WORKER_ANALYSIS.md","WORKER_ANALYSIS.md"),
+                        ("examples/worker-analysis/workers.csv","worker-workers.csv"),("examples/worker-analysis/tasks.csv","worker-tasks.csv"),
+                        ("examples/worker-analysis/costs.csv","worker-costs.csv"),("examples/worker-analysis/scenarios.json","worker-scenarios.json"),
                         ("cases/llm-context/multi-domain.json","MULTI_DOMAIN_LLM_TASKS.json"),
                         ("spec/profiles/WORKER_SCHEDULING_0_1.md","WORKER_SCHEDULING_0_1.md"),
                         ("spec/profiles/INVENTORY_REPLENISHMENT_0_1.md","INVENTORY_REPLENISHMENT_0_1.md"),
                         ("authoring/byo_library.py","byo_library.py"),("authoring/export_transcript.py","export_transcript.py"),
                         ("examples/app-b/main.ts","main.ts"),("examples/app-b/own_app.cjs","own_app.cjs"),("examples/app-b/package.json","package.json"),
                         ("examples/app-b/tsconfig.json","tsconfig.json")]:
+        if target_kind=="python" and source.startswith("examples/app-b/"):continue
         shutil.copy2(ROOT/source,target/dest)
     guide=target/"MULTI_DOMAIN_QUICKSTART.md"
     guide.write_text(guide.read_text().replace("../../spec/profiles/", ""))
@@ -64,7 +71,7 @@ def build(output=None):
     if selected_sources()!=hashes:raise RuntimeError("Source changed during kit build")
     (target/"source-manifest.json").write_text(json.dumps(source_provenance(hashes),indent=2)+"\n")
     files={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(target.iterdir())}
-    manifest={"scope":"private_invitation_candidate","distribution_authorized":False,"public_release":False,
+    manifest={"scope":"private_invitation_candidate","target":target_kind,"distribution_authorized":False,"public_release":False,
         "secrets_included":False,"platform_verification":"See the separate report for this exact artifact; building is not verification.","files":files}
     (target/"manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
     return {"directory":str(target),"files":files}
@@ -72,4 +79,6 @@ def build(output=None):
 
 if __name__=="__main__":
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument("--output")
-    print(json.dumps(build(parser.parse_args().output)))
+    parser.add_argument("--target",choices=("full","python"),default="full",help="python builds no Node package or example")
+    args=parser.parse_args()
+    print(json.dumps(build(args.output,target_kind=args.target)))

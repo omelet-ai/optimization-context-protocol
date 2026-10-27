@@ -89,6 +89,10 @@ LLM judgment tests. Additional model runs require separately bounded approval.
 First install the Node consumer from the same kit directory (Python installation
 does not install Node packages):
 
+Use a **full kit** for this section. The default README setup creates a
+Python-only kit; build the optional full kit using the source build guide
+before running these Node commands. Python and MCP examples do not need it.
+
 <!-- ocp:node-install -->
 ```sh
 npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund ./ocp-candidate-0.1.0.tgz

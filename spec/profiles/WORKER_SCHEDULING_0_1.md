@@ -1,6 +1,6 @@
 # worker.scheduling 0.1.0
 
-Status: private candidate. Additive profile; Core 0.1.0 and assignment.fixture are unchanged.
+Status: public developer preview contract, not a stable standard. Additive profile; Core 0.1.0 and assignment.fixture are unchanged.
 
 A fixed-time assignment problem, not shift generation. Input limits: 1–8 tasks,
 1–4 workers. Time is an integer minute offset from the same planning origin,

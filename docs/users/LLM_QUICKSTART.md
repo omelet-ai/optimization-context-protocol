@@ -8,7 +8,8 @@ to send tasks and tool responses to a model provider.
 
 ## Install and check the connection
 
-From the extracted developer kit, with Python 3.12 on macOS or Linux:
+For source installation, follow the [README](https://github.com/omelet-ai/optimization-context-protocol#first-success-from-github): Python/MCP setup needs no Node/npm and already installs MCP.
+For an extracted developer kit that has not been installed, with Python 3.12 on macOS or Linux:
 
 ```sh
 python3.12 start.py --mcp --venv .agent

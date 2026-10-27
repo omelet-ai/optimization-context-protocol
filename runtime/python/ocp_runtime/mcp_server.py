@@ -94,6 +94,13 @@ def create_mcp(adapter, *, name="OCP local reference", instructions=None, regist
                 "comparison":"Compare scenarios only with the same profile version, metric definition and units; name changed inputs. Do not compare domain costs as one scale.",
                 "metrics":"Distinguish optimized from reported and evaluated from not_evaluated; null is not zero.",
                 "checks":"Provider evaluation is not an independent check or engine certification. Name the checker and its scope."},
+            "verification_guidance":{
+                "report_id":"ocp.verification-scope","report_version":"0.1.0",
+                "dimensions":["feasibility","objective_recomputation","optimality","infeasibility","execution_attestation"],
+                "how":"Run the separately installed conformance.assessment.assess(request, response) or local_agent.py smoke. ocp_evaluate is provider evaluation, not an independent check.",
+                "interpretation":"Read each check status. A feasibility/cost PASS does not verify optimality. PARTIAL or INCOMPLETE never verifies the untested proof claim. Unknown/null is not infeasible/zero.",
+                "limits":"The selected profile defines solution limits. Routing proof enumeration is limited to 7 visits/3 vehicles; feasibility checking has a larger scope. Worker/inventory proof checks are bounded by their small reference profiles.",
+                "execution":"Transcript hashes identify checked data; they do not attest which engine/artifact ran. This context lookup has performed no check or solve."},
             "steps":["Replace input with your synthetic input; fill every required input_schema field.",
                      "Ask the user for missing information. Do not invent or silently convert units, capacities, costs or constraints.",
                      "Use only the advertised profile and configuration. No implicit engine/profile fallback.",

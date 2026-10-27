@@ -1,6 +1,6 @@
 # inventory.replenishment 0.1.0
 
-Status: private candidate. Additive deterministic finite-horizon order-quantity
+Status: public developer preview contract, not a stable standard. Additive deterministic finite-horizon order-quantity
 profile; distinct from an (s,S) policy and from demand forecasting. Core is unchanged.
 
 Input: 1–4 independent products, 1–6 equal daily periods indexed 0..periods-1,

@@ -77,3 +77,14 @@ does not claim a GitHub download or a human's unaided success. Record a separate
 anonymous public-clone/online rehearsal before making those claims. H31 must be
 current PASS before H32 can advance. Neither gate calls a model or publishes a
 package/site.
+
+## Developer experience and explicit verification scope
+
+H33 → H34 → H35 → H36 follow the existing source/onboarding gates. H33 checks
+public status consistency and the documentation-only site artifact. H34 builds and
+installs the Python/MCP path with Node/npm unavailable. H35 exercises worker CSV
+input, explicit scenario changes, solving and comparison. H36 distinguishes
+feasibility, objective recomputation and proof checks in installed app/MCP flows.
+Each stage requires current predecessor PASS. Package publication, additional
+model runs, external developers and new site deployments are outside these local
+checks. See harness status for results; this plan is not evidence of completion.

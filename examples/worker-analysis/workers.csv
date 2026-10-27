@@ -1,0 +1,4 @@
+worker_id,available_start,available_end,max_minutes
+alice,0,240,180
+bob,0,240,180
+casey,60,240,180

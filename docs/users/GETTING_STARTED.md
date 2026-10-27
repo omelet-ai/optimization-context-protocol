@@ -1,6 +1,6 @@
 # Start with the path you need
 
-현재는 비공개 기술 후보이며 외부 사용자를 위한 Omelet trial 발급·배포는 준비 중이다. 공개 registry에 존재한다고 가정해 `pip install ocp-candidate`를 실행하지 않는다. 검증한 로컬 wheel/tarball을 사용한다. Python 3.12/macOS arm64, Node 24에서 검사했다.
+현재는 Apache-2.0 공개 개발자 프리뷰다. 설명 사이트도 공개되었으며 Omelet trial 발급·운영은 별도다. 공개 registry에 존재한다고 가정해 `pip install ocp-candidate`를 실행하지 않는다. 검증한 로컬 wheel/tarball을 사용한다. Python 3.12/macOS arm64, Node 24에서 검사했다.
 
 ## Try Omelet
 

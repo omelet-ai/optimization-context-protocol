@@ -1,6 +1,6 @@
 # OCP Core 0.1 계약 후보
 
-상태: 비공개 기술 후보. 이 프로젝트 안의 H01 구현·검증 기준이며 공개 승인이나 공식 namespace 확정이 아니다. JSON 교환 버전은 `0.1.0`, schema ID는 임시 `urn:ocp:candidate:core:0.1.0`이다. 구조 정본은 [schema](../schemas/core-0.1.schema.json)다.
+상태: Apache-2.0으로 공개된 개발자 프리뷰 계약. 안정판이나 외부에서 합의된 표준은 아니며 공식 namespace는 아직 확정하지 않았다. JSON 교환 버전은 `0.1.0`, schema ID는 임시 `urn:ocp:candidate:core:0.1.0`이다. 구조 정본은 [schema](../schemas/core-0.1.schema.json)다.
 
 ## 목적과 소유 경계
 
@@ -53,6 +53,6 @@ request ID는 상관관계 식별자이며 인증·입력 hash가 아니다. pro
 
 ## 검증 범위와 출처
 
-[Core fixtures](../../cases/core/messages.json)는 합성 예제이며 실제 solver 실행 결과가 아니다. H01은 schema·오류·상태·확장·버전 형태와 독립성을 검증한다. H02 이후 domain 검증과 H03 이후 provider/client 비교가 별도로 필요하다. 공개 권리·라이선스와 외부 환경은 아직 미승인이다.
+[Core fixtures](../../cases/core/messages.json)는 합성 예제이며 실제 solver 실행 결과가 아니다. Core schema 검증과 domain 의미 검증, provider/client 실행 검증은 별개다. 소스 공개 권리·Apache-2.0은 확인되었으며 상용 엔진 접근과 외부 trial 운영은 별도다.
 
 설계는 새로 작성했으며 Foundry 구현의 코드를 runtime으로 가져오지 않았다. 내부 계약 mapping과 개발 요구 추적은 별도 개발 자료로 관리하며 이 규격의 사용 조건이 아니다. Schema 방언은 [JSON Schema 공식 Core 문서](https://json-schema.org/draft/2020-12/json-schema-core), 검사 API는 [python-jsonschema 공식 문서](https://python-jsonschema.readthedocs.io/en/stable/validate/)를 기준으로 고정했다.

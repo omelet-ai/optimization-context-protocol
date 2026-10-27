@@ -2,7 +2,7 @@
 
 Run these commands from the extracted developer kit, using Python 3.12 and Node 24
 for the optional Node examples. No company checkout, Foundry, key or account is
-needed for local use. These are private candidate artifacts, not registry packages.
+needed for local use. These are locally built developer-preview artifacts, not published registry packages.
 README.md lists prerequisites, platform verification scope and offline options.
 한국어 시작 안내와 초대 trial 절차는 README.md 아래에 있습니다.
 
@@ -54,6 +54,8 @@ parent directory first. Never change the job identity merely to bypass uncertain
 
 Install the local Python provider above first. The Node SDK is a separate consumer;
 Node does not run OR-Tools. Node 24/TypeScript 7 versions are pinned in package.json.
+This section needs the full kit; the README's Python-only kit deliberately excludes
+Node files. See the source build guide for the optional full kit before proceeding.
 
 ```sh
 node --version

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:ocp:candidate:core:0.1.0",
-  "title": "OCP Core 0.1.0 private technical candidate",
+  "title": "OCP Core 0.1.0 developer preview",
   "$defs": {
     "reference": {
       "type": "object",

@@ -1,7 +1,7 @@
 # OCP developer kit
 
 Use OCP from your own application or connect your own optimization engine. This is
-a private evaluation candidate, not a published registry release. A trial account
+a locally built evaluation artifact, not a published registry release. A trial account
 or `session.json` is **not required** for the local and bring-your-engine paths.
 한국어 초대 시험 안내는 이 문서 아래에, 앱·엔진 개발 안내는 `DEVELOPER_GUIDE.md`에 있습니다.
 

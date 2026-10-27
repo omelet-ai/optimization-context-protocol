@@ -95,3 +95,57 @@ first online downloads are recorded separately with their exact public commit;
 local fixes are identified separately from that published baseline. No model
 call, external-human acceptance, website deployment or registry publication is
 implied. See the current harness status for results.
+
+## Developer experience and explicit verification scope
+
+H33 → H34 → H35 → H36 follow the existing source/onboarding gates. H33 checks
+public status consistency and the documentation-only site artifact. H34 builds and
+installs the Python/MCP path with Node/npm unavailable. H35 exercises worker CSV
+input, explicit scenario changes, solving and comparison. H36 distinguishes
+feasibility, objective recomputation and proof checks in installed app/MCP flows.
+Each stage requires current predecessor PASS. Package publication, additional
+model runs, external developers and new site deployments are outside these local
+checks. See harness status for results; this plan is not evidence of completion.
+
+## 2026-10-27: Site explanation and entry-path review
+
+The owner requested local site/README improvements and review before deployment.
+The public homepage now explains integration value, links directly to local and
+AI setup, and retains Omelet as the recommended trial when invited. Current
+profile limits and narrower engine limits are distinct; engine authoring separates
+existing profiles from new domains. Routing, worker and inventory website outputs
+are calculated and independently checked at build time. Public editorial content
+lives in `site/content.py`; builders retain output selection and README command
+extraction. Concurrent CSV analysis and verification-scope documentation were preserved.
+
+Standalone documentation/static-artifact checks passed 14 tests; real example
+costs were 18 meter, 7 cost_unit and 16 cost_unit. Eight pages were inspected at
+320/390/768/1440px, including mobile menu, example keyboard tabs and exact command
+copying. Workspace transfer integrity and working-file publication inventory also
+passed within their stated scopes. Evidence, exact rendered files and screenshots
+are local under `.harness/work/site-refresh-20261027-202020/`. This does not advance
+harness dependencies, establish external acceptance or authorize publication.
+No commit, push, deployment or model call was performed. The preview includes
+pending local installer changes; synchronize reviewed source and documentation
+before a separately authorized deployment.
+
+## 2026-10-27: Approved source and Pages update
+
+After reviewing the preview, the owner authorized the validated documentation and
+installation changes on `omelet-ai/optimization-context-protocol` `main`, followed
+by deployment to its existing GitHub Pages site. The separate scope is recorded
+in `provenance/PUBLICATION_APPROVAL.md`.
+
+Pre-publication standalone checks in an isolated selected-source copy passed
+79 tests: exact README/full-kit consumers (7), no-Node Python/MCP setup (11),
+worker CSV scenarios (12), dimensioned independent verification (18), existing
+site/download/install regression (17), and public documentation/static artifact
+checks (14). No tests were skipped and no models were called. The public build
+contains 33 static files, real checked examples and no package or trial service.
+Workspace transfer verification also passed for 307 copied source files; this
+does not establish product or trial readiness. Source inventory and Git index
+must match the 224-file allowlist before commit. Local evidence is preserved
+under `.harness/work/pages-publication-20261027/`; published commit, Pages build,
+fresh online install and URL results are recorded there after remote checks.
+These standalone results do not promote stale harness dependencies or establish
+external-human acceptance.

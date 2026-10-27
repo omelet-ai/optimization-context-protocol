@@ -1,0 +1,17 @@
+task_id,worker_id,cost
+receive,alice,2
+receive,bob,5
+inspect,alice,1
+inspect,bob,3
+pack,alice,2
+pack,bob,3
+pack,casey,4
+label,alice,4
+label,bob,2
+label,casey,2
+dispatch,alice,2
+dispatch,bob,4
+dispatch,casey,3
+returns,alice,4
+returns,bob,2
+returns,casey,1

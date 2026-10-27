@@ -23,3 +23,21 @@ not approve package-registry publication, release assets, website deployment,
 hosted trial access, spending or additional model calls. The software remains a
 developer preview; source publication does not establish production readiness,
 external-user acceptance or universal engine/LLM interoperability.
+
+## 2026-10-27 documentation and installation update
+
+After reviewing the local site and README changes, the owner explicitly approved
+committing and pushing the validated changes and necessary installation
+improvements to `omelet-ai/optimization-context-protocol` on `main`, and deploying
+the documentation to the existing GitHub Pages site at
+`https://omelet-ai.github.io/optimization-context-protocol/` through `gh-pages`.
+The update includes the Python-only setup, its documented examples and
+verification guidance, and the matching public documentation. Omelet remains
+the recommended trial when invited; public self-service signup is not opened.
+
+The exact source inventory remains the matched repository/publication allowlist.
+The Pages artifact contains only the static documentation selection checked by
+`tools/check_public_site.py`. Post-deployment verification must compare the
+published installation commands with `main` and check their links. This separate
+Pages approval does not expand the source-only flags in `publication.json` or
+authorize trial hosting, registry/release assets, spending or model calls.

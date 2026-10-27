@@ -34,6 +34,7 @@ async def probe(problem=None, request_id=None, profile="routing.basic"):
     from mcp import Client, StdioServerParameters
     from jsonschema import Draft202012Validator
     from conformance.runner import CHECKERS
+    from conformance.assessment import assess
 
     calls = []
     report = {"status": "PASS", "scope": "installed_local_mcp_only_not_model_acceptance",
@@ -92,7 +93,8 @@ async def probe(problem=None, request_id=None, profile="routing.basic"):
                 evaluation = await call("ocp_evaluate", {"request": request, "solution": result["solution"]})
                 if evaluation.get("kind") != "evaluation":
                     raise SetupError("MCP_EVALUATION_FAILED", "Preserve the request ID and inspect the local environment.")
-            report.update(request=request, response=result, independent_check=checked, evaluation=evaluation)
+            report.update(request=request, response=result, independent_check=checked, evaluation=evaluation,
+                          verification=assess(request, result))
             # PASS means protocol + checker acceptance, not solution existence.
             report["solution_found"] = result["solution"] is not None
             return report

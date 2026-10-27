@@ -1,0 +1,8 @@
+{
+  "time_unit": "minute",
+  "cost_unit": "cost_unit",
+  "scenarios": [
+    {"id": "changed-cost", "changes": [{"op": "set_cost", "task_id": "receive", "worker_id": "alice", "value": 9}]},
+    {"id": "later-availability", "changes": [{"op": "set_availability", "worker_id": "bob", "value": [{"start": 240, "end": 300}]}]}
+  ]
+}

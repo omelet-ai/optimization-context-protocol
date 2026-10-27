@@ -1,6 +1,6 @@
 # Optional HTTP and MCP bindings 0.1.0
 
-상태: 비공개 기술 후보. Core는 아래 endpoint·MCP·서버·TypeScript를 공통 필수로 요구하지 않는다. 두 binding 모두 `execution.sync@0.1.0`만 제공한다. job 생성·조회·취소·복구를 선언하지 않으며 async 요청은 거절한다.
+상태: 공개 개발자 프리뷰 binding. 안정판·모든 LLM host 호환성을 뜻하지 않는다. Core는 아래 endpoint·MCP·서버·TypeScript를 공통 필수로 요구하지 않는다. 두 binding 모두 `execution.sync@0.1.0`만 제공한다. job 생성·조회·취소·복구를 선언하지 않으며 async 요청은 거절한다.
 
 | HTTP | 입력 | 출력 |
 | --- | --- | --- |
