@@ -28,6 +28,8 @@ result에는 optimized metric 하나와 enforced constraint 평가 두 개를 �
 
 infeasible의 허용 근거는 필수 총수요가 총용량 초과, 한 방문 수요가 모든 차량 용량 초과, 또는 위 한도 안의 완전 열거다. `optimal`은 한도 안의 완전 열거로 최적값을 재검증할 수 있는 경우에만 이 후보에서 확인한다. solver의 성공 코드·제한 시간 종료·검색 실패를 증명으로 쓰지 않는다.
 
+해석적 증명의 `evidence`도 입력에서 다시 계산한 값과 일치해야 한다. `total-demand-exceeds-total-capacity`는 `total_demand`·`total_capacity`, `individual-demand-exceeds-all-capacities`는 `maximum_demand`·`maximum_capacity`를 정수 kg 값으로 제공한다. 누락·다른 값·boolean·실수는 거절한다. 불가능하다는 결론이 맞아도 설명에 사용한 숫자가 틀리면 그 증명 응답은 통과하지 않는다.
+
 ## 사례와 호환 경계
 
 [수작업 행렬 사례](../../cases/routing/basic-matrix.json)의 route 비용은 6과 12, 총 18이다. 독립 oracle도 18을 확인한다. [기존 greedy 반례](../../cases/failure-semantics/greedy-feasible.json)는 용량 6 두 개·수요 3,3,2,2,2의 실제 feasible 배정이 존재함을 확인한다. 합성 입력이며 기존 Standard API payload가 아니다.

@@ -120,10 +120,36 @@ class ConformanceTests(unittest.TestCase):
             for name in ("import ocp_routing","from ocp_routing","import ortools","from ortools","reference/imported-foundry"):
                 self.assertNotIn(name,path.read_text())
 
+    def test_24_total_capacity_proof_numbers_must_match_input(self):
+        req=request()
+        for vehicle in req["input"]["vehicles"]: vehicle["capacity"]=1
+        out=result();out.update(status="infeasible",solution=None,metrics=[],constraints=[],
+            proof={"claim":"infeasible","method":"total-demand-exceeds-total-capacity",
+                   "scope":"all mandatory visits","evidence":{"total_demand":4,"total_capacity":2}})
+        self.assertEqual(verify_bundle(bundle(req,out),ARTIFACT)["status"],"PASS")
+        for evidence in ({"total_demand":999,"total_capacity":998},{"total_demand":4,"total_capacity":1},
+                         {"total_capacity":2},{"total_demand":4.0,"total_capacity":2}):
+            with self.subTest(evidence=evidence):
+                bad=deepcopy(out);bad["proof"]["evidence"]=evidence;self.assert_rejected(bundle(req,bad))
+
+    def test_25_individual_capacity_proof_numbers_must_match_input(self):
+        req=request()
+        for vehicle in req["input"]["vehicles"]: vehicle["capacity"]=1
+        for visit in req["input"]["visits"]: visit["demand"]=0
+        req["input"]["visits"][0]["demand"]=2
+        out=result();out.update(status="infeasible",solution=None,metrics=[],constraints=[],
+            proof={"claim":"infeasible","method":"individual-demand-exceeds-all-capacities",
+                   "scope":"all mandatory visits","evidence":{"maximum_demand":2,"maximum_capacity":1}})
+        self.assertEqual(verify_bundle(bundle(req,out),ARTIFACT)["status"],"PASS")
+        for evidence in ({"maximum_demand":9,"maximum_capacity":8},{"maximum_demand":2,"maximum_capacity":True},
+                         {"maximum_demand":2},{"maximum_demand":2,"maximum_capacity":1.0}):
+            with self.subTest(evidence=evidence):
+                bad=deepcopy(out);bad["proof"]["evidence"]=evidence;self.assert_rejected(bundle(req,bad))
+
 
 if __name__ == "__main__":
     result=unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromTestCase(ConformanceTests))
-    passed=result.wasSuccessful() and result.testsRun>=23 and not result.skipped
+    passed=result.wasSuccessful() and result.testsRun>=25 and not result.skipped
     print(json.dumps({"status":"PASS" if passed else "FAIL","tests_run":result.testsRun,"failures":len(result.failures),"errors":len(result.errors),"skipped":len(result.skipped),
                       "versions":{"suite":"ocp.transcript@0.1.0","assignment.fixture":"0.1.0"},
                       "scope":"Independent transcript runner, intentional defective outputs and second-domain fixtures; no assignment engine execution"}))

@@ -1,14 +1,24 @@
-# 공개 준비 체크리스트
+# Public release checklist
 
-- [ ] Technical Owner·핵심 담당·지원 시간 배정
-- [ ] 공개 대상별 저작권·특허·라이선스 결정
-- [ ] `.private/`·원본 snapshot·운영 데이터·secret 제외
-- [ ] 공개 후보 allowlist 확정과 파일 hash 기록
-- [ ] 독립 install/build/test/예제 실행
-- [ ] 앱 A/B × OR-Tools/Omelet trial 교차 검증
-- [ ] trial 신원·quota·만료·회수·원가 검증
-- [ ] 15분·60분 외부 사용자 시험
-- [ ] 공개 문서·NOTICE·기여·보안·호환 정책
-- [ ] 대상 repo·ref·게시·배포 동작의 사용자 승인
+This checklist separates technical evidence from rights, people and publication.
+The project owner is assigned. Reconfirming that assignment is unnecessary.
 
-현재 checked 항목이 없는 것은 제품 준비 상태다. 파일 복사와 합성 반례 검사를 이 항목들의 완료로 대체하지 않는다.
+| Area | Current state | Release exit condition |
+| --- | --- | --- |
+| Owner | Assigned by the user | Publish an agreed contact/support scope |
+| Source, kit and site | Private developer-preview candidates | Exact approved source and immutable artifact hashes |
+| Local installation and consumers | Automated harness paths implemented | Current PASS for the release artifact; see H20–H22 |
+| Platform coverage | macOS arm64 full regression; Linux x86_64 container first-success path | Native Linux/Node validation; Windows remains unsupported until tested |
+| Independent checking | Separate checker and intentional corruption probes | State exact profile/constraint coverage; never general engine certification |
+| LLM context and behavior | H23 server/context checks; initial scoped model pilot performed, broader H24 acceptance pending | Named model/host trials with fresh sessions, full traces and answer review before claiming LLM interoperability |
+| External human use | Review feedback received; installation not completed by that reviewer | Unaided install and integration tasks with recorded outcomes |
+| License, copyright and patents | Proposed direction; approval records still pending | Per-file rights review, approved LICENSE/NOTICE and public allowlist |
+| Community | Contribution/security guides and issue/PR templates prepared | Working public reporting route, agreed support scope |
+| Publication | Not authorized | Exact repository/ref/artifacts/settings and actions approved |
+| Site and trial | Permanent deployment on hold | Separate scoped environment, operation and cost approval |
+
+Run the current harness rather than treating this document as a test result.
+A private code push, automated local pass, limited preview link and public release
+are distinct actions. See the [launch preparation](docs/development/GITHUB_LAUNCH.md),
+[publication policy](provenance/publication.json) and
+[compatibility policy](docs/users/COMPATIBILITY.md).

@@ -330,7 +330,7 @@ class HarnessTests(unittest.TestCase):
 
     def test_timeout_phase_is_fixed_and_bounded(self):
         base={"test_number":10000,"kind":"error","category":"subprocess_timeout","elapsed_ms":60000}
-        for phase in ("site_engine_startup","site_example_execution"):
+        for phase in ("site_engine_startup","site_example_execution","app_engine_startup","app_example_execution"):
             value=dict(base,phase=phase,timeout_seconds=60)
             self.assertEqual(module.failure_diagnostics(json.dumps({"failure_diagnostics":[value]})),[value])
         for phase,limit in [("synthetic-secret",60),("site_engine_startup",True),

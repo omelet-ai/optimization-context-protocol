@@ -174,7 +174,7 @@ class MCPTests(unittest.IsolatedAsyncioTestCase):
     @mcp_session
     async def test_17_mcp_discovery_and_describe(self):
         tools=await self.client.list_tools()
-        self.assertEqual({t.name for t in tools.tools},{"ocp_describe","ocp_requirements","ocp_validate","ocp_execute","ocp_evaluate"})
+        self.assertEqual({t.name for t in tools.tools},{"ocp_context","ocp_describe","ocp_requirements","ocp_validate","ocp_execute","ocp_evaluate"})
         value=await self.call("ocp_describe")
         self.assertEqual(value["bindings"],[{"id":"binding.mcp_stdio","version":"0.1.0"}])
         self.assertEqual(self.client.protocol_version,"2026-07-28")

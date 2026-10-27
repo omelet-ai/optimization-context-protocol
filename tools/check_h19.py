@@ -215,7 +215,7 @@ class InvitationTests(unittest.TestCase):
     def test_19_installed_mcp_bridge_executes_evaluates_replays(self):
         async def scenario():
             async with MCPClient(StdioServerParameters(command=str(PYTHON),args=["-I","-B","-m","ocp_runtime.trial_client","--session",str(self.session),"mcp"],env=ENV,cwd=str(DIRECTORY)),read_timeout_seconds=15) as client:
-                tools=await client.list_tools();self.assertEqual(len(tools.tools),5)
+                tools=await client.list_tools();self.assertEqual(len(tools.tools),6)
                 result=await client.call_tool("ocp_describe",{});self.assertEqual(result.structured_content["kind"],"capability")
                 req=request()
                 first=await client.call_tool("ocp_execute",{"request":req})

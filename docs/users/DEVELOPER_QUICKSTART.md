@@ -1,5 +1,14 @@
 # Build your own app and engine
 
+## First success from the developer kit
+
+After unpacking the kit, run `python3.12 start.py --venv .local`. This installs
+the local dependencies, runs the same app/input with two actual engines, and
+independently checks their results and deliberately damaged outputs. No key is
+needed. Use `.local/bin/python -B demo.py --diagnostics` for subsequent runs.
+See the kit README for prerequisites, offline installation and supported limits.
+
+
 이 안내의 명령은 **설치 꾸러미를 푼 폴더**에서 실행한다. Python 3.12/macOS arm64, Node 24에서 검증한다. Linux는 별도 검증 대상이며 Windows용 installer는 제공하지 않는다. 회사 저장소·Foundry·API key 없이도 아래 자기 엔진 경로를 사용할 수 있다. Node는 TypeScript를 사용할 때만 필요하다. 현재 artifact는 비공개 후보이고 registry 이름으로 설치하지 않는다.
 
 ## 사전 점검
@@ -87,7 +96,7 @@ if (result.solution !== null) {
 
 ## 4. MCP: 요청을 추측하지 않고 구성하기
 
-README의 stdio 연결 후 `ocp://request-guide/0.1.0` 리소스를 먼저 읽는다. Core request schema, 선택 profile의 input schema, provider의 기본 configuration·budget을 담은 request template이 제공된다. template의 `input`을 자기 합성 입력으로, `request_id`를 명시한 작업 ID로 바꾼다. validate가 valid=true일 때 execute하고 반환된 solution을 evaluate한다. 리소스 읽기는 계산을 수행하지 않는다. 모르는 profile에서 input_schema가 null이면 해당 provider 문서를 먼저 확인한다.
+README의 stdio 연결 후 `ocp_context()` 도구를 먼저 호출한다. 리소스를 지원하는 호스트에서는 `ocp://request-guide/0.1.0`을 읽어 같은 안내를 얻을 수 있다. Core request schema, 선택 profile의 input schema, provider의 기본 configuration·budget을 담은 request template이 제공된다. template의 `input`을 자기 합성 입력으로, `request_id`를 명시한 작업 ID로 바꾼다. 빠진 입력을 추측하지 말고 질문한다. validate가 valid=true일 때 execute하고 non-null solution만 evaluate한다. 컨텍스트 조회는 계산을 수행하지 않는다. 모르는 profile에서 input_schema가 null이면 해당 provider 문서를 먼저 확인한다.
 
 공식 MCP Python host 검증은 실제 Claude Code host의 승인 화면·도구 선택 검증을 대신하지 않는다. 서버 주소/권한/pin을 임의로 바꾸거나 오류 후 새 ID로 자동 재시도하지 않는다.
 

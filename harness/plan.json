@@ -255,7 +255,8 @@
         "tools/build_candidate.py",
         "tools/dependency-wheels.json",
         "tools/requirements-dev.lock",
-        "tools/safe_test_result.py"
+        "tools/safe_test_result.py",
+        "tools/build_site.py"
       ],
       "acceptance": "OR-Tools 실제 solve·독립 평가·격리 설치와 자기 입력 실행",
       "checks": [
@@ -273,7 +274,7 @@
             "errors": 0,
             "skipped": 0
           },
-          "min_tests": 13
+          "min_tests": 16
         }
       ]
     },
@@ -296,7 +297,7 @@
         "tools/check_h02.py",
         "tools/requirements-dev.lock"
       ],
-      "acceptance": "독립 runner·결함 검출·두 번째 도메인 fixture와 실행 범위 보고",
+      "acceptance": "독립 runner·결함 검출·입력과 분석 증명 수치의 일치·두 번째 도메인 fixture와 실행 범위 보고",
       "checks": [
         {
           "id": "independent-conformance",
@@ -312,7 +313,7 @@
             "errors": 0,
             "skipped": 0
           },
-          "min_tests": 23
+          "min_tests": 25
         }
       ]
     },
@@ -1068,6 +1069,138 @@
           "min_tests": 17
         }
       ]
+    },
+    {
+      "id": "H22",
+      "title": "첫 성공과 실제 엔진 교체·독립 오류 탐지",
+      "tasks": [
+        "OSS-03",
+        "OSS-10",
+        "OSS-11",
+        "OSS-12"
+      ],
+      "depends_on": [
+        "H21"
+      ],
+      "mode": "local",
+      "inputs": [
+        "sdk/",
+        "adapters/",
+        "runtime/",
+        "examples/",
+        "authoring/",
+        "conformance/",
+        "spec/",
+        "docs/",
+        "cases/",
+        "tools/check_h20.py",
+        "tools/build_invitation_kit.py",
+        "tools/build_review_bundle.py",
+        "tools/build_typescript.py",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/isolated_candidate.py",
+        "tools/dependency-wheels.json",
+        "tools/requirements-dev.lock",
+        "provenance/candidate-selection.json",
+        "site/",
+        "tools/build_site.py",
+        "tools/check_h21.py",
+        "tools/check_h22.py",
+        "README.md",
+        "CONTRIBUTING.md",
+        "SECURITY.md",
+        "PUBLIC_RELEASE_CHECKLIST.md",
+        ".github/ISSUE_TEMPLATE/",
+        ".github/pull_request_template.md"
+      ],
+      "acceptance": "새 꾸러미 한 명령 설치, 같은 앱·입력의 실제 두 엔진, 입력 변경 재계산, 실제 deadline, checker-only 환경의 변조 탐지와 안전한 실패. 사람 수락·다중 도메인 실행·Linux/Windows·게시 제외",
+      "checks": [
+        {
+          "id": "first-success-and-independent-checker",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h22.py"
+          ],
+          "timeout_seconds": 240,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 12
+        }
+      ]
+    },
+    {
+      "id": "H23",
+      "title": "LLM 컨텍스트 제공과 실제 MCP 사용 경로",
+      "tasks": [
+        "OSS-05",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H22"
+      ],
+      "mode": "local",
+      "inputs": [
+        "runtime/",
+        "sdk/",
+        "adapters/",
+        "conformance/",
+        "authoring/",
+        "spec/",
+        "cases/",
+        "docs/",
+        "tools/build_candidate.py",
+        "tools/isolated_candidate.py",
+        "tools/dependency-wheels.json",
+        "tools/requirements-dev.lock",
+        "tools/build_llm_context_pack.py",
+        "tools/check_h23.py"
+      ],
+      "acceptance": "새 설치 MCP의 tools-only context, schema/template, 단위·누락·미지원 차단, 실제 계산·검산·deadline·용량 증명·예외 보호. 실제 LLM 판단과 외부 host 수락 제외",
+      "checks": [
+        {
+          "id": "model-context-contract",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h23.py"
+          ],
+          "timeout_seconds": 150,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 14
+        }
+      ]
+    },
+    {
+      "id": "H24",
+      "title": "실제 LLM·호스트 컨텍스트 수락",
+      "tasks": [
+        "OSS-05",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H23"
+      ],
+      "mode": "external",
+      "inputs": [
+        "runtime/",
+        "spec/",
+        "cases/llm-context/",
+        "docs/development/LLM_CONTEXT_VALIDATION.md",
+        "tools/build_llm_context_pack.py"
+      ],
+      "acceptance": "승인된 모델/호스트·사용량 범위에서 새 세션의 실제 도구 기록, 누락 질문·미지원 거절·계산·결과 의미·지시문 데이터 처리와 최종 답변 검토. 준비물·SDK 호출·자기평가는 대체 증거가 아님",
+      "checks": []
     }
   ]
 }

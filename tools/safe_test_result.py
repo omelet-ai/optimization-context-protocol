@@ -33,7 +33,7 @@ class DiagnosticResult(unittest.TextTestResult):
                                  "kind":kind,"category":category,
                                  "elapsed_ms":round((time.monotonic()-self.started)*1000)}
         phase=getattr(err[1],"ocp_phase",None);limit=getattr(err[1],"ocp_timeout_seconds",None)
-        if (category=="subprocess_timeout" and phase in ("site_engine_startup","site_example_execution")
+        if (category=="subprocess_timeout" and phase in ("site_engine_startup","site_example_execution","app_engine_startup","app_example_execution")
                 and type(limit) in (int,float) and 0<limit<=3600):
             diagnostic.update(phase=phase,timeout_seconds=limit)
         self.diagnostics.append(diagnostic)

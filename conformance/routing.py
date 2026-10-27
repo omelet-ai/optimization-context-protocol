@@ -141,9 +141,23 @@ def verify_result(request, result):
         raise ContractError("EVALUATION_WITHOUT_SOLUTION")
     if result["status"] == "infeasible":
         method = result["proof"]["method"]
-        proven = (method == "total-demand-exceeds-total-capacity" and sum(v["demand"] for v in problem["visits"]) > sum(v["capacity"] for v in problem["vehicles"]))
-        proven = proven or (method == "individual-demand-exceeds-all-capacities" and max(v["demand"] for v in problem["visits"]) > max(v["capacity"] for v in problem["vehicles"]))
-        proven = proven or (method == "exhaustive-enumeration" and not exhaustive_optimum(problem)["feasible"])
+        evidence = result["proof"]["evidence"]
+        expected = None
+        if method == "total-demand-exceeds-total-capacity":
+            expected = {"total_demand": sum(v["demand"] for v in problem["visits"]),
+                        "total_capacity": sum(v["capacity"] for v in problem["vehicles"])}
+            proven = expected["total_demand"] > expected["total_capacity"]
+        elif method == "individual-demand-exceeds-all-capacities":
+            expected = {"maximum_demand": max(v["demand"] for v in problem["visits"]),
+                        "maximum_capacity": max(v["capacity"] for v in problem["vehicles"])}
+            proven = expected["maximum_demand"] > expected["maximum_capacity"]
+        else:
+            proven = method == "exhaustive-enumeration" and not exhaustive_optimum(problem)["feasible"]
+        if expected is not None:
+            # A true conclusion cannot validate fabricated explanation numbers.
+            # bool is an int subclass in Python, but is not an integer kg value.
+            proven = proven and all(type(evidence.get(key)) is int and evidence[key] == value
+                                    for key, value in expected.items())
         if not proven:
             raise ContractError("UNVERIFIED_PROOF")
     return None

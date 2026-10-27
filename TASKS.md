@@ -10,12 +10,12 @@
 | OSS-01 | Core/profile/binding RFC | 비공개 기술 후보 구현, 최신 H01 판정 | Core schema·sync 후보·Omelet mapping, 35개 계약 검사 |
 | OSS-02 | 의미·오류·평가 fixture | routing 후보·독립 평가 구현, 최신 H02 판정 | 34개 정상·거부·반례 검사, bounded oracle |
 | OSS-03 | library/SDK/REST adapter port·client | Python port/client·OR-Tools adapter 후보 구현, H03 판정 | 28개 실제 호출·거절·결함 주입 검사. HTTP/TypeScript 후보는 H06 |
-| OSS-04 | OR-Tools reference·App A | 독립 설치·App A 후보 구현, H04 판정 | 14개 검사: 오프라인 설치·실제 solve·자기 입력·독립 평가·실패 진단·초기 준비 |
+| OSS-04 | OR-Tools reference·App A | 독립 설치·App A 후보 구현, H04 판정 | 16개 검사: 오프라인 설치·실제 solve·자기 입력·독립 평가·단계별 실패 진단·cold 준비 |
 | OSS-05 | HTTP/async/MCP·환경 binding | sync HTTP·MCP·TypeScript 후보 구현, H06 판정 | 21개 loopback·stdio·App B·응답 제한 검사. async 미지원 |
 | OSS-06 | Omelet engine·App B 교차 연결 | H17 로컬 후보 구현·검사 연결, H09 외부 운영 대기 | 설치 Python/TypeScript × 실제 OR-Tools/로컬 Omelet 네 조합 |
 | OSS-07 | Studio 최소 smoke | private draft PR 구현·검증, H10 외부 선행 대기 | [소비자 원장](docs/development/INTERNAL_CONSUMER_STATUS.md)의 브라우저→API→실제 엔진 |
 | OSS-08 | Foundry 조회·resolve 시험 | 같은 draft PR에 구현·검증, H18에 main 기반 provider 호환 검사 연결 | 같은 package의 공개 entrypoint를 쓰는 TMS resolver |
-| OSS-09 | 다른 도메인·공통 conformance | transcript runner·assignment fixture 구현, H05 판정 | 23개 결함 검출·CLI·도메인 분리 검사. assignment 실제 solve 미구현 |
+| OSS-09 | 다른 도메인·공통 conformance | transcript runner·assignment fixture 구현, H05 판정 | 25개 결함 검출·CLI·도메인 분리 검사. 분석 증명의 수치도 입력과 대조. assignment 실제 solve 미구현 |
 | OSS-10 | 배포 artifact·호환성 | 비공개 선정 소스·wheel·tarball 구현, H11 판정 | 14개 clean install/build·BYO·소스 일치·문서 검사 |
 | OSS-11 | 외부 DX·기여 운영 | 세 입구·BYO·호환·기여·실제 과제·계측 도구 준비. H12 대기 | H11에 계측 회귀 20개 추가. [외부 과제지](docs/users/EXTERNAL_DX_STUDY.md)의 실제 수행은 미완료 |
 | OSS-12 | 공개 RC·trial 공동 출시 | P0 관문 대기 | 승인·게시·재설치 |
@@ -62,3 +62,9 @@ H21은 [공개 사이트의 로컬 후보](site/README.md)를 추적한다. 영�
 H21 준비 시간 초과는 새 설치의 네이티브 엔진 로딩과 예제 실행을 분리해 처리한다. 시작 60초·준비 후 실행 30초·solve 1,000ms의 독립 상한과 고정 단계별 실패 진단을 적용하며, 첫 실행을 미리 로딩하거나 자동 재시도로 대체하지 않는다. 시작/실행 초과와 자식 프로세스 정리도 회귀 검사한다. 배포 보류를 유지한다.
 
 다운로드 꾸러미를 저장소 밖에서 사용하는 엔지니어 리허설의 후속으로, 첫 README에 영문 세 시작 경로와 no-key 설치·앱·엔진 연결을 제공한다. 로컬 trace 파일 충돌을 초대 오류로 잘못 안내하던 문제는 별도 진단과 실행 전 경로 검사로 수정한다. H20은 기존 파일·끊어진 symlink·없는 부모 폴더를 거절하고 원본과 호출 횟수를 보존하는 회귀를 포함한다. 에이전트 리허설과 실제 외부 개발자 수락은 계속 구분한다.
+
+H22는 외부 평가 후 첫 성공 경로를 추적한다. 새 꾸러미의 `start.py`가 검증·설치·실제 두 엔진 실행·독립 검사를 연결한다. 같은 앱·입력, 변경 입력 재계산, 잘못된 단위·용량·누락·비용과 실제 deadline, checker-only 환경, 기존 환경 보존을 검사한다. [GitHub 공개 준비](docs/development/GITHUB_LAUNCH.md)에 영문 README·기여/보안/이슈/PR 자료와 후속 Linux·비라우팅·사람 시험을 정리한다. 실제 외부 수락·라이선스 적용·게시를 완료로 간주하지 않는다.
+
+H23은 [LLM 컨텍스트 검증](docs/development/LLM_CONTEXT_VALIDATION.md)의 로컬 단계를 추적한다. `ocp_context` 도구로 리소스를 읽지 않는 호스트에도 capability·입력 schema·template·결과 의미를 제공한다. 새 설치, 실제 MCP 통신, 정상 계산·검산, 누락·단위·미지원 제약·profile 차이·deadline·용량 증명·지시문 형태 ID를 검사한다. 실제 모델용 8개 과제와 별도 rubric을 생성하는 것은 모델 실행과 구분한다. H24의 승인된 첫 모델 시험은 수행되었으며, 호스트 설정 실패도 분모에 남긴다. 상세 도구 기록·답변 판정·사용량은 비공개 실행 증거에 보관하고 H24 전체 수락이나 범용 LLM 호환성으로 확대하지 않는다. H23 PASS와 제한된 모델 시험은 H12 외부 개발자 수락을 대신하지 않는다.
+
+첫 성공 개선의 전체 회귀에서 H04 첫 프로세스의 15초 초과가 다시 관찰되었다. 실제 backend 생성 뒤 준비 신호를 계측해 cold 준비 60초·준비 후 실행 15초를 분리한다. 같은 cold 프로세스에서 실제 App A를 실행하고 준비 이전/이후 초과 및 실패 종료를 검사하며, 재시도나 사전 실행은 추가하지 않는다. solver 1,000ms 및 1ms 의미는 유지한다.

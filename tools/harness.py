@@ -49,7 +49,7 @@ def failure_diagnostics(stdout):
         item={key:value[key] for key in ("test_number","kind","category","elapsed_ms")}
         limit=value.get("timeout_seconds")
         if (value["category"]=="subprocess_timeout" and
-                value.get("phase") in ("site_engine_startup","site_example_execution") and
+                value.get("phase") in ("site_engine_startup","site_example_execution","app_engine_startup","app_example_execution") and
                 type(limit) in (int,float) and 0<limit<=3600):
             item.update(phase=value["phase"],timeout_seconds=limit)
         safe.append(item)

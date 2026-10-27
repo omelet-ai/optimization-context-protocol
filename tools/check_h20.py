@@ -197,7 +197,7 @@ try{await c.evaluate(r,s.solution);process.exitCode=1}catch(e){if(e.message!=='I
         async def scenario():
             before=GATEWAY.summary()["calls"]
             async with MCPClient(StdioServerParameters(command=str(PYTHON),args=["-I","-B","-m","ocp_runtime.trial_client","--session",str(SESSION),"mcp"],env=ENV,cwd=str(KIT)),read_timeout_seconds=20) as host:
-                self.assertEqual(len((await host.list_tools()).tools),5)
+                self.assertEqual(len((await host.list_tools()).tools),6)
                 resources=await host.list_resources();self.assertIn("ocp://request-guide/0.1.0",[str(r.uri) for r in resources.resources])
                 content=await host.read_resource("ocp://request-guide/0.1.0")
                 guide=json.loads(content.contents[0].text)

@@ -41,13 +41,15 @@ def source(name):
     return p
 
 
-def run_example(argv, *, env, cwd, startup_timeout=60, execution_timeout=30):
+def run_example(argv, *, env, cwd, startup_timeout=60, execution_timeout=30,
+                ready_line=b"OCP_SITE_ENGINE_READY\n", phase_prefix="site"):
     """One cold process: bound native startup separately from example execution.
 
     The readiness line is emitted only after ORToolsBackend finishes loading.
     It never substitutes for a zero exit and a verified example JSON result.
     """
-    started=time.monotonic();phase="site_engine_startup";limit=startup_timeout
+    if phase_prefix not in ("site","app"):raise ValueError("Unknown diagnostic phase")
+    started=time.monotonic();phase=phase_prefix+"_engine_startup";limit=startup_timeout
     with tempfile.TemporaryFile() as errors:
         # Unbuffered stdout prevents readline from consuming JSON bytes that
         # communicate must read after the readiness line (including fast exits).
@@ -59,9 +61,9 @@ def run_example(argv, *, env, cwd, startup_timeout=60, execution_timeout=30):
         try:
             try:line=ready.get(timeout=startup_timeout)
             except queue.Empty:raise subprocess.TimeoutExpired(argv,startup_timeout) from None
-            if line!=b"OCP_SITE_ENGINE_READY\n":
+            if line!=ready_line:
                 raise RuntimeError("Site example exited or returned invalid engine readiness")
-            loaded=time.monotonic();phase="site_example_execution";limit=execution_timeout
+            loaded=time.monotonic();phase=phase_prefix+"_example_execution";limit=execution_timeout
             stdout,_=process.communicate(timeout=execution_timeout)
             errors.seek(0);stderr=errors.read().decode(errors="replace")
             timings={"startup_ms":round((loaded-started)*1000),

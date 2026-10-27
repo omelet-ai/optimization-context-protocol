@@ -91,7 +91,7 @@ class InstalledLiveInvitation(unittest.TestCase):
             fixture=json.loads((ROOT/"cases/routing/coordinates.json").read_text())
             request=client.request(fixture["input"],request_id="invited-"+uuid.uuid4().hex,time_limit_ms=1000)
             async with MCPClient(StdioServerParameters(command=str(PYTHON),args=["-I","-B","-m","ocp_runtime.trial_client","--session",str(SESSION),"mcp"],env=ENV,cwd=str(DIRECTORY)),read_timeout_seconds=20) as host:
-                tools=await host.list_tools();self.assertEqual(len(tools.tools),5)
+                tools=await host.list_tools();self.assertEqual(len(tools.tools),6)
                 checked=await host.call_tool("ocp_validate",{"request":request});self.assertTrue(checked.structured_content["valid"])
                 first=await host.call_tool("ocp_execute",{"request":request});result=first.structured_content
                 self.assertEqual(verify_result(request,result)["total_cost"],11358)

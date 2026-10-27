@@ -32,6 +32,7 @@ export OCP_NPM_OFFLINE=1
 /tmp/ocp-dev/bin/python -B tools/check_h07.py
 /tmp/ocp-dev/bin/python -B tools/check_h11.py
 /tmp/ocp-dev/bin/python -B tools/check_dx_study.py
+/tmp/ocp-dev/bin/python -B tools/check_h23.py
 ```
 
 H04·H06·H07·H11은 system-site-packages 없는 임시 Python 환경에 hash를 확인한 wheel만 설치한다. H06/H07은 실제 127.0.0.1 HTTP와 stdio 통신을 사용하므로 해당 로컬 실행 권한이 필요하다. 공개 서버 배포 검사가 아니다. MCP host는 공식 Python SDK Client이며 Claude Code/Desktop의 실제 trial 연결은 미검증이다.

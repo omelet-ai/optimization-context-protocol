@@ -22,6 +22,7 @@ def build(output=None):
                         ("docs/users/INVITED_TRIAL.md","README.md"),("tools/requirements-dev.lock","constraints.txt"),
                         ("docs/users/DEVELOPER_QUICKSTART.md","DEVELOPER_GUIDE.md"),
                         ("examples/invited-trial/own_app.py","own_app.py"),
+                        ("examples/invited-trial/start.py","start.py"),("examples/invited-trial/demo.py","demo.py"),
                         ("authoring/byo_library.py","byo_library.py"),("authoring/export_transcript.py","export_transcript.py"),
                         ("examples/app-b/main.ts","main.ts"),("examples/app-b/package.json","package.json"),
                         ("examples/app-b/tsconfig.json","tsconfig.json")]:

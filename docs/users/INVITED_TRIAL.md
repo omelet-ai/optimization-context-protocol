@@ -14,9 +14,11 @@ or `session.json` is **not required** for the local and bring-your-engine paths.
 | Bring your engine | Python 3.12; your calculation code | Your own engine below; no Omelet, OR-Tools or MCP required |
 
 Run every command from the directory where you extracted this kit. The verified
-platform is Python 3.12 on macOS Apple Silicon. Node 24 is needed only for the
-TypeScript example. Other platforms require separate verification; the installer
-does not support Windows. If `python3.12` is unavailable, install Python 3.12 or
+full regression platform is Python 3.12 on macOS Apple Silicon. The first-success
+command also ran in a Python 3.12.15 Linux x86_64 container on Docker Desktop
+(macOS arm64 host). That is not a native Linux or complete Linux Node/trial test.
+Node 24 is needed only for the TypeScript example. The installer does not support
+Windows. If `python3.12` is unavailable, install Python 3.12 or
 use its absolute executable path. Check the version before continuing.
 
 ```sh
@@ -32,14 +34,33 @@ Verify and install before editing included files. Create new files for your work
 ## Local reference: no key or session file
 
 ```sh
-python3.12 -m venv .local
-.local/bin/python -m pip install --no-compile -c constraints.txt './ocp_candidate-0.1.0-py3-none-any.whl[reference]' ./ocp_conformance_candidate-0.1.0-py3-none-any.whl
+python3.12 start.py --venv .local
+```
+
+This verifies kit hashes, creates a new environment, and runs the same application
+and input with **two actual engines**: OR-Tools and the small enumerating library.
+Both results are independently checked. The bundled four-visit problem has a
+hand-checked cost of 18 meters. Feasible does not mean proven optimal; other
+inputs need not produce identical routes or costs across engines.
+
+The report also shows unsupported-unit rejection, deliberate capacity/visit/cost
+corruption caught by the independent checker, and an actual 1 ms library deadline.
+A timeout may retain a feasible solution or return unknown. No timeout is mocked.
+Failure probes use separate synthetic inputs, not your data.
+
+The command downloads pinned public dependencies but calls no remote engine.
+For an offline install, add `--offline-wheelhouse /path/to/reviewed-wheels`.
+Existing environments are preserved. Rerun without installing:
+
+```sh
+.local/bin/python -B demo.py --diagnostics
 .local/bin/python -B own_app.py --input basic-input.json --request-id local-first --trace local-first.json
 ```
 
-The actual OR-Tools engine solves two vehicles and four visits. Expect a feasible
-result, an evaluated total cost of 18 meters, and an independent capacity/visit
-check. Feasible does not mean proven optimal.
+The second command saves a new request/result trace. `demo.py` itself writes no
+trace files. To swap engines explicitly, use `demo.py --engine own` or
+`demo.py --engine reference`. With `--input my-input.json`, the same app uses your
+input. The own-engine example supports at most six visits and three vehicles.
 
 Copy `basic-input.json` to a new file and change demands or capacities. Added or
 renamed visits also require matching `matrix.node_ids` and matrix rows/columns.
@@ -163,7 +184,9 @@ claude mcp add --transport stdio ocp-trial -- /absolute/path/.venv/bin/python -B
 
 Claude Code의 `/mcp`에서 연결을 확인한 뒤, 다음 요청으로 시작한다.
 
-> OCP trial의 기능을 조회하고 ocp://request-guide/0.1.0 리소스에서 요청 template과 schema를 읽어 줘. template의 input에 input.json의 합성 입력을 넣어 검증해 줘. request-id는 first-mcp-run으로 사용하고 한 번만 계산한 뒤 결과와 평가를 설명해 줘. 실패하면 새 ID로 재시도하지 마.
+> 먼저 ocp_context 도구로 OCP trial의 기능·입력 조건·요청 template과 schema를 조회해 줘. template의 input에 input.json의 합성 입력을 넣어 검증해 줘. 빠진 값이나 미지원 조건은 추측하지 말고 질문해 줘. request-id는 first-mcp-run으로 사용하고 검증 성공 시 한 번만 계산한 뒤 결과와 평가의 범위를 설명해 줘. 실패하면 새 ID로 재시도하지 마.
+
+리소스를 지원하는 호스트에서는 `ocp://request-guide/0.1.0`을 읽어 같은 안내를 얻을 수 있다. 단순 연결 성공과 LLM의 올바른 판단은 다르다. 실제 모델별 확인 방법은 소스 저장소의 `docs/development/LLM_CONTEXT_VALIDATION.md`를 따른다.
 
 연결 방식은 [Claude Code 공식 MCP 안내](https://code.claude.com/docs/en/mcp)를 따른다. 이 후보의 자동 검사는 공식 Python MCP host를 사용한다. 실제 Claude Code host에서의 최초 연결·승인·계산 시간은 별도 기록한다. Claude 사용에 따른 계정 비용은 운영자의 엔진 시험 예산과 별개다.
 
