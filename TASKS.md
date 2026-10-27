@@ -15,7 +15,7 @@
 | OSS-06 | Omelet engine·App B 교차 연결 | H17 로컬 후보 구현·검사 연결, H09 외부 운영 대기 | 설치 Python/TypeScript × 실제 OR-Tools/로컬 Omelet 네 조합 |
 | OSS-07 | Studio 최소 smoke | private draft PR 구현·검증, H10 외부 선행 대기 | [소비자 원장](docs/development/INTERNAL_CONSUMER_STATUS.md)의 브라우저→API→실제 엔진 |
 | OSS-08 | Foundry 조회·resolve 시험 | 같은 draft PR에 구현·검증, H18에 main 기반 provider 호환 검사 연결 | 같은 package의 공개 entrypoint를 쓰는 TMS resolver |
-| OSS-09 | 다른 도메인·공통 conformance | transcript runner·assignment fixture 구현, H05 판정 | 25개 결함 검출·CLI·도메인 분리 검사. 분석 증명의 수치도 입력과 대조. assignment 실제 solve 미구현 |
+| OSS-09 | 다른 도메인·공통 conformance | transcript runner·assignment fixture 구현, H05 판정 | 25개 결함 검출·CLI·도메인 분리 검사. 분석 증명의 수치도 입력과 대조. assignment fixture 유지; 실제 worker/inventory는 H26~H30 별도 검증 |
 | OSS-10 | 배포 artifact·호환성 | 비공개 선정 소스·wheel·tarball 구현, H11 판정 | 14개 clean install/build·BYO·소스 일치·문서 검사 |
 | OSS-11 | 외부 DX·기여 운영 | 세 입구·BYO·호환·기여·실제 과제·계측 도구 준비. H12 대기 | H11에 계측 회귀 20개 추가. [외부 과제지](docs/users/EXTERNAL_DX_STUDY.md)의 실제 수행은 미완료 |
 | OSS-12 | 공개 RC·trial 공동 출시 | P0 관문 대기 | 승인·게시·재설치 |
@@ -70,3 +70,9 @@ H23은 [LLM 컨텍스트 검증](docs/development/LLM_CONTEXT_VALIDATION.md)의 
 첫 성공 개선의 전체 회귀에서 H04 첫 프로세스의 15초 초과가 다시 관찰되었다. 실제 backend 생성 뒤 준비 신호를 계측해 cold 준비 60초·준비 후 실행 15초를 분리한다. 같은 cold 프로세스에서 실제 App A를 실행하고 준비 이전/이후 초과 및 실패 종료를 검사하며, 재시도나 사전 실행은 추가하지 않는다. solver 1,000ms 및 1ms 의미는 유지한다.
 
 H25는 no-key LLM 연결의 설치 공백을 해결한다. `start.py --mcp`는 reference·MCP·독립 checker를 함께 설치하고 실제 stdio 컨텍스트를 진단한다. `local_agent doctor/smoke/config`는 계산 없는 진단·한 번의 실제 계산/독립 검산·설정 출력을 구분한다. 새 ZIP·HOME·venv의 Python/Node 앱과 잘못된 입력 차단을 검사하고 영문 시작 안내·과제·피드백 양식·소스 해시를 평가 꾸러미에 포함한다. [재현 절차](docs/development/NO_KEY_EVALUATION.md)를 따르며 Linux/다른 기기의 결과는 정확한 ZIP hash를 가진 별도 실행 보고서로 확인한다. H25는 H23에 의존하고 외부 H24를 우회하거나 완료하지 않는다. 추가 모델 호출·공유·배포 없이 로컬 준비만 수행한다.
+
+## 2026-10-27: 세 도메인 실제 실행 확대
+
+사용자가 워커 스케줄링과 재고 발주 profile·실제 solver·독립 checker 및 공통 앱/MCP 구현을 승인했다. 기존 두 번째 도메인 fixture 범위를 확장하되 assignment.fixture와 Core 의미는 유지한다. H26 계약 → H27 워커 → H28 재고 → H29 공통 앱/MCP → H30 새 설치·평가 준비 순서이며 각 현재 선행 PASS 후 진급한다. 작은 합성 문제·공개 의존성과 신규 구현만 사용한다. 내부 Foundry 소스는 설계 참고이며 runtime import/복사하지 않는다. 추가 모델 실행·비용·외부 공유·배포는 포함하지 않는다. H24 실제 모델과 H12 실제 사람, D00/D01/D03 관문은 유지한다. 기술 판정은 harness status의 현재 입력 기준이며 이 계획 문구는 PASS 증거가 아니다.
+
+H26~H30 구현을 검사에 연결했다. 신규 worker.scheduling(분기 한정 탐색)과 inventory.replenishment(재고 상태 동적계획), 독립 전수탐색 checker, offline profile registry, 세 도메인 MCP 및 공통 Python/Node 앱을 제공한다. 새 꾸러미의 모델 평가 8과제는 준비만 했으며 추가 모델 실행 0회다. H30 PASS 시 정확히 시험한 ZIP·소스 archive를 `.harness/work/multidomain-evaluation/`에 hash별로 보존한다. 파일 제공·외부 공유·배포 승인은 이에 포함되지 않는다.

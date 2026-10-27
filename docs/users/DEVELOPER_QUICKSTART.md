@@ -133,3 +133,6 @@ Use EVALUATION_TASKS.md and a new copy of FEEDBACK_TEMPLATE.md. Record exact kit
 and source hashes, platform versions, time, help, failures and retries. Share only
 reviewed synthetic input/code/results, never credentials, private URLs, customer
 data, home paths or model login logs. Nothing is uploaded by these examples.
+
+For executable worker scheduling and inventory replenishment through the same
+app/MCP flow, follow the [three-domain quickstart](MULTI_DOMAIN_QUICKSTART.md).

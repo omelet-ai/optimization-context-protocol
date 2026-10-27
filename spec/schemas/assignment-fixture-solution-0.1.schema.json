@@ -19,5 +19,6 @@
   },
   "required": [
     "assignments"
-  ]
+  ],
+  "$id": "urn:ocp:candidate:assignment.fixture:0.1.0:solution"
 }

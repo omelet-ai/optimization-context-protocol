@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:candidate:inventory.replenishment:0.1.0:input",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "quantity_unit": {
+      "const": "item"
+    },
+    "period_unit": {
+      "const": "day"
+    },
+    "cost_unit": {
+      "const": "cost_unit"
+    },
+    "periods": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 6
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "demand": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 50
+            },
+            "minItems": 1,
+            "maxItems": 6
+          },
+          "scheduled_receipts": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 50
+            },
+            "minItems": 1,
+            "maxItems": 6
+          },
+          "initial_inventory": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50
+          },
+          "lead_time": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6
+          },
+          "max_order_quantity": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5
+          },
+          "storage_capacity": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50
+          },
+          "terminal_min_inventory": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 50
+          },
+          "unit_order_cost": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000
+          },
+          "fixed_order_cost": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000
+          },
+          "holding_cost": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100000
+          }
+        },
+        "required": [
+          "id",
+          "demand",
+          "scheduled_receipts",
+          "initial_inventory",
+          "lead_time",
+          "max_order_quantity",
+          "storage_capacity",
+          "terminal_min_inventory",
+          "unit_order_cost",
+          "fixed_order_cost",
+          "holding_cost"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 4
+    }
+  },
+  "required": [
+    "quantity_unit",
+    "period_unit",
+    "cost_unit",
+    "periods",
+    "products"
+  ]
+}

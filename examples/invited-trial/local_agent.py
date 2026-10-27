@@ -24,15 +24,15 @@ def dependencies():
                          "From an intact kit run python3.12 start.py --mcp --venv NEW_PATH, then use that environment's Python.")
 
 
-def configuration():
+def configuration(profile="routing.basic"):
     # Resolving a symlink here would replace the venv Python with base Python.
-    return {"command": str(Path(sys.executable).absolute()), "args": SERVER_ARGS.copy()}
+    return {"command": str(Path(sys.executable).absolute()), "args": SERVER_ARGS.copy() + (["--profile",profile] if profile!="routing.basic" else [])}
 
 
-async def probe(problem=None, request_id=None):
+async def probe(problem=None, request_id=None, profile="routing.basic"):
     from mcp import Client, StdioServerParameters
     from jsonschema import Draft202012Validator
-    from conformance.routing import verify_result
+    from conformance.runner import CHECKERS
 
     calls = []
     report = {"status": "PASS", "scope": "installed_local_mcp_only_not_model_acceptance",
@@ -41,7 +41,7 @@ async def probe(problem=None, request_id=None):
         # A fresh home/cwd and fixed environment avoid dependence on repo files,
         # user Python paths or trial credentials. No port is opened.
         env = {"PATH": os.defpath, "HOME": directory, "PYTHONDONTWRITEBYTECODE": "1"}
-        params = StdioServerParameters(**configuration(), env=env, cwd=directory)
+        params = StdioServerParameters(**configuration(profile), env=env, cwd=directory)
         async with Client(params, read_timeout_seconds=60) as host:
             async def call(name, arguments):
                 calls.append(name)
@@ -56,8 +56,8 @@ async def probe(problem=None, request_id=None):
             guide = await call("ocp_context", {})
             for key in ("request_schema", "input_schema"):
                 Draft202012Validator.check_schema(guide[key])
-            if guide["capability"]["domain_profile"] != {"id": "routing.basic", "version": "0.1.0"}:
-                raise SetupError("MCP_PROFILE_MISMATCH", "This diagnostic requires the local routing.basic provider.")
+            if guide["capability"]["domain_profile"] != {"id": profile, "version": "0.1.0"}:
+                raise SetupError("MCP_PROFILE_MISMATCH", "The provider did not return the explicitly selected profile.")
             report.update(protocol_version=str(host.protocol_version), tools=sorted(names),
                           domain_profile=guide["capability"]["domain_profile"])
             if problem is None:
@@ -72,7 +72,7 @@ async def probe(problem=None, request_id=None):
                 return report
             report["execute_calls"] = 1
             result = await call("ocp_execute", {"request": request})
-            checked = verify_result(request, result)
+            checked = CHECKERS[(profile,"0.1.0")](request, result)
             evaluation = None
             if result["solution"] is not None:
                 evaluation = await call("ocp_evaluate", {"request": request, "solution": result["solution"]})
@@ -87,17 +87,19 @@ async def probe(problem=None, request_id=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="operation", required=True)
-    sub.add_parser("doctor", help="Start MCP, discover tools and read context; no solve")
+    doctor = sub.add_parser("doctor", help="Start MCP, discover tools and read context; no solve")
     config = sub.add_parser("config", help="Print config for review; do not change host configuration")
     config.add_argument("--format", choices=("json", "codex"), default="json")
     smoke = sub.add_parser("smoke", help="Execute one synthetic input through MCP and independently check the result")
     smoke.add_argument("--input", required=True)
     smoke.add_argument("--request-id", required=True)
+    for command in (doctor,config,smoke):
+        command.add_argument("--profile",choices=("routing.basic","worker.scheduling","inventory.replenishment"),default="routing.basic")
     args = parser.parse_args()
     try:
         dependencies()
         if args.operation == "config":
-            value = configuration()
+            value = configuration(args.profile)
             if args.format == "json":
                 print(json.dumps({"mcpServers": {"ocp-local": value}}, indent=2))
             else:
@@ -117,7 +119,7 @@ def main():
                     raise ValueError("Input must be an object")
             except Exception:
                 raise SetupError("INPUT_INVALID", "Use a readable UTF-8 JSON object, at most 128 KiB, with unique keys and finite numbers.") from None
-        report = asyncio.run(probe(problem, getattr(args, "request_id", None)))
+        report = asyncio.run(probe(problem, getattr(args, "request_id", None), args.profile))
         print(json.dumps(report, allow_nan=False))
         return 0 if report["status"] == "PASS" else 1
     except Exception as error:

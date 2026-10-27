@@ -42,14 +42,23 @@ def build(output=None):
                         ("examples/invited-trial/own_app.py","own_app.py"),
                         ("examples/invited-trial/start.py","start.py"),("examples/invited-trial/demo.py","demo.py"),
                         ("examples/invited-trial/local_agent.py","local_agent.py"),
+                        ("examples/multi-domain/main.py","multi_app.py"),("docs/users/MULTI_DOMAIN_QUICKSTART.md","MULTI_DOMAIN_QUICKSTART.md"),
+                        ("cases/llm-context/multi-domain.json","MULTI_DOMAIN_LLM_TASKS.json"),
+                        ("spec/profiles/WORKER_SCHEDULING_0_1.md","WORKER_SCHEDULING_0_1.md"),
+                        ("spec/profiles/INVENTORY_REPLENISHMENT_0_1.md","INVENTORY_REPLENISHMENT_0_1.md"),
                         ("authoring/byo_library.py","byo_library.py"),("authoring/export_transcript.py","export_transcript.py"),
                         ("examples/app-b/main.ts","main.ts"),("examples/app-b/own_app.cjs","own_app.cjs"),("examples/app-b/package.json","package.json"),
                         ("examples/app-b/tsconfig.json","tsconfig.json")]:
         shutil.copy2(ROOT/source,target/dest)
+    guide=target/"MULTI_DOMAIN_QUICKSTART.md"
+    guide.write_text(guide.read_text().replace("../../spec/profiles/", ""))
     data=json.loads((ROOT/"cases/routing/coordinates.json").read_text())["input"]
     (target/"input.json").write_text(json.dumps(data,ensure_ascii=False,indent=2)+"\n")
     basic=json.loads((ROOT/"cases/routing/basic-matrix.json").read_text())["input"]
     (target/"basic-input.json").write_text(json.dumps(basic,ensure_ascii=False,indent=2)+"\n")
+    for domain in ("worker","inventory"):
+        problem=json.loads((ROOT/"cases"/domain/"small.json").read_text())["input"]
+        (target/(domain+"-input.json")).write_text(json.dumps(problem,indent=2)+"\n")
     hashes=bundle["manifest"]["sources"]
     if selected_sources()!=hashes:raise RuntimeError("Source changed during kit build")
     (target/"source-manifest.json").write_text(json.dumps(source_provenance(hashes),indent=2)+"\n")

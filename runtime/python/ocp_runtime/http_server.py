@@ -102,11 +102,12 @@ def create_server(adapter, port=0, service=None):
 
 
 def main():
-    from ocp_routing import RoutingAdapter, ORToolsBackend
+    from .providers import PROVIDERS, make_provider
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--port",type=int,default=0)
+    parser.add_argument("--profile",choices=list(PROVIDERS),default="routing.basic")
     args=parser.parse_args()
-    server=create_server(RoutingAdapter(ORToolsBackend()),args.port)
+    server=create_server(make_provider(args.profile),args.port)
     print(json.dumps({"url":"http://127.0.0.1:"+str(server.server_port)}),flush=True)
     try: server.serve_forever()
     finally: server.server_close()

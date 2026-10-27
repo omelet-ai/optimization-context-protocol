@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:candidate:worker.scheduling:0.1.0:input",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "time_unit": {
+      "const": "minute"
+    },
+    "cost_unit": {
+      "const": "cost_unit"
+    },
+    "workers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "availability": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "start": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10080
+                },
+                "end": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10080
+                }
+              },
+              "required": [
+                "start",
+                "end"
+              ]
+            },
+            "minItems": 1,
+            "maxItems": 8
+          },
+          "max_minutes": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10080
+          }
+        },
+        "required": [
+          "id",
+          "availability",
+          "max_minutes"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 4
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10080
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10080
+          },
+          "eligible_workers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            "minItems": 0,
+            "maxItems": 4,
+            "uniqueItems": true
+          },
+          "costs": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100000
+            }
+          }
+        },
+        "required": [
+          "id",
+          "start",
+          "end",
+          "eligible_workers",
+          "costs"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 8
+    }
+  },
+  "required": [
+    "time_unit",
+    "cost_unit",
+    "workers",
+    "tasks"
+  ]
+}

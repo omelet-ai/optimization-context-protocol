@@ -152,7 +152,7 @@ class ArtifactTests(unittest.TestCase):
 
     def test_14_wheel_code_matches_selected_sources(self):
         roots={"ocp_candidate":"sdk/python/src/ocp_candidate","ocp_routing":"adapters/python/ocp_routing",
-               "ocp_runtime":"runtime/python/ocp_runtime","conformance":"conformance"}
+               "ocp_runtime":"runtime/python/ocp_runtime","ocp_planning":"adapters/python/ocp_planning","conformance":"conformance"}
         for path in ARTIFACTS.glob("*.whl"):
             with zipfile.ZipFile(path) as archive:
                 for name in archive.namelist():

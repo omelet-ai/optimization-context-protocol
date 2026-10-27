@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:candidate:worker.scheduling:0.1.0:configuration",
+  "const": {
+    "objectives": [
+      {
+        "id": "total_cost",
+        "weight": 1
+      }
+    ],
+    "constraints": [
+      "task_coverage",
+      "eligibility",
+      "availability",
+      "no_overlap",
+      "workload"
+    ],
+    "parameters": {}
+  }
+}

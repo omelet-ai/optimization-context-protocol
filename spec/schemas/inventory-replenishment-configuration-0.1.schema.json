@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:candidate:inventory.replenishment:0.1.0:configuration",
+  "const": {
+    "objectives": [
+      {
+        "id": "total_cost",
+        "weight": 1
+      }
+    ],
+    "constraints": [
+      "inventory_balance",
+      "no_stockout",
+      "storage_capacity",
+      "order_limit",
+      "terminal_inventory"
+    ],
+    "parameters": {}
+  }
+}

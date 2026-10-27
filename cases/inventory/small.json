@@ -1,0 +1,69 @@
+{
+  "input": {
+    "quantity_unit": "item",
+    "period_unit": "day",
+    "cost_unit": "cost_unit",
+    "periods": 4,
+    "products": [
+      {
+        "id": "widget",
+        "demand": [
+          2,
+          1,
+          3,
+          2
+        ],
+        "scheduled_receipts": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "initial_inventory": 2,
+        "lead_time": 1,
+        "max_order_quantity": 5,
+        "storage_capacity": 8,
+        "terminal_min_inventory": 0,
+        "unit_order_cost": 1,
+        "fixed_order_cost": 4,
+        "holding_cost": 1
+      }
+    ]
+  },
+  "configuration": {
+    "objectives": [
+      {
+        "id": "total_cost",
+        "weight": 1
+      }
+    ],
+    "constraints": [
+      "inventory_balance",
+      "no_stockout",
+      "storage_capacity",
+      "order_limit",
+      "terminal_inventory"
+    ],
+    "parameters": {}
+  },
+  "witness": {
+    "plans": [
+      {
+        "product_id": "widget",
+        "orders": [
+          1,
+          5,
+          0,
+          0
+        ],
+        "ending_inventory": [
+          0,
+          0,
+          2,
+          0
+        ]
+      }
+    ]
+  },
+  "optimal_cost": 16
+}

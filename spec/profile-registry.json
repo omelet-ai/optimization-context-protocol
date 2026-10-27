@@ -1,0 +1,62 @@
+[
+  {
+    "reference": {
+      "id": "routing.basic",
+      "version": "0.1.0"
+    },
+    "input_schema": "routing-input",
+    "solution_schema": "routing-solution",
+    "semantics": [
+      "Explicit directed integer meter matrix and kg capacities; every visit mandatory; closed depot routes."
+    ]
+  },
+  {
+    "reference": {
+      "id": "routing.coordinates",
+      "version": "0.1.0"
+    },
+    "input_schema": "routing-coordinates-input",
+    "solution_schema": "routing-solution",
+    "semantics": [
+      "Use the declared coordinate distance formula, units and rounding; no implicit road-network travel times."
+    ]
+  },
+  {
+    "reference": {
+      "id": "assignment.fixture",
+      "version": "0.1.0"
+    },
+    "input_schema": "assignment-fixture-input",
+    "solution_schema": "assignment-fixture-solution",
+    "semantics": [
+      "Fixture only: unique item-worker assignment costs, no reference execution engine."
+    ]
+  },
+  {
+    "reference": {
+      "id": "worker.scheduling",
+      "version": "0.1.0"
+    },
+    "input_schema": "worker-scheduling-input",
+    "solution_schema": "worker-scheduling-solution",
+    "semantics": [
+      "Fixed half-open [start,end) minute offsets from one planning origin; adjacent tasks do not overlap.",
+      "Every task exactly once to an eligible available worker; summed duration <= max_minutes; minimize sum of pair costs.",
+      "Missing eligibility, availability or costs require user input; no fairness, overtime, breaks or shift generation."
+    ]
+  },
+  {
+    "reference": {
+      "id": "inventory.replenishment",
+      "version": "0.1.0"
+    },
+    "input_schema": "inventory-replenishment-input",
+    "solution_schema": "inventory-replenishment-solution",
+    "semantics": [
+      "Supplied demand is future deterministic demand; do not infer a forecast from sales history.",
+      "Daily periods: scheduled receipts and orders from t-lead_time arrive before demand; holding costs use end inventory.",
+      "No stockouts/backlog; capacity checked before demand; last inventory >= terminal_min_inventory; orders arriving after horizon must be zero.",
+      "Minimize unit ordering + fixed positive-order + holding costs; products independent, no shared budget or uncertainty."
+    ]
+  }
+]

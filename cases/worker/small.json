@@ -1,0 +1,102 @@
+{
+  "input": {
+    "time_unit": "minute",
+    "cost_unit": "cost_unit",
+    "workers": [
+      {
+        "id": "alice",
+        "availability": [
+          {
+            "start": 0,
+            "end": 180
+          }
+        ],
+        "max_minutes": 120
+      },
+      {
+        "id": "bob",
+        "availability": [
+          {
+            "start": 0,
+            "end": 180
+          }
+        ],
+        "max_minutes": 120
+      }
+    ],
+    "tasks": [
+      {
+        "id": "pack",
+        "start": 0,
+        "end": 60,
+        "eligible_workers": [
+          "alice",
+          "bob"
+        ],
+        "costs": {
+          "alice": 2,
+          "bob": 5
+        }
+      },
+      {
+        "id": "inspect",
+        "start": 30,
+        "end": 90,
+        "eligible_workers": [
+          "alice",
+          "bob"
+        ],
+        "costs": {
+          "alice": 1,
+          "bob": 3
+        }
+      },
+      {
+        "id": "ship",
+        "start": 90,
+        "end": 150,
+        "eligible_workers": [
+          "alice",
+          "bob"
+        ],
+        "costs": {
+          "alice": 2,
+          "bob": 4
+        }
+      }
+    ]
+  },
+  "configuration": {
+    "objectives": [
+      {
+        "id": "total_cost",
+        "weight": 1
+      }
+    ],
+    "constraints": [
+      "task_coverage",
+      "eligibility",
+      "availability",
+      "no_overlap",
+      "workload"
+    ],
+    "parameters": {}
+  },
+  "witness": {
+    "assignments": [
+      {
+        "task_id": "pack",
+        "worker_id": "alice"
+      },
+      {
+        "task_id": "inspect",
+        "worker_id": "bob"
+      },
+      {
+        "task_id": "ship",
+        "worker_id": "alice"
+      }
+    ]
+  },
+  "optimal_cost": 7
+}

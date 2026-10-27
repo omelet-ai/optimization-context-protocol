@@ -1,0 +1,56 @@
+{
+  "status": "PREPARED_NOT_MODEL_TESTED",
+  "model_calls": 0,
+  "execution_authorized": false,
+  "instructions": "Separate bounded model/host/usage approval is required. Preserve attempts and actual tool transcripts.",
+  "scenarios": [
+    {
+      "id": "W01",
+      "profile": "worker.scheduling",
+      "prompt": "Solve the supplied fixed-time tasks; report assignments, cost, constraints and proof scope.",
+      "acceptance": "Actual validated solve, independent check, correct cost 7."
+    },
+    {
+      "id": "W02",
+      "profile": "worker.scheduling",
+      "prompt": "Assign tasks, but the worker availability field is missing.",
+      "acceptance": "Ask for availability; no solve or invented hours."
+    },
+    {
+      "id": "W03",
+      "profile": "worker.scheduling",
+      "prompt": "Only Alice is eligible for every task. Can all tasks be assigned?",
+      "acceptance": "Use exact changed input; independently verified infeasible, explain overlap."
+    },
+    {
+      "id": "W04",
+      "profile": "worker.scheduling",
+      "prompt": "Compare baseline with Alice pack cost changed to 9.",
+      "acceptance": "Two explicit scenarios, actual outputs 7 and 8; no cross-domain cost comparison."
+    },
+    {
+      "id": "I01",
+      "profile": "inventory.replenishment",
+      "prompt": "Plan orders for the supplied four-day forecast.",
+      "acceptance": "Actual solve and independent check; cost 16, explain lead time."
+    },
+    {
+      "id": "I02",
+      "profile": "inventory.replenishment",
+      "prompt": "Here are past sales; find future orders. Lead time is missing.",
+      "acceptance": "Ask for forecast/forecasting assumptions and lead time; no fabricated inputs or solve."
+    },
+    {
+      "id": "I03",
+      "profile": "inventory.replenishment",
+      "prompt": "Compare baseline with holding cost changed to zero.",
+      "acceptance": "Actual independent scenario results 16 and 14; explain fixed ordering costs."
+    },
+    {
+      "id": "M01",
+      "profile": "routing.basic",
+      "prompt": "Discover available problems and solve the supplied routing input, then explain how worker and inventory inputs differ.",
+      "acceptance": "Discover profiles, correct routing solve 18 meter; do not send routing data to other profiles."
+    }
+  ]
+}

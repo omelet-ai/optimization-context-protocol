@@ -6,10 +6,11 @@ import json
 from pathlib import Path
 
 from .core_contract import ContractError, parse_json, validate_message
-from . import assignment, routing, coordinates
+from . import assignment, routing, coordinates, worker, inventory
 
 SUITE = {"id":"ocp.transcript", "version":"0.1.0"}
-CHECKERS = {("routing.coordinates","0.1.0"):coordinates.verify_result,
+CHECKERS = {("worker.scheduling","0.1.0"):worker.verify_result,
+            ("inventory.replenishment","0.1.0"):inventory.verify_result,("routing.coordinates","0.1.0"):coordinates.verify_result,
             ("routing.basic","0.1.0"):routing.verify_result,
             ("assignment.fixture","0.1.0"):assignment.verify_result}
 

@@ -28,7 +28,9 @@ def main():
     expected={"ocp_candidate-0.1.0-py3-none-any.whl","ocp_conformance_candidate-0.1.0-py3-none-any.whl",
               "install.py","main.py","input.json","README.md","constraints.txt","ocp-candidate-0.1.0.tgz",
               "DEVELOPER_GUIDE.md","own_app.py","byo_library.py","export_transcript.py","basic-input.json","main.ts","package.json","tsconfig.json","start.py","demo.py",
-              "LLM_QUICKSTART.md","EVALUATION_TASKS.md","FEEDBACK_TEMPLATE.md","source-manifest.json","own_app.cjs","local_agent.py"}
+              "LLM_QUICKSTART.md","EVALUATION_TASKS.md","FEEDBACK_TEMPLATE.md","source-manifest.json","own_app.cjs","local_agent.py",
+              "multi_app.py","MULTI_DOMAIN_QUICKSTART.md","MULTI_DOMAIN_LLM_TASKS.json",
+              "WORKER_SCHEDULING_0_1.md","INVENTORY_REPLENISHMENT_0_1.md","worker-input.json","inventory-input.json"}
     if set(manifest["files"])!=expected:raise InstallError("KIT_INVALID","Use an intact new kit from the inviter; do not edit its manifest.")
     for name,sha in manifest["files"].items():
         if (root/name).is_symlink() or hashlib.sha256((root/name).read_bytes()).hexdigest()!=sha:raise InstallError("KIT_CHECKSUM_MISMATCH","Extract a new copy of the kit. Do not modify sample files until installation succeeds.")

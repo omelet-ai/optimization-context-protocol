@@ -31,7 +31,7 @@ that observation, not an external acceptance pass.
 | Engine substitution unclear | `demo.py` runs one application/input with OR-Tools and a separate enumerating library | An external developer's own engine; no claim that all engines interchange |
 | Value over direct solver calls unclear | README explains discovery, rejection, result semantics and checker boundary | Observe whether developers use this in their application |
 | Checker independence unproven to reviewer | Checker-only environment tests accept actual results and reject capacity, missing visit and cost corruption | Additional constraints require their own independent checks |
-| Non-routing evidence too narrow | Keep `assignment.fixture` explicitly fixture-only | Build a bounded real assignment adapter and changed-input cases before claiming executable multi-domain coverage |
+| Non-routing evidence too narrow | Keep `assignment.fixture` explicitly fixture-only; worker/inventory implemented separately | H26–H30 verify bounded real solvers, independent checks, changed inputs and common consumers |
 | ZIP returned 403 in reviewer environment | Complete protected URL returned 200 with two user-agent strings and matching ZIP hash from the execution host; the reviewer-specific 403 was not reproduced | Cannot assign a cause to an environment-specific 403 without its response evidence |
 
 The kit's checksums detect changed bytes, not publisher authenticity. Provide the
@@ -55,7 +55,7 @@ public delivery should be an immutable GitHub Release asset, after approval.
    the selected source, run `start.py`, then the checker and failure cases. Record
    OS/architecture/package hashes. No Linux or Windows PASS may be inferred from
    a macOS run. A workflow must be separately approved before activation.
-3. **Executable second domain:** a tiny assignment solver with changed cost matrices,
+3. **Executable additional domains:** worker scheduling and inventory replenishment are implemented under H26–H30; verify current gate evidence and extend the bounded models deliberately. Earlier target: a tiny assignment solver with changed cost matrices,
    independent result checking and unsupported-input rejection. Keep its profile
    experimental; do not promote the existing fixture into a general standard.
 4. **Human first use:** owner invites up to five developers: Python app engineer,

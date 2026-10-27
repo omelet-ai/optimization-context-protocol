@@ -86,3 +86,6 @@ local filesystem paths; do not include them or account credentials in feedback.
 한국어: `start.py --mcp`로 로컬 엔진·MCP를 함께 설치합니다. `doctor`는 계산 없이 연결을,
 `smoke`는 실제 계산과 독립 검산을 확인합니다. 두 명령은 LLM을 호출하지 않습니다.
 실제 모델 사용량과 외부 자료 전송은 별도이며 설치 경로는 모델 호스트가 실행되는 기기 기준입니다.
+
+For executable worker scheduling and inventory replenishment through the same
+app/MCP flow, follow the [three-domain quickstart](MULTI_DOMAIN_QUICKSTART.md).

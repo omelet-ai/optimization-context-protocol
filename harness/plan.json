@@ -1255,6 +1255,216 @@
           "min_tests": 13
         }
       ]
+    },
+    {
+      "id": "H26",
+      "title": "워커·재고 profile 계약",
+      "tasks": [
+        "OSS-09",
+        "OSS-05",
+        "OSS-10"
+      ],
+      "depends_on": [
+        "H01"
+      ],
+      "mode": "local",
+      "inputs": [
+        "spec/",
+        "cases/worker/",
+        "cases/inventory/",
+        "tools/check_h26.py"
+      ],
+      "acceptance": "새 profile schema·단위·경계·독립 손계산 사례; Core 및 기존 fixture 호환 유지",
+      "checks": [
+        {
+          "id": "h26-multidomain",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h26.py"
+          ],
+          "timeout_seconds": 240,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 8
+        }
+      ]
+    },
+    {
+      "id": "H27",
+      "title": "워커 실제 solver와 독립 checker",
+      "tasks": [
+        "OSS-09",
+        "OSS-05",
+        "OSS-10"
+      ],
+      "depends_on": [
+        "H26"
+      ],
+      "mode": "local",
+      "inputs": [
+        "adapters/",
+        "sdk/",
+        "conformance/",
+        "spec/",
+        "cases/worker/",
+        "tools/check_h27.py",
+        "tools/build_candidate.py"
+      ],
+      "acceptance": "실제 배정·독립 전수탐색 대조·변조 탐지·deadline 의미",
+      "checks": [
+        {
+          "id": "h27-multidomain",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h27.py"
+          ],
+          "timeout_seconds": 240,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 15
+        }
+      ]
+    },
+    {
+      "id": "H28",
+      "title": "재고 실제 solver와 독립 checker",
+      "tasks": [
+        "OSS-09",
+        "OSS-05",
+        "OSS-10"
+      ],
+      "depends_on": [
+        "H27"
+      ],
+      "mode": "local",
+      "inputs": [
+        "adapters/",
+        "sdk/",
+        "conformance/",
+        "spec/",
+        "cases/inventory/",
+        "tools/check_h28.py",
+        "tools/build_candidate.py"
+      ],
+      "acceptance": "실제 다기간 발주·독립 수지/비용/전수탐색·리드타임·품절·종료 재고",
+      "checks": [
+        {
+          "id": "h28-multidomain",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h28.py"
+          ],
+          "timeout_seconds": 240,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 16
+        }
+      ]
+    },
+    {
+      "id": "H29",
+      "title": "세 도메인 공통 앱·MCP",
+      "tasks": [
+        "OSS-09",
+        "OSS-05",
+        "OSS-10"
+      ],
+      "depends_on": [
+        "H28",
+        "H06",
+        "H11"
+      ],
+      "mode": "local",
+      "inputs": [
+        "runtime/",
+        "sdk/",
+        "adapters/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "examples/",
+        "tools/check_h29.py",
+        "tools/build_candidate.py"
+      ],
+      "acceptance": "등록된 profile 기반 context·같은 Python/Node 호출·실제 MCP 세 도메인, 모델 호출 없음",
+      "checks": [
+        {
+          "id": "h29-multidomain",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h29.py"
+          ],
+          "timeout_seconds": 240,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 9
+        }
+      ]
+    },
+    {
+      "id": "H30",
+      "title": "세 도메인 새 설치와 평가 준비",
+      "tasks": [
+        "OSS-09",
+        "OSS-05",
+        "OSS-10"
+      ],
+      "depends_on": [
+        "H29",
+        "H25"
+      ],
+      "mode": "local",
+      "inputs": [
+        "runtime/",
+        "sdk/",
+        "adapters/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "examples/",
+        "docs/",
+        "provenance/candidate-selection.json",
+        "tools/"
+      ],
+      "acceptance": "선정 소스 build·새 환경 설치·세 도메인 앱/MCP·checker-only·평가 과제. 모델/사람/외부 공유/배포 제외",
+      "checks": [
+        {
+          "id": "h30-multidomain",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h30.py"
+          ],
+          "timeout_seconds": 240,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 9
+        }
+      ]
     }
   ]
 }

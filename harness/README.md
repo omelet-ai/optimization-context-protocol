@@ -56,3 +56,9 @@ H22는 H21 뒤 새 꾸러미의 한 명령 첫 성공, 동일 앱·입력의 두
 H04도 실제 backend 생성 시점의 준비 신호를 사용한다. cold 준비 60초와 준비 후 App A 실행 15초를 분리하고 `app_engine_startup`/`app_example_execution` 실패 단계만 기록한다. H21과 같은 단일 프로세스 감시를 재사용하며, 최초 실행 재시도나 결과 성공 대체를 하지 않는다.
 
 H23은 H22 뒤 실제 설치 MCP의 컨텍스트 제공, tools-only 소비, 올바른 요청·실제 결과·오류 의미와 모델 시험 꾸러미를 검사한다. `tools/check_h23.py`는 모델을 호출하지 않는다. H24는 새 대화의 실제 LLM 도구 사용·질문·최종 답변과 사용량을 추적하는 외부 단계다. 모델·호스트·합성 자료 전송·사용량 범위가 결정되기 전에는 실행하지 않으며 준비물이나 SDK 성공을 외부 PASS로 바꾸지 않는다. [검증 방법](../docs/development/LLM_CONTEXT_VALIDATION.md)을 따른다. 승인된 첫 모델 시험의 상세 기록은 비공개 증거로 보관한다. 호스트 설정 실패도 시도로 집계하고, 수정 후 모델 재시험은 별도 사용량 승인 범위를 따른다. H05는 분석적 불가능 증명의 수치 변조도 거부해야 한다.
+
+## 2026-10-27: 세 도메인 실제 실행 확대
+
+사용자가 워커 스케줄링과 재고 발주 profile·실제 solver·독립 checker 및 공통 앱/MCP 구현을 승인했다. 기존 두 번째 도메인 fixture 범위를 확장하되 assignment.fixture와 Core 의미는 유지한다. H26 계약 → H27 워커 → H28 재고 → H29 공통 앱/MCP → H30 새 설치·평가 준비 순서이며 각 현재 선행 PASS 후 진급한다. 작은 합성 문제·공개 의존성과 신규 구현만 사용한다. 내부 Foundry 소스는 설계 참고이며 runtime import/복사하지 않는다. 추가 모델 실행·비용·외부 공유·배포는 포함하지 않는다. H24 실제 모델과 H12 실제 사람, D00/D01/D03 관문은 유지한다. 기술 판정은 harness status의 현재 입력 기준이며 이 계획 문구는 PASS 증거가 아니다.
+
+H26~H30은 [세 도메인 결정](../docs/decisions/0008_MULTI_DOMAIN_REFERENCE.md)을 따른다. H27 워커 search와 H28 재고 DP는 독립 전수탐색 정답에 대조한다. H29는 실제 MCP 한 프로세스의 세 profile 및 동일 Node 앱을, H30은 새 ZIP·HOME·venv와 solver-free checker를 검사한다. H30이 통과하면 시험한 artifact를 `.harness/work/multidomain-evaluation/<ZIP SHA-256>/`에 보존한다. 추가 모델 과제는 준비만 하며 H24/사람/게시 관문을 통과시키지 않는다.

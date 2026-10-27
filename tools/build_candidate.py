@@ -21,8 +21,10 @@ def build(output_dir=None):
         shutil.copytree(ROOT / "sdk/python", staging)
         shutil.copytree(ROOT / "adapters/python/ocp_routing", staging / "src/ocp_routing")
         shutil.copytree(ROOT / "runtime/python/ocp_runtime", staging / "src/ocp_runtime")
+        shutil.copytree(ROOT / "adapters/python/ocp_planning", staging / "src/ocp_planning")
         resources = staging / "src/ocp_candidate/schemas"
         resources.mkdir()
+        shutil.copy2(ROOT / "spec/profile-registry.json", staging / "src/ocp_candidate/profiles.json")
         source_hashes = {}
         for path in sorted((ROOT / "spec/schemas").glob("*.json")):
             shutil.copy2(path, resources / path.name)

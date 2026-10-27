@@ -44,3 +44,13 @@ account logs and customer data. Do not upload automatically. Record inability to
 finish honestly; no fabricated participant success. Automated rehearsals, human
 no-key trials and hosted Omelet trials are separate cohorts. The formal release
 gate still requires its own rights, environment and actual-user evidence.
+
+## Three-domain extension
+
+Use MULTI_DOMAIN_QUICKSTART.md. Run multi_app.py for routing, worker and inventory,
+then the worker/inventory local_agent smoke commands. Change Alice's pack cost to
+9 (expected optimum 8), and inventory holding_cost to 0 (expected optimum 14).
+Try missing availability and lead_time: validation must fail before execution.
+Record commands, environment, exact kit hash, elapsed time and assistance.
+MCP smoke is a protocol rehearsal; MULTI_DOMAIN_LLM_TASKS.json contains model
+evaluation prompts that have NOT been run or authorized by building this kit.

@@ -17,4 +17,4 @@ mcp = ["mcp==2.3.0"]
 where = ["src"]
 
 [tool.setuptools.package-data]
-ocp_candidate = ["schemas/*.json", "schema-manifest.json"]
+ocp_candidate = ["schemas/*.json", "schema-manifest.json", "profiles.json"]

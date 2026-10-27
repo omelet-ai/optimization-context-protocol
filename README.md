@@ -57,9 +57,11 @@ OCP is useful when another app, agent or engine needs the same boundary:
 
 Engine substitution applies only to the intersection of supported profiles,
 units, costs and constraints. It does not guarantee identical routes, quality,
-speed or support for every optimization domain. The current runnable examples
-focus on routing. `assignment.fixture` checks a second domain's contract; it does
-**not** currently provide a second-domain solver.
+speed or support for every optimization domain. Runnable reference profiles cover routing, fixed-time worker scheduling and
+deterministic inventory replenishment. Use the [three-domain quickstart](docs/users/MULTI_DOMAIN_QUICKSTART.md)
+for the same app and MCP flow across all three. The new profiles deliberately
+bound model size so optimality/infeasibility can be checked independently.
+`assignment.fixture` remains a separate schema/witness fixture with no solver.
 
 ## Choose a starting path
 
