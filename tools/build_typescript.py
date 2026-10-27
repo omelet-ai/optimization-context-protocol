@@ -14,10 +14,13 @@ NODE=Path(os.environ.get("OCP_NODE") or shutil.which("node") or "node")
 NPM=Path(os.environ.get("OCP_NPM") or (str(NODE.with_name("npm")) if NODE.with_name("npm").is_file() else shutil.which("npm") or "npm"))
 
 
-def command(argv, cwd):
+def command(argv, cwd, *, timeout=90):
     env=dict(os.environ, PATH=str(NODE.parent)+os.pathsep+os.environ.get("PATH",os.defpath))
     if os.environ.get("OCP_NPM_CACHE"): env["npm_config_cache"]=os.environ["OCP_NPM_CACHE"]
-    result=subprocess.run([str(x) for x in argv],cwd=cwd,env=env,capture_output=True,text=True,timeout=90)
+    try:
+        result=subprocess.run([str(x) for x in argv],cwd=cwd,env=env,capture_output=True,text=True,timeout=timeout)
+    except subprocess.TimeoutExpired:
+        raise RuntimeError("Build step exceeded its bounded timeout. Check public dependency download access; preserve this failure before retrying in a new build directory.") from None
     if result.returncode: raise RuntimeError(result.stdout+result.stderr)
     return result.stdout
 
@@ -28,7 +31,8 @@ def build(output_dir, *, offline=None):
     with tempfile.TemporaryDirectory(prefix="ocp-ts-build-") as directory:
         stage=Path(directory)/"package"
         shutil.copytree(ROOT/"sdk/typescript",stage,ignore=shutil.ignore_patterns("node_modules","dist"))
-        command([NPM,"ci",*(["--offline"] if offline else []),"--ignore-scripts","--no-audit","--no-fund"],stage)
+        # A first public native TypeScript download is distinct from compilation.
+        command([NPM,"ci",*(["--offline"] if offline else []),"--ignore-scripts","--no-audit","--no-fund"],stage,timeout=90 if offline else 300)
         command([NODE,stage/"node_modules/typescript/bin/tsc"],stage)
         resources=stage/"dist/schemas"; resources.mkdir()
         shutil.copy2(ROOT/"spec/schemas/core-0.1.schema.json",resources/"core-0.1.schema.json")

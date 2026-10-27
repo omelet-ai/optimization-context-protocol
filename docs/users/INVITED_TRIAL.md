@@ -16,7 +16,8 @@ or `session.json` is **not required** for the local and bring-your-engine paths.
 Run every command from the directory where you extracted this kit. The verified
 full regression platform is Python 3.12 on macOS Apple Silicon. The first-success
 command also ran in a Python 3.12.15 Linux x86_64 container on Docker Desktop
-(macOS arm64 host). That is not a native Linux or complete Linux Node/trial test.
+(macOS arm64 host). That is not a native Linux or full Linux trial test. Additional MCP/Python/Node
+rehearsals must identify the exact ZIP hash in the supplied verification report.
 Node 24 is needed only for the TypeScript example. The installer does not support
 Windows. If `python3.12` is unavailable, install Python 3.12 or
 use its absolute executable path. Check the version before continuing.
@@ -70,6 +71,10 @@ profile for the invited trial; do not substitute it in the local example.
 
 ## Your own engine: replace the calculation
 
+For a local LLM connection use `python3.12 start.py --mcp --venv .agent` and follow
+`LLM_QUICKSTART.md`. This includes both the local engine and MCP, with doctor,
+one-solve smoke and config generation. No model is called by these checks.
+
 ```sh
 python3.12 -m venv .byo
 .byo/bin/python -m pip install --no-compile -c constraints.txt ./ocp_candidate-0.1.0-py3-none-any.whl ./ocp_conformance_candidate-0.1.0-py3-none-any.whl
@@ -116,12 +121,18 @@ Terminal B:
 
 ```sh
 node dist/main.js http://127.0.0.1:8765 basic-input.json --request-id my-ts-job-1
+node own_app.cjs http://127.0.0.1:8765 basic-input.json my-node-app-1
 ```
 
 In your Node code, use `Client.connect(endpoint)`, `request(input, configuration,
 requestId)`, `validate(request)`, `execute(request)`, and
 `evaluate(request, result.solution)`. Check response kinds at each step. The SDK
 is for server-side Node; do not expose a trial key in browser code.
+
+`own_app.cjs` includes explicit validation and provider evaluation. Its PASS does
+not claim independent verification. Use the conformance package to check its
+request/response separately. Evaluation tasks and a feedback template are included
+as `EVALUATION_TASKS.md` and `FEEDBACK_TEMPLATE.md`; no feedback is uploaded.
 
 ## Output files and recovery
 

@@ -37,3 +37,12 @@ are discarded with the container; the Docker image remains cached locally.
 Keep the kit manifest hash, image digest, Python/OS/architecture, command, exit
 status and actual output in private run evidence. Do not infer this probe passed
 for a newer changed installer, dependency set or engine without rerunning it.
+
+## Extended kit rehearsal
+
+The earlier probe above is Python-only evidence. For a new exact ZIP,
+[the no-key evaluation workflow](NO_KEY_EVALUATION.md) adds MCP, fresh Python/Node
+installation, TypeScript build, changed-input app evaluation and BYO checks. Run
+`tools/check_kit_environment.py` with Node 24 available inside the same container.
+Record each new artifact hash and result separately; do not extend the earlier
+Python-only result to the new commands without executing them.

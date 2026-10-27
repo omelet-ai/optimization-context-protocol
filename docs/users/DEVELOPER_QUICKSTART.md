@@ -1,117 +1,135 @@
 # Build your own app and engine
 
-## First success from the developer kit
+Run these commands from the extracted developer kit, using Python 3.12 and Node 24
+for the optional Node examples. No company checkout, Foundry, key or account is
+needed for local use. These are private candidate artifacts, not registry packages.
+README.md lists prerequisites, platform verification scope and offline options.
+한국어 시작 안내와 초대 trial 절차는 README.md 아래에 있습니다.
 
-After unpacking the kit, run `python3.12 start.py --venv .local`. This installs
-the local dependencies, runs the same app/input with two actual engines, and
-independently checks their results and deliberately damaged outputs. No key is
-needed. Use `.local/bin/python -B demo.py --diagnostics` for subsequent runs.
-See the kit README for prerequisites, offline installation and supported limits.
-
-
-이 안내의 명령은 **설치 꾸러미를 푼 폴더**에서 실행한다. Python 3.12/macOS arm64, Node 24에서 검증한다. Linux는 별도 검증 대상이며 Windows용 installer는 제공하지 않는다. 회사 저장소·Foundry·API key 없이도 아래 자기 엔진 경로를 사용할 수 있다. Node는 TypeScript를 사용할 때만 필요하다. 현재 artifact는 비공개 후보이고 registry 이름으로 설치하지 않는다.
-
-## 사전 점검
+## 1. Install and get a real result
 
 ```sh
 python3.12 --version
-node --version
+python3.12 start.py --venv .local
+.local/bin/python -B demo.py --diagnostics
 ```
 
-`python3.12: command not found`이면 Python 3.12를 설치하거나 이미 설치된 실행 파일의 절대 경로를 사용한다. `python3 --version`이 3.12라면 아래의 `python3.12`를 `python3`로 바꿀 수 있다. 다른 버전을 자동으로 사용하는 것은 지원하지 않는다. Python 설치 안내: https://www.python.org/downloads/ . Node는 24 이상이 필요하다. 실행 파일을 찾는 문제를 해결한 뒤 시작한다.
+The start command installs into a new environment and runs the same app/input
+with OR-Tools and a small enumerating library. Both outputs are independently
+checked; the bundled problem has cost 18 meters. Installation preserves existing
+environments. Use a new `--venv` path if you need a clean retry. The diagnostic
+also demonstrates rejected units, damaged solutions and an actual 1 ms deadline.
+A feasible answer is not a proof of optimality. No solution at a deadline is unknown.
 
-## 1. 자기 엔진: 계정·OR-Tools·MCP 없이
+For LLM/MCP use `python3.12 start.py --mcp --venv .agent` instead and follow
+LLM_QUICKSTART.md. It includes both engine and MCP dependencies. Its doctor and
+smoke checks do not call a model or edit host settings.
 
-새 환경에 기본 SDK와 독립 checker만 설치한다.
+## 2. Change the input and build a Python app
+
+Copy `basic-input.json` to `my-input.json`. Double each matrix value for a simple
+recalculation check (the bundled problem's checked cost becomes 36 meters), then
+try your own synthetic demands/capacities. Adding or renaming visits requires
+matching `matrix.node_ids` and rows/columns. Units are kg and integer meters; the
+matrix model is explicit_matrix and rounding is none. Unsupported choices fail
+validation. `input.json` is a separate coordinates profile for the invited trial.
 
 ```sh
-python3.12 -m venv .byo
-.byo/bin/python -m pip install --no-compile -c constraints.txt ./ocp_candidate-0.1.0-py3-none-any.whl ./ocp_conformance_candidate-0.1.0-py3-none-any.whl
+.local/bin/python -B own_app.py --input my-input.json --request-id my-app-1 --trace my-app-1.json
+```
+
+`own_app.py` is a small complete app: discovery → requirements → validation →
+execution → provider evaluation → independent checker. Copy it to a new filename
+and replace input loading/presentation with your UI, backend or notebook logic.
+Keep failure distinct from result; read result.status, termination and solution.
+Only evaluate a non-null solution. Preserve unevaluated metric nulls rather than
+turning them into zero. Keep the request ID on an uncertain retry of the same
+job; use a new ID for a changed input/job. There is no automatic fallback.
+
+Traces/transcripts create new files only. `TRACE_EXISTS` means preserve the old
+file and select a new output name. `TRACE_DIRECTORY_MISSING` means create the
+parent directory first. Never change the job identity merely to bypass uncertainty.
+
+## 3. Connect a Node/TypeScript application
+
+Install the local Python provider above first. The Node SDK is a separate consumer;
+Node does not run OR-Tools. Node 24/TypeScript 7 versions are pinned in package.json.
+
+```sh
+node --version
+npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund ./ocp-candidate-0.1.0.tgz
+npm run build
+```
+
+In terminal A start the loopback-only provider:
+
+```sh
+.local/bin/python -I -B -m ocp_runtime.http_server --port 8765
+```
+
+In terminal B:
+
+```sh
+node dist/main.js http://127.0.0.1:8765 basic-input.json --request-id my-ts-job-1
+node own_app.cjs http://127.0.0.1:8765 my-input.json my-node-job-1
+```
+
+`main.ts` is the small TypeScript execution example. `own_app.cjs` includes explicit
+validation and provider evaluation; copy it and replace file input/presentation
+with your own server-side application. Its output includes request and response
+for independent checking. Provider evaluation is not independent verification.
+Do not put a trial token in browser JavaScript. Stop the local provider with Ctrl-C.
+
+To check the Node app's synthetic output separately:
+
+```sh
+node own_app.cjs http://127.0.0.1:8765 my-input.json my-node-job-2 > node-result.json
+.local/bin/python -I -B -c "import json; from conformance.routing import verify_result; t=json.load(open('node-result.json')); print(verify_result(t['request'],t['response']))"
+```
+
+Choose a new output filename to preserve earlier evidence. If the app fails,
+inspect the error before running the checker; do not treat an empty file as a result.
+The checker verifies the supplied request/result, not every possible engine behavior.
+
+## 4. Bring your own engine without OR-Tools or MCP
+
+```sh
+python3.12 install.py --profile byo --venv .byo
 .byo/bin/python -B byo_library.py basic-input.json --trace own-engine-trace.json
 .byo/bin/python -B export_transcript.py --trace own-engine-trace.json --artifact byo_library.py --out own-engine-transcript.json
 .byo/bin/python -B -m conformance.runner --bundle own-engine-transcript.json --artifact byo_library.py
 ```
 
-`byo_library.py`의 `EnumeratingLibrary.solve(problem, time_limit_ms)`가 실제 계산 코드다. 자기 library로 교체할 때 `name`, `version`, `solve`와 반환값 `Outcome(solution, termination, objective)`를 유지한다. 입력은 kg·정수 meter 행렬이다. `solution`은 `{ "routes": [{ "vehicle_id": "v1", "visits": ["a", "b"] }] }` 형태다. 미지원 조건은 validate에서 거절하며 해를 못 찾으면 unknown을 유지한다. 최적성은 별도 증명 없이는 주장하지 않는다.
+Copy `byo_library.py` to `my_engine.py`. Replace `EnumeratingLibrary.solve(problem,
+time_limit_ms)` with your actual algorithm. Keep `name`, `version`, `solve` and the
+`Outcome(solution, termination, objective)` return shape. A solution contains
+`routes`, each with `vehicle_id` and ordered `visits`. Extend
+`OwnLibraryAdapter.validate` to reject any unsupported condition. The teaching
+adapter supports at most six visits and three vehicles. A heuristic that finds no
+solution must return unknown unless it has an applicable proof of infeasibility.
 
-처음에는 `basic-input.json`을 `my-input.json`으로 복사해 방문 demand와 차량 capacity를 바꿔 실행한다. ID를 바꾸거나 방문을 추가하면 `matrix.node_ids`와 거리 행렬의 행·열도 함께 바꿔야 한다. 같은 입력을 복사 실행한 것은 독립 엔진 개발 실적으로 계산하지 않는다. 작은 library는 방문 6개·차량 3개까지만 지원한다.
+Run your new file with a new synthetic input and an unsupported case. Export the
+new trace with `--artifact my_engine.py` and a new output filename. The checker
+binds the transcript to an artifact hash; it does not prove that this code produced
+that transcript or certify the whole engine. A copied sample alone is not evidence
+of an independent engine integration.
 
-trace/transcript는 새 파일만 생성한다. 다시 시험할 때 `own-engine-trace-2.json`처럼 다른 파일명을 사용해 최초 실패를 보존한다. checker의 PASS는 그 요청·응답 의미를 검증하며 엔진 실행·전체 artifact 인증을 대신하지 않는다. `implementation`은 `response.provenance.implementation`에서 복사하며 `engine` ID와 구분한다. artifact에는 실제 검토할 코드/배포 파일을 지정하고 변경되면 hash와 검사를 갱신한다.
+## 5. Optional invited Omelet trial
 
-## 2. 자기 Python 앱: 로컬 계산 또는 초대 엔진
-
-로컬 reference를 선택하면 위 환경에 OR-Tools extra를 설치한다.
-
-```sh
-.byo/bin/python -m pip install --no-compile -c constraints.txt './ocp_candidate-0.1.0-py3-none-any.whl[reference]'
-.byo/bin/python -B own_app.py --input basic-input.json --request-id my-local-job-1 --trace my-app-trace.json
-```
-
-초대 엔진을 선택하면 README의 installer와 `doctor`를 먼저 실행한 뒤 다음과 같이 호출한다.
+Follow README.md's invitation instructions and trial doctor first. Use the
+separate coordinates input and an explicit session file:
 
 ```sh
 .venv/bin/python -B own_app.py --session session.json --input input.json --request-id my-trial-job-1 --trace my-trial-trace.json
 ```
 
-`own_app.py`는 discover → requirements → validate → execute → evaluate → 독립 검산의 최소 앱이다. 자기 UI·서버에서는 이 흐름을 함수로 호출하면 된다. 입력 schema는 선택한 profile을 따르며 임의 행렬을 좌표로 자동 변환하지 않는다. 결과 `status`와 metric `status == "evaluated"`를 확인한다. `not_evaluated`의 null을 0으로 바꾸지 않는다. 실패 응답과 infeasible/unknown을 별도로 처리한다.
+An expired key or changed catalog is a reason to stop and contact the inviter,
+not a reason to silently switch engines or override the expected catalog pin.
+No trial session is included in the no-key evaluation kit.
 
-## 3. 자기 TypeScript 앱
+## 6. Report what happened
 
-꾸러미의 package.json/tsconfig.json은 Node 24/TypeScript 7의 타입 설정을 포함한다. 공개 의존성 다운로드가 필요하다.
-
-```sh
-npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund ./ocp-candidate-0.1.0.tgz
-npm run build
-```
-
-터미널 A에서 로컬 provider를 실행한다.
-
-```sh
-.byo/bin/python -B -m ocp_runtime.http_server --port 8765
-```
-
-터미널 B에서 실행한다.
-
-```sh
-node dist/main.js http://127.0.0.1:8765 basic-input.json --request-id my-ts-job-1
-```
-
-다른 입력을 시험할 때에는 `my-ts-job-2`처럼 새 ID를 명시한다. 같은 요청의 재시도는 동일 ID와 동일 입력을 유지한다. 초대 HTTP provider는 별도 `OCP_TRIAL_TOKEN` 환경변수를 사용하며 그 값을 명령 기록·URL·Git에 넣지 않는다. 브라우저 직접 호출용 SDK가 아닌 Node 소비자다.
-
-자기 코드에서는 다음 공개 메서드로 평가까지 진행할 수 있다. `endpoint`와 `input`은 앱에서 받은 값을 사용한다.
-
-```ts
-import { Client } from "ocp-candidate";
-const client = await Client.connect(endpoint);
-const request = client.request(input, undefined, "my-stable-job-id");
-const validation = await client.validate(request);
-if (!validation.valid) throw new Error("Review validation.issues");
-const result = await client.execute(request);
-if (result.kind === "failure") throw new Error(result.error.code);
-if (result.solution !== null) {
-  const evaluation = await client.evaluate(request, result.solution);
-  // Preserve evaluation failure, metric.status and null values in your app.
-}
-```
-
-## 4. MCP: 요청을 추측하지 않고 구성하기
-
-README의 stdio 연결 후 `ocp_context()` 도구를 먼저 호출한다. 리소스를 지원하는 호스트에서는 `ocp://request-guide/0.1.0`을 읽어 같은 안내를 얻을 수 있다. Core request schema, 선택 profile의 input schema, provider의 기본 configuration·budget을 담은 request template이 제공된다. template의 `input`을 자기 합성 입력으로, `request_id`를 명시한 작업 ID로 바꾼다. 빠진 입력을 추측하지 말고 질문한다. validate가 valid=true일 때 execute하고 non-null solution만 evaluate한다. 컨텍스트 조회는 계산을 수행하지 않는다. 모르는 profile에서 input_schema가 null이면 해당 provider 문서를 먼저 확인한다.
-
-공식 MCP Python host 검증은 실제 Claude Code host의 승인 화면·도구 선택 검증을 대신하지 않는다. 서버 주소/권한/pin을 임의로 바꾸거나 오류 후 새 ID로 자동 재시도하지 않는다.
-
-## 5. 실패에서 복구하기
-
-| 진단 | 다음 행동 |
-| --- | --- |
-| PYTHON_VERSION_UNSUPPORTED | Python 3.12 실행 파일 경로를 확인하고 installer --check를 다시 실행 |
-| ENVIRONMENT_EXISTS | 기존 환경으로 doctor를 실행하거나 새 --venv 경로 선택 |
-| KIT_CHECKSUM_MISMATCH | 새 꾸러미를 다시 풀기. manifest를 수정하지 않기 |
-| INVITATION_NOT_FOUND / INVITATION_JSON_INVALID | 정확한 session 경로 확인 또는 발급자에게 새 파일 요청 |
-| INVITATION_PERMISSIONS | chmod 600 session.json 후 doctor 재실행 |
-| UNAUTHORIZED / TRIAL_EXPIRED | 발급자에게 키 상태·시험 종료 시각 문의 |
-| CATALOG_CHANGED | 중단하고 검토된 새 session 요청. pin을 스스로 덮어쓰지 않기 |
-| IDEMPOTENCY_CONFLICT | 기존 작업이면 원래 입력 복원. 다른 작업이면 새 request ID 선택 |
-| TRANSPORT_UNCERTAIN | 요청 ID 보존. 연결·시험 시간 확인 후 발급자에게 오류 코드 문의 |
-
-잘못된 입력은 JSON 중복 키·NaN·단위·필수 필드부터 확인한다. 키·원문 데이터 대신 오류 코드와 request ID만 공유한다. 유료 서비스나 공개 배포를 자동으로 만들지 않는다.
+Use EVALUATION_TASKS.md and a new copy of FEEDBACK_TEMPLATE.md. Record exact kit
+and source hashes, platform versions, time, help, failures and retries. Share only
+reviewed synthetic input/code/results, never credentials, private URLs, customer
+data, home paths or model login logs. Nothing is uploaded by these examples.

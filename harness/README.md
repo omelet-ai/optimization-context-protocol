@@ -15,6 +15,8 @@ python3 -B tools/harness.py run H00
 
 ## 검사 추가
 
+H25는 H23 뒤 no-key MCP 통합 설치·진단·실제 stdio 계산/독립 검산·Python/Node 소비자와 로컬 평가 꾸러미를 검사한다. `tools/check_kit_environment.py`는 정확한 ZIP을 새 HOME·venv·npm cache에서 재현하는 별도 도구다. 같은 ZIP의 macOS/Linux 실행은 각 보고서의 platform·machine·hash로 식별하며 Docker emulation을 native Linux로 표현하지 않는다. H24 실제 모델 수락과 H12 사람 시험은 별도다. [평가 준비 절차](../docs/development/NO_KEY_EVALUATION.md)를 따른다.
+
 단계별 acceptance를 충족하는 코드·fixture·검사기를 먼저 구현하고 해당 단계의 `checks`에 명령을 연결한다. 명령은 shell 문자열이 아닌 argv 배열이며 `{python}`은 현재 Python 실행기로 바뀐다. 검사기는 stdout에 JSON 객체 하나를 출력한다. 필수 검사 실패는 0이 아닌 종료 코드를 반환한다.
 
 `expect`는 정확한 타입과 값을 검사하고 `status: PASS`가 필수다. 테스트 실행에는 `min_tests`를 양수로 정하고 실행·실패·오류·skip 수를 보고한다. 필수 테스트가 0개이거나 skip됐다면 통과하지 않게 정의한다. 실제 기능 검증 없이 JSON PASS만 출력하는 검사는 허용하지 않는다.

@@ -17,6 +17,8 @@ export OCP_NPM_CACHE=/tmp/ocp-build-npm-cache
 
 온라인 준비 후 같은 cache로 재현하려면 다음 명령을 쓴다. cache가 없으면 실패하며 온라인으로 자동 전환하지 않는다.
 
+첫 npm 의존성 다운로드에는 네이티브 TypeScript 패키지가 포함된다. 온라인 설치는 300초, 오프라인 설치·컴파일·포장은 각 90초 상한을 별도로 둔다. 시간 초과는 실패로 남으며 자동 재시도하지 않는다. solver 실행 예산과는 무관하다.
+
 ```sh
 /tmp/ocp-build/bin/python -B tools/build_typescript.py --offline
 ```

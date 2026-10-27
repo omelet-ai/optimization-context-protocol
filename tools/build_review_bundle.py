@@ -47,7 +47,8 @@ def build(output_dir=None):
             for name in sorted(hashes): archive.add(stage/name,arcname="ocp-candidate/"+name,recursive=False)
         env=dict(os.environ,PYTHONDONTWRITEBYTECODE="1")
         for builder in ("build_candidate.py","build_conformance.py","build_typescript.py"):
-            completed=subprocess.run([sys.executable,"-B",str(stage/"tools"/builder)],cwd=stage,env=env,capture_output=True,text=True,timeout=120)
+            timeout=540 if builder=="build_typescript.py" and env.get("OCP_NPM_OFFLINE")!="1" else 120
+            completed=subprocess.run([sys.executable,"-B",str(stage/"tools"/builder)],cwd=stage,env=env,capture_output=True,text=True,timeout=timeout)
             if completed.returncode: raise RuntimeError("Selected-source build failed: "+builder+"\n"+completed.stderr)
             artifact=json.loads(completed.stdout)
             source=Path(artifact.get("wheel",artifact.get("tarball")))

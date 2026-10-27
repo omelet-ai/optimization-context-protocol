@@ -18,8 +18,8 @@ def main():
     parser.add_argument("--venv")
     parser.add_argument("--check",action="store_true",help="Check interpreter and kit hashes without creating an environment")
     parser.add_argument("--offline-wheelhouse")
-    parser.add_argument("--profile",choices=("trial","local","byo"),default="trial",
-                        help="trial installs MCP; local installs OR-Tools; byo installs neither")
+    parser.add_argument("--profile",choices=("trial","local","local-mcp","byo"),default="trial",
+                        help="local-mcp installs OR-Tools + MCP; trial installs MCP; local installs OR-Tools; byo installs neither")
     args=parser.parse_args()
     if sys.version_info[:2]!=(3,12) or os.name!="posix":
         raise InstallError("PYTHON_VERSION_UNSUPPORTED","Use Python 3.12 on macOS/Linux. Run python3.12 --version or use its absolute path. See README prerequisites; Windows is not supported by this installer.")
@@ -27,7 +27,8 @@ def main():
     manifest=json.loads((root/"manifest.json").read_text())
     expected={"ocp_candidate-0.1.0-py3-none-any.whl","ocp_conformance_candidate-0.1.0-py3-none-any.whl",
               "install.py","main.py","input.json","README.md","constraints.txt","ocp-candidate-0.1.0.tgz",
-              "DEVELOPER_GUIDE.md","own_app.py","byo_library.py","export_transcript.py","basic-input.json","main.ts","package.json","tsconfig.json","start.py","demo.py"}
+              "DEVELOPER_GUIDE.md","own_app.py","byo_library.py","export_transcript.py","basic-input.json","main.ts","package.json","tsconfig.json","start.py","demo.py",
+              "LLM_QUICKSTART.md","EVALUATION_TASKS.md","FEEDBACK_TEMPLATE.md","source-manifest.json","own_app.cjs","local_agent.py"}
     if set(manifest["files"])!=expected:raise InstallError("KIT_INVALID","Use an intact new kit from the inviter; do not edit its manifest.")
     for name,sha in manifest["files"].items():
         if (root/name).is_symlink() or hashlib.sha256((root/name).read_bytes()).hexdigest()!=sha:raise InstallError("KIT_CHECKSUM_MISMATCH","Extract a new copy of the kit. Do not modify sample files until installation succeeds.")
@@ -53,7 +54,7 @@ def main():
          "PIP_DISABLE_PIP_VERSION_CHECK":"1"}
     command=[str(python),"-B","-m","pip","install","--no-compile","--no-cache-dir","-c",str(root/"constraints.txt")]
     if wheelhouse:command += ["--no-index","--find-links",str(wheelhouse)]
-    extra={"trial":"[mcp]","local":"[reference]","byo":""}[args.profile]
+    extra={"trial":"[mcp]","local":"[reference]","local-mcp":"[reference,mcp]","byo":""}[args.profile]
     command += [str(root/"ocp_candidate-0.1.0-py3-none-any.whl")+extra,str(root/"ocp_conformance_candidate-0.1.0-py3-none-any.whl")]
     subprocess.run(command,env=env,check=True,timeout=480)
     subprocess.run([str(python),"-B","-m","pip","check"],env=env,check=True,timeout=30)

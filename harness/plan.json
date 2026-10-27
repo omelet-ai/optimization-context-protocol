@@ -1201,6 +1201,60 @@
       ],
       "acceptance": "승인된 모델/호스트·사용량 범위에서 새 세션의 실제 도구 기록, 누락 질문·미지원 거절·계산·결과 의미·지시문 데이터 처리와 최종 답변 검토. 준비물·SDK 호출·자기평가는 대체 증거가 아님",
       "checks": []
+    },
+    {
+      "id": "H25",
+      "title": "No-key MCP 설치와 외부 평가 꾸러미",
+      "tasks": [
+        "OSS-05",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H23"
+      ],
+      "mode": "local",
+      "inputs": [
+        "runtime/",
+        "sdk/",
+        "adapters/",
+        "conformance/",
+        "authoring/",
+        "examples/",
+        "docs/",
+        "cases/",
+        "provenance/candidate-selection.json",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/build_typescript.py",
+        "tools/build_review_bundle.py",
+        "tools/build_invitation_kit.py",
+        "tools/prepare_evaluation.py",
+        "tools/check_h25.py",
+        "tools/check_kit_environment.py",
+        "tools/isolated_candidate.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json"
+      ],
+      "acceptance": "새 ZIP·HOME·Python 환경에서 no-key MCP 설치·진단·실제 계산·독립 검산·잘못된 입력 무실행, Node 앱 연동, 정확한 소스 해시와 영문 평가 과제. Linux는 동일 ZIP 별도 실행 보고서. 실제 모델·사람·외부 공유·배포 제외",
+      "checks": [
+        {
+          "id": "no-key-agent-and-evaluation-kit",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h25.py"
+          ],
+          "timeout_seconds": 240,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 13
+        }
+      ]
     }
   ]
 }

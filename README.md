@@ -29,12 +29,18 @@ how to produce it. There is no public download or registry install claim yet.
 
 The full local regression environment is Python 3.12 on macOS Apple Silicon.
 The first-success command also ran on Python 3.12.15 in a Linux x86_64 container
-under Docker Desktop on that Mac. Native Linux machines and the Linux Node path
-remain separate validation work; the installer rejects Windows. Node 24 is needed
-only for the optional TypeScript consumer.
+under Docker Desktop on that Mac. Additional Python/MCP/Node checks are recorded for each exact ZIP using the
+[evaluation rehearsal](docs/development/NO_KEY_EVALUATION.md). Native Linux machines
+and the full Linux trial integration remain separate work; the installer rejects
+Windows. Node 24 is needed only for the optional Node/TypeScript consumer.
 
 See [first-use instructions](docs/users/INVITED_TRIAL.md) and
 [connect your app or engine](docs/users/DEVELOPER_QUICKSTART.md).
+
+For a no-key local LLM connection, use `python3.12 start.py --mcp --venv .agent`
+from the kit and follow the [MCP quickstart](docs/users/LLM_QUICKSTART.md).
+It installs the engine and MCP together. Doctor, smoke and config generation
+do not call a language model; model-host usage remains separate.
 
 ## Why add OCP to a solver?
 

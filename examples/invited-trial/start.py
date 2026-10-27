@@ -10,15 +10,20 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--venv",default=".ocp",help="NEW environment; existing files are preserved")
     parser.add_argument("--offline-wheelhouse",help="Optional directory of pinned dependency wheels")
+    parser.add_argument("--mcp",action="store_true",help="Also install and diagnose the no-key local MCP server; no model call")
     args=parser.parse_args()
     root=Path(__file__).resolve().parent
     destination=Path(args.venv).absolute()
-    command=[sys.executable,"-B",str(root/"install.py"),"--profile","local","--venv",str(destination)]
+    command=[sys.executable,"-B",str(root/"install.py"),"--profile","local-mcp" if args.mcp else "local","--venv",str(destination)]
     if args.offline_wheelhouse:command += ["--offline-wheelhouse",args.offline_wheelhouse]
     print("[1/2] Verifying the kit and installing local engines. No account or trial key is needed.",file=sys.stderr,flush=True)
     # Stream pip progress to stderr; stdout is one machine-readable demo report.
     installed=subprocess.run(command,stdout=sys.stderr,timeout=600)
     if installed.returncode:return installed.returncode
+    if args.mcp:
+        print("Checking the installed MCP connection without a model or solve.",file=sys.stderr,flush=True)
+        diagnosed=subprocess.run([str(destination/"bin/python"),"-I","-B",str(root/"local_agent.py"),"doctor"],stdout=sys.stderr,timeout=90)
+        if diagnosed.returncode:return diagnosed.returncode
     print("[2/2] Solving with two engines and checking intentionally damaged results.",file=sys.stderr,flush=True)
     result=subprocess.run([str(destination/"bin/python"),"-B",str(root/"demo.py"),"--diagnostics"],timeout=60)
     if result.returncode==0:
