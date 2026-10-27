@@ -1,8 +1,8 @@
 # GitHub launch preparation
 
-Status: local preparation, not publication authorization. The intended canonical
-project is `omelet-ai/optimization-context-protocol`. Its current visibility is
-private. `ocp.omelet.ai` is the selected website direction; permanent deployment
+Status: the owner approved GitHub source publication and Apache-2.0 on 2026-10-27.
+The canonical project is `omelet-ai/optimization-context-protocol`. This document
+distinguishes that source developer preview from later releases and hosted services. `ocp.omelet.ai` is the selected website direction; permanent deployment
 remains on hold. A protected, expiring review link is not the public project site.
 
 ## The adoption path
@@ -76,17 +76,16 @@ No analytics is added to the preview site by this plan.
 
 The owner is already assigned. Do not request that assignment again.
 
-- **Rights:** Apache-2.0 remains the proposed project license direction accepted
-  for preparation. It has not been applied as a rights determination. Review each
-  selected source's ownership, dependency notices and patent implications; prepare
-  LICENSE/NOTICE only for an approved scope. Never copy a dependency's license to
-  the whole project as permission.
-- **History and scope:** prefer a reviewed publication extraction with fresh history,
-  preserving the private workspace and its history. Do not simply flip visibility
-  on the current repository. Resolve the exact destination/name migration before
-  making any remote changes. GitHub notes that visibility changes expose repository
-  content and affect other features in its
-  [visibility documentation](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility).
+- **Rights:** the owner confirmed company disclosure/distribution authority and
+  patent disclosure clearance for the selected work. Apache-2.0 is applied with
+  LICENSE, NOTICE and third-party notices. This does not claim particular patent
+  filing/grant status or relicense dependencies.
+- **History and scope:** the owner approved the existing repository and its
+  10-commit baseline history at `a83573d`. A bounded scan of its 202 paths and
+  369 unique blobs found no excluded paths or tested secret patterns. The source
+  publication inventory includes license, notice, documentation and validation
+  changes for this transition. Internal material and execution evidence remain
+  excluded. See [the approval record](../../provenance/PUBLICATION_APPROVAL.md).
 - **Version:** existing `0.1.0` artifacts are private candidates; hashes distinguish
   rebuilds. The first public prerelease tag, Python/Node package names and versions
   must be fixed together after name availability and compatibility review. Never
@@ -96,4 +95,4 @@ The owner is already assigned. Do not request that assignment again.
   with a defined runner/cost scope. Website and hosted trial are separate approvals.
 
 This file, community templates and the release checklist are preparation artifacts.
-They neither approve publication nor establish a license, trial service or support SLA.
+The scoped source approval and LICENSE now apply; these materials do not establish a trial service, package-registry release or support SLA.

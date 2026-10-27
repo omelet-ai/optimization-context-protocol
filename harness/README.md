@@ -62,3 +62,9 @@ H23은 H22 뒤 실제 설치 MCP의 컨텍스트 제공, tools-only 소비, 올�
 사용자가 워커 스케줄링과 재고 발주 profile·실제 solver·독립 checker 및 공통 앱/MCP 구현을 승인했다. 기존 두 번째 도메인 fixture 범위를 확장하되 assignment.fixture와 Core 의미는 유지한다. H26 계약 → H27 워커 → H28 재고 → H29 공통 앱/MCP → H30 새 설치·평가 준비 순서이며 각 현재 선행 PASS 후 진급한다. 작은 합성 문제·공개 의존성과 신규 구현만 사용한다. 내부 Foundry 소스는 설계 참고이며 runtime import/복사하지 않는다. 추가 모델 실행·비용·외부 공유·배포는 포함하지 않는다. H24 실제 모델과 H12 실제 사람, D00/D01/D03 관문은 유지한다. 기술 판정은 harness status의 현재 입력 기준이며 이 계획 문구는 PASS 증거가 아니다.
 
 H26~H30은 [세 도메인 결정](../docs/decisions/0008_MULTI_DOMAIN_REFERENCE.md)을 따른다. H27 워커 search와 H28 재고 DP는 독립 전수탐색 정답에 대조한다. H29는 실제 MCP 한 프로세스의 세 profile 및 동일 Node 앱을, H30은 새 ZIP·HOME·venv와 solver-free checker를 검사한다. H30이 통과하면 시험한 artifact를 `.harness/work/multidomain-evaluation/<ZIP SHA-256>/`에 보존한다. 추가 모델 과제는 준비만 하며 H24/사람/게시 관문을 통과시키지 않는다.
+
+## 2026-10-27 source publication scope
+
+The owner confirmed company disclosure/distribution rights, patent disclosure clearance and Apache-2.0 for the reviewed GitHub source. LICENSE and notices accompany source and local builds. The repository-selection guard checks the exact public inventory; registry/release assets, site/trial deployment, operating budgets and external acceptance remain separate. D00 includes additional operating decisions and is not marked wholly PASS by this scoped source approval. Publication metadata or documentation changes expire affected harness evidence; rerun only relevant gates and report their actual scope.
+
+H31 validates this scoped source-publication transition after H11 and H29: exact inventory and rejection tests, independent build approval, licensed fresh three-domain consumers, and local site/kit reconstruction. Remote visibility and anonymous access are verified separately after publication. It does not mark older external or hosted-trial gates PASS.

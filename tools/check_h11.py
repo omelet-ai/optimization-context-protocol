@@ -124,8 +124,13 @@ class ArtifactTests(unittest.TestCase):
     def test_10_no_publication_approval_implied(self):
         self.assertFalse(MANIFEST["publication_approved"])
         publication=json.loads((ROOT/"provenance/publication.json").read_text())
-        self.assertFalse(publication["publication_authorized"]); self.assertEqual(publication["public_allowlist"],[])
+        self.assertEqual(publication["scope"],"github_source_repository_only")
+        self.assertTrue(publication["publication_authorized"])
+        self.assertFalse(publication["registry_publication_authorized"])
+        self.assertFalse(publication["site_deployment_authorized"])
+        self.assertFalse(publication["trial_deployment_authorized"])
         self.assertFalse(json.loads((ROOT/"sdk/typescript/package.json").read_text()).get("publishConfig"))
+        self.assertTrue(json.loads((ROOT/"sdk/typescript/package.json").read_text())["private"])
 
     def test_11_dependency_locks_and_versions_retained(self):
         self.assertEqual(hashlib.sha256((SOURCE/"tools/requirements-dev.lock").read_bytes()).hexdigest(),MANIFEST["dependencies"]["python_lock_sha256"])
@@ -161,6 +166,25 @@ class ArtifactTests(unittest.TestCase):
                     source=roots[package]+"/"+relative
                     self.assertIn(source,MANIFEST["sources"])
                     self.assertEqual(hashlib.sha256(archive.read(name)).hexdigest(),MANIFEST["sources"][source])
+
+    def test_15_license_and_notices_in_each_distribution(self):
+        notices=("LICENSE","NOTICE","THIRD_PARTY_NOTICES.md")
+        for name in notices:
+            self.assertEqual((SOURCE/name).read_bytes(),(ROOT/name).read_bytes())
+        for path in ARTIFACTS.glob("*.whl"):
+            with zipfile.ZipFile(path) as archive:
+                metadata=next(name for name in archive.namelist() if name.endswith(".dist-info/METADATA"))
+                self.assertIn("License-Expression: Apache-2.0",archive.read(metadata).decode())
+                for name in notices:
+                    matches=[n for n in archive.namelist() if n.endswith(".dist-info/licenses/"+name)]
+                    self.assertEqual(len(matches),1)
+                    self.assertEqual(archive.read(matches[0]),(ROOT/name).read_bytes())
+        with tarfile.open(ARTIFACTS/"ocp-candidate-0.1.0.tgz") as archive:
+            package=json.load(archive.extractfile("package/package.json"))
+            self.assertEqual(package["license"],"Apache-2.0")
+            self.assertTrue(package["private"])
+            for name in notices:
+                self.assertEqual(archive.extractfile("package/"+name).read(),(ROOT/name).read_bytes())
 
 
 if __name__=="__main__":

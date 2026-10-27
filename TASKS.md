@@ -76,3 +76,9 @@ H25는 no-key LLM 연결의 설치 공백을 해결한다. `start.py --mcp`는 r
 사용자가 워커 스케줄링과 재고 발주 profile·실제 solver·독립 checker 및 공통 앱/MCP 구현을 승인했다. 기존 두 번째 도메인 fixture 범위를 확장하되 assignment.fixture와 Core 의미는 유지한다. H26 계약 → H27 워커 → H28 재고 → H29 공통 앱/MCP → H30 새 설치·평가 준비 순서이며 각 현재 선행 PASS 후 진급한다. 작은 합성 문제·공개 의존성과 신규 구현만 사용한다. 내부 Foundry 소스는 설계 참고이며 runtime import/복사하지 않는다. 추가 모델 실행·비용·외부 공유·배포는 포함하지 않는다. H24 실제 모델과 H12 실제 사람, D00/D01/D03 관문은 유지한다. 기술 판정은 harness status의 현재 입력 기준이며 이 계획 문구는 PASS 증거가 아니다.
 
 H26~H30 구현을 검사에 연결했다. 신규 worker.scheduling(분기 한정 탐색)과 inventory.replenishment(재고 상태 동적계획), 독립 전수탐색 checker, offline profile registry, 세 도메인 MCP 및 공통 Python/Node 앱을 제공한다. 새 꾸러미의 모델 평가 8과제는 준비만 했으며 추가 모델 실행 0회다. H30 PASS 시 정확히 시험한 ZIP·소스 archive를 `.harness/work/multidomain-evaluation/`에 hash별로 보존한다. 파일 제공·외부 공유·배포 승인은 이에 포함되지 않는다.
+
+## 2026-10-27 source publication scope
+
+The owner confirmed company disclosure/distribution rights, patent disclosure clearance and Apache-2.0 for the reviewed GitHub source. LICENSE and notices accompany source and local builds. The repository-selection guard checks the exact public inventory; registry/release assets, site/trial deployment, operating budgets and external acceptance remain separate. D00 includes additional operating decisions and is not marked wholly PASS by this scoped source approval. Publication metadata or documentation changes expire affected harness evidence; rerun only relevant gates and report their actual scope.
+
+H31 validates this scoped source-publication transition after H11 and H29: exact inventory and rejection tests, independent build approval, licensed fresh three-domain consumers, and local site/kit reconstruction. Remote visibility and anonymous access are verified separately after publication. It does not mark older external or hosted-trial gates PASS.

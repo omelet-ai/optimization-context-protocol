@@ -1,4 +1,4 @@
-"""Check explicit private-repository source selection and, optionally, Git's index.
+"""Check an explicit repository source selection and, optionally, Git's index.
 
 Only selected UTF-8 source is read. This is a bounded pre-push check,
 not a complete secret-detection or rights audit.
@@ -44,9 +44,12 @@ def verify(index=False):
         return source.read_bytes()
 
     selection = json.loads(read(SELECTION))
-    if selection["scope"] != "private_repository_only" or selection["repository"] != "omelet-ai/optimization-context-protocol":
+    public_source = selection["scope"] == "public_source_repository"
+    if selection["scope"] not in {"private_repository_only", "public_source_repository"} or selection["repository"] != "omelet-ai/optimization-context-protocol":
         raise ValueError("Unexpected repository scope")
-    if selection["publication_approved"] is not False: raise ValueError("Private selection cannot authorize publication")
+    if selection["publication_approved"] is not public_source: raise ValueError("Repository approval does not match scope")
+    if selection.get("visibility") != ("public" if public_source else "private"):
+        raise ValueError("Repository visibility does not match scope")
     files = selection["files"]
     if not files or len(files) != len(set(files)) or SELECTION not in files: raise ValueError("Invalid selection")
     if index:
@@ -79,10 +82,26 @@ def verify(index=False):
                 if target not in files: raise ValueError("Link outside selection: " + name + " -> " + link)
         hashes[name] = hashlib.sha256(content).hexdigest()
     public = json.loads(read("provenance/publication.json"))
-    if public["publication_authorized"] or public["public_allowlist"]: raise ValueError("Public release state changed")
+    if public_source:
+        required = ("rights_approved", "license_approved", "patent_disclosure_approved", "publication_authorized")
+        if any(public.get(key) is not True for key in required): raise ValueError("Source publication approval incomplete")
+        allowed = public.get("public_allowlist")
+        if not isinstance(allowed, list) or len(allowed) != len(set(allowed)) or set(allowed) != set(files):
+            raise ValueError("Public allowlist differs from repository selection")
+        if public.get("scope") != "github_source_repository_only" or public.get("repository") != selection["repository"]:
+            raise ValueError("Publication target or scope mismatch")
+        for flag in ("registry_publication_authorized", "site_deployment_authorized", "trial_deployment_authorized"):
+            if public.get(flag) is not False: raise ValueError("Source approval cannot authorize deployment or registry publication")
+        if public.get("approval_record") != "provenance/PUBLICATION_APPROVAL.md" or public["approval_record"] not in files:
+            raise ValueError("Missing scoped approval record")
+        if public.get("license") != "Apache-2.0" or hashes.get("LICENSE") != public.get("license_sha256"):
+            raise ValueError("Approved license missing or changed")
+        if not {"NOTICE", "THIRD_PARTY_NOTICES.md"}.issubset(files): raise ValueError("Missing license notices")
+    elif public["publication_authorized"] or public["public_allowlist"]:
+        raise ValueError("Private selection cannot authorize publication")
     digest = hashlib.sha256(json.dumps(hashes, sort_keys=True).encode()).hexdigest()
-    return {"status": "PASS", "scope": "private_repository_selection", "source": "git_index" if index else "working_files",
-            "files": len(files), "tree_content_sha256": digest, "public_release_authorized": False}
+    return {"status": "PASS", "scope": "public_source_selection" if public_source else "private_repository_selection", "source": "git_index" if index else "working_files",
+            "files": len(files), "tree_content_sha256": digest, "public_release_authorized": public_source}
 
 
 if __name__ == "__main__":

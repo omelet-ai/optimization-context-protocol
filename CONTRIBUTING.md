@@ -1,9 +1,10 @@
 # Contributing to the OCP developer preview
 
 Thanks for helping make optimization integrations easier to use and verify.
-This repository is a private candidate. Public contribution intake and the
-project-wide license are not active yet. Do not assume a dependency's license
-licenses this repository or submit third-party code without its provenance.
+This developer preview is licensed under [Apache-2.0](LICENSE). Contributions
+intentionally submitted for inclusion follow that license's contribution terms.
+Only submit work you have the right to contribute, and preserve the provenance
+and applicable notices of third-party code.
 
 Start with a small synthetic example and describe the application or engine you
 want to connect. Keep Core, domain profiles, bindings and provider policy separate.
@@ -20,5 +21,6 @@ For a change:
 
 Use a reproducible bug report or integration report with synthetic input, version,
 profile and error code. Security issues follow [SECURITY.md](SECURITY.md).
-Until public intake is enabled, contact the person who invited you through the
-same private channel. No response-time commitment or support SLA is promised.
+Use this repository's issues for non-sensitive bugs and integration feedback,
+and pull requests for proposed changes. No response-time commitment or support
+SLA is promised.

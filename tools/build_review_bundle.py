@@ -57,7 +57,7 @@ def build(output_dir=None):
     artifact_hashes={Path(a.get("wheel",a.get("tarball"))).name:a["sha256"] for a in artifacts}
     artifact_hashes[source_archive.name]=hashlib.sha256(source_archive.read_bytes()).hexdigest()
     manifest={"scope":"private_technical_review_only","version":"0.1.0-candidate","publication_approved":False,
-              "rights_license_patent":"pending","artifacts":artifact_hashes,"sources":hashes,
+              "rights_license_patent":json.loads((ROOT/"provenance/candidate-selection.json").read_text())["rights_status"],"artifacts":artifact_hashes,"sources":hashes,
               "dependencies":{"python_lock_sha256":hashlib.sha256((ROOT/"tools/requirements-dev.lock").read_bytes()).hexdigest(),
                               "npm_lock_sha256":hashlib.sha256((ROOT/"sdk/typescript/package-lock.json").read_bytes()).hexdigest()},
               "limitations":["Not published","No real Omelet trial","No external-user acceptance","Candidate version not frozen"]}

@@ -31,6 +31,8 @@ def build(output_dir, *, offline=None):
     with tempfile.TemporaryDirectory(prefix="ocp-ts-build-") as directory:
         stage=Path(directory)/"package"
         shutil.copytree(ROOT/"sdk/typescript",stage,ignore=shutil.ignore_patterns("node_modules","dist"))
+        for name in ("LICENSE","NOTICE","THIRD_PARTY_NOTICES.md"):
+            shutil.copy2(ROOT/name,stage/name)
         # A first public native TypeScript download is distinct from compilation.
         command([NPM,"ci",*(["--offline"] if offline else []),"--ignore-scripts","--no-audit","--no-fund"],stage,timeout=90 if offline else 300)
         command([NODE,stage/"node_modules/typescript/bin/tsc"],stage)

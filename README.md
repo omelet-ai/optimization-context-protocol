@@ -6,14 +6,23 @@ OCP describes what an engine supports, what an application requests, what was
 actually enforced, and how to check the result. Applications can use their own
 engines independently of Omelet, Foundry, Studio, or a particular transport.
 
-**Status: developer preview.** This repository is currently private. The code and
-packages are evaluation candidates; a public license, registry release and public
-trial enrollment are pending. A passing local check is not engine certification
+**Status: open-source developer preview, licensed under [Apache-2.0](LICENSE).**
+Source code is available in this GitHub repository. Package-registry releases,
+a hosted public website and open trial enrollment are not available yet.
+A passing local check is not engine certification
 or evidence of unaided external adoption.
 
 ## See the benefit in one command
 
-After receiving and unpacking the credential-free developer kit:
+Clone the source and follow the [build instructions](docs/development/BUILD_FROM_SOURCE.md)
+to produce a credential-free developer kit:
+
+```sh
+git clone https://github.com/omelet-ai/optimization-context-protocol.git
+cd optimization-context-protocol
+```
+
+From the built kit directory:
 
 ```sh
 python3.12 start.py --venv .local
@@ -25,7 +34,7 @@ independent enumerating teaching library. It checks both outputs, then demonstra
 rejected units, intentionally corrupted results, and a real execution deadline.
 No Omelet account or trial key is needed. The command is for the extracted kit;
 [source checkout build instructions](docs/development/BUILD_FROM_SOURCE.md) explain
-how to produce it. There is no public download or registry install claim yet.
+how to produce it. Prebuilt release assets and registry packages are not published yet.
 
 The full local regression environment is Python 3.12 on macOS Apple Silicon.
 The first-success command also ran on Python 3.12.15 in a Linux x86_64 container
@@ -82,11 +91,12 @@ It is optional; Core compliance never requires an Omelet account.
 - [Development harness](harness/README.md), [task ledger](TASKS.md), and [fresh checkout checks](docs/development/LOCAL_RUNTIME.md).
 - [GitHub launch preparation](docs/development/GITHUB_LAUNCH.md) and [publication checklist](PUBLIC_RELEASE_CHECKLIST.md).
 
-Only the [selected source files](provenance/repository-selection.json) belong in
-this private repository. Internal material, credentials, original snapshots and
-execution evidence stay outside it. Publication requires a separate approved
-file inventory, rights review and exact destination authorization.
+The [approved source inventory](provenance/publication.json) defines this
+repository's published scope. See [NOTICE](NOTICE) and
+[third-party notices](THIRD_PARTY_NOTICES.md). Internal material, credentials,
+original snapshots and execution evidence stay outside it. Hosted services,
+registry packages and release assets require separate scoped authorization.
 
 한국어: OCP는 앱·AI 에이전트와 최적화 엔진 사이의 지원 기능·요청·결과·검증을
-명시하는 인터페이스입니다. 현재는 개발자 프리뷰이며, 공개 출시는 별도 관문입니다.
+명시하는 인터페이스입니다. Apache-2.0으로 공개된 개발자 프리뷰이며, 사이트·trial 배포와 패키지 레지스트리 출시는 별도입니다.
 [한국어 시작 안내](docs/users/GETTING_STARTED.md)를 참고하세요.

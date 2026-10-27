@@ -16,6 +16,8 @@ def build(output_dir):
     output=Path(output_dir).resolve(); output.mkdir(parents=True,exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="ocp-conformance-build-") as directory:
         stage=Path(directory)
+        for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
+            shutil.copy2(ROOT/name,stage/name)
         package=stage/"src/conformance"; package.mkdir(parents=True)
         for path in (ROOT/"conformance").glob("*.py"): shutil.copy2(path,package/path.name)
         shutil.copytree(ROOT/"spec/schemas",package/"schemas")
@@ -25,6 +27,8 @@ build-backend="setuptools.build_meta"
 [project]
 name="ocp-conformance-candidate"
 version="0.1.0"
+license="Apache-2.0"
+license-files=["LICENSE","NOTICE","THIRD_PARTY_NOTICES.md"]
 requires-python=">=3.12"
 dependencies=["jsonschema==4.26.0"]
 [tool.setuptools.packages.find]

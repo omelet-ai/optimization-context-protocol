@@ -33,7 +33,8 @@ def build(output=None):
         bundle=build_review(directory)
         for name in ("ocp_candidate-0.1.0-py3-none-any.whl","ocp_conformance_candidate-0.1.0-py3-none-any.whl","ocp-candidate-0.1.0.tgz"):
             shutil.copy2(Path(bundle["directory"])/name,target/name)
-    for source,dest in [("examples/invited-trial/install.py","install.py"),("examples/invited-trial/main.py","main.py"),
+    for source,dest in [("LICENSE","LICENSE"),("NOTICE","NOTICE"),("THIRD_PARTY_NOTICES.md","THIRD_PARTY_NOTICES.md"),
+                        ("examples/invited-trial/install.py","install.py"),("examples/invited-trial/main.py","main.py"),
                         ("docs/users/INVITED_TRIAL.md","README.md"),("tools/requirements-dev.lock","constraints.txt"),
                         ("docs/users/DEVELOPER_QUICKSTART.md","DEVELOPER_GUIDE.md"),
                         ("docs/users/LLM_QUICKSTART.md","LLM_QUICKSTART.md"),

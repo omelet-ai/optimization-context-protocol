@@ -1,6 +1,6 @@
-# OCP private technical candidate
+# OCP source developer preview
 
-Independent optimization contracts and optional implementations. This source bundle is for local review and verification. Publication, license and patent approval are pending; no public release is claimed.
+Independent optimization contracts and optional implementations. The original source is available under [Apache-2.0](LICENSE); see [NOTICE](NOTICE) and [third-party notices](THIRD_PARTY_NOTICES.md). Locally built artifacts remain evaluation candidates. Registry packages, immutable release assets and hosted services have not been published.
 
 Start with [Getting started](docs/users/GETTING_STARTED.md), [Compatibility](docs/users/COMPATIBILITY.md), [Contribution and support](docs/users/CONTRIBUTING_SUPPORT.md), and [BYO authoring](authoring/README.md).
 

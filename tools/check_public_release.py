@@ -1,6 +1,7 @@
 from pathlib import Path, PurePosixPath
 import json
 import sys
+from verify_repository import verify
 
 root = Path(__file__).resolve().parents[1]
 policy = json.loads((root / 'provenance/publication.json').read_text())
@@ -35,4 +36,13 @@ for relative in allowlist:
 if reasons:
     print('PUBLIC RELEASE BLOCKED: ' + ', '.join(reasons))
     sys.exit(2)
-print('Review metadata permits a candidate review; this command does not publish files.')
+try:
+    selection = verify()
+    if not selection['public_release_authorized']:
+        raise ValueError('Repository source publication is not approved')
+except (ValueError, KeyError, OSError, UnicodeError) as exc:
+    print('PUBLIC RELEASE BLOCKED: ' + str(exc))
+    sys.exit(2)
+print(json.dumps({'status': 'PASS', 'scope': 'github_source_repository_only',
+                  'files': selection['files'], 'tree_content_sha256': selection['tree_content_sha256'],
+                  'publishes_files': False, 'authorizes_deployment_or_registry': False}))

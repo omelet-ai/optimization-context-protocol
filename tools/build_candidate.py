@@ -19,6 +19,8 @@ def build(output_dir=None):
     with tempfile.TemporaryDirectory(prefix="ocp-wheel-build-") as directory:
         staging = Path(directory) / "candidate"
         shutil.copytree(ROOT / "sdk/python", staging)
+        for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
+            shutil.copy2(ROOT / name, staging / name)
         shutil.copytree(ROOT / "adapters/python/ocp_routing", staging / "src/ocp_routing")
         shutil.copytree(ROOT / "runtime/python/ocp_runtime", staging / "src/ocp_runtime")
         shutil.copytree(ROOT / "adapters/python/ocp_planning", staging / "src/ocp_planning")

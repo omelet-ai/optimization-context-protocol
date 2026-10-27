@@ -25,7 +25,7 @@ def main():
         raise InstallError("PYTHON_VERSION_UNSUPPORTED","Use Python 3.12 on macOS/Linux. Run python3.12 --version or use its absolute path. See README prerequisites; Windows is not supported by this installer.")
     root=Path(__file__).resolve().parent
     manifest=json.loads((root/"manifest.json").read_text())
-    expected={"ocp_candidate-0.1.0-py3-none-any.whl","ocp_conformance_candidate-0.1.0-py3-none-any.whl",
+    expected={"LICENSE","NOTICE","THIRD_PARTY_NOTICES.md","ocp_candidate-0.1.0-py3-none-any.whl","ocp_conformance_candidate-0.1.0-py3-none-any.whl",
               "install.py","main.py","input.json","README.md","constraints.txt","ocp-candidate-0.1.0.tgz",
               "DEVELOPER_GUIDE.md","own_app.py","byo_library.py","export_transcript.py","basic-input.json","main.ts","package.json","tsconfig.json","start.py","demo.py",
               "LLM_QUICKSTART.md","EVALUATION_TASKS.md","FEEDBACK_TEMPLATE.md","source-manifest.json","own_app.cjs","local_agent.py",

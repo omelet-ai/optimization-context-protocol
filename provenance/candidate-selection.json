@@ -1,9 +1,12 @@
 {
   "scope": "private_technical_review_only",
   "publication_allowlist": false,
-  "rights_status": "pending",
+  "rights_status": "source_apache_2_0_approved_artifact_publication_separate",
   "files": [
     "CANDIDATE_README.md",
+    "LICENSE",
+    "NOTICE",
+    "THIRD_PARTY_NOTICES.md",
     "adapters/python/ocp_planning/__init__.py",
     "adapters/python/ocp_planning/adapter.py",
     "adapters/python/ocp_planning/inventory.py",
