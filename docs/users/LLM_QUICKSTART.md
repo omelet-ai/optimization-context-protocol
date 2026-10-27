@@ -32,10 +32,19 @@ An invalid input returns a nonzero exit and zero execute calls. No automatic ret
 
 ## Generate configuration for your host
 
+For all three bundled domains in one server:
+
 ```sh
-.agent/bin/python -I -B local_agent.py config --format codex
-.agent/bin/python -I -B local_agent.py config --format json
+.agent/bin/python -I -B local_agent.py doctor --profile all
+.agent/bin/python -I -B local_agent.py config --profile all --format codex
+.agent/bin/python -I -B local_agent.py config --profile all --format json
 ```
+
+Doctor checks routing, worker and inventory context with zero solve calls. For a
+single-domain server, replace `all` with `worker.scheduling`,
+`inventory.replenishment` or `routing.basic`. Omitting `--profile` keeps the
+original routing-only behavior. Smoke needs a specific domain and matching input;
+use the examples in the [three-domain guide](MULTI_DOMAIN_QUICKSTART.md).
 
 These print configuration for review; they do not edit account settings or start
 a model. The command uses the environment's absolute Python path, including

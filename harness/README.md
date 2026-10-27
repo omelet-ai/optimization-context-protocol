@@ -68,3 +68,12 @@ H26~H30은 [세 도메인 결정](../docs/decisions/0008_MULTI_DOMAIN_REFERENCE.
 The owner confirmed company disclosure/distribution rights, patent disclosure clearance and Apache-2.0 for the reviewed GitHub source. LICENSE and notices accompany source and local builds. The repository-selection guard checks the exact public inventory; registry/release assets, site/trial deployment, operating budgets and external acceptance remain separate. D00 includes additional operating decisions and is not marked wholly PASS by this scoped source approval. Publication metadata or documentation changes expire affected harness evidence; rerun only relevant gates and report their actual scope.
 
 H31 validates this scoped source-publication transition after H11 and H29: exact inventory and rejection tests, independent build approval, licensed fresh three-domain consumers, and local site/kit reconstruction. Remote visibility and anonymous access are verified separately after publication. It does not mark older external or hosted-trial gates PASS.
+
+H32 executes the marked README command blocks from selected source in a fresh
+home/environment, including three-domain apps, no-solve context discovery,
+generated multi-profile MCP configuration, actual tools, invalid inputs and
+Node installation. `tools/check_h32.py` uses reviewed offline dependencies; it
+does not claim a GitHub download or a human's unaided success. Record a separate
+anonymous public-clone/online rehearsal before making those claims. H31 must be
+current PASS before H32 can advance. Neither gate calls a model or publishes a
+package/site.

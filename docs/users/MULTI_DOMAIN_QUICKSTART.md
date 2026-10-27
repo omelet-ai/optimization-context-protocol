@@ -1,6 +1,6 @@
 # Three optimization domains, one application flow
 
-Private developer preview. These are small executable reference profiles, not
+Open-source developer preview. These are small executable reference profiles, not
 production scheduling or inventory services. No model, account or hosted engine
 is needed. The profiles are worker.scheduling 0.1.0 and inventory.replenishment
 0.1.0 alongside routing.basic 0.1.0. assignment.fixture remains a fixture.
@@ -62,10 +62,15 @@ The same six tools support every provider. Test one domain without a model:
 .agent/bin/python -I -B local_agent.py smoke --profile worker.scheduling --input worker-input.json --request-id mcp-worker-1
 .agent/bin/python -I -B local_agent.py smoke --profile inventory.replenishment --input inventory-input.json --request-id mcp-inventory-1
 .agent/bin/python -I -B local_agent.py config --profile inventory.replenishment
+.agent/bin/python -I -B local_agent.py doctor --profile all
+.agent/bin/python -I -B local_agent.py config --profile all --format json
+.agent/bin/python -I -B local_agent.py config --profile all --format codex
 ```
 
-For all three domains in one MCP server, configure the absolute installed Python
-path with arguments `-I -B -m ocp_runtime.mcp_server --profile all`. The process
+The last two commands print configuration for all three domains in one MCP
+server, with the absolute installed Python path and arguments
+`-I -B -m ocp_runtime.mcp_server --profile all`. Doctor checks all three contexts
+without solving. The process
 uses stdio and stdout is reserved for MCP. A host starts the process, discovers
 tools, calls ocp_context(), reads available_profiles, then calls
 `ocp_context(profile="worker.scheduling")` (or another advertised exact ID).
@@ -81,14 +86,29 @@ LLM judgment tests. Additional model runs require separately bounded approval.
 
 ## Your Node app
 
-Start a local provider in another terminal; it prints its loopback URL:
+First install the Node consumer from the same kit directory (Python installation
+does not install Node packages):
+
+<!-- ocp:node-install -->
+```sh
+npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund ./ocp-candidate-0.1.0.tgz
+```
+
+In terminal A, from the kit directory, start the provider; it prints its loopback URL:
 
 ```sh
 .agent/bin/python -I -B -m ocp_runtime.http_server --profile worker.scheduling
+```
+
+Leave it running. In terminal B, change to the **same kit directory** and replace
+`PORT` with the port printed by terminal A:
+
+```sh
 node own_app.cjs http://127.0.0.1:PORT worker-input.json node-worker-1
 ```
 
 Use `--profile inventory.replenishment` and inventory-input.json for inventory.
+Stop the provider with Ctrl-C when finished.
 The Node source is identical for routing, worker and inventory. Its evaluation
 is provider evaluation; the separately installed Python checker can validate the
 returned request/response using conformance.runner.CHECKERS.

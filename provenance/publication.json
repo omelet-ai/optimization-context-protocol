@@ -198,6 +198,7 @@
     "tools/check_h28.py",
     "tools/check_h29.py",
     "tools/check_h30.py",
+    "tools/check_h32.py",
     "tools/check_invitation_live.py",
     "tools/check_kit_environment.py",
     "tools/check_public_release.py",

@@ -11,6 +11,7 @@ import tempfile
 
 SERVER_ARGS = ["-I", "-B", "-m", "ocp_runtime.mcp_server"]
 TOOLS = {"ocp_context", "ocp_describe", "ocp_requirements", "ocp_validate", "ocp_execute", "ocp_evaluate"}
+PROFILES = ("routing.basic", "worker.scheduling", "inventory.replenishment")
 
 
 class SetupError(ValueError):
@@ -54,12 +55,25 @@ async def probe(problem=None, request_id=None, profile="routing.basic"):
             if names != TOOLS:
                 raise SetupError("MCP_TOOLSET_MISMATCH", "Use the exact environment from this kit; do not guess missing tools.")
             guide = await call("ocp_context", {})
-            for key in ("request_schema", "input_schema"):
-                Draft202012Validator.check_schema(guide[key])
-            if guide["capability"]["domain_profile"] != {"id": profile, "version": "0.1.0"}:
-                raise SetupError("MCP_PROFILE_MISMATCH", "The provider did not return the explicitly selected profile.")
-            report.update(protocol_version=str(host.protocol_version), tools=sorted(names),
-                          domain_profile=guide["capability"]["domain_profile"])
+            def check_guide(value, selected):
+                for key in ("request_schema", "input_schema"):
+                    Draft202012Validator.check_schema(value[key])
+                if value["capability"]["domain_profile"] != {"id": selected, "version": "0.1.0"}:
+                    raise SetupError("MCP_PROFILE_MISMATCH", "The provider did not return the explicitly selected profile.")
+
+            report.update(protocol_version=str(host.protocol_version), tools=sorted(names))
+            if profile == "all":
+                expected = [{"id": item, "version": "0.1.0"} for item in PROFILES]
+                available = guide.get("available_profiles")
+                if not isinstance(available, list) or len(available) != len(expected) or any(item not in available for item in expected):
+                    raise SetupError("MCP_PROFILE_MISMATCH", "Expected context for all three bundled profiles; check the installed environment.")
+                check_guide(guide, PROFILES[0])
+                for selected in PROFILES[1:]:
+                    check_guide(await call("ocp_context", {"profile": selected}), selected)
+                report.update(available_profiles=available, checked_profiles=list(PROFILES))
+            else:
+                check_guide(guide, profile)
+                report["domain_profile"] = guide["capability"]["domain_profile"]
             if problem is None:
                 return report
             request = deepcopy(guide["request_template"])
@@ -94,7 +108,7 @@ def main():
     smoke.add_argument("--input", required=True)
     smoke.add_argument("--request-id", required=True)
     for command in (doctor,config,smoke):
-        command.add_argument("--profile",choices=("routing.basic","worker.scheduling","inventory.replenishment"),default="routing.basic")
+        command.add_argument("--profile",choices=PROFILES if command is smoke else (*PROFILES,"all"),default="routing.basic")
     args = parser.parse_args()
     try:
         dependencies()

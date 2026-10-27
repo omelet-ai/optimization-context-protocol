@@ -82,3 +82,16 @@ H26~H30 구현을 검사에 연결했다. 신규 worker.scheduling(분기 한정
 The owner confirmed company disclosure/distribution rights, patent disclosure clearance and Apache-2.0 for the reviewed GitHub source. LICENSE and notices accompany source and local builds. The repository-selection guard checks the exact public inventory; registry/release assets, site/trial deployment, operating budgets and external acceptance remain separate. D00 includes additional operating decisions and is not marked wholly PASS by this scoped source approval. Publication metadata or documentation changes expire affected harness evidence; rerun only relevant gates and report their actual scope.
 
 H31 validates this scoped source-publication transition after H11 and H29: exact inventory and rejection tests, independent build approval, licensed fresh three-domain consumers, and local site/kit reconstruction. Remote visibility and anonymous access are verified separately after publication. It does not mark older external or hosted-trial gates PASS.
+
+## Public GitHub first-use verification
+
+H32 follows H31 and executes the README's actual build/install, three-domain
+examples and MCP commands from a new selected-source checkout, empty HOME and
+new environments. It checks generated JSON/TOML configuration against a real
+multi-profile MCP session, rejects invalid inputs before execution, and exercises
+the documented Node install and existing-environment recovery. Its offline
+regression uses reviewed public dependency caches. Anonymous GitHub cloning and
+first online downloads are recorded separately with their exact public commit;
+local fixes are identified separately from that published baseline. No model
+call, external-human acceptance, website deployment or registry publication is
+implied. See the current harness status for results.
