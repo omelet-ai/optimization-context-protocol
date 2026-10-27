@@ -33,6 +33,21 @@ def readme_commands(marker):
     return document_commands("README.md", marker)
 
 
+def comparison_table():
+    """Render the marked three-column README table; prose remains page-specific."""
+    matches = re.findall(r"<!-- ocp:core-native-table:start -->\s*(.*?)\s*<!-- ocp:core-native-table:end -->",
+                         source("README.md").read_text(), re.S)
+    if len(matches) != 1:
+        raise ValueError("Core/native comparison table missing or ambiguous")
+    rows = [line.strip().strip('|').split('|') for line in matches[0].splitlines()]
+    rows = [[cell.strip() for cell in row] for row in rows]
+    if len(rows) < 3 or any(len(row) != 3 for row in rows) or rows[1] != ['---'] * 3:
+        raise ValueError("Expected a three-column Core/native comparison table")
+    def row(cells, tag):
+        return '<tr>' + ''.join('<' + tag + '>' + re.sub(r'`([^`]+)`', r'<code>\1</code>', escape(cell)) + '</' + tag + '>' for cell in cells) + '</tr>'
+    return '<div class="table-scroll"><table data-core-native><caption>Public Core 0.1 and the unpublished native v1 candidate</caption><thead>' + row(rows[0], 'th') + '</thead><tbody>' + ''.join(row(cells, 'td') for cells in rows[2:]) + '</tbody></table></div>'
+
+
 def canonical_base(value):
     parsed = urlsplit(value)
     if (parsed.scheme != "https" or not parsed.hostname or parsed.username or
@@ -63,7 +78,8 @@ def build(output, base_url):
         pages = content.public_pages(json.loads(source("site/commands.json").read_text()),
                                      json.loads((review / "assets/example.json").read_text()),
                                      {**{key: readme_commands(key) for key in ("readme-build", "readme-examples", "readme-mcp")},
-                                      "worker-analysis": document_commands("docs/users/WORKER_ANALYSIS.md", "worker-analysis")})
+                                      "worker-analysis": document_commands("docs/users/WORKER_ANALYSIS.md", "worker-analysis")},
+                                     comparison_table())
         template_text = source("site/templates/page.html").read_text().replace(
             '<meta name="robots" content="noindex, nofollow">', '$publication_meta').replace(
             'Local review edition. Public distribution is pending.', 'Open-source developer preview · Apache-2.0')

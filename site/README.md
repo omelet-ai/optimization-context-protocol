@@ -104,3 +104,11 @@ Agent conversation steps are illustrative guidance, not model acceptance evidenc
 Keep README command blocks and the referenced source revision available together
 when publishing a future update. A local preview may include source changes that
 have not yet reached public `main`; building it does not publish those changes.
+
+The public edition distinguishes the available Core 0.1 quickstart from the
+local, unpublished native v1 candidate at each entry point. The protocol page
+renders the marked `core-native-table` directly from README; keep its three-column
+Markdown format. Artifact checks compare every rendered cell with README, retain
+the existing Core command blocks, and check the separate native job/MCP guidance.
+Native implementation, extracted contracts and review bundles are not included
+by documenting them. Do not link to unpublished repository files or packages.

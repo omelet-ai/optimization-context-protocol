@@ -1,6 +1,7 @@
 """Check the exact documentation-only artifact before uploading it to Pages."""
 import argparse
 import hashlib
+from html import unescape
 import json
 from pathlib import Path
 import re
@@ -134,6 +135,56 @@ class PublicSite(unittest.TestCase):
             self.assertEqual(data['result']['metrics'][0]['value'], cost)
             self.assertEqual(data['evaluation']['metrics'][0]['value'], cost)
             self.assertIn(key, self.pages['examples/index.html'].ids)
+
+    def test_10_entrypoints_distinguish_public_core_and_unpublished_native(self):
+        for name in ('index.html', 'start/index.html', 'start/local/index.html',
+                     'start/engine/index.html', 'guides/apps/index.html',
+                     'reference/index.html', 'project/index.html', 'examples/index.html'):
+            self.assertIn('data-edition-status', self.html[name], name)
+            self.assertIn('Core 0.1 is public. Native v1 is a local, unpublished candidate.', self.html[name], name)
+            self.assertTrue(any(link.endswith('/reference/index.html#core-native') for link in self.pages[name].links), name)
+        self.assertIn('Core 0.1은 공개, native v1은 미공개 후보', self.html['ko/index.html'])
+        readme = (ROOT / 'README.md').read_text()
+        self.assertIn('not included in this public checkout', readme)
+        self.assertIn('Existing Core 0.1 imports and synchronous semantics remain supported', readme)
+        for name, page in self.pages.items():
+            for link in page.links:
+                self.assertFalse(any(unpublished in link for unpublished in
+                    ('NATIVE_LOCAL_CANDIDATE', 'FOUNDRY_NATIVE_V1_CANDIDATE', 'native_server_template', '.whl', '.tgz', '.zip')), (name, link))
+            for command in page.commands.values():
+                self.assertNotIn('ocp_runtime.native_mcp', command)
+                self.assertNotIn('.native/bin', command)
+
+    def test_11_readme_and_site_comparison_cells_match(self):
+        readme = (ROOT / 'README.md').read_text()
+        marked = re.findall(r'<!-- ocp:core-native-table:start -->\s*(.*?)\s*<!-- ocp:core-native-table:end -->', readme, re.S)
+        self.assertEqual(len(marked), 1)
+        rows = marked[0].splitlines()
+        expected = [cell.strip().replace('`', '') for i, row in enumerate(rows) if i != 1
+                    for cell in row.strip().strip('|').split('|')]
+        tables = re.findall(r'<table data-core-native>(.*?)</table>', self.html['reference/index.html'], re.S)
+        self.assertEqual(len(tables), 1)
+        actual = [unescape(re.sub(r'<[^>]+>', '', cell)) for cell in
+                  re.findall(r'<(?:th|td)\b[^>]*>(.*?)</(?:th|td)>', tables[0], re.S)]
+        self.assertEqual(actual, expected)
+        self.assertIn('Core 0.1', actual)
+        self.assertIn('Native v1 candidate', actual)
+
+    def test_12_native_lifecycle_and_tools_have_separate_guidance(self):
+        apps = self.html['guides/apps/index.html']
+        self.assertIn('native-mcp', self.pages['guides/apps/index.html'].ids)
+        tools = re.findall(r'<th scope="row"><code>(ocp_native_\w+)</code></th>', apps)
+        self.assertEqual(tools, ['ocp_native_' + name for name in
+                         ('context', 'requirements', 'validate', 'submit', 'job', 'result', 'cancel', 'evaluate')])
+        self.assertIn('Doctor discovers six tools', apps)
+        self.assertIn('ocp_candidate.native', apps)
+        self.assertIn('ocp-candidate/native', apps)
+        reference = unescape(self.html['reference/index.html'])
+        for meaning in ('contractVersion: "1"', 'domainPayloadFormat: "ocp-core-request/0.1.0"',
+                        'JobResult.result', 'same idempotency key and input',
+                        'confirm a terminal job state', 'not mathematical optimality',
+                        'not the full', 'no removal date is set'):
+            self.assertIn(meaning, reference)
 
 
 if __name__ == "__main__":

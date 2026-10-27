@@ -173,3 +173,17 @@ source files still match the checked build; rerun the public artifact and index
 checks before publishing. Deployment hashes and published viewport/contrast
 results are recorded locally under `.harness/work/brand-palette-20261027/` after
 execution. This approval does not include trial or package publication.
+
+## 2026-10-28: Core/native documentation and wider hero publication
+
+The owner authorized README/site guidance distinguishing public Core 0.1 from
+the local, unpublished native v1 candidate, including formats, SDK entrypoints,
+six versus eight MCP tools, real job lifecycle and compatibility boundaries.
+The protocol comparison table is rendered from README. Native implementation,
+extracted packages and review bundles remain outside the public inventory.
+The approved hero layout increases the desktop text measure and preserves
+responsive wrapping. Build, source inventory, command/table consistency, links
+and browser checks are recorded against the exact artifact in local evidence.
+Commit/push targets `main` and the existing Pages `gh-pages` branch only.
+Existing Foundry repositories are not modified. These documentation checks do
+not promote stale harness stages or establish native publication or acceptance.

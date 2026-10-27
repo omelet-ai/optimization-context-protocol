@@ -155,7 +155,37 @@ def planning_example(demo, key, title, description):
     return f'''<section class="wrap section" id="{key}"><p class="eyebrow">{escape(data['result']['domain_profile']['id'])} · 0.1.0</p><h2>{title}</h2><p class="lead">{description}</p><p><strong>{escape(data['result']['status'])} · {checked['total_cost']} cost_unit</strong></p><div class="table-scroll">{table}</div><p>{explanation} The bounded optimum is checked by a separate exhaustive oracle.</p>{details}<p><a href="../start/local/index.html">Reproduce all three examples locally →</a></p></section>'''
 
 
-def public_pages(commands, demo, command_blocks):
+def edition_notice(root, *, korean=False):
+    if korean:
+        return f'''<div class="notice" data-edition-status><strong>Core 0.1은 공개, native v1은 미공개 후보입니다.</strong><p>현재 GitHub 설치 명령은 Core 0.1을 설치합니다. Native v1 구현·계약 패키지·검토 bundle은 공개 저장소에 포함되지 않습니다. <a href="{root}/reference/index.html#core-native">두 경로의 차이와 공개 상태 →</a></p></div>'''
+    return f'''<div class="notice" data-edition-status><strong>Core 0.1 is public. Native v1 is a local, unpublished candidate.</strong><p>The GitHub quickstart installs Core 0.1. Native v1 implementation and review bundles are not included in this public checkout. <a href="{root}/reference/index.html#core-native">Compare formats and availability →</a></p></div>'''
+
+
+def native_protocol(comparison):
+    return '''<section id="core-native"><h2>Core 0.1 and native v1</h2><p>Use the public Core 0.1 quickstart today. Native v1 aligns a separate local candidate with Foundry Capability Contract v1. This comparison publishes documentation only; native implementation, extracted contract packages and review bundles remain unpublished.</p>''' + comparison + '''
+<h3>Two contract layers, explicit versions</h3><p>The native outer catalog/job/error uses <code>contractVersion: "1"</code>. Reference problems declare <code>domainPayloadFormat: "ocp-core-request/0.1.0"</code>, and <code>JobResult.result</code> retains the original Core result. The inner synchronous execution profile describes the solver invocation; the outer job lifecycle is asynchronous. Contract, domain-profile and package versions identify different things.</p>
+<p>Matrix routing does not become coordinate routing, and worker assignment does not become nurse scheduling. Compare only matching domain profiles, units, costs and constraints.</p>
+<h3>Follow the job through to a checked result</h3><ol><li>Discover the exact catalog and request template, resolve requirements and validate input.</li><li>Submit a job; retain its job ID, input and idempotency key.</li><li>Poll queued/running work to a terminal state, then fetch the result.</li><li>Inspect the domain status and evaluate an available solution; run a separate independent checker.</li></ol>
+<p><code>succeeded</code> means computation completed, not mathematical optimality. Preserve feasible/optimal/infeasible/unknown, termination, proof and unevaluated nulls. After an uncertain response, reuse the same idempotency key and input. Cancellation is a request: confirm a terminal job state before saying computation stopped. A timeout message alone is not cancellation evidence.</p>
+<h3>Compatibility and reference limits</h3><p>Existing Core 0.1 imports and synchronous semantics remain supported; no removal date is set. Native clients choose explicit entrypoints and a reviewed native bundle. Changing a default wire format needs a versioned migration and consumer checks.</p><p>The native MCP candidate is a stateless local binding, not the full <code>foundry-ocp-standard/v1</code> gateway/ocps1 state profile. Compilation, repair and ocps1 state are not advertised by these references. Localhost-only access, volatile two-hour records and a default 128-job session limit are local reference policies, not universal protocol requirements. Credentials and tenant are trusted host configuration.</p></section>'''
+
+
+def native_agent_guide():
+    tools = [
+        ('ocp_native_context', 'List domains or read the selected catalog, schemas and templates.'),
+        ('ocp_native_requirements', 'Resolve configuration and input requirements without solving.'),
+        ('ocp_native_validate', 'Validate the declared problem body; invalid input is not infeasibility.'),
+        ('ocp_native_submit', 'Submit real work with an explicit idempotency key; return a job.'),
+        ('ocp_native_job', 'Poll job state; succeeded does not prove optimality.'),
+        ('ocp_native_result', 'Fetch the completed domain result with its original mathematical meaning.'),
+        ('ocp_native_cancel', 'Request cancellation, then confirm a terminal job state.'),
+        ('ocp_native_evaluate', 'Evaluate a returned solution; independent checking is separate.'),
+    ]
+    rows = ''.join(f'<tr><th scope="row"><code>{name}</code></th><td>{description}</td></tr>' for name, description in tools)
+    return '''<section id="native-mcp"><h2>Native v1: a separate app and MCP binding</h2><p>This local, unpublished candidate requires a separately reviewed native bundle. The Core installation and six tools above do not install it. Native Python imports <code>NativeClient</code> from <code>ocp_candidate.native</code>; Node imports <code>createOptimizationApiClient</code> from <code>ocp-candidate/native</code>. Existing root imports remain Core 0.1.</p><p>The candidate MCP entrypoint is <code>ocp_runtime.native_mcp</code>. Its eight tools use actual jobs and explicit domain selection. Start with <code>ocp_native_context</code>; use advertised <code>selectionTemplate</code> and <code>requestTemplate</code>, ask for missing data, and never invent a payload.</p><div class="table-scroll"><table><caption>Native candidate tools — not included in the public quickstart</caption><thead><tr><th>Tool</th><th>Purpose</th></tr></thead><tbody>''' + rows + '''</tbody></table></div><p>Keep credentials and tenant in trusted host configuration, not tool arguments. Retain the original input and idempotency key after uncertainty. Submitting a job, receiving a result, provider evaluation and independent verification are separate steps. This local binding does not claim the full gateway/ocps1 state profile or acceptance by every model/host.</p><p><a href="../../reference/index.html#core-native">Read the format, lifecycle and compatibility rules →</a></p></section>'''
+
+
+def public_pages(commands, demo, command_blocks, comparison):
     rendered = pages(commands, demo, "")
 
     def block(key, label, command):
@@ -223,4 +253,27 @@ def public_pages(commands, demo, command_blocks):
     rendered['examples/index.html']['body'] += '<section class="wrap section"><h2>From CSV to a checked worker assignment</h2><p>Use a separate CSV dataset to compare baseline, changed assignment cost and changed availability. Expected synthetic outcomes are costs 12 and 14, followed by a proven infeasible scenario with no cost. The command writes assignment tables and exact transcripts.</p>' + block('worker-analysis', 'Run the worker scenario analysis locally', command_blocks['worker-analysis']) + '<p>' + link('docs/users/WORKER_ANALYSIS.md', 'Read the CSV contract and analysis walkthrough') + '. These are local commands, not live browser solver calls.</p></section>'
     verification = '<h2>Show exactly what was verified</h2><p>Read the <code>verification</code> report beside the legacy measurement. Feasibility, cost recomputation, optimality and infeasibility have separate statuses. PARTIAL or INCOMPLETE never establishes an untested proof claim. Offline checking cannot attest engine execution.</p><p>' + link('docs/users/VERIFICATION_SCOPE.md', 'Verification dimensions, limits and independent CLI') + '.</p>'
     rendered['guides/apps/index.html']['body'] = rendered['guides/apps/index.html']['body'].replace('</article></div>', verification + '</article></div>')
+    # State the installed edition at each entry point, including saved examples.
+    for path, page in rendered.items():
+        if path == 'start/omelet/index.html':
+            continue
+        root = ('../' * path.count('/')).rstrip('/') or '.'
+        notice = edition_notice(root, korean=path == 'ko/index.html')
+        if '<article class="prose">' in page['body']:
+            page['body'] = page['body'].replace('<article class="prose">', '<article class="prose">' + notice, 1)
+        elif path == 'index.html':
+            page['body'] = page['body'].replace('</section>', '</section><div class="wrap">' + notice + '</div>', 1)
+        else:
+            page['body'] = page['body'].replace('<section class="wrap" data-example', '<div class="wrap">' + notice + '</div><section class="wrap" data-example', 1)
+
+    rendered['reference/index.html']['body'] = rendered['reference/index.html']['body'].replace('<h2>Four layers</h2>', native_protocol(comparison) + '<h2>Four layers</h2>', 1)
+    additions = {
+        'guides/apps/index.html': native_agent_guide(),
+        'start/local/index.html': '<h2>Need the native v1 candidate?</h2><p>The commands on this page install Core 0.1. A native evaluation starts from a separately supplied, reviewed bundle and its exact installation guide. The native implementation and bundle are not published here or on PyPI/npm. Do not run native commands in this Core kit. Python/MCP native setup needs no Node; Node is optional for its TypeScript app.</p><p><a href="../../reference/index.html#core-native">Compare the paths before choosing an integration →</a></p>',
+        'start/engine/index.html': '<h2>Native v1 engine registration — local candidate</h2><p>The paths above describe the public Core 0.1 kit. In the separate native candidate, a domain adapter and an importable solve function are registered with the common server. <code>ReferenceDomain</code> retains declared Core domain semantics, <code>Registration(domain, solve)</code> binds the engine, and <code>LocalAPI</code> supplies the shared job lifecycle. A spawned solve function must be importable; executable Python entry scripts need a main guard.</p><p>This native authoring template is part of the unpublished review materials, not this public checkout. A new problem still needs explicit schemas, semantics, supported capabilities and independent checks. Sharing a server does not make arbitrary engines interchangeable.</p><p><a href="../../reference/index.html#core-native">Native contract and compatibility boundaries →</a></p>',
+        'ko/index.html': '<h2>Core 0.1과 native v1의 차이</h2><p>Core 0.1은 지금 공개 소스로 설치하는 경로이며 기존 동기 호출과 6개 MCP 도구를 유지합니다. Native v1은 Foundry Capability Contract v1에 맞춘 별도 로컬 후보입니다. 외부 catalog/job/error 계약과 실제 비동기 작업을 제공하며 내부 문제·결과는 명시된 Core 0.1 도메인 형식을 유지합니다.</p><p>Native SDK는 <code>ocp_candidate.native</code> 또는 <code>ocp-candidate/native</code>를 명시적으로 선택하고, MCP는 <code>ocp_native_context</code>로 시작하는 8개 도구를 사용합니다. 작업 제출 → 상태 조회 → 결과 조회 → 평가 후 독립 검산으로 이어집니다. <code>succeeded</code>는 계산 완료이며 최적성 증명이 아닙니다. 응답이 불확실하면 같은 입력과 멱등 키를 유지하고, 취소 요청 후에는 종료 상태를 확인합니다.</p><p>Native 구현·계약 패키지·검토 bundle은 미공개이며 현재 설치 명령으로 제공되지 않습니다. 전체 gateway/ocps1 state 규격을 구현했다는 뜻도 아닙니다. 기존 Core 0.1의 제거 일정은 정하지 않았습니다. 패키지 레지스트리 출시와 상시 trial 가입도 열지 않았습니다. <a href="../reference/index.html#core-native">공개 상태·호환성 비교</a> · <a href="../guides/apps/index.html#native-mcp">native MCP 도구 설명</a></p>',
+    }
+    for path, addition in additions.items():
+        rendered[path]['body'] = rendered[path]['body'].replace('</article></div>', addition + '</article></div>')
+    rendered['project/index.html']['body'] = rendered['project/index.html']['body'].replace('<h2>Why use OCP?</h2>', '<h2>What is public?</h2><p>Core 0.1 source and this documentation are public. The native v1 implementation, extracted contract packages and review bundle remain local and unpublished. Public comparison text does not release those artifacts. Existing Core imports remain supported. Package registries and public self-service trial signup are not open.</p><p><a href="../reference/index.html#core-native">Compare the two contracts and their availability →</a></p><h2>Why use OCP?</h2>', 1)
     return rendered

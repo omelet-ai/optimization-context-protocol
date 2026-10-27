@@ -16,6 +16,51 @@ or evidence of unaided external adoption.
 
 See [project status and verification boundaries](docs/users/PROJECT_STATUS.md).
 
+## Core 0.1 and native v1
+
+**Use Core 0.1 from this public repository today.** The installation and MCP
+commands below install that path. **Native v1 is a local, unpublished candidate**
+aligned with Foundry Capability Contract v1. Its implementation, extracted
+contract packages and review bundle are not included in this public checkout.
+This public comparison does not publish those artifacts or announce a stable v1 release.
+
+<!-- ocp:core-native-table:start -->
+| Boundary | Core 0.1 | Native v1 candidate |
+| --- | --- | --- |
+| Availability | Public source developer preview; install from GitHub | Local, unpublished candidate; requires a separately reviewed bundle |
+| Execution | Synchronous reference calls | Asynchronous jobs: submit, poll, fetch result, request cancellation |
+| Wire format | Core request/result envelopes, version `0.1.0` | Capability Contract v1 outer catalog/job/error; declared Core 0.1 domain payload retained |
+| SDK entrypoints | `ocp_candidate` / `ocp-candidate` | Explicit opt-in: `ocp_candidate.native` / `ocp-candidate/native` |
+| MCP | Six tools, starting with `ocp_context` | Eight tools, starting with `ocp_native_context` |
+| Local setup | No account or key; Python/MCP need no Node | Separate bundle; host manages ephemeral credentials; Python/MCP need no Node |
+<!-- ocp:core-native-table:end -->
+
+In the native reference, `contractVersion: "1"` identifies the outer contract.
+`domainPayloadFormat: "ocp-core-request/0.1.0"` identifies the preserved problem
+body, and `JobResult.result` contains the original domain result. Contract,
+domain-profile and package versions are separate. This does not make matrix
+routing equivalent to coordinate routing, or worker assignment to nurse scheduling.
+
+Native jobs follow submit → poll → fetch result → evaluate. A job marked
+`succeeded` means computation completed, not that a solution is optimal.
+Inspect the inner result status, termination, proof and null metrics, and use
+a separate independent checker. Keep the same idempotency key and input after
+an uncertain response. Cancellation is a request; confirm a terminal job state
+before saying the computation stopped.
+
+Existing Core 0.1 imports and synchronous semantics remain supported; no removal
+date is set. A native integration needs the reviewed native bundle and explicit
+entrypoints. Do not change wire formats merely by updating a dependency. The
+native MCP candidate is a stateless local binding, not the full
+`foundry-ocp-standard/v1` gateway/ocps1 state profile. Its localhost-only server,
+volatile two-hour records and default 128-job session limit are local reference
+policies, not universal OCP requirements. Native source and bundle publication
+remain separate from these documentation updates. PyPI/npm releases and public
+self-service trial signup are not open for either path.
+
+See the [protocol comparison](https://omelet-ai.github.io/optimization-context-protocol/reference/index.html#core-native)
+and [native MCP overview](https://omelet-ai.github.io/optimization-context-protocol/guides/apps/index.html#native-mcp).
+
 ## Why add OCP to a solver?
 
 Calling OR-Tools directly is appropriate for one application using its solver API.
@@ -50,6 +95,8 @@ Omelet trial is the recommended introduction when an invitation is available.
 It is optional; Core compliance never requires an Omelet account.
 
 ## First success from GitHub
+
+This quickstart installs **Core 0.1**, including the six-tool Core MCP server.
 
 Prerequisites: **Git and Python 3.12 on PATH**, on macOS or Linux.
 Check `python3.12 --version` first. **Python and MCP installation need no Node or
@@ -132,6 +179,9 @@ Consult [the contracts and compatibility rules](docs/users/COMPATIBILITY.md)
 and discover the engine's actual capabilities before building a request.
 
 ## Connect MCP without calling a model
+
+This section uses **Core 0.1** tools. Native v1 has a separate eight-tool binding
+and is not installed by these commands.
 
 OCP defines optimization request and result semantics. The optional MCP binding
 makes that context and those operations available to an AI host; OCP also works

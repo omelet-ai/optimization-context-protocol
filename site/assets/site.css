@@ -31,3 +31,10 @@ h1 em{color:var(--purple)}
 .closing .button:hover{background:var(--lime-hover);border-color:var(--lime-hover)}
 .nav-cta:hover{background:var(--accent-hover)}
 ::selection{background:var(--lime);color:var(--ink)}
+
+/* Give the opening copy a wider measure while keeping the diagram alongside it. */
+.hero .lead{max-width:60ch}
+@media(min-width:681px){
+  .hero{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);column-gap:clamp(28px,4vw,48px);padding-inline:clamp(34px,5vw,64px)}
+  .hero h1{font-size:clamp(44px,5.7vw,82px)}
+}

@@ -50,3 +50,19 @@ the existing GitHub Pages site through `gh-pages`. This covers the site colors,
 OCP mark, diagrams and theme color, plus their validation records. Desktop and
 mobile rendering and readability must be checked on the published site. The
 same source inventory and documentation-only deployment boundary apply.
+
+## 2026-10-28 Core/native documentation and text width update
+
+The owner explicitly approved documenting Core 0.1 versus native v1 and their
+publication status in README and the website, validating the wider hero text,
+committing and pushing these changes to `omelet-ai/optimization-context-protocol`
+`main`, and deploying the existing GitHub Pages site through `gh-pages`.
+The owner also explicitly required that existing Foundry repositories remain
+unchanged. This update uses an independent OCP checkout and does not write to
+Foundry checkouts, worktrees or Git metadata.
+
+The public inventory remains 224 source files. This scope publishes comparison
+and availability guidance, the website layout, and related build/check changes.
+It does not publish the native implementation, extracted contract packages,
+local review bundles or execution evidence, and does not authorize trial hosting,
+registry/release assets, spending or model calls.
