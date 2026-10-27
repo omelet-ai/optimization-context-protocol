@@ -149,3 +149,27 @@ under `.harness/work/pages-publication-20261027/`; published commit, Pages build
 fresh online install and URL results are recorded there after remote checks.
 These standalone results do not promote stale harness dependencies or establish
 external-human acceptance.
+
+## 2026-10-27: Omelet color palette preview
+
+The owner requested purple and light green using the Omelet website as the visual
+reference. The local site now uses its observed purple `#7B5BFF`, a darker
+`#6443DF` accent for small text/actions, and a complementary light green `#D5F89B`.
+The palette covers CSS, the OCP mark, diagrams, route illustrations and browser
+theme color. Content, installation commands and protocol behavior are unchanged.
+
+The public-edition build and nine existing artifact checks passed. Eleven
+specified normal-text color combinations have contrast of at least 5.20:1;
+the large purple heading has 4.19:1 contrast. Workspace transfer and source
+inventory checks also passed within their existing scopes. Local evidence is
+under `.harness/work/brand-palette-20261027/`. The app browser did not attach,
+so rendered visual/mobile checks remain unverified. This is a local preview;
+no commit, push or additional deployment was performed for this palette update.
+
+The owner subsequently approved this palette update on `main` and GitHub Pages,
+including desktop/mobile checks after deployment. The existing Chrome connection
+now renders the local preview and confirms the desktop palette. The four site
+source files still match the checked build; rerun the public artifact and index
+checks before publishing. Deployment hashes and published viewport/contrast
+results are recorded locally under `.harness/work/brand-palette-20261027/` after
+execution. This approval does not include trial or package publication.

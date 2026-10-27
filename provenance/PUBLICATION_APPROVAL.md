@@ -41,3 +41,12 @@ The Pages artifact contains only the static documentation selection checked by
 published installation commands with `main` and check their links. This separate
 Pages approval does not expand the source-only flags in `publication.json` or
 authorize trial hosting, registry/release assets, spending or model calls.
+
+## 2026-10-27 purple and light-green palette update
+
+The owner subsequently approved committing and pushing the reviewed purple and
+light-green site changes to the same repository's `main` and deploying them to
+the existing GitHub Pages site through `gh-pages`. This covers the site colors,
+OCP mark, diagrams and theme color, plus their validation records. Desktop and
+mobile rendering and readability must be checked on the published site. The
+same source inventory and documentation-only deployment boundary apply.
