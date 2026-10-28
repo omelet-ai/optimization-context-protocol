@@ -7,3 +7,10 @@ are licensed under the Apache License, Version 2.0. See LICENSE.
 Third-party dependencies retain their own licenses. See THIRD_PARTY_NOTICES.md.
 The proprietary Omelet engine, internal snapshots and private operating materials
 are not included in this repository. The license does not grant trademark rights.
+
+Selected native contract and SDK sources originate from Omelet Foundry commit
+7547036d1bc9464d6c43a9bdf7cff0a78e8560d7 and are included under Apache-2.0 with
+the owner's authorization. Their origin hashes and the TypeScript import
+relocation and cancel-uncertainty-1 text modification are recorded in ORIGIN.json
+and provenance/native-origin-inventory.json. This is a selected source extraction,
+not distribution of the complete Foundry repository or proprietary engines.

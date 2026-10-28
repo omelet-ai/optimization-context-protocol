@@ -269,7 +269,7 @@
           "role": "enforced",
           "definition": "routing.basic.weight_capacity.v1",
           "unit": "kg",
-          "source": "independent",
+          "source": "engine",
           "status": "evaluated",
           "violation": 0,
           "satisfied": true,
@@ -280,7 +280,7 @@
           "role": "enforced",
           "definition": "routing.basic.all_visits_once.v1",
           "unit": "count",
-          "source": "independent",
+          "source": "engine",
           "status": "evaluated",
           "violation": 0,
           "satisfied": true,
@@ -320,7 +320,7 @@
           "role": "optimized",
           "definition": "routing.basic.total_distance.v1",
           "unit": "meter",
-          "source": "independent",
+          "source": "engine",
           "status": "evaluated",
           "value": 18,
           "reason": null
@@ -332,7 +332,7 @@
           "role": "enforced",
           "definition": "routing.basic.weight_capacity.v1",
           "unit": "kg",
-          "source": "independent",
+          "source": "engine",
           "status": "evaluated",
           "violation": 0,
           "satisfied": true,
@@ -343,7 +343,7 @@
           "role": "enforced",
           "definition": "routing.basic.all_visits_once.v1",
           "unit": "count",
-          "source": "independent",
+          "source": "engine",
           "status": "evaluated",
           "violation": 0,
           "satisfied": true,
@@ -355,6 +355,7 @@
         "version": "0.1.0"
       },
       "limitations": [
+        "Provider evaluation reuses provider logic; use the separately packaged independent checker.",
         "Feasibility and cost evaluation; no optimality proof"
       ]
     },
