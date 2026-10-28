@@ -7,6 +7,7 @@ an independently adopted industry standard.
 | --- | --- |
 | Source | Public at [GitHub](https://github.com/omelet-ai/optimization-context-protocol); original code is Apache-2.0, with separate third-party notices |
 | Documentation site | Public on [GitHub Pages](https://omelet-ai.github.io/optimization-context-protocol/) |
+| Native v1 | Public source candidate aligned with pinned Capability Contract v1; explicit native SDK/MCP entrypoints; not stable v1 or the full gateway/ocps1 profile |
 | Installation | Build local preview artifacts from source; no PyPI/npm release or public binary release assets |
 | Runtime examples | Routing, fixed-time worker assignment and deterministic inventory replenishment; bounded reference profiles |
 | Omelet trial | Separate invitation, environment and operating limits; no public self-service signup |
@@ -33,3 +34,10 @@ Internal source snapshots and private evidence are intentionally absent from Git
 Documentation, source, registry artifacts and hosted services have different
 publication scopes. A locally generated artifact does not publish itself, and
 the source license does not activate a hosted trial or grant a service credential.
+
+For synchronous Core calls use the original quickstart. For native jobs and eight
+MCP tools, use [the native source quickstart](../../README.md#native-v1-from-public-source).
+Both build locally from the same public repository without a Foundry checkout.
+Selected native source rights, Apache-2.0 and patent disclosure were confirmed
+on 2026-10-28; [the publication record](../../provenance/PUBLICATION_APPROVAL.md)
+distinguishes source and Pages from registry/releases and hosted trials.

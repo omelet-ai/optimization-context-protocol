@@ -1,0 +1,1274 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OI Foundry Capability Contract",
+    "version": "1",
+    "description": "The HTTP contract every OI Foundry Optimization API (one per problem type) keeps. Normative text: ../README.md. Paths below are relative to the API's basePath, except /health, /ready and /version, which are at the root."
+  },
+  "servers": [
+    {
+      "url": "{origin}{basePath}",
+      "variables": {
+        "origin": {
+          "default": "http://127.0.0.1:9489"
+        },
+        "basePath": {
+          "default": "/v2",
+          "enum": [
+            "/v2",
+            "/api/routing/v1",
+            "/api/advanced-routing/v1",
+            "/v1"
+          ],
+          "description": "nurse-scheduling /v2, routing /api/routing/v1, advanced-routing /api/advanced-routing/v1, inventory-control /v1"
+        }
+      }
+    }
+  ],
+  "paths": {
+    "/capabilities": {
+      "get": {
+        "summary": "The problem type's capability catalog",
+        "operationId": "getCapabilities",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The catalog; catalogDigest covers everything else but api.baseUrl",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Capabilities"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        }
+      }
+    },
+    "/validate": {
+      "post": {
+        "summary": "Check a problem without solving it",
+        "operationId": "validateProblem",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Whether the problem is valid, and why not",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Validation"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/Invalid"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "413": {
+            "$ref": "#/components/responses/PayloadTooLarge"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/configurations/resolve": {
+      "post": {
+        "summary": "Resolve a configuration against the catalog (curation)",
+        "operationId": "resolveConfiguration",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The resolved configuration",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/Invalid"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "413": {
+            "$ref": "#/components/responses/PayloadTooLarge"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/data-requirements/resolve": {
+      "post": {
+        "summary": "Resolve the data a configuration needs (curation)",
+        "operationId": "resolveDataRequirements",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The data requirements",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/Invalid"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "413": {
+            "$ref": "#/components/responses/PayloadTooLarge"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs": {
+      "post": {
+        "summary": "Submit a problem to solve",
+        "operationId": "submitJob",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TenantHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted: the job (new, or the one this key already names for the same request)",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Location": {
+                "description": "{basePath}/jobs/{jobId}",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Idempotent-Replayed": {
+                "description": "\"true\" when the key already named this job",
+                "schema": {
+                  "type": "string",
+                  "const": "true"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadHeaders"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Invalid"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "413": {
+            "$ref": "#/components/responses/PayloadTooLarge"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/jobs/{jobId}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/JobId"
+        }
+      ],
+      "get": {
+        "summary": "A job's state",
+        "operationId": "getJob",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TenantHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The job",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadHeaders"
+          },
+          "404": {
+            "$ref": "#/components/responses/JobNotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Cancel a job",
+        "operationId": "cancelJob",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TenantHeader"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The job: cancelled if it was queued, cancelRequested if running, unchanged if finished",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadHeaders"
+          },
+          "404": {
+            "$ref": "#/components/responses/JobNotFound"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        }
+      }
+    },
+    "/jobs/{jobId}/result": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/JobId"
+        }
+      ],
+      "get": {
+        "summary": "A finished job's result",
+        "operationId": "getJobResult",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TenantHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The result of a succeeded or infeasible job",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadHeaders"
+          },
+          "404": {
+            "$ref": "#/components/responses/JobNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        }
+      }
+    },
+    "/evaluations": {
+      "post": {
+        "summary": "Evaluate a job's result ({jobId}) or a given solution",
+        "operationId": "evaluate",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TenantHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The evaluation",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadHeaders"
+          },
+          "404": {
+            "$ref": "#/components/responses/JobNotFound"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Invalid"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "413": {
+            "$ref": "#/components/responses/PayloadTooLarge"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compilations": {
+      "post": {
+        "summary": "Compile a problem into the engine's input without solving it",
+        "operationId": "compile",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The compiled problem",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "$ref": "#/components/responses/Invalid"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "413": {
+            "$ref": "#/components/responses/PayloadTooLarge"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-capability-optional": true
+      }
+    },
+    "/repairs": {
+      "post": {
+        "summary": "Repair a solution after a change, as a job",
+        "operationId": "repair",
+        "security": [
+          {
+            "serviceToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RequestIdHeader"
+          },
+          {
+            "$ref": "#/components/parameters/TenantHeader"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKeyHeader"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted: the repair's job (new, or the one this key already names for the same request)",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              },
+              "Location": {
+                "description": "{basePath}/jobs/{jobId}",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Idempotent-Replayed": {
+                "description": "\"true\" when the key already named this job",
+                "schema": {
+                  "type": "string",
+                  "const": "true"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Job"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadHeaders"
+          },
+          "409": {
+            "$ref": "#/components/responses/Conflict"
+          },
+          "422": {
+            "$ref": "#/components/responses/Invalid"
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthenticated"
+          },
+          "413": {
+            "$ref": "#/components/responses/PayloadTooLarge"
+          },
+          "500": {
+            "$ref": "#/components/responses/Internal"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "x-capability-optional": true
+      }
+    },
+    "/health": {
+      "servers": [
+        {
+          "url": "{origin}",
+          "variables": {
+            "origin": {
+              "default": "http://127.0.0.1:9489"
+            }
+          }
+        }
+      ],
+      "get": {
+        "summary": "The process answers",
+        "operationId": "health",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Alive",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ready": {
+      "servers": [
+        {
+          "url": "{origin}",
+          "variables": {
+            "origin": {
+              "default": "http://127.0.0.1:9489"
+            }
+          }
+        }
+      ],
+      "get": {
+        "summary": "Every readiness check passes",
+        "operationId": "ready",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Ready",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Readiness"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Not ready: the failing checks by name, no address or error text",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Readiness"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/version": {
+      "servers": [
+        {
+          "url": "{origin}",
+          "variables": {
+            "origin": {
+              "default": "http://127.0.0.1:9489"
+            }
+          }
+        }
+      ],
+      "get": {
+        "summary": "The service's versions and build",
+        "operationId": "version",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Versions",
+            "headers": {
+              "x-request-id": {
+                "$ref": "#/components/headers/RequestId"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Version"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "serviceToken": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "A service token; the API holds its sha256 under the caller's name in <PREFIX>_SERVICE_TOKENS"
+      }
+    },
+    "headers": {
+      "RequestId": {
+        "description": "The request id: the caller's usable x-request-id, else one the API made",
+        "schema": {
+          "type": "string",
+          "pattern": "^[\\w.:-]{1,128}$"
+        }
+      }
+    },
+    "parameters": {
+      "RequestIdHeader": {
+        "name": "x-request-id",
+        "in": "header",
+        "required": false,
+        "description": "The caller's correlation id ([A-Za-z0-9_.:-], at most 128); echoed back",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "TenantHeader": {
+        "name": "X-OIP-Tenant-Id",
+        "in": "header",
+        "required": true,
+        "description": "The OIP tenant the job belongs to",
+        "schema": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._:-]{1,128}$"
+        }
+      },
+      "IdempotencyKeyHeader": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "description": "Unique within (tenant, problem type); the same key and request name the same job",
+        "schema": {
+          "type": "string",
+          "pattern": "^[\\x21-\\x7e]{1,200}$"
+        }
+      },
+      "JobId": {
+        "name": "jobId",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "responses": {
+      "Unauthenticated": {
+        "description": "UNAUTHENTICATED: no service token, or an unknown one",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "BadHeaders": {
+        "description": "TENANT_REQUIRED or IDEMPOTENCY_KEY_REQUIRED",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "JobNotFound": {
+        "description": "JOB_NOT_FOUND: no such job for this tenant (another tenant's job included)",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "Conflict": {
+        "description": "IDEMPOTENCY_CONFLICT, JOB_NOT_FINISHED (retryable), JOB_CANCELLED or JOB_FAILED",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "Invalid": {
+        "description": "INVALID_REQUEST (the body breaks the contract) or the API's own code for an invalid problem",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "PayloadTooLarge": {
+        "description": "PAYLOAD_TOO_LARGE: Content-Length over the API's limit (32 MiB by default)",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      },
+      "Internal": {
+        "description": "INTERNAL (retryable): a fault inside the API; no detail is answered",
+        "headers": {
+          "x-request-id": {
+            "$ref": "#/components/headers/RequestId"
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Timestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "Issue": {
+        "type": "object",
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "fieldPath": {
+            "type": "string"
+          }
+        }
+      },
+      "ErrorEnvelope": {
+        "type": "object",
+        "required": [
+          "code",
+          "message",
+          "requestId",
+          "retryable",
+          "issues"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
+          "message": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string",
+            "pattern": "^[\\w.:-]{1,128}$"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "fieldPath": {
+            "type": "string"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Issue"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "JobStatus": {
+        "type": "string",
+        "enum": [
+          "queued",
+          "running",
+          "succeeded",
+          "infeasible",
+          "failed",
+          "cancelled"
+        ]
+      },
+      "JobError": {
+        "type": "object",
+        "description": "Why a job failed: SOLVE_FAILED (a fault; the message names the exception type only), SOLVER_CRASHED, ATTEMPTS_EXHAUSTED, BAD_OUTCOME, or a code the solve declared",
+        "required": [
+          "code",
+          "message",
+          "retryable",
+          "issues"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
+          "message": {
+            "type": "string"
+          },
+          "retryable": {
+            "type": "boolean"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Issue"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Job": {
+        "type": "object",
+        "description": "A job's state; never its problem or result",
+        "required": [
+          "jobId",
+          "problemType",
+          "status",
+          "attempt",
+          "cancelRequested",
+          "createdAt",
+          "updatedAt",
+          "startedAt",
+          "finishedAt",
+          "expiresAt"
+        ],
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "problemType": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/JobStatus"
+          },
+          "attempt": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "cancelRequested": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "$ref": "#/components/schemas/Timestamp"
+          },
+          "updatedAt": {
+            "$ref": "#/components/schemas/Timestamp"
+          },
+          "startedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Timestamp"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "finishedAt": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Timestamp"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "expiresAt": {
+            "$ref": "#/components/schemas/Timestamp"
+          },
+          "error": {
+            "$ref": "#/components/schemas/JobError"
+          }
+        },
+        "additionalProperties": false
+      },
+      "JobResult": {
+        "type": "object",
+        "required": [
+          "jobId",
+          "status",
+          "result"
+        ],
+        "properties": {
+          "jobId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "succeeded",
+              "infeasible"
+            ]
+          },
+          "result": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Capabilities": {
+        "type": "object",
+        "description": "The catalog: the API's versions and what its problem type supports. catalogDigest is the canonical digest (fixtures/canonical-vectors.json) of this object without catalogDigest and without api.baseUrl",
+        "required": [
+          "contractVersion",
+          "problemType",
+          "catalogDigest"
+        ],
+        "properties": {
+          "contractVersion": {
+            "const": "1"
+          },
+          "problemType": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "catalogDigest": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "api": {
+            "type": "object",
+            "properties": {
+              "version": {
+                "type": "string"
+              },
+              "baseUrl": {
+                "type": "string"
+              }
+            }
+          },
+          "objectives": {
+            "type": "array"
+          },
+          "constraints": {
+            "type": "array"
+          },
+          "parameters": {
+            "type": "array"
+          }
+        }
+      },
+      "Validation": {
+        "type": "object",
+        "required": [
+          "valid",
+          "issues"
+        ],
+        "properties": {
+          "valid": {
+            "type": "boolean"
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Issue"
+            }
+          }
+        }
+      },
+      "Health": {
+        "type": "object",
+        "required": [
+          "status",
+          "service"
+        ],
+        "properties": {
+          "status": {
+            "const": "ok"
+          },
+          "service": {
+            "type": "string"
+          }
+        },
+        "description": "At least status ok and the service; an API that had its own /health keeps its fields"
+      },
+      "Readiness": {
+        "type": "object",
+        "required": [
+          "ready",
+          "service",
+          "checks"
+        ],
+        "properties": {
+          "ready": {
+            "type": "boolean"
+          },
+          "service": {
+            "type": "string"
+          },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "ok"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "ok": {
+                  "type": "boolean"
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "Version": {
+        "type": "object",
+        "required": [
+          "service",
+          "build"
+        ],
+        "properties": {
+          "service": {
+            "type": "string"
+          },
+          "build": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

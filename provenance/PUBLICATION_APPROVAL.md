@@ -66,3 +66,32 @@ and availability guidance, the website layout, and related build/check changes.
 It does not publish the native implementation, extracted contract packages,
 local review bundles or execution evidence, and does not authorize trial hosting,
 registry/release assets, spending or model calls.
+
+## 2026-10-28 native source publication and Pages update
+
+The owner explicitly confirmed public disclosure rights, Apache-2.0 distribution
+and patent-disclosure clearance for the 28 newly selected native sources, and
+approved publishing the reviewed 301-file candidate to this repository's `main`
+after finalizing notices and validation. The review baseline is public `main`
+`211682d944d068d69ab669747c04fc7abbd7918c`; the reviewed candidate source digest was
+`a7417f4a446788f8ec4f81c46f4e017e6adb5db44cfc1c81e4b768de9b0f0255`.
+The final inventory has 307 files: the 301-file candidate with finalized approval,
+license, README/site and validation changes, plus LICENSE, NOTICE and
+THIRD_PARTY_NOTICES.md in each of the two extracted contract packages. The pending
+rights document is renamed LICENSE_SCOPE.md. Original selected source hashes
+remain unchanged; the documented TypeScript relocation/text proposal remains
+unaccepted upstream. The explicit final inventory is native-publication.json,
+publication.json and repository-selection.json.
+
+The same instruction separately authorizes updating README and the homepage,
+deploying static documentation to the existing GitHub Pages URL through
+`gh-pages`, and checking the deployed commands and links. Existing Foundry
+checkouts, worktrees and Git metadata must not be modified. Concurrent BYO worker
+development is excluded from this reviewed source selection.
+
+This records the owner's decision, not an independent legal opinion. The source
+is a developer preview; stable-v1, full gateway/ocps1, production acceptance and
+external-human/LLM-host acceptance are not claimed. Package registries, release
+assets, hosted trials, spending and additional model calls remain outside this
+publication task. Local generated kits retain `publication_authorized: false`
+for artifact posting, separately from `source_publication_authorized: true`.

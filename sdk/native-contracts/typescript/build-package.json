@@ -1,0 +1,17 @@
+{
+  "name": "ocp-foundry-convergence-build",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local-only build tooling; does not publish or license Foundry source",
+  "dependencies": {
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2",
+    "@types/node": "24.10.0",
+    "tsx": "4.21.0",
+    "ajv": "8.20.0",
+    "jsonc-parser": "3.3.1"
+  }
+}

@@ -187,3 +187,26 @@ and browser checks are recorded against the exact artifact in local evidence.
 Commit/push targets `main` and the existing Pages `gh-pages` branch only.
 Existing Foundry repositories are not modified. These documentation checks do
 not promote stale harness stages or establish native publication or acceptance.
+
+## 2026-10-28: native source publication preparation
+
+The owner requested a reviewable, validated native v1 publication candidate,
+without modifying any existing Foundry repository and without publishing yet.
+The portable build uses the explicitly extracted contract sources in
+`sdk/native-contracts`, preserves Core entrypoints and selects the distinct
+`cancel-uncertainty-1` TypeScript proposal version. Installed native, Core and
+Linux checks are standalone candidate evidence, not promotion of historic
+H37–H55 stages. Source/license/patent and exact GitHub publication decisions
+remain false in `provenance/native-publication.json`. The current approved
+Core allowlist is unchanged. This preparation invokes no model; model acceptance
+of this exact portable candidate and external-human adoption remain unrun.
+
+## 2026-10-28 native source publication approval
+
+The owner approved rights, Apache-2.0 and patent disclosure for the 28 extracted
+sources, final notices, the reviewed 301-file candidate on main, and matching
+README/GitHub Pages updates. Six package notice files finalize the 307-file
+selection. The independent source checks and installed-runtime checks apply to
+this candidate; historic harness stages are not promoted. Concurrent BYO worker
+work and existing Foundry repositories are excluded. See
+[publication scope](provenance/PUBLICATION_APPROVAL.md).

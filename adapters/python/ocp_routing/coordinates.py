@@ -50,7 +50,7 @@ def to_matrix(problem):
                        "unit":"meter", "model":"explicit_matrix", "rounding":"none"}}
 
 
-def evaluation_fields(problem, solution, source="independent"):
+def evaluation_fields(problem, solution, source="engine"):
     metrics, constraints = matrix_profile.evaluation_fields(to_matrix(problem), solution, source)
     for item in metrics + constraints:
         item["definition"] = item["definition"].replace("routing.basic.", "routing.coordinates.")

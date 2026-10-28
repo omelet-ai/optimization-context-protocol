@@ -45,7 +45,7 @@ def comparison_table():
         raise ValueError("Expected a three-column Core/native comparison table")
     def row(cells, tag):
         return '<tr>' + ''.join('<' + tag + '>' + re.sub(r'`([^`]+)`', r'<code>\1</code>', escape(cell)) + '</' + tag + '>' for cell in cells) + '</tr>'
-    return '<div class="table-scroll"><table data-core-native><caption>Public Core 0.1 and the unpublished native v1 candidate</caption><thead>' + row(rows[0], 'th') + '</thead><tbody>' + ''.join(row(cells, 'td') for cells in rows[2:]) + '</tbody></table></div>'
+    return '<div class="table-scroll"><table data-core-native><caption>Public Core 0.1 and native v1 source previews</caption><thead>' + row(rows[0], 'th') + '</thead><tbody>' + ''.join(row(cells, 'td') for cells in rows[2:]) + '</tbody></table></div>'
 
 
 def canonical_base(value):
@@ -77,7 +77,7 @@ def build(output, base_url):
         module_spec.loader.exec_module(content)
         pages = content.public_pages(json.loads(source("site/commands.json").read_text()),
                                      json.loads((review / "assets/example.json").read_text()),
-                                     {**{key: readme_commands(key) for key in ("readme-build", "readme-examples", "readme-mcp")},
+                                     {**{key: readme_commands(key) for key in ("readme-build", "readme-examples", "readme-mcp", "readme-native-build", "readme-native-mcp")},
                                       "worker-analysis": document_commands("docs/users/WORKER_ANALYSIS.md", "worker-analysis")},
                                      comparison_table())
         template_text = source("site/templates/page.html").read_text().replace(

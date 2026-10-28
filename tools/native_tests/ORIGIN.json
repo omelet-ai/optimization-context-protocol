@@ -1,0 +1,8 @@
+{
+  "commit": "7547036d1bc9464d6c43a9bdf7cff0a78e8560d7",
+  "upstream.test.ts": "be8405111d15a28bec44f653114a385cbe4c497b1bc888412fcc1311d9c41b57",
+  "vectors.json": "564471605a724e112350d4ff378f0396a9e3adc68cdb88782388e42f95e07527",
+  "publication_authorized": true,
+  "license": "Apache-2.0",
+  "approval_record": "provenance/PUBLICATION_APPROVAL.md"
+}

@@ -14,6 +14,10 @@ snapshot is distributed in this source repository.
 | jsonc-parser | 3.3.1 | MIT | TypeScript JSON parsing |
 | TypeScript | 7.0.2 | Apache-2.0 | Build-time compiler |
 | @types/node | 24.10.0 | MIT | Build-time Node type definitions |
+| FastAPI | 0.135.1 | MIT | Native contract HTTP server |
+| annotated-doc | 0.0.4 | MIT | Native contract annotations |
+| Uvicorn | 0.54.0 | BSD-3-Clause | Native local ASGI server |
+| Zod | 4.6.7 | MIT | Native TypeScript validators |
 
 Exact direct and transitive dependency versions are retained in the
 [Python lock](tools/requirements-dev.lock) and

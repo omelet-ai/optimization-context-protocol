@@ -41,7 +41,7 @@ capability의 `configuration_schema`는 독립 JSON Schema이고 내부 fragment
 
 schema가 proof의 존재를 검사해도 수학적 증명을 검증한 것은 아니다. profile/adapter가 증거를 확인할 수 없으면 optimal/infeasible로 승격하지 않는다. runtime 장애나 미지원 요청에는 failure를 반환한다. timeout 자체를 infeasible로 mapping하지 않는다.
 
-objective는 `optimized/reported`, constraint는 `enforced/evaluated`를 구분한다. 평가에는 정의·단위·출처(`engine/independent`)와 평가 상태가 있다. `not_evaluated`는 value/violation/satisfied를 null로 두고 이유를 요구한다. null을 0·충족으로 변환하지 않는다. constraint의 violation 0이면 satisfied=true, 양수면 false다. profile이 위반 수식과 hard/soft 관계를 정한다.
+objective는 `optimized/reported`, constraint는 `enforced/evaluated`를 구분한다. 평가에는 정의·단위·출처(`engine/independent`)와 평가 상태가 있다. `not_evaluated`는 value/violation/satisfied를 null로 두고 이유를 요구한다. null을 0·충족으로 변환하지 않는다. `source=engine`은 제공자 내부 계산·재평가를 포함한다. 같은 제공자의 평가 함수를 별도 endpoint로 호출하는 것만으로 `independent`가 되지 않는다. 별도로 구현된 checker의 실제 실행 여부와 검사 범위를 구분해 보고한다. constraint의 violation 0이면 satisfied=true, 양수면 false다. profile이 위반 수식과 hard/soft 관계를 정한다.
 
 request ID는 상관관계 식별자이며 인증·입력 hash가 아니다. provider는 요청을 변경 불가능한 실행 단위로 취급하고 응답에 같은 ID·참조 버전·effective configuration을 연결한다. result의 provenance request ID도 일치해야 한다. client는 원 요청과 비교하고 evaluator는 원 입력과 실제 해를 함께 받는다. public content digest는 이 Core 후보의 필수사항이 아니다. 도입할 때 canonicalization·범위·알고리즘을 별도 정의한다. 기존 Omelet opaque digest를 새 내용에 재사용하지 않는다.
 

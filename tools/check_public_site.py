@@ -73,7 +73,7 @@ class PublicSite(unittest.TestCase):
         observed = {}
         for page in self.pages.values():
             observed.update(page.commands)
-        for marker in ("readme-build", "readme-examples", "readme-mcp"):
+        for marker in ("readme-build", "readme-examples", "readme-mcp", "readme-native-build", "readme-native-mcp"):
             self.assertEqual(observed[marker], readme_commands(marker))
         self.assertIn("--profile all", observed["readme-mcp"])
         worker = re.search(r'<!-- ocp:worker-analysis -->\s*```sh\n(.*?)\n```',
@@ -136,24 +136,24 @@ class PublicSite(unittest.TestCase):
             self.assertEqual(data['evaluation']['metrics'][0]['value'], cost)
             self.assertIn(key, self.pages['examples/index.html'].ids)
 
-    def test_10_entrypoints_distinguish_public_core_and_unpublished_native(self):
+    def test_10_entrypoints_distinguish_core_and_native_source_paths(self):
         for name in ('index.html', 'start/index.html', 'start/local/index.html',
                      'start/engine/index.html', 'guides/apps/index.html',
                      'reference/index.html', 'project/index.html', 'examples/index.html'):
             self.assertIn('data-edition-status', self.html[name], name)
-            self.assertIn('Core 0.1 is public. Native v1 is a local, unpublished candidate.', self.html[name], name)
-            self.assertTrue(any(link.endswith('/reference/index.html#core-native') for link in self.pages[name].links), name)
-        self.assertIn('Core 0.1은 공개, native v1은 미공개 후보', self.html['ko/index.html'])
+            self.assertIn('Core 0.1 and the native v1 candidate are public source previews.', self.html[name], name)
+            self.assertTrue(any(link.endswith('/start/local/index.html#native') for link in self.pages[name].links), name)
+        self.assertIn('Core 0.1과 native v1 후보를 공개 소스로 제공합니다.', self.html['ko/index.html'])
         readme = (ROOT / 'README.md').read_text()
-        self.assertIn('not included in this public checkout', readme)
         self.assertIn('Existing Core 0.1 imports and synchronous semantics remain supported', readme)
+        self.assertIn('native', self.pages['start/local/index.html'].ids)
+        self.assertIn('build_native_candidate.py', self.pages['start/local/index.html'].commands['readme-native-build'])
+        self.assertIn('--domain worker-scheduling --input worker-input.json', self.pages['start/local/index.html'].commands['readme-native-mcp'])
         for name, page in self.pages.items():
+            for stale in ('local, unpublished candidate', 'remain local and unpublished', '미공개 후보'):
+                self.assertNotIn(stale, self.html[name])
             for link in page.links:
-                self.assertFalse(any(unpublished in link for unpublished in
-                    ('NATIVE_LOCAL_CANDIDATE', 'FOUNDRY_NATIVE_V1_CANDIDATE', 'native_server_template', '.whl', '.tgz', '.zip')), (name, link))
-            for command in page.commands.values():
-                self.assertNotIn('ocp_runtime.native_mcp', command)
-                self.assertNotIn('.native/bin', command)
+                self.assertFalse(any(package in link for package in ('.whl', '.tgz', '.zip')), (name, link))
 
     def test_11_readme_and_site_comparison_cells_match(self):
         readme = (ROOT / 'README.md').read_text()

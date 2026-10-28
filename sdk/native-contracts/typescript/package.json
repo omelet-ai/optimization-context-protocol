@@ -1,0 +1,52 @@
+{
+  "name": "@omelet/ocp-native-contracts",
+  "version": "0.0.0-foundry.7547036d1bc9.review.1",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "engines": {
+    "node": "^22.0.0 || ^24.0.0"
+  },
+  "files": [
+    "dist",
+    "ORIGIN.json",
+    "LICENSE",
+    "NOTICE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./capability": {
+      "types": "./dist/contracts/capability-contract.d.ts",
+      "default": "./dist/contracts/capability-contract.js"
+    },
+    "./manifest": {
+      "types": "./dist/contracts/ocp-standard-manifest.d.ts",
+      "default": "./dist/contracts/ocp-standard-manifest.js"
+    },
+    "./state": {
+      "types": "./dist/contracts/ocp-state-envelope.d.ts",
+      "default": "./dist/contracts/ocp-state-envelope.js"
+    },
+    "./client": {
+      "types": "./dist/optimization-api/client.d.ts",
+      "default": "./dist/optimization-api/client.js"
+    },
+    "./trace": {
+      "types": "./dist/caller-trace.d.ts",
+      "default": "./dist/caller-trace.js"
+    },
+    "./canonical": {
+      "types": "./dist/domain/canonical.d.ts",
+      "default": "./dist/domain/canonical.js"
+    }
+  },
+  "dependencies": {
+    "zod": "4.6.7"
+  }
+}

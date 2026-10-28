@@ -14,6 +14,7 @@ dependencies = ["jsonschema==4.26.0"]
 [project.optional-dependencies]
 reference = ["ortools==9.15.6755"]
 mcp = ["mcp==2.3.0"]
+native = ["ocp-foundry-contracts-candidate==0.0.0+foundry.7547036d1bc9.review1", "uvicorn==0.54.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

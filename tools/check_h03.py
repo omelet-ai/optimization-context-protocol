@@ -52,6 +52,7 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(output["status"],"feasible")
         self.assertEqual(output["provenance"]["engine"],{"id":"ortools.routing","version":"9.15.6755"})
         self.assertEqual(verify_result(req,output)["total_cost"],18)
+        self.assertTrue(all(item["source"] == "engine" for item in output["metrics"] + output["constraints"]))
 
     def test_02_describe_matches_core(self):
         validate_message(self.adapter.describe())
@@ -178,10 +179,16 @@ class AdapterTests(unittest.TestCase):
         output=self.client.execute(self.problem,request_id="")
         self.assertEqual(output["kind"],"failure"); validate_message(output)
 
-    def test_25_evaluation_preserves_independent_origin(self):
+    def test_25_provider_evaluation_does_not_claim_independent_origin(self):
         response=self.adapter.evaluate(self.client.request(self.problem),FIXTURE["witness"])
         validate_message(response)
-        self.assertEqual(response["metrics"][0]["source"],"independent")
+        self.assertTrue(all(item["source"] == "engine" for item in response["metrics"] + response["constraints"]))
+        self.assertIn("reuses provider logic", response["limitations"][0])
+        # A corrupted solution must still be evaluated, without claiming independence.
+        broken = deepcopy(FIXTURE["witness"])
+        broken["routes"][0]["visits"].pop()
+        checked = self.adapter.evaluate(self.client.request(self.problem), broken)
+        self.assertTrue(any(not item["satisfied"] for item in checked["constraints"]))
 
     def test_26_requirements_reject_unsupported_parameters(self):
         config=deepcopy(FIXTURE["configuration"]); config["parameters"]["seed"]=1

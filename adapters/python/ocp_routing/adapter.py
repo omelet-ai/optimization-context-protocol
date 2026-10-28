@@ -103,7 +103,8 @@ class RoutingAdapter:
             metrics,constraints=self.profile.evaluation_fields(request["input"],solution)
             return {"core_version":"0.1.0","kind":"evaluation","request_id":request["request_id"],
                     "capability":deepcopy(self.identity),"domain_profile":deepcopy(self.profile.DOMAIN),"metrics":metrics,"constraints":constraints,
-                    "evaluator":{"id":"ocp-candidate.routing-evaluator","version":"0.1.0"},"limitations":["Feasibility and cost evaluation; no optimality proof"]}
+                    "evaluator":{"id":"ocp-candidate.routing-evaluator","version":"0.1.0"},"limitations":["Provider evaluation reuses provider logic; use the separately packaged independent checker.",
+                        "Feasibility and cost evaluation; no optimality proof"]}
         except OCPError as exc:
             rid=request.get("request_id") if isinstance(request,dict) else None
             return failure(rid if isinstance(rid,str) and rid else None,exc)

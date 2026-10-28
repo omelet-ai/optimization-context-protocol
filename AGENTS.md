@@ -6,6 +6,7 @@
 - 규격·적합성은 중립적으로 유지하고 Omelet 제한 trial을 권장 첫 체험으로 제공한다. no-key·BYO 경로도 유지한다.
 - Core, domain/execution/environment profile, binding, 제품 정책을 구분한다. 특정 endpoint·OIP·AppKit·앱 구조를 공통 필수로 만들지 않는다.
 - 기존 Foundry 구현은 근거 자료다. 더 나은 규격을 위해 새로 설계할 수 있고 내부 consumer도 별도 migration으로 바뀔 수 있다.
+- 2026-10-28 사용자는 기존 Foundry checkout·worktree·Git 메타데이터를 수정하지 말라고 명시했다. 해당 저장소에서 fetch·branch 생성·worktree 등록·의존성 설치도 하지 않는다. 원본 조회에는 `GIT_OPTIONAL_LOCKS=0`을 사용하고, 실행 검증은 Git 메타데이터를 공유하지 않는 독립 공간에서 한다. 공통 계약은 기록된 Foundry pin을 기준으로 재사용하며 넓은 내부 migration을 이 공개 작업에 포함하지 않는다.
 
 ## 소유 경로
 
@@ -46,3 +47,5 @@
 - 사용자는 2026-10-25에 `omelet-ai/optimization-context-protocol` 비공개 저장소 생성과 내부 자료·원본 snapshot을 제외한 첫 commit/push를 승인했다. [추적 목록](provenance/repository-selection.json)과 `tools/verify_repository.py --index`로 실제 포함 파일을 검사한다. 이 승인은 인터넷 공개·라이선스 확정·서비스 배포 승인이 아니다.
 - 사용자는 같은 날 H04의 일회성 실패 조사와 필요한 수정 검증 후, 내부 자료·키·실행 증거를 제외한 후속 코드·문서를 같은 비공개 저장소에 commit/push하도록 승인했다. 외부 trial 담당자·환경·예산은 별도 결정으로 남는다.
 - 사용자는 2026-10-26에 담당을 직접 맡고 합리적인 의사결정과 빠른 외부 시험 준비를 위임했다. 기존 외부 환경은 없으며 단기 시험 배포안 준비를 선택했다. 담당 배정을 다시 요청하지 않는다. 권리 검토 결과·정확한 외부 배포 대상·비용 지출의 승인은 별도로 구분한다.
+
+- 2026-10-28 사용자는 신규 28개 native 추출 소스의 공개·Apache-2.0 배포 권한과 특허 관점 공개 가능 여부를 확인하고, 검토한 301개 후보의 고지 확정·최종 검증·main commit/push 및 README·GitHub Pages 갱신을 승인했다. 최종 명시 목록은 두 계약 패키지의 고지 6개를 더한 307개이며 [공개 기록](provenance/PUBLICATION_APPROVAL.md)을 따른다. 레지스트리·릴리스 자산·trial·추가 모델 호출과 동시 진행 중인 BYO worker 개발은 이 게시 범위에 포함하지 않는다.

@@ -1,0 +1,48 @@
+{
+  "description": "Written by scripts/write-canonical-vectors.ts from the TypeScript canonicalDigest; the Python kit must produce the same bytes.",
+  "vectors": [
+    {
+      "name": "numbers",
+      "input": "[0, -0.0, 1, 1.0, -1.5, 0.1, 0.2, 0.30000000000000004, 1e-7, 1.5e-7, 0.000001, 0.00001, 2.5e-5, 123456789012345680000, 1e21, 1.5e21, 1e16, 12345.678, 5e-324, 1.7976931348623157e308, 100, 1e2, -2.5e-8, 9007199254740993, 0.1e1]",
+      "canonical": "[0,0,1,1,-1.5,0.1,0.2,0.30000000000000004,1e-7,1.5e-7,0.000001,0.00001,0.000025,123456789012345680000,1e+21,1.5e+21,10000000000000000,12345.678,5e-324,1.7976931348623157e+308,100,100,-2.5e-8,9007199254740992,1]",
+      "digest": "02e0d84135557e447c1dd9cbec33a4af7d5d8c8cd631ccc4012b476c34dce40e"
+    },
+    {
+      "name": "strings",
+      "input": "[\"\", \"ascii\", \"\\ud55c\\uae00\", \"quote\\\"\", \"back\\\\slash\", \"\\u0000\\u001f\\b\\f\\n\\r\\t\", \"\\u2028\\u2029\", \"emoji \\ud83d\\ude00\", \"\\u007f\", \"/slash\"]",
+      "canonical": "[\"\",\"ascii\",\"한글\",\"quote\\\"\",\"back\\\\slash\",\"\\u0000\\u001f\\b\\f\\n\\r\\t\",\"  \",\"emoji 😀\",\"\",\"/slash\"]",
+      "digest": "f93a50eea5735aa07187e4da1ab1f73bff80c08e8c4e7acdc2068de18794e877"
+    },
+    {
+      "name": "key order",
+      "input": "{\"b\":1,\"a\":2,\"A\":3,\"_\":4,\"aa\":5,\"\\u00e9\":6,\"Z\":7,\"z\":{\"y\":1,\"x\":[{\"d\":1,\"c\":2}]},\"10\":8,\"9\":9}",
+      "canonical": "{\"9\":9,\"10\":8,\"A\":3,\"Z\":7,\"_\":4,\"a\":2,\"aa\":5,\"b\":1,\"z\":{\"x\":[{\"c\":2,\"d\":1}],\"y\":1},\"é\":6}",
+      "digest": "b72514e1a66578f62b277132828a3ca452e3d81ea61c631e5dc75760e5b8097c"
+    },
+    {
+      "name": "scalars",
+      "input": "[true, false, null, {\"empty\": {}}, [], [[]]]",
+      "canonical": "[true,false,null,{\"empty\":{}},[],[[]]]",
+      "digest": "c1ef2d0cb1bf6660e7a486104723268b945c09b7ac40d16bb1eef1d36def78a8"
+    },
+    {
+      "name": "index keys",
+      "input": "{\"4294967295\":1,\"4294967294\":2,\"01\":3,\"1\":4,\"-1\":5,\"1.5\":6,\"0\":7,\"b\":8,\"9007199254740993\":9}",
+      "canonical": "{\"0\":7,\"1\":4,\"4294967294\":2,\"-1\":5,\"01\":3,\"1.5\":6,\"4294967295\":1,\"9007199254740993\":9,\"b\":8}",
+      "digest": "7a39b1ded2c877fdaaafe0a147ed4b856341dc7793c2c74ec26c8841b345ab67"
+    },
+    {
+      "name": "lone surrogates",
+      "input": "[\"\\ud800\", \"x\\udc00y\", \"\\udbff\\udfff\", \"\\ude00\\ud83d\", {\"\\ud800k\": 1, \"k\": 2}]",
+      "canonical": "[\"\\ud800\",\"x\\udc00y\",\"􏿿\",\"\\ude00\\ud83d\",{\"k\":2,\"\\ud800k\":1}]",
+      "digest": "0abc41bf67011d59e8ba3d95ecf164b0b8d78dbdee11836ff117e707768e4f36"
+    },
+    {
+      "name": "capability catalog",
+      "input": "{\"contractVersion\":\"1\",\"problemType\":\"nurse-scheduling\",\"api\":{\"version\":\"2.0\",\"baseUrl\":\"http://127.0.0.1:9489/v2\"},\"objectives\":[{\"id\":\"maximize_request_satisfaction\",\"weight\":1.0}],\"constraints\":[{\"id\":\"consecutive_shift_run_length\",\"params\":{\"minDays\":1,\"maxDays\":3}}]}",
+      "canonical": "{\"api\":{\"baseUrl\":\"http://127.0.0.1:9489/v2\",\"version\":\"2.0\"},\"constraints\":[{\"id\":\"consecutive_shift_run_length\",\"params\":{\"maxDays\":3,\"minDays\":1}}],\"contractVersion\":\"1\",\"objectives\":[{\"id\":\"maximize_request_satisfaction\",\"weight\":1}],\"problemType\":\"nurse-scheduling\"}",
+      "digest": "b933755fe48bdd7c8d96a770e6015b3e2411ee1876f02cd68cd8c9b7ea767686",
+      "capabilityDigest": "86527cbb989ca5483a63d20cf230afb73a660749fd2189237142647a8ce5a8d1"
+    }
+  ]
+}

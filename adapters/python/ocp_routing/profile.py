@@ -73,11 +73,11 @@ def measurements(problem, solution):
     return total, overload, wrong_visits
 
 
-def evaluation_fields(problem, solution, source="independent"):
+def evaluation_fields(problem, solution, source="engine"):
     total, overload, visits = measurements(problem,solution)
     metrics=[{"id":"minimize_total_route_cost","role":"optimized","definition":"routing.basic.total_distance.v1",
               "unit":"meter","source":source,"status":"evaluated","value":total,"reason":None}]
     constraints=[{"id":cid,"role":"enforced","definition":"routing.basic."+cid+".v1","unit":unit,
-                  "source":"independent","status":"evaluated","violation":amount,"satisfied":amount==0,"reason":None}
+                  "source":source,"status":"evaluated","violation":amount,"satisfied":amount==0,"reason":None}
                  for cid,unit,amount in [("weight_capacity","kg",overload),("all_visits_once","count",visits)]]
     return metrics,constraints

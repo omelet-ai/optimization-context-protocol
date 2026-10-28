@@ -1,0 +1,56 @@
+{
+  "repository": "omelet-ai/oi-foundry",
+  "commit": "7547036d1bc9464d6c43a9bdf7cff0a78e8560d7",
+  "publication": "Apache-2.0 GitHub source publication authorized 2026-10-28",
+  "source_authority": "pinned Foundry, no independent fork",
+  "files": {
+    "src/contracts/capability-contract.ts": {
+      "source": "shared/ocp-contracts/ocp-core/src/contracts/capability-contract.ts",
+      "source_sha256": "5918db27e0df0c41a72c214e731a366c9cefcb0dce07416722b9610744ecc3b7",
+      "packaged_source_sha256": "5918db27e0df0c41a72c214e731a366c9cefcb0dce07416722b9610744ecc3b7",
+      "transform": "none"
+    },
+    "src/contracts/ocp-standard-manifest.ts": {
+      "source": "shared/ocp-contracts/ocp-core/src/contracts/ocp-standard-manifest.ts",
+      "source_sha256": "9c2a71fb7785b764bc494155cfe69cf8209bee7ba95aaba813edd9989c20c7ac",
+      "packaged_source_sha256": "9c2a71fb7785b764bc494155cfe69cf8209bee7ba95aaba813edd9989c20c7ac",
+      "transform": "none"
+    },
+    "src/contracts/ocp-state-envelope.ts": {
+      "source": "shared/ocp-contracts/ocp-core/src/contracts/ocp-state-envelope.ts",
+      "source_sha256": "f1d0228a0319d68670b3c351890cc24435cd3c399f1a4b6a69aa793c8e29298f",
+      "packaged_source_sha256": "f1d0228a0319d68670b3c351890cc24435cd3c399f1a4b6a69aa793c8e29298f",
+      "transform": "none"
+    },
+    "src/contracts/validation.ts": {
+      "source": "shared/ocp-contracts/ocp-core/src/contracts/validation.ts",
+      "source_sha256": "541dc2824f1a9e3e06cfaeea47bacfd62b75584efdfaf2122183b968103ac1a5",
+      "packaged_source_sha256": "541dc2824f1a9e3e06cfaeea47bacfd62b75584efdfaf2122183b968103ac1a5",
+      "transform": "none"
+    },
+    "src/optimization-api/client.ts": {
+      "source": "shared/ocp-contracts/ocp-server-base/src/optimization-api/client.ts",
+      "source_sha256": "ca7105266115c2a9807b1db2e00a7f001e22e4adce605a18032807176eaca17c",
+      "packaged_source_sha256": "ef4e31fb4bf11ca8bd0b3ac2cef006bb4dc7fc1b9213d1d33e206bd9485d4b14",
+      "transform": "one import: @omelet/ocp-core -> ../contracts/index.js; explicit cancel-uncertainty-1 proposal"
+    },
+    "src/caller-trace.ts": {
+      "source": "shared/ocp-contracts/ocp-server-base/src/caller-trace.ts",
+      "source_sha256": "424b35ab39494cbb8710d83352dc6235f8805a1260c45e372e097a6eea3e5584",
+      "packaged_source_sha256": "424b35ab39494cbb8710d83352dc6235f8805a1260c45e372e097a6eea3e5584",
+      "transform": "none"
+    },
+    "src/domain/canonical.ts": {
+      "source": "shared/ocp-contracts/ocp-server-base/src/domain/canonical.ts",
+      "source_sha256": "f28cd90bf49c7ee011ee5d9c7aa4d510770455bb93a1607728719a6ffe678fd8",
+      "packaged_source_sha256": "f28cd90bf49c7ee011ee5d9c7aa4d510770455bb93a1607728719a6ffe678fd8",
+      "transform": "none"
+    }
+  },
+  "proposal": {
+    "id": "cancel-uncertainty-1",
+    "upstream_accepted": false,
+    "wire_contract_changed": false
+  },
+  "approval_record": "provenance/PUBLICATION_APPROVAL.md"
+}

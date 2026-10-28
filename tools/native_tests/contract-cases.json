@@ -1,0 +1,436 @@
+[
+  {
+    "id": "Capabilities-valid",
+    "component": "Capabilities",
+    "value": {
+      "contractVersion": "1",
+      "problemType": "worker-scheduling",
+      "catalogDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "custom": {
+        "unit": "kg"
+      }
+    },
+    "valid": true
+  },
+  {
+    "id": "Capabilities-missing-contractVersion",
+    "component": "Capabilities",
+    "value": {
+      "problemType": "worker-scheduling",
+      "catalogDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "custom": {
+        "unit": "kg"
+      }
+    },
+    "valid": false
+  },
+  {
+    "id": "Capabilities-missing-problemType",
+    "component": "Capabilities",
+    "value": {
+      "contractVersion": "1",
+      "catalogDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "custom": {
+        "unit": "kg"
+      }
+    },
+    "valid": false
+  },
+  {
+    "id": "Capabilities-missing-catalogDigest",
+    "component": "Capabilities",
+    "value": {
+      "contractVersion": "1",
+      "problemType": "worker-scheduling",
+      "custom": {
+        "unit": "kg"
+      }
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-valid",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "status": "queued",
+      "attempt": 0,
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": true
+  },
+  {
+    "id": "Job-missing-jobId",
+    "component": "Job",
+    "value": {
+      "problemType": "worker-scheduling",
+      "status": "queued",
+      "attempt": 0,
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-missing-problemType",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "status": "queued",
+      "attempt": 0,
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-missing-status",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "attempt": 0,
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-missing-attempt",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "status": "queued",
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-missing-cancelRequested",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "status": "queued",
+      "attempt": 0,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-missing-createdAt",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "status": "queued",
+      "attempt": 0,
+      "cancelRequested": false,
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-missing-updatedAt",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "status": "queued",
+      "attempt": 0,
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-missing-startedAt",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "status": "queued",
+      "attempt": 0,
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-missing-finishedAt",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "status": "queued",
+      "attempt": 0,
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-missing-expiresAt",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "status": "queued",
+      "attempt": 0,
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null
+    },
+    "valid": false
+  },
+  {
+    "id": "JobResult-valid",
+    "component": "JobResult",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "status": "succeeded",
+      "result": {
+        "status": "unknown",
+        "solution": null
+      }
+    },
+    "valid": true
+  },
+  {
+    "id": "JobResult-missing-jobId",
+    "component": "JobResult",
+    "value": {
+      "status": "succeeded",
+      "result": {
+        "status": "unknown",
+        "solution": null
+      }
+    },
+    "valid": false
+  },
+  {
+    "id": "JobResult-missing-status",
+    "component": "JobResult",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "result": {
+        "status": "unknown",
+        "solution": null
+      }
+    },
+    "valid": false
+  },
+  {
+    "id": "JobResult-missing-result",
+    "component": "JobResult",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "status": "succeeded"
+    },
+    "valid": false
+  },
+  {
+    "id": "ErrorEnvelope-valid",
+    "component": "ErrorEnvelope",
+    "value": {
+      "code": "INVALID_REQUEST",
+      "message": "bad",
+      "requestId": "fixture",
+      "retryable": false,
+      "issues": []
+    },
+    "valid": true
+  },
+  {
+    "id": "ErrorEnvelope-missing-code",
+    "component": "ErrorEnvelope",
+    "value": {
+      "message": "bad",
+      "requestId": "fixture",
+      "retryable": false,
+      "issues": []
+    },
+    "valid": false
+  },
+  {
+    "id": "ErrorEnvelope-missing-message",
+    "component": "ErrorEnvelope",
+    "value": {
+      "code": "INVALID_REQUEST",
+      "requestId": "fixture",
+      "retryable": false,
+      "issues": []
+    },
+    "valid": false
+  },
+  {
+    "id": "ErrorEnvelope-missing-requestId",
+    "component": "ErrorEnvelope",
+    "value": {
+      "code": "INVALID_REQUEST",
+      "message": "bad",
+      "retryable": false,
+      "issues": []
+    },
+    "valid": false
+  },
+  {
+    "id": "ErrorEnvelope-missing-retryable",
+    "component": "ErrorEnvelope",
+    "value": {
+      "code": "INVALID_REQUEST",
+      "message": "bad",
+      "requestId": "fixture",
+      "issues": []
+    },
+    "valid": false
+  },
+  {
+    "id": "ErrorEnvelope-missing-issues",
+    "component": "ErrorEnvelope",
+    "value": {
+      "code": "INVALID_REQUEST",
+      "message": "bad",
+      "requestId": "fixture",
+      "retryable": false
+    },
+    "valid": false
+  },
+  {
+    "id": "Validation-valid",
+    "component": "Validation",
+    "value": {
+      "valid": false,
+      "issues": [
+        {
+          "code": "MISSING",
+          "message": "missing",
+          "fieldPath": "input"
+        }
+      ]
+    },
+    "valid": true
+  },
+  {
+    "id": "Validation-missing-valid",
+    "component": "Validation",
+    "value": {
+      "issues": [
+        {
+          "code": "MISSING",
+          "message": "missing",
+          "fieldPath": "input"
+        }
+      ]
+    },
+    "valid": false
+  },
+  {
+    "id": "Validation-missing-issues",
+    "component": "Validation",
+    "value": {
+      "valid": false
+    },
+    "valid": false
+  },
+  {
+    "id": "Job-wrong-status",
+    "component": "Job",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "problemType": "worker-scheduling",
+      "status": "optimal",
+      "attempt": 0,
+      "cancelRequested": false,
+      "createdAt": "2026-10-28T00:00:00+00:00",
+      "updatedAt": "2026-10-28T00:00:00+00:00",
+      "startedAt": null,
+      "finishedAt": null,
+      "expiresAt": "2026-10-28T00:00:00+00:00"
+    },
+    "valid": false
+  },
+  {
+    "id": "Capabilities-wrong-contractVersion",
+    "component": "Capabilities",
+    "value": {
+      "contractVersion": "0.1.0",
+      "problemType": "worker-scheduling",
+      "catalogDigest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "custom": {
+        "unit": "kg"
+      }
+    },
+    "valid": false
+  },
+  {
+    "id": "JobResult-wrong-status",
+    "component": "JobResult",
+    "value": {
+      "jobId": "12345678-1234-4234-8234-123456789abc",
+      "status": "unknown",
+      "result": {
+        "status": "unknown",
+        "solution": null
+      }
+    },
+    "valid": false
+  },
+  {
+    "id": "Validation-wrong-valid",
+    "component": "Validation",
+    "value": {
+      "valid": "yes",
+      "issues": [
+        {
+          "code": "MISSING",
+          "message": "missing",
+          "fieldPath": "input"
+        }
+      ]
+    },
+    "valid": false
+  }
+]

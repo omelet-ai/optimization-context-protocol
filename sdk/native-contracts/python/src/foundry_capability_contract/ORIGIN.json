@@ -1,0 +1,26 @@
+{
+  "commit": "7547036d1bc9464d6c43a9bdf7cff0a78e8560d7",
+  "files": {
+    "shared/ocp-contracts/capability-contract/openapi/capability-contract-v1.json": "f3c8f8091366392d6d666797edd578f39bcc923491f15045e0e014feccf117bc",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/__init__.py": "3fdf09d7f9ed08949d25171720541dea6ffa6dbd674c1f5c7fa0131ba0830456",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/canonical.py": "076e42f4f8bcdcdae81b7b8b0d2d0e7c74e0fb886f73df8455b26538c44c12d6",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/conformance.py": "9f6247d49fae8b9510c371e0ab932a80da4fa01f82caad35249235432c83833e",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/errors.py": "da2b12b496365380d6a78b1b3fe988a5b72678bced66a7d0c9a9b086e7947659",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/jobs/__init__.py": "ec363429c6c64c574f5395c65b98fe871e779d9df5023e4481053f26c1b8f99d",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/jobs/memory.py": "7c1b4182d04a609c0023ba10f35684cb3a50ae1c1f48c10578dd9e8bf25d8a81",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/jobs/model.py": "82e26e78e5ff5d3786435e4309ac1c82eb5f09ded0f0f87601d688d3d18c9dea",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/jobs/postgres.py": "3c021a21a7c0b52173992e2f6a1a900986eb9e33f864d8c2e4c07ccdc50dcd04",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/jobs/worker.py": "e012cabd72695f10b6418920ecea817a169004a7f1c12412082f720a6d92aa27",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/migrations.py": "189ec82778e5cc9ab9d552e713493239bff14d7f47f84ef866027345c8aff473",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/ops.py": "41e2088c8d90228e0bdba5f81af45dbfe23a40d1fc26c7d4e569d8f0f2cedd24",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/router.py": "efff426d587ddc13a7fb58325cd40cf468c5779513e132f46422ac337440f673",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/runners.py": "e94207eac56c199961101ef18187c1cf998163e2b0f520855e4a54f009d54f30",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/settings.py": "fa64ab58e880f6062858595568273cc373081f1127d606d076da56fc8e03f8ef",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/testing/__init__.py": "a69e33795708ffaa8dfd405378929b3eea3ef9622e2c6565005ca22d083d8e32",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/testing/openapi.py": "affb96d5a0a2abdce6c7ea78961d303a3c40145dd582c0c30bb22428a0d89e4d",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/testing/suite.py": "7175f3af246623310555ad27e1be31d52c191347859c2b77a462b7205da6f496",
+    "shared/ocp-contracts/capability-contract/python/src/foundry_capability_contract/trust.py": "19162859bae1891b4a63327b847cdb8332b937415202961a4f55518133656dac"
+  },
+  "publication": "Apache-2.0 GitHub source publication authorized 2026-10-28",
+  "approval_record": "provenance/PUBLICATION_APPROVAL.md"
+}

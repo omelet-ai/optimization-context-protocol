@@ -18,21 +18,23 @@ See [project status and verification boundaries](docs/users/PROJECT_STATUS.md).
 
 ## Core 0.1 and native v1
 
-**Use Core 0.1 from this public repository today.** The installation and MCP
-commands below install that path. **Native v1 is a local, unpublished candidate**
-aligned with Foundry Capability Contract v1. Its implementation, extracted
-contract packages and review bundle are not included in this public checkout.
-This public comparison does not publish those artifacts or announce a stable v1 release.
+**Core 0.1 and the native v1 candidate are public source developer previews.**
+Both are licensed under Apache-2.0. The Core quickstart below retains the existing
+synchronous interface; the [native source quickstart](#native-v1-from-public-source)
+builds a separate opt-in kit aligned with Foundry Capability Contract v1.
+Native implementation, pinned shared contracts and build tools are included here.
+This is not a stable v1 or full gateway/ocps1 release. No prebuilt native downloads
+or registry packages are published.
 
 <!-- ocp:core-native-table:start -->
 | Boundary | Core 0.1 | Native v1 candidate |
 | --- | --- | --- |
-| Availability | Public source developer preview; install from GitHub | Local, unpublished candidate; requires a separately reviewed bundle |
+| Availability | Public source developer preview; install from GitHub | Public source developer preview; build the native kit from this checkout |
 | Execution | Synchronous reference calls | Asynchronous jobs: submit, poll, fetch result, request cancellation |
 | Wire format | Core request/result envelopes, version `0.1.0` | Capability Contract v1 outer catalog/job/error; declared Core 0.1 domain payload retained |
 | SDK entrypoints | `ocp_candidate` / `ocp-candidate` | Explicit opt-in: `ocp_candidate.native` / `ocp-candidate/native` |
 | MCP | Six tools, starting with `ocp_context` | Eight tools, starting with `ocp_native_context` |
-| Local setup | No account or key; Python/MCP need no Node | Separate bundle; host manages ephemeral credentials; Python/MCP need no Node |
+| Local setup | No account or key; Python/MCP need no Node | Separate local build; host manages ephemeral credentials; Python/MCP need no Node |
 <!-- ocp:core-native-table:end -->
 
 In the native reference, `contractVersion: "1"` identifies the outer contract.
@@ -49,17 +51,67 @@ an uncertain response. Cancellation is a request; confirm a terminal job state
 before saying the computation stopped.
 
 Existing Core 0.1 imports and synchronous semantics remain supported; no removal
-date is set. A native integration needs the reviewed native bundle and explicit
+date is set. A native integration needs a locally built native kit and explicit
 entrypoints. Do not change wire formats merely by updating a dependency. The
 native MCP candidate is a stateless local binding, not the full
 `foundry-ocp-standard/v1` gateway/ocps1 state profile. Its localhost-only server,
 volatile two-hour records and default 128-job session limit are local reference
-policies, not universal OCP requirements. Native source and bundle publication
-remain separate from these documentation updates. PyPI/npm releases and public
+policies, not universal OCP requirements. Native sources are public; prebuilt kit downloads are not offered. PyPI/npm releases and public
 self-service trial signup are not open for either path.
 
 See the [protocol comparison](https://omelet-ai.github.io/optimization-context-protocol/reference/index.html#core-native)
 and [native MCP overview](https://omelet-ai.github.io/optimization-context-protocol/guides/apps/index.html#native-mcp).
+
+See the [native build and verification guide](docs/development/NATIVE_SOURCE_REVIEW.md)
+and [source license and origin](sdk/native-contracts/LICENSE_SCOPE.md). The source
+selection and Apache-2.0 notices were approved on 2026-10-28; registry and hosted
+trial publication remain separate.
+
+## Native v1 from public source
+
+Use this opt-in path for Capability Contract v1 jobs and the eight native MCP
+tools. From a fresh checkout of this repository, use Python 3.12 on macOS or Linux.
+The Python/MCP path needs no Node, Foundry checkout, account, API key or model.
+Run the full block from the repository root in one terminal. It downloads public
+build dependencies and produces a separate local kit:
+
+<!-- ocp:readme-native-build -->
+```sh
+OCP_NATIVE_WORK="$(mktemp -d)"
+python3.12 -m venv "$OCP_NATIVE_WORK/build-env"
+"$OCP_NATIVE_WORK/build-env/bin/python" -m pip install -r tools/requirements-dev.lock
+"$OCP_NATIVE_WORK/build-env/bin/python" -B tools/build_native_candidate.py --output "$OCP_NATIVE_WORK/kit"
+cd "$OCP_NATIVE_WORK/kit"
+python3.12 -B install.py
+.native/bin/python -I -B demo.py
+```
+
+Expect `status: "PASS"`, three actual jobs and independently checked costs:
+routing **18 meters**, worker scheduling **7 cost units**, inventory **16 cost units**.
+`install.py` and `demo.py` here are generated native-kit files. Keep this terminal
+in the kit directory. Reuse `.native/bin/python` to rerun; choose a fresh output
+path if rebuilding. No model is called. Native setup without the MCP extra is
+also covered by an independent install regression.
+
+Generate MCP configuration and run the real stdio walkthrough:
+
+<!-- ocp:readme-native-mcp -->
+```sh
+.native/bin/python -I -B mcp_config.py
+.native/bin/python -I -B mcp_walkthrough.py --domain worker-scheduling --input worker-input.json
+```
+
+The generated configuration selects `ocp_runtime.native_mcp` and its eight tools;
+existing `ocp_runtime.mcp_server` remains the separate six-tool Core server.
+For optional TypeScript, use Node 24/npm and add `--with-typescript` to the build
+command with a new output directory. Native SDK entrypoints remain explicit.
+See [installation, input changes and Node usage](docs/users/NATIVE_LOCAL_CANDIDATE.md),
+[three-domain examples](docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md), and the
+[engine registration template](authoring/native_server_template.py).
+
+Validation covers macOS arm64 and Linux amd64 in a network-disabled Python 3.12
+container under Docker on an arm64 host. Windows and native Linux arm64 are not
+verified. Automated checks do not establish external-human or model-host acceptance.
 
 ## Why add OCP to a solver?
 
