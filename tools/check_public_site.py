@@ -75,7 +75,7 @@ class PublicSite(unittest.TestCase):
             self.assertIn(url, self.pages[name].links, name)
             self.assertIn('SHA256SUMS', self.html[name], name)
         for name, body in self.html.items():
-            for obsolete in ['prebuilt native downloads are not published', 'no release download is published yet', '사전 빌드 다운로드는 제공하지 않습니다']:
+            for obsolete in ['prebuilt native downloads are not published', 'no release download is published yet', '사전 빌드 다운로드는 제공하지 않습니다', 'Native prebuilt downloads and registry releases are not offered', 'no prebuilt package downloads are published', 'Native 사전 빌드 다운로드와 레지스트리 패키지는 제공하지 않습니다']:
                 self.assertNotIn(obsolete, body, name)
 
     def test_04_readme_commands_are_identical(self):
