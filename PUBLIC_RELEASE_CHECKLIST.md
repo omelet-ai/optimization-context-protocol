@@ -1,26 +1,32 @@
 # Public release checklist
 
-This checklist separates technical evidence from rights, people and publication.
-The project owner is assigned. Reconfirming that assignment is unnecessary.
+OCP is already an Apache-2.0 public-source developer preview. This checklist
+separates source availability, an installable preview release and actual adoption.
+The owner is assigned; do not request that assignment or confirmed source rights
+again. The [first preview plan](docs/development/PREVIEW_RELEASE.md) fixes the
+local candidate and its intended delivery channel.
 
-| Area | Current state | Release exit condition |
+| Area | Current state | Remaining exit |
 | --- | --- | --- |
-| Owner | Assigned by the user | Publish an agreed contact/support scope |
-| Source, kit and site | Core and native source previews approved; Pages published; kits built locally | Exact approved source and immutable artifact hashes |
-| Local installation and consumers | Automated harness paths implemented | Current PASS for the release artifact; see H20–H22 |
-| Platform coverage | macOS arm64 full regression; Linux x86_64 container first-success path | Native Linux/Node validation; Windows remains unsupported until tested |
-| Independent checking | Separate checker and intentional corruption probes | State exact profile/constraint coverage; never general engine certification |
-| LLM context and behavior | H23 server/context checks; initial scoped model pilot performed, broader H24 acceptance pending | Named model/host trials with fresh sessions, full traces and answer review before claiming LLM interoperability |
-| External human use | Review feedback received; installation not completed by that reviewer | Unaided install and integration tasks with recorded outcomes |
-| License, copyright and patents | Owner confirmed original source on 2026-10-27 and 28 additional native sources on 2026-10-28, including Apache-2.0 and patent disclosure | Per-file rights review, approved LICENSE/NOTICE and public allowlist |
-| Community | Contribution/security guides and issue/PR templates prepared | Working public reporting route, agreed support scope |
-| Publication | GitHub source repository and reviewed history authorized; other publication remains separate | Exact repository/ref/artifacts/settings and actions approved |
-| Site and trial | Static Pages deployment approved; hosted trial remains separately scoped | Separate scoped environment, operation and cost approval |
+| GitHub source and license | Core/native source public; approved Apache-2.0 notices and explicit selection | Review and approve any subsequent source push separately |
+| Preview version and files | [v0.1.1-preview.1](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1); selected source ZIP, native kit, hashes and blank review form | Preserve tested bytes; a changed candidate needs a new version |
+| Installation and consumers | H63 builds from public selection and tests the same extracted ZIP | Current PASS for this exact candidate, not a historical build |
+| Platform scope | macOS arm64 Python/Node; Linux amd64 Python/MCP under Docker emulation | Record actual PASS per artifact; Windows/native Linux arm64/Linux Node remain unverified |
+| Independent checking | Real domains, separate checker, corrupted-result probes and bounded proof scope | State exact profile/constraint limits; no engine certification claim |
+| Foundry alignment | Pinned Capability Contract v1 and isolated consumer rehearsal | Shared original repositories remain untouched; broader upstream adoption is separate |
+| Site | Existing GitHub Pages site public | 2026-10-29 update approved; verify deployed content after publication |
+| Registry and release assets | First GitHub prerelease approved; PyPI/npm remain unpublished | Verify anonymous asset download; registry naming/ownership/order needs separate review |
+| External human use | Agent feedback and automated installation evidence exist | Real participant's unaided app/engine integration; NOT_RUN until documented |
+| Internal business acceptance | Synthetic inspection exercise and owner review form ready | Actual owner's business review; NOT_RUN until documented |
+| LLM use | Scoped historical model pilots and real MCP SDK tests | No blanket current-host claim; additional model runs require separate approval |
+| Community and support | Issue/PR templates, contribution/security routes; no SLA promised | Validate actual reporting and response flow during first human trials |
 
-Run the current harness rather than treating this document as a test result.
-A private code push, automated local pass, limited preview link and public release
-are distinct actions. See the [launch preparation](docs/development/GITHUB_LAUNCH.md),
-[publication policy](provenance/publication.json) and
-[compatibility policy](docs/users/COMPATIBILITY.md).
+A GitHub source preview does not require every future OS, registry or trial
+service. Keep the declared scope narrow and accurate. A stable production claim
+requires evidence beyond this preview. No automated checker fills a human review
+or authorizes uploading, deploying or spending.
 
-Source-only publication is tracked in [the approval record](provenance/PUBLICATION_APPROVAL.md). Broader trial, external-user, registry and other hosted-service gates remain separate.
+For current technical results, run the documented environment's harness and the
+exact candidate checks. `STALE` means source/environment/prerequisite identity
+changed; it must not be relabeled PASS. Source inventory changes also invalidate
+old evidence. Logs and completed execution evidence stay outside public assets.

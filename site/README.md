@@ -105,10 +105,14 @@ Keep README command blocks and the referenced source revision available together
 when publishing a future update. A local preview may include source changes that
 have not yet reached public `main`; building it does not publish those changes.
 
-The public edition distinguishes the available Core 0.1 quickstart from the
-local, unpublished native v1 candidate at each entry point. The protocol page
+The public edition distinguishes the Core 0.1 source quickstart from the native
+v1 prerelease ZIP and source-build path at each entry point. The protocol page
 renders the marked `core-native-table` directly from README; keep its three-column
 Markdown format. Artifact checks compare every rendered cell with README, retain
 the existing Core command blocks, and check the separate native job/MCP guidance.
+
+The approved first native ZIP is linked on GitHub Releases. Pages contains only
+static documentation, not packages or completed test evidence. Verify the release
+link and the deployed Pages content after each separately authorized update.
 Native implementation, extracted contracts and review bundles are not included
 by documenting them. Do not link to unpublished repository files or packages.

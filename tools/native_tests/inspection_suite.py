@@ -1,15 +1,21 @@
 """Installed business exercise: real jobs and CSV/report regressions, no LLM."""
 import csv
+import asyncio
+import contextlib
 from copy import deepcopy
 import importlib.util
+import io
 import json
 from pathlib import Path
 import re
+import runpy
 import shutil
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
+from types import SimpleNamespace
 
 ROOT=Path.cwd()
 
@@ -37,7 +43,7 @@ class Inspection(unittest.TestCase):
         cls.app=module('inspection');cls.project=module('project')
         cls.base=cls.documented('inspection-baseline')
         cls.original=cls.project.read(ROOT/'scenarios/baseline/input.json')
-        cls.command('.native/bin/python -I -B -m pip install --no-index --no-deps ./ocp_worker_greedy_example-0.1.0-py3-none-any.whl')
+        cls.command('.native/bin/python -I -B -m pip install --no-index --no-deps --no-compile ./ocp_worker_greedy_example-0.1.0-py3-none-any.whl')
 
     def temp(self):
         path=Path(tempfile.mkdtemp(prefix='inspection-case-',dir=ROOT))
@@ -212,6 +218,121 @@ print(json.dumps(app.report(Path('runs/inspection-baseline'),Path('reviews/impor
         self.assertEqual((result['solution_status'],result['objective_value']),('optimal',13))
         comparison=self.project.compare(ROOT/'runs/inspection-baseline',ROOT/'runs/cost-change')
         self.assertEqual((comparison['same_problem'],comparison['right_minus_left']),(False,-3))
+
+    def installer_failure(self, arguments, **patches):
+        stream=io.StringIO()
+        with contextlib.ExitStack() as stack:
+            stack.enter_context(patch.object(sys,'argv',['install.py',*arguments]))
+            stack.enter_context(contextlib.redirect_stderr(stream))
+            for name,value in patches.items():stack.enter_context(patch(name,**value))
+            with self.assertRaises(SystemExit) as error:runpy.run_path(str(ROOT/'install.py'),run_name='__main__')
+        self.assertEqual(error.exception.code,1)
+        self.assertNotIn('Traceback',stream.getvalue())
+        result=json.loads(stream.getvalue().splitlines()[-1]);self.assertEqual(result['status'],'FAIL')
+        return result
+
+    def test_14_wrong_python_explains_required_interpreter_before_writing(self):
+        output=self.temp()/'environment'
+        result=self.installer_failure(['--venv',str(output)],**{'sys.version_info':{'new':(3,11)}})
+        self.assertEqual(result['code'],'PYTHON_3_12_REQUIRED')
+        self.assertIn('python3.12 -B install.py',result['hint']);self.assertFalse(output.exists())
+
+    def test_15_dependency_timeout_is_structured_and_does_not_retry(self):
+        output=self.temp()/'partial';output.mkdir();(output/'diagnostic.txt').write_text('preserve')
+        # Simulate the timeout after environment creation, without a model/network call.
+        fresh=output/'environment'
+        with patch('subprocess.run',side_effect=subprocess.TimeoutExpired('pip',300)) as command:
+            result=self.installer_failure(['--venv',str(fresh)],**{'venv.EnvBuilder.create':{'return_value':None}})
+        self.assertEqual(result['code'],'INSTALL_TIMEOUT');self.assertEqual(command.call_count,1)
+        self.assertIn('new --venv',result['hint']);self.assertEqual((output/'diagnostic.txt').read_text(),'preserve')
+
+    def test_16_existing_environment_is_preserved_and_recovery_is_explicit(self):
+        folder=self.temp();environment=folder/'partial';environment.mkdir()
+        (environment/'diagnostic.txt').write_text('original failure')
+        p=subprocess.run([sys.executable,'-I','-B',str(ROOT/'install.py'),'--venv',str(environment)],capture_output=True,text=True)
+        self.assertEqual(p.returncode,1);value=json.loads(p.stderr)
+        self.assertEqual(value['code'],'ENVIRONMENT_EXISTS');self.assertIn('pip check',value['hint'])
+        self.assertIn('incomplete',value['hint']);self.assertEqual((environment/'diagnostic.txt').read_text(),'original failure')
+
+    def test_17_unicode_space_directory_install_and_mcp_configuration(self):
+        folder=self.temp()/'개발자 kit';folder.mkdir()
+        manifest=json.loads((ROOT/'manifest.json').read_text())
+        for name in [*manifest['files'],'manifest.json']:shutil.copyfile(ROOT/name,folder/name)
+        environment=folder/'별도 environment'
+        p=subprocess.run([sys.executable,'-I','-B',str(folder/'install.py'),'--venv',str(environment)],
+                         cwd=folder.parent,capture_output=True,text=True,timeout=300)
+        self.assertEqual(p.returncode,0,p.stderr[-3000:]);self.assertEqual(json.loads(p.stdout)['status'],'PASS')
+        shutil.copyfile(ROOT/'worker-project.json',folder/'worker-project.json')
+        for script in ['project.py','mcp_config.py']:
+            args=['run','--project',str(folder/'worker-project.json'),'--output',str(folder/'run')] if script=='project.py' else []
+            p=subprocess.run([str(environment/'bin/python'),'-I','-B',str(folder/script),*args],cwd=folder.parent,capture_output=True,text=True,timeout=120)
+            self.assertEqual(p.returncode,0,p.stderr[-3000:]);value=json.loads(p.stdout)
+            if script=='project.py':self.assertEqual(value['status'],'PASS')
+            else:self.assertEqual(value['mcpServers']['ocp-native-local']['command'],str(environment/'bin/python'))
+
+    def test_18_malformed_manifest_does_not_create_environment(self):
+        folder=self.temp();shutil.copyfile(ROOT/'install.py',folder/'install.py')
+        (folder/'manifest.json').write_text('{broken')
+        p=subprocess.run([sys.executable,'-I','-B',str(folder/'install.py'),'--venv',str(folder/'env')],capture_output=True,text=True)
+        self.assertEqual(p.returncode,1);self.assertEqual(json.loads(p.stderr)['code'],'KIT_INVALID')
+        self.assertFalse((folder/'env').exists())
+
+    def test_19_csv_rejection_gives_a_correction_without_running_solver(self):
+        folder=self.temp()
+        for kind,value,code in [('workers','작업자','CSV_ID'),('tasks','9:00','CSV_TIME'),('costs','2.5','CSV_INTEGER')]:
+            paths={k:ROOT/f'inspection-{k}.csv' for k in ['workers','tasks','costs']}
+            text=paths[kind].read_text();old={'workers':'alex','tasks':'09:00','costs':'alex,2'}[kind]
+            text=text.replace(old,'alex,'+value if kind=='costs' else value,1)
+            paths[kind]=folder/(kind+'.csv');paths[kind].write_text(text)
+            argv=[sys.executable,'-I','-B',str(ROOT/'inspection.py'),'prepare']
+            for key,path in paths.items():argv+=['--'+key,str(path)]
+            p=subprocess.run([*argv,'--output',str(folder/'output')],capture_output=True,text=True)
+            result=json.loads(p.stdout);self.assertEqual(p.returncode,1);self.assertEqual(result['code'],code)
+            self.assertTrue(result['hint']);self.assertEqual(result['execute_calls'],0);self.assertFalse((folder/'output').exists())
+
+    def test_20_adjacent_tasks_are_allowed_but_overlap_is_infeasible(self):
+        data={'time_unit':'minute','cost_unit':'cost_unit','workers':[{'id':'w','availability':[{'start':0,'end':30}],'max_minutes':30}],
+              'tasks':[{'id':'t'+str(i),'start':i*10,'end':(i+1)*10,'eligible_workers':['w'],'costs':{'w':i}} for i in range(3)]}
+        result=self.scenario('adjacent-new',data)
+        self.assertEqual((result['solution_status'],result['objective_value']),('optimal',3))
+        data['tasks'][1]['start']=9
+        data['workers'][0]['max_minutes']=31  # isolate overlap, not workload capacity
+        result=self.scenario('overlap-new',data)
+        self.assertEqual(result['solution_status'],'infeasible');self.assertIsNone(result['objective_value'])
+
+    def test_21_mcp_lease_failure_and_cancellation_preserve_job_without_result_or_retry(self):
+        from datetime import datetime, timedelta, UTC
+        from foundry_capability_contract import MemoryJobStore
+        now=[datetime(2026,1,1,tzinfo=UTC)]
+        store=MemoryJobStore(max_attempts=1,clock=lambda:now[0])
+        kwargs={'tenant':'test','problem_type':'worker-scheduling','request_hash':'synthetic','caller':'test','problem':{}}
+        job,_=store.submit(**kwargs,idempotency_key='lost-lease')
+        store.claim(problem_type='worker-scheduling',worker_id='first',lease_seconds=30)
+        now[0]+=timedelta(seconds=31)
+        self.assertIsNone(store.claim(problem_type='worker-scheduling',worker_id='next',lease_seconds=30))
+        failed=store.get(tenant='test',problem_type='worker-scheduling',job_id=job.id).public()
+        self.assertEqual(failed['error']['code'],'ATTEMPTS_EXHAUSTED')
+        queued,_=store.submit(**kwargs,idempotency_key='cancelled')
+        cancelled=store.request_cancel(tenant='test',problem_type='worker-scheduling',job_id=queued.id).public()
+        app=module('mcp_walkthrough')
+        for terminal in [failed,cancelled]:
+            calls=[]
+            class Host:
+                def __init__(self,*args,**kw):pass
+                async def __aenter__(self):return self
+                async def __aexit__(self,*args):pass
+                async def call_tool(self,name,args):
+                    calls.append(name)
+                    values={'ocp_native_context':{'catalog':{'domainProfile':{'id':'worker.scheduling','version':'0.1.0'},'selectionTemplate':{},'requestTemplate':{}}},
+                            'ocp_native_requirements':{},'ocp_native_validate':{'valid':True},'ocp_native_submit':{'job':terminal}}
+                    if name not in values:raise AssertionError('Unexpected result, evaluation or retry: '+name)
+                    return SimpleNamespace(is_error=False,structured_content=values[name])
+            with patch.object(app,'Client',Host):value=asyncio.run(app.run('worker-scheduling',self.original))
+            self.assertEqual(value['code'],'JOB_'+terminal['status'].upper())
+            self.assertEqual(value['job'],terminal);self.assertIsNone(value['response'])
+            self.assertIsNone(value['independent_check']);self.assertIsNone(value['execute_calls'])
+            self.assertEqual(value['idempotency_key'],value['request']['request_id'])
+            self.assertEqual(calls.count('ocp_native_submit'),1);self.assertEqual(value['model_calls'],0)
 
 
 if __name__=='__main__':

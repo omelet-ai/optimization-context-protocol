@@ -44,6 +44,13 @@ async def run(domain, data, *, worker_engine='reference', extension=None, checke
             if asyncio.get_running_loop().time() >= deadline: raise ValueError('WAIT_TIMEOUT_TERMINATION_UNCONFIRMED')
             await asyncio.sleep(.05)
             job = await call('ocp_native_job', {'domain': domain, 'job_id': job['jobId']})
+        if job['status'] in ('failed', 'cancelled'):
+            return {'status': 'FAIL', 'code': 'JOB_' + job['status'].upper(),
+                    'domain': domain, 'job': job, 'request': problem,
+                    'idempotency_key': problem['request_id'], 'response': None,
+                    'independent_check': None, 'submit_calls': 1, 'execute_calls': None,
+                    'model_calls': 0, 'tool_calls': events,
+                    'message': 'No mathematical result is available. Preserve the job, input and key; inspect the job error before deciding on another run. This is not proof of infeasibility and is not retried automatically.'}
         result = await call('ocp_native_result', {'domain': domain, 'job_id': job['jobId']})
         response = result['result']
         report = assess(problem, response, registry=checker_registry)

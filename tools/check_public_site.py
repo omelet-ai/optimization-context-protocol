@@ -69,6 +69,15 @@ class PublicSite(unittest.TestCase):
                 if tag == "script" and attrs.get("src"):
                     self.assertTrue(urljoin(self.base + name, attrs["src"]).startswith(self.base))
 
+    def test_native_release_is_discoverable_without_source_build(self):
+        url = REPO + '/releases/tag/v0.1.1-preview.1'
+        for name in ['index.html', 'start/index.html', 'start/local/index.html', 'ko/index.html']:
+            self.assertIn(url, self.pages[name].links, name)
+            self.assertIn('SHA256SUMS', self.html[name], name)
+        for name, body in self.html.items():
+            for obsolete in ['prebuilt native downloads are not published', 'no release download is published yet', '사전 빌드 다운로드는 제공하지 않습니다']:
+                self.assertNotIn(obsolete, body, name)
+
     def test_04_readme_commands_are_identical(self):
         observed = {}
         for page in self.pages.values():

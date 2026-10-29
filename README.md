@@ -14,7 +14,32 @@ Package-registry releases and open trial enrollment are not available yet.
 A passing local check is not engine certification
 or evidence of unaided external adoption.
 
-See [project status and verification boundaries](docs/users/PROJECT_STATUS.md).
+See [project status and verification boundaries](docs/users/PROJECT_STATUS.md)
+and the [first immutable preview plan](docs/development/PREVIEW_RELEASE.md).
+## Download and run the native preview
+
+Start with the [v0.1.1-preview.1 prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1). Download
+`ocp-native-v0.1.1-preview.1.zip` and `SHA256SUMS`, compare the ZIP's SHA-256,
+and extract into a new folder. Python 3.12 on macOS or Linux is required.
+Git, Node, a source build, an Omelet key and model calls are unnecessary for
+this Python/MCP path. Dependencies are installed from public PyPI.
+
+```sh
+shasum -a 256 ocp-native-v0.1.1-preview.1.zip
+unzip ocp-native-v0.1.1-preview.1.zip -d ocp-native-preview
+cd ocp-native-preview
+python3.12 -B install.py
+.native/bin/python -I -B demo.py
+.native/bin/python -I -B mcp_config.py
+```
+
+Compare the first command's output with the native ZIP line in `SHA256SUMS`
+before continuing. On Linux, `sha256sum` is also available. Checksums detect
+changed bytes; they are not signatures. Read `START_HERE.md` inside the ZIP for
+MCP, your own inputs, engine replacement and the blank independent review form.
+The demo's checked costs are routing 18, worker 7 and inventory 16; units and
+mathematical status are reported separately. See the source-build path below
+if you want to develop OCP itself.
 
 ## Core 0.1 and native v1
 
@@ -23,13 +48,13 @@ Both are licensed under Apache-2.0. The Core quickstart below retains the existi
 synchronous interface; the [native source quickstart](#native-v1-from-public-source)
 builds a separate opt-in kit aligned with Foundry Capability Contract v1.
 Native implementation, pinned shared contracts and build tools are included here.
-This is not a stable v1 or full gateway/ocps1 release. No prebuilt native downloads
-or registry packages are published.
+This is not a stable v1 or full gateway/ocps1 release. The [native ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1)
+is a prerelease; PyPI/npm packages are not published.
 
 <!-- ocp:core-native-table:start -->
 | Boundary | Core 0.1 | Native v1 candidate |
 | --- | --- | --- |
-| Availability | Public source developer preview; install from GitHub | Public source developer preview; build the native kit from this checkout |
+| Availability | Public source developer preview; install from GitHub | Public source and native prerelease ZIP; source build also available |
 | Execution | Synchronous reference calls | Asynchronous jobs: submit, poll, fetch result, request cancellation |
 | Wire format | Core request/result envelopes, version `0.1.0` | Capability Contract v1 outer catalog/job/error; declared Core 0.1 domain payload retained |
 | SDK entrypoints | `ocp_candidate` / `ocp-candidate` | Explicit opt-in: `ocp_candidate.native` / `ocp-candidate/native` |
@@ -51,12 +76,12 @@ an uncertain response. Cancellation is a request; confirm a terminal job state
 before saying the computation stopped.
 
 Existing Core 0.1 imports and synchronous semantics remain supported; no removal
-date is set. A native integration needs a locally built native kit and explicit
+date is set. A native integration needs the prerelease ZIP or a locally built native kit and explicit
 entrypoints. Do not change wire formats merely by updating a dependency. The
 native MCP candidate is a stateless local binding, not the full
 `foundry-ocp-standard/v1` gateway/ocps1 state profile. Its localhost-only server,
 volatile two-hour records and default 128-job session limit are local reference
-policies, not universal OCP requirements. Native sources are public; prebuilt kit downloads are not offered. PyPI/npm releases and public
+policies, not universal OCP requirements. Native sources and the prerelease ZIP are public. PyPI/npm releases and public
 self-service trial signup are not open for either path.
 
 See the [protocol comparison](https://omelet-ai.github.io/optimization-context-protocol/reference/index.html#core-native)

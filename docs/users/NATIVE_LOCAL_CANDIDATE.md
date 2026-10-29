@@ -1,9 +1,11 @@
 # Native v1: local review quickstart
 
 Use this candidate when developing against Foundry Capability Contract v1 jobs.
-It is a **public source developer preview** under Apache-2.0. Build the kit
-from the repository using the native source quickstart in README.md before
-following this installation guide. The Core quickstart remains a separate path.
+It is an **Apache-2.0 developer preview**. Download the native ZIP and checksum
+from the [GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1),
+or build a kit using the repository README's native source quickstart. If you
+already extracted the kit, continue below without cloning or rebuilding OCP.
+The Core quickstart remains a separate path.
 Neither PyPI nor npm contains these candidate releases. Bundle hashes check
 file integrity, not the identity or trustworthiness of their source.
 

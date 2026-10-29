@@ -1,0 +1,20 @@
+{
+  "format": "ocp-preview-plan/1",
+  "release_id": "v0.1.1-preview.1",
+  "maturity": "developer-preview",
+  "target_repository": "omelet-ai/optimization-context-protocol",
+  "asset_channel": "github-release",
+  "publication_authorized": false,
+  "registry_publication_authorized": false,
+  "python_sdk": "0.1.1.dev1",
+  "typescript_sdk": "0.1.1-native.7547036d1bc9.review.1",
+  "native_contracts_python": "0.0.0+foundry.7547036d1bc9.review1",
+  "native_contracts_typescript": "0.0.0-foundry.7547036d1bc9.review.1",
+  "core_contract": "0.1.0",
+  "native_contract": "1",
+  "foundry_contract_pin": "7547036d1bc9464d6c43a9bdf7cff0a78e8560d7",
+  "python": "3.12",
+  "optional_node": "24",
+  "verification_targets": ["macOS-arm64", "Linux-amd64-Docker-emulation"],
+  "not_verified": ["Windows", "native-Linux-arm64", "Linux-Node", "external-human-acceptance", "internal-owner-acceptance", "new-model-host-trials"]
+}

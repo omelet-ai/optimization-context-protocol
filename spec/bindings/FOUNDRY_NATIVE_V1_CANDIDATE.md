@@ -71,8 +71,3 @@ state as evidence, never that exception text. The local `cancel-uncertainty-1`
 proposal changes only this explanation and its API comment; it keeps error codes,
 wire schemas and behavior. The default Foundry pin is preserved until upstream
 review. The proposal and rollback results are separate from baseline conformance.
-
-The portable source-review build explicitly selects `cancel-uncertainty-1` in
-TypeScript prerelease `.review.1`. It never reuses baseline artifact versions.
-The outer wire contract and existing Core imports are unchanged. This is an OCP
-publication proposal; no upstream Foundry source or service is modified.

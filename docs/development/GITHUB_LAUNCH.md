@@ -2,8 +2,11 @@
 
 Status: the owner approved GitHub source publication and Apache-2.0 on 2026-10-27.
 The canonical project is `omelet-ai/optimization-context-protocol`. This document
-distinguishes that source developer preview from later releases and hosted services. `ocp.omelet.ai` is the selected website direction; permanent deployment
-remains on hold. A protected, expiring review link is not the public project site.
+distinguishes that source developer preview from later releases and hosted services.
+The GitHub Pages documentation site is public; deploying its latest changes is
+held. `ocp.omelet.ai` remains a future custom-domain option. The current first
+immutable asset plan is [v0.1.1-preview.1](PREVIEW_RELEASE.md); H63 verifies the
+exact extracted ZIP without publishing it.
 
 ## The adoption path
 
@@ -20,13 +23,15 @@ No workflow, repository setting or publication is activated by this plan.
 
 ## Response to the external review
 
-The review is useful qualitative feedback. Its author reported browser interaction
-and document reading, but did not complete installation or a solve. Record it as
-that observation, not an external acceptance pass.
+The initial reviewer reported browser/document use and a blocked download. A
+later agent review reported installation and actual three-domain MCP calculations.
+These are useful observations with different scopes; neither establishes a real
+external human independently connecting their own application and engine. The
+table below records the original feedback and subsequent implementation.
 
 | Finding | Current response | Remaining evidence |
 | --- | --- | --- |
-| Preview presented as an open-source product | English README and site label say developer preview; no public package claim | Approved public source/license/release |
+| Preview presented as an open-source product | English README and site label say developer preview; no public package claim | Source/license public; first immutable GitHub prerelease approved |
 | Installation too complex | `python3.12 start.py --venv .local` verifies, installs, solves and checks; existing environment preserved | Real download/install in new users' environments |
 | Engine substitution unclear | `demo.py` runs one application/input with OR-Tools and a separate enumerating library | An external developer's own engine; no claim that all engines interchange |
 | Value over direct solver calls unclear | README explains discovery, rejection, result semantics and checker boundary | Observe whether developers use this in their application |
@@ -86,10 +91,11 @@ The owner is already assigned. Do not request that assignment again.
   publication inventory includes license, notice, documentation and validation
   changes for this transition. Internal material and execution evidence remain
   excluded. See [the approval record](../../provenance/PUBLICATION_APPROVAL.md).
-- **Version:** existing `0.1.0` artifacts are private candidates; hashes distinguish
-  rebuilds. The first public prerelease tag, Python/Node package names and versions
-  must be fixed together after name availability and compatibility review. Never
-  silently replace a published artifact under the same version.
+- **Version:** the local first-release identifier and package versions are fixed
+  in [the preview plan](preview-release.json). Core and native source are public;
+  the first GitHub asset publication is approved in the publication record. Preserve one
+  tested asset by hash; never silently replace a published artifact. PyPI/npm
+  name ownership and dependency publication order are a separate channel review.
 - **Operations:** validate private vulnerability reporting and an actual maintainer
   response route. Enable issues/discussions and CI only in the approved repository
   with a defined runner/cost scope. Website and hosted trial are separate approvals.

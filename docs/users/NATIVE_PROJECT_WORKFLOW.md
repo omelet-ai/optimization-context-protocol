@@ -165,5 +165,7 @@ error, environment, help needed, time to first verified solution and remaining
 limitations. A maintainer's automated PASS is not the reviewer's acceptance.
 
 This workflow is ready for local evaluation after its recorded harness gates
-pass. Organization-wide migration, external sharing, package publication,
-deployment and additional model trials require their own approved scope.
+pass. The GitHub prerelease provides a public kit; do not include private
+project data or completed review records when sharing it. Organization-wide
+migration, registry publication, deployment and additional model trials require
+their own approved scope.

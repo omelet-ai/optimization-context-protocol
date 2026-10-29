@@ -208,6 +208,14 @@ def main():
         print(json.dumps(value,allow_nan=False));return 0
     except Exception as error:
         result={'status':'FAIL','code':getattr(error,'code','INSPECTION_COMMAND_FAILED'),'execute_calls':0,'model_calls':0}
+        hints = {'CSV_ID':'Use an ASCII identifier starting with a letter (letters, digits, underscore or hyphen; at most 64 characters). Keep display names in your application.',
+                 'CSV_TIME':'Use HH:MM on one local day, for example 09:00; 24:00 is allowed only as an end time.',
+                 'CSV_INTEGER':'Use a non-negative integer. Cost is per complete assignment in one declared unit; convert all monetary values consistently before importing.',
+                 'CSV_HEADER':'Use the exact header fields shown in field, in that order.',
+                 'CSV_COLUMNS':'Use one value for each header field; remove blank rows and extra columns.',
+                 'CSV_EMPTY_OR_WHITESPACE':'Provide a non-empty value without surrounding whitespace.',
+                 'OUTPUT_EXISTS':'Preserve the existing project or report and choose a new output directory.'}
+        if result['code'] in hints: result['hint']=hints[result['code']]
         result.update(getattr(error,'details',{}));print(json.dumps(result,allow_nan=False));return 1
 
 

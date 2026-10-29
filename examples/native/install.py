@@ -53,9 +53,32 @@ def main():
     print(json.dumps({'status': 'PASS', 'scope': 'installation only', 'python': str(python), 'model_calls': 0}))
 
 
+def failure(error):
+    """Keep partial installs intact and explain how to recover without blind retries."""
+    if isinstance(error, subprocess.TimeoutExpired):
+        code = 'INSTALL_TIMEOUT'
+    elif isinstance(error, (json.JSONDecodeError, KeyError, TypeError)):
+        code = 'KIT_INVALID'
+    elif isinstance(error, subprocess.CalledProcessError):
+        code = 'DEPENDENCY_INSTALL_FAILED'
+    else:
+        code = str(error) if isinstance(error, ValueError) else 'INSTALL_FAILED'
+    hints = {
+        'PYTHON_3_12_REQUIRED': 'Run this installer with Python 3.12: python3.12 -B install.py.',
+        'PLATFORM_NOT_SUPPORTED': 'Use macOS or Linux with Python 3.12; Windows is not supported by this installer.',
+        'ENVIRONMENT_EXISTS': 'Do not overwrite this environment. If installation previously passed, run its bin/python -m pip check and reuse it. If it failed or is incomplete, preserve it and choose a new --venv path.',
+        'KIT_INVALID': 'Extract a fresh complete native ZIP and compare its SHA-256 with the release checksum before installing.',
+        'KIT_CHANGED': 'A kit file is missing or changed. Extract a fresh ZIP and verify the release checksum; do not edit the manifest to bypass this check.',
+        'OFFLINE_WHEELHOUSE_INVALID': 'Supply an existing dependency directory with --offline-wheelhouse PATH, or omit it to use public PyPI.',
+        'INSTALL_TIMEOUT': 'Dependency installation or checking timed out. Keep the partial environment and error output; check network access or use a complete offline wheelhouse, then choose a new --venv path.',
+        'DEPENDENCY_INSTALL_FAILED': 'Read the pip error above. Check Python/platform and network access, or complete the offline wheelhouse. Preserve the partial environment and choose a new --venv path after correcting the cause.',
+    }
+    return {'status': 'FAIL', 'code': code, 'hint': hints.get(code,
+        'Keep the error output and any partial environment for diagnosis; correct the cause and choose a new --venv path.')}
+
+
 if __name__ == '__main__':
     try: main()
-    except (ValueError, OSError, KeyError, subprocess.CalledProcessError) as error:
-        print(json.dumps({'status': 'FAIL', 'code': str(error) if isinstance(error, ValueError) else 'INSTALL_FAILED',
-                          'hint': 'Keep any partial environment for diagnosis; choose a new --venv path to retry.'}), file=sys.stderr)
+    except (ValueError, OSError, KeyError, TypeError, subprocess.SubprocessError) as error:
+        print(json.dumps(failure(error)), file=sys.stderr)
         sys.exit(1)

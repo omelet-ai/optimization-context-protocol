@@ -116,3 +116,27 @@ This instruction authorizes the source `main` update only. Existing Foundry
 checkouts, worktrees and Git metadata must not be modified. Site deployment,
 package registries, release assets, external trial hosting and additional model
 runs remain on hold. A local kit build is not artifact publication.
+
+## First native GitHub prerelease and Pages update, 2026-10-29
+
+The owner approved proceeding with all prepared next steps and additional
+external-user-perspective scenario testing. This authorizes committing and
+pushing the validated source/documentation to this repository's main, publishing
+`v0.1.1-preview.1` as a GitHub prerelease with its exact checked source/native ZIPs,
+`SHA256SUMS` and `preview.json`, and updating the existing static GitHub Pages
+site through gh-pages. The source inventory is repository-selection.json and
+publication.json; local approval/testing receipts bind the final commit and asset
+hashes. The same tested ZIP bytes must be uploaded without rebuilding.
+
+The source changes add preparation/verification tooling, blank review materials,
+installer recovery diagnostics and CSV correction guidance. They contain no new
+Foundry extraction. The previously approved Apache-2.0 notices remain in place.
+Internal materials, private plans, credentials, Foundry copies and completed
+execution records are excluded. Existing Foundry checkouts, worktrees and Git
+metadata remain read-only. Synthetic agent checks are not external-human or
+internal-owner acceptance. No participant or completed human review is invented.
+
+This approval does not publish to PyPI/npm, provision a trial, permit additional
+model calls or spending, or authorize future release versions. Local builder
+flags continue to state that preparation itself grants no publication authority;
+GitHub delivery is verified separately after the authorized publication.

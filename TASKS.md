@@ -1,5 +1,10 @@
 # 작업 원장
 
+현재 공개 상태(2026-10-29): Core·native 소스와 Apache-2.0 고지는 공개되었고 기존 Pages 사이트가 운영 중이다. 아래 초기 표와 날짜별 기록은 개발 이력이다. 최신 준비 범위는 [프리릴리스 계획](docs/development/PREVIEW_RELEASE.md)과 H63을 따른다. H63은 선택 소스로 만든 동일 ZIP의 새 설치·실제 앱/MCP·검산을 검사하며 전체 로컬 선행을 갱신한 뒤 진급한다. 실제 외부 개발자와 내부 담당자 수락은 NOT_RUN이다. 2026-10-29 사용자는 검증된 소스 commit/push, 첫 GitHub 프리릴리스 자산 게시와 기존 Pages 갱신을 승인했다. 레지스트리·추가 모델 실행·외부 trial은 별도 범위다.
+
+## 초기 개발 이력
+
+
 상태: H01~H07·H11·H15~H18에 더해 초대 운영·설치 MCP 준비 H19를 구현·검사에 연결했다. 실제 외부 trial·사용자·공개 관문은 미완료다. 2026-10-26 요청 사용자가 운영·기술·지원 및 권리 검토 조정 책임을 맡았다. 권리 검토 결과를 담당 배정으로 대신하지 않는다. 기술 단계의 현재 판정은 [검증 환경](docs/development/LOCAL_RUNTIME.md)의 Python으로 `tools/harness.py status`를 실행해 계산하며 아래 작업의 전체 완료와 구분한다.
 
 | ID | 작업 | 상태 | 첫 완료 증거 |
@@ -375,3 +380,25 @@ H62는 같은 안내 명령과 입력/변조 회귀를 네트워크 없는 Linux
 외부 개발자 수락은 NOT_RUN으로 남긴다. 이동·휴식·공정성·노동 규칙·불확실성은
 미지원이며 실제 업무에 필요하면 적합성 실패로 기록해야 한다. 새 꾸러미는 로컬
 검토용이다. 커밋·푸시·외부 공유·배포·추가 모델 실행·비용은 별도 승인 대상이다.
+
+
+## H63: 최초 프리릴리스 준비
+
+- 버전·지원 범위·승인 분리: `docs/development/preview-release.json`.
+- 선택 소스/설치 ZIP·해시·빈 사람 검토 양식: `tools/prepare_preview.py`.
+- 동일 추출 ZIP의 macOS Python/Node 및 오프라인 Linux Python/MCP 실제 회귀: `tools/check_preview_candidate.py`.
+- Foundry 원본과 등록 worktree는 수정하지 않고 기존 H00–H62 로컬 경로를 먼저 갱신한다.
+- 이 단계의 PASS는 준비물과 자동 검증 범위에 한정한다. 사람 시험·게시 이력은 생성하지 않는다.
+
+## H63 follow-up: first-user scenarios and approved delivery
+
+- Add installed regressions for wrong Python, dependency timeout without retry,
+  partial-environment preservation, malformed manifest, a Unicode/spaced install
+  path outside the current directory, actionable CSV corrections, and independent
+  adjacent/overlapping task scenarios. Run them on macOS and offline Linux.
+- Separate the prerelease ZIP path from source development in README and Pages;
+  preserve checksum, version, no-key MCP and explicit preview limits.
+- Publish only checked selected source/assets under the 2026-10-29 scoped
+  approval; anonymously redownload and run after delivery. Completed logs remain
+  private. External-human/internal-owner acceptance and registry/model trials
+  remain separate; Foundry original repositories remain unchanged.

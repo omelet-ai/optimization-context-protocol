@@ -9,8 +9,10 @@ evidence of a deployed internal project or a completed human acceptance test.
 
 ## Install and prepare the work
 
-Build a kit using the repository README's native source quickstart
-(`tools/build_native_candidate.py`). It contains `inspection.py` and this guide.
+Download and verify the native ZIP from the
+[GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1),
+or build a kit using the repository README's native source quickstart
+(`tools/build_native_candidate.py`). Both contain `inspection.py` and this guide.
 No internal Foundry checkout or review artifact is needed. From the kit:
 
 <!-- ocp:inspection-init -->

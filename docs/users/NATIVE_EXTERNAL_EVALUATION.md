@@ -1,9 +1,12 @@
 # Native candidate: independent developer evaluation
 
-This is a local review candidate. Sharing requires approval for the exact bundle
-and its newly extracted contract sources. No participant has been assigned yet.
-The public Core 0.1 release is a separate path; these instructions do not claim
-that native artifacts have been published to GitHub or a package registry.
+Core and native sources are public under Apache-2.0; the native source rights
+and notices were approved in October 2026. Download the native ZIP and checksum
+from the [first GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1).
+A separately rebuilt evaluation bundle is a different artifact; do not replace
+the published checksum with its hash. No independent participant has been assigned yet.
+The release kit includes START_HERE.md and a blank REVIEW_FORM.json. Record
+actual outcomes and help needed; automated tests never populate human acceptance.
 
 ## Start without project assistance
 

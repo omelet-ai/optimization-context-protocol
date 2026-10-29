@@ -8,7 +8,7 @@ an independently adopted industry standard.
 | Source | Public at [GitHub](https://github.com/omelet-ai/optimization-context-protocol); original code is Apache-2.0, with separate third-party notices |
 | Documentation site | Public on [GitHub Pages](https://omelet-ai.github.io/optimization-context-protocol/) |
 | Native v1 | Public source candidate aligned with pinned Capability Contract v1; explicit native SDK/MCP entrypoints; not stable v1 or the full gateway/ocps1 profile |
-| Installation | Build local preview artifacts from source; no PyPI/npm release or public binary release assets |
+| Installation | [Native prerelease ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1) or source build; no PyPI/npm release |
 | Runtime examples | Routing, fixed-time worker assignment and deterministic inventory replenishment; bounded reference profiles |
 | Omelet trial | Separate invitation, environment and operating limits; no public self-service signup |
 | Compatibility | Preview contracts, explicit profile versions and artifact hashes; not a frozen stable API |
@@ -36,8 +36,16 @@ publication scopes. A locally generated artifact does not publish itself, and
 the source license does not activate a hosted trial or grant a service credential.
 
 For synchronous Core calls use the original quickstart. For native jobs and eight
-MCP tools, use [the native source quickstart](../../README.md#native-v1-from-public-source).
+MCP tools, use [the native source quickstart](https://github.com/omelet-ai/optimization-context-protocol#native-v1-from-public-source).
 Both build locally from the same public repository without a Foundry checkout.
 Selected native source rights, Apache-2.0 and patent disclosure were confirmed
-on 2026-10-28; [the publication record](../../provenance/PUBLICATION_APPROVAL.md)
+on 2026-10-28; [the publication record](https://github.com/omelet-ai/optimization-context-protocol/blob/main/provenance/PUBLICATION_APPROVAL.md)
 distinguishes source and Pages from registry/releases and hosted trials.
+
+
+The first immutable asset release is `v0.1.1-preview.1`; see the
+[preparation and verification scope](https://github.com/omelet-ai/optimization-context-protocol/blob/main/docs/development/PREVIEW_RELEASE.md). It is
+a developer prerelease delivered through [GitHub assets](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1), not a registry release. Exact candidate checks and the refreshed
+local harness are separate evidence records. Actual external developer and
+internal business-owner acceptance remain pending; the blank forms do not imply
+that a participant has performed the tasks.

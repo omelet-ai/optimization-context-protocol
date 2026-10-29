@@ -3641,6 +3641,73 @@
           "min_tests": 13
         }
       ]
+    },
+    {
+      "id": "H63",
+      "title": "Immutable public-source preview and exact extracted-asset regression",
+      "tasks": [
+        "OSS-10",
+        "OSS-11",
+        "OSS-12"
+      ],
+      "depends_on": [
+        "H62"
+      ],
+      "mode": "local",
+      "inputs": [
+        "README.md",
+        "PUBLIC_RELEASE_CHECKLIST.md",
+        "docs/",
+        "tools/",
+        "provenance/",
+        "examples/",
+        "sdk/",
+        "runtime/",
+        "adapters/",
+        "conformance/",
+        "authoring/",
+        "spec/",
+        "cases/"
+      ],
+      "acceptance": "One exact selected-source candidate; macOS Python/Node and offline Linux amd64 fresh ZIP installation, actual jobs/MCP and independent checks; no publication or human acceptance claim",
+      "checks": [
+        {
+          "id": "preview-integrity-regressions",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/tests/test_preview.py"
+          ],
+          "timeout_seconds": 60,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 20
+        },
+        {
+          "id": "preview-extracted-assets",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_preview_candidate.py"
+          ],
+          "timeout_seconds": 2400,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "model_calls": 0,
+            "published": false,
+            "registry_published": false,
+            "site_deployed": false
+          },
+          "min_tests": 100
+        }
+      ]
     }
   ]
 }

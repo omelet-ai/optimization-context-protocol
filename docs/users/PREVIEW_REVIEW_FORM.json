@@ -1,0 +1,17 @@
+{
+  "format": "ocp-human-review/1",
+  "candidate_sha256": null,
+  "participant_alias": null,
+  "environment": {"os": null, "architecture": null, "python": null, "node_if_used": null},
+  "external_developer_acceptance": "NOT_RUN",
+  "internal_owner_acceptance": "NOT_RUN",
+  "tasks": [
+    {"id": "install", "status": "NOT_STARTED", "minutes": null, "help_needed": null, "evidence": []},
+    {"id": "own-application", "status": "NOT_STARTED", "minutes": null, "help_needed": null, "evidence": []},
+    {"id": "own-engine", "status": "NOT_STARTED", "minutes": null, "help_needed": null, "evidence": []},
+    {"id": "mcp-sdk", "status": "NOT_STARTED", "minutes": null, "help_needed": null, "evidence": []},
+    {"id": "inspection-owner-review", "status": "NOT_STARTED", "minutes": null, "help_needed": null, "evidence": []}
+  ],
+  "findings": [],
+  "maintainer_review": null
+}

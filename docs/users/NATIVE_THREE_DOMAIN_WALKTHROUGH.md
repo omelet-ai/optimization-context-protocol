@@ -137,5 +137,15 @@ turns a missing solution into a zero-cost solution. Host configuration is genera
 by `mcp_config.py` as explained in the bundle README.
 
 These workflows exercise transport and tools, not an LLM's reasoning or a real
-external person's unaided experience. Public sharing of this native bundle,
-Linux/Windows validation and additional model evaluation remain separate steps.
+external person's unaided experience. The published prerelease ZIP is the
+reviewed delivery artifact; a local rebuild has different bytes. Linux amd64
+Python/MCP is tested under Docker emulation; native Linux arm64, Windows and
+Linux Node remain unverified. Additional model trials require their own scope.
+
+If a job ends as `failed` or `cancelled`, the walkthrough reports `JOB_FAILED`
+or `JOB_CANCELLED` with the original job, request and idempotency key. No result,
+objective or independent PASS is invented, and no resubmission occurs. A local
+worker lease can expire after a host pause; inspect the job's error before
+choosing a new run. A failed job is not mathematical infeasibility. Keep the
+machine awake during an uninterrupted regression run; tests must still fail if
+an expected calculation does not finish.

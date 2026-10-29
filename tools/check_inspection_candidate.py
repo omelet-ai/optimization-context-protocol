@@ -44,7 +44,7 @@ import json,subprocess,sys
 from pathlib import Path
 manifest=json.loads(Path('manifest.json').read_text())
 wheels=[str(Path(n).resolve()) for key,n in manifest['example_wheels'].items() if key.startswith('budget_')]
-subprocess.run([sys.executable,'-m','pip','install','--no-index','--no-deps',*wheels],check=True,stdout=subprocess.DEVNULL)
+subprocess.run([sys.executable,'-m','pip','install','--no-index','--no-deps','--no-compile',*wheels],check=True,stdout=subprocess.DEVNULL)
 subprocess.run([sys.executable,'-m','pip','check'],check=True,stdout=subprocess.DEVNULL)
 print(json.dumps({'status':'PASS'}))
 PY''','optional-dependencies')
