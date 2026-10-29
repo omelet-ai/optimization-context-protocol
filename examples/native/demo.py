@@ -6,7 +6,8 @@ import subprocess
 import sys
 import uuid
 
-from conformance.assessment import assess
+from conformance.assessment import assess, load_registry
+from conformance.core_contract import ContractError
 from ocp_candidate.contract import parse_json
 from ocp_candidate.native import NativeError
 from ocp_runtime.native_server import LocalAPI
@@ -17,12 +18,22 @@ DOMAINS = {'routing-basic': 'routing-input.json', 'worker-scheduling': 'worker-i
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--domain', choices=DOMAINS)
+    parser.add_argument('--domain', help='Exact discovered domain ID')
+    parser.add_argument('--extension', help='Trusted installed MODULE:FACTORY, supplied by the host')
+    parser.add_argument('--checker-factory', help='Trusted installed checker MODULE:FACTORY')
+    parser.add_argument('--worker-engine', choices=('reference', 'byo'), default='reference',
+                        help='Swap only the worker provider; the client and independent checker stay the same')
     parser.add_argument('--input', type=Path)
     parser.add_argument('--node', action='store_true', help='Use the optional installed TypeScript SDK from Node')
     parser.add_argument('--output', type=Path, help='Save the full result and independent report to a new JSON file')
     args = parser.parse_args()
     if args.input and not args.domain: parser.error('--input needs --domain')
+    if args.worker_engine == 'byo' and args.domain != 'worker-scheduling':
+        parser.error('--worker-engine byo needs --domain worker-scheduling')
+    if args.extension and (not args.domain or not args.input): parser.error('--extension needs --domain and --input')
+    if args.extension and args.worker_engine != 'reference': parser.error('Choose --extension or --worker-engine byo')
+    if not args.extension and args.domain and args.domain not in DOMAINS: parser.error('Unknown built-in domain; supply --extension')
+    checker_registry = load_registry(args.checker_factory)
     root = Path(__file__).resolve().parent
     if args.output and args.output.exists():
         print(json.dumps({'status': 'FAIL', 'code': 'OUTPUT_EXISTS', 'execute_calls': 0, 'model_calls': 0})); return 1
@@ -36,10 +47,27 @@ def main():
                 'execute_calls': 0, 'model_calls': 0})); return 1
     prepared = {}
     # Prepare and validate every selected input before spending any solver work.
-    with LocalAPI() as local:
+    registrations = None
+    if args.worker_engine == 'byo':
+        try:
+            from ocp_worker_greedy.registration import registration
+        except ModuleNotFoundError as error:
+            if error.name != 'ocp_worker_greedy': raise
+            print(json.dumps({'status': 'FAIL', 'code': 'BYO_ENGINE_NOT_INSTALLED',
+                'message': 'Install the bundled ocp_worker_greedy_example wheel; see BYO_WORKER.md.',
+                'execute_calls': 0, 'model_calls': 0})); return 1
+        registrations = [registration()]
+    if args.extension:
+        from ocp_runtime.native_extension import load_extension
+        registrations = load_extension(args.extension)
+    with LocalAPI(registrations) as local:
         for domain, data in inputs.items():
             api = local.client(domain)
             catalog = api.capabilities()
+            try:
+                checker_registry.resolve(catalog['domainProfile'])
+            except ContractError as error:
+                print(json.dumps({'status': 'FAIL', 'code': error.code, 'execute_calls': 0, 'model_calls': 0})); return 1
             request = catalog['requestTemplate']
             request.update(input=data, request_id=str(uuid.uuid4()))
             validation = api.validate(request)
@@ -59,7 +87,7 @@ def main():
             else:
                 solved = local.client(domain).solve(request, tenant='local-engineer', idempotency_key=request['request_id'])
             response = solved['result']['result']
-            check = assess(request, response)
+            check = assess(request, response, registry=checker_registry)
             if check['status'] != 'PASS': raise ValueError('INDEPENDENT_CHECK_FAILED')
             metric = check['checks']['objective_recomputation']
             outcomes.append({'domain': domain, 'request': request, 'response': response, 'independent_check': check,

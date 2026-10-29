@@ -95,3 +95,24 @@ external-human/LLM-host acceptance are not claimed. Package registries, release
 assets, hosted trials, spending and additional model calls remain outside this
 publication task. Local generated kits retain `publication_authorized: false`
 for artifact posting, separately from `source_publication_authorized: true`.
+
+## Inspection source update, 2026-10-29
+
+The owner authorized committing and pushing the verified inspection assignment
+and H61/H62 changes to `omelet-ai/optimization-context-protocol`, excluding internal
+material, credentials and execution evidence. The update includes the necessary
+independent project app, BYO worker/custom-profile examples, checker registration,
+portable source build and inspection regression. These are newly authored public
+implementation/example files; no additional Foundry sources are extracted.
+The existing Apache-2.0 license and previously approved native source hashes remain
+unchanged. The updated explicit repository/public allowlists contain 341 files.
+
+Internal plans, original snapshots, `tools/foundry_convergence/` and local execution
+records remain excluded. H61/H62's public counterpart uses only published source
+and local dependency caches; it does not copy internal acceptance or historical
+PASS evidence into a public clone. Human adoption remains a separate activity.
+
+This instruction authorizes the source `main` update only. Existing Foundry
+checkouts, worktrees and Git metadata must not be modified. Site deployment,
+package registries, release assets, external trial hosting and additional model
+runs remain on hold. A local kit build is not artifact publication.

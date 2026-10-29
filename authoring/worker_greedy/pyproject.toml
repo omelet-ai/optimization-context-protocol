@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.46.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ocp-worker-greedy-example"
+version = "0.1.0"
+description = "Independent, bounded greedy worker provider for the OCP candidate contract"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+dependencies = ["ocp-candidate>=0.1.0,<=0.1.1.dev1"]
+classifiers = ["Private :: Do Not Upload"]
+
+[tool.setuptools.packages.find]
+where = ["src"]

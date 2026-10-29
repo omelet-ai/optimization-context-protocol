@@ -99,6 +99,22 @@
             "skipped": 0
           },
           "min_tests": 8
+        },
+        {
+          "id": "authored-document-scope-regressions",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/tests/test_workspace_links.py"
+          ],
+          "timeout_seconds": 60,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 4
         }
       ]
     },
@@ -2187,6 +2203,1442 @@
             "skipped": 0
           },
           "min_tests": 18
+        }
+      ]
+    },
+    {
+      "id": "H37",
+      "title": "Pinned Foundry baseline and contract mapping",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H00"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "AGENTS.md",
+        "cases/routing/coordinates.json",
+        "conformance/coordinates.py",
+        "conformance/routing.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Pinned Foundry baseline and contract mapping; pinned sources, actual scoped checks, no shared Foundry mutation, publication or model execution",
+      "checks": [
+        {
+          "id": "h37-convergence",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/check.py",
+            "H37"
+          ],
+          "timeout_seconds": 90,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 6
+        }
+      ]
+    },
+    {
+      "id": "H38",
+      "title": "Canonical Foundry contracts in standalone packages",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H37"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "AGENTS.md",
+        "cases/routing/coordinates.json",
+        "conformance/coordinates.py",
+        "conformance/routing.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Canonical Foundry contracts in standalone packages; pinned sources, actual scoped checks, no shared Foundry mutation, publication or model execution",
+      "checks": [
+        {
+          "id": "h38-convergence",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/check.py",
+            "H38"
+          ],
+          "timeout_seconds": 360,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 12
+        }
+      ]
+    },
+    {
+      "id": "H39",
+      "title": "One native SDK in isolated consumers",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H38"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "AGENTS.md",
+        "cases/routing/coordinates.json",
+        "conformance/coordinates.py",
+        "conformance/routing.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "One native SDK in isolated consumers; pinned sources, actual scoped checks, no shared Foundry mutation, publication or model execution",
+      "checks": [
+        {
+          "id": "h39-convergence",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/check.py",
+            "H39"
+          ],
+          "timeout_seconds": 180,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 10
+        }
+      ]
+    },
+    {
+      "id": "H40",
+      "title": "Real isolated internal Routing OCP integration",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H39"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "AGENTS.md",
+        "cases/routing/coordinates.json",
+        "conformance/coordinates.py",
+        "conformance/routing.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Real isolated internal Routing OCP integration; pinned sources, actual scoped checks, no shared Foundry mutation, publication or model execution",
+      "checks": [
+        {
+          "id": "h40-convergence",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/check.py",
+            "H40"
+          ],
+          "timeout_seconds": 420,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 8
+        }
+      ]
+    },
+    {
+      "id": "H41",
+      "title": "Native package boundaries and canonical import relocation",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H40"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "AGENTS.md",
+        "cases/routing/coordinates.json",
+        "conformance/coordinates.py",
+        "conformance/routing.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Native package boundaries and canonical import relocation; no shared Foundry mutations, registry publication or model execution",
+      "checks": [
+        {
+          "id": "h41-adoption",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/check.py",
+            "H41"
+          ],
+          "timeout_seconds": 360,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 46
+        }
+      ]
+    },
+    {
+      "id": "H42",
+      "title": "Complete internal consumer opt-in and rollback",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H41"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "AGENTS.md",
+        "cases/routing/coordinates.json",
+        "conformance/coordinates.py",
+        "conformance/routing.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Complete internal consumer opt-in and rollback; no shared Foundry mutations, registry publication or model execution",
+      "checks": [
+        {
+          "id": "h42-adoption",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/check.py",
+            "H42"
+          ],
+          "timeout_seconds": 360,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 20
+        }
+      ]
+    },
+    {
+      "id": "H43",
+      "title": "Fresh installed native internal and external execution",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H42"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "AGENTS.md",
+        "cases/routing/coordinates.json",
+        "conformance/coordinates.py",
+        "conformance/routing.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Fresh installed native internal and external execution; no shared Foundry mutations, registry publication or model execution",
+      "checks": [
+        {
+          "id": "h43-adoption",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/check.py",
+            "H43"
+          ],
+          "timeout_seconds": 420,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 17
+        }
+      ]
+    },
+    {
+      "id": "H44",
+      "title": "Installed public SDK native bindings",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-05",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H43"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "cases/",
+        "spec/",
+        "tools/build_candidate.py",
+        "tools/build_typescript.py",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/check_h29.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Installed public SDK native bindings; local synthetic evidence, no model calls or publication",
+      "checks": [
+        {
+          "id": "h44-native-binding",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/binding_check.py",
+            "H44"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 16
+        }
+      ]
+    },
+    {
+      "id": "H45",
+      "title": "Shared native server and actual domain execution",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-05",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H44"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "cases/",
+        "spec/",
+        "tools/build_candidate.py",
+        "tools/build_typescript.py",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/check_h29.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Shared native server and actual domain execution; local synthetic evidence, no model calls or publication",
+      "checks": [
+        {
+          "id": "h45-native-binding",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/binding_check.py",
+            "H45"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 23
+        }
+      ]
+    },
+    {
+      "id": "H46",
+      "title": "Installed TypeScript and MCP three-domain use",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-05",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H45"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "cases/",
+        "spec/",
+        "tools/build_candidate.py",
+        "tools/build_typescript.py",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/check_h29.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Installed TypeScript and MCP three-domain use; local synthetic evidence, no model calls or publication",
+      "checks": [
+        {
+          "id": "h46-native-binding",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/binding_check.py",
+            "H46"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 29
+        }
+      ]
+    },
+    {
+      "id": "H47",
+      "title": "Original Foundry API with public Python and MCP",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-05",
+        "OSS-09"
+      ],
+      "depends_on": [
+        "H46"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "cases/",
+        "spec/",
+        "tools/build_candidate.py",
+        "tools/build_typescript.py",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/check_h29.py",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Original Foundry API with public Python and MCP; local synthetic evidence, no model calls or publication",
+      "checks": [
+        {
+          "id": "h47-native-binding",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/binding_check.py",
+            "H47"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "failures": 0,
+            "errors": 0,
+            "skipped": 0
+          },
+          "min_tests": 23
+        }
+      ]
+    },
+    {
+      "id": "H48",
+      "title": "Native review kit documented fresh installation",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-05",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H47"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Native review kit documented fresh installation; exact local candidate only, no shared Foundry changes, publication, external users or models",
+      "checks": [
+        {
+          "id": "h48-release-flow",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/kit_check.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 8
+        }
+      ]
+    },
+    {
+      "id": "H49",
+      "title": "Native and Core installation compatibility checkpoint",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-05",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H48",
+        "H36"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "provenance/",
+        "tools/verify_repository.py",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Native and Core installation compatibility checkpoint; exact local candidate only, no shared Foundry changes, publication, external users or models",
+      "checks": [
+        {
+          "id": "h49-release-flow",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/verify_repository.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS"
+          }
+        }
+      ]
+    },
+    {
+      "id": "H50",
+      "title": "Shared contract proposal and two-consumer rollback",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-05",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H49"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Shared contract proposal and two-consumer rollback; exact local candidate only, no shared Foundry changes, publication, external users or models",
+      "checks": [
+        {
+          "id": "h50-release-flow",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/feedback.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 73
+        }
+      ]
+    },
+    {
+      "id": "H51",
+      "title": "Three fresh external-style domain application journeys",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-05",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H50"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Fresh isolated local synthetic domain journeys; no external human acceptance, shared Foundry mutation, model calls or publication",
+      "checks": [
+        {
+          "id": "h51-journey",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/journey_check.py",
+            "apps"
+          ],
+          "timeout_seconds": 900,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 27
+        }
+      ]
+    },
+    {
+      "id": "H52",
+      "title": "Three-domain real MCP problem application journeys",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-05",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H51"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Fresh isolated local synthetic domain journeys; no external human acceptance, shared Foundry mutation, model calls or publication",
+      "checks": [
+        {
+          "id": "h52-journey",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/journey_check.py",
+            "mcp"
+          ],
+          "timeout_seconds": 900,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 12
+        }
+      ]
+    },
+    {
+      "id": "H53",
+      "title": "Read-only current Foundry consumer rehearsal",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H52"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Read-only current Foundry consumer rehearsal; no shared Foundry writes, publication, external-human acceptance or model calls",
+      "checks": [
+        {
+          "id": "h53-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/current_check.py"
+          ],
+          "timeout_seconds": 1200,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 51
+        }
+      ]
+    },
+    {
+      "id": "H54",
+      "title": "Offline Linux native installation and three-domain MCP",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H53"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Offline Linux native installation and three-domain MCP; no shared Foundry writes, publication, external-human acceptance or model calls",
+      "checks": [
+        {
+          "id": "h54-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/linux_check.py"
+          ],
+          "timeout_seconds": 1200,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 27
+        }
+      ]
+    },
+    {
+      "id": "H55",
+      "title": "Exact native candidate and independent evaluation preparation",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H54"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Exact native candidate and independent evaluation preparation; no shared Foundry writes, publication, external-human acceptance or model calls",
+      "checks": [
+        {
+          "id": "h55-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/evaluation_pack.py"
+          ],
+          "timeout_seconds": 1200,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 13
+        }
+      ]
+    },
+    {
+      "id": "H56",
+      "title": "Independent BYO worker engine and same-app substitution",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H55"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Fresh installed independent greedy engine, unchanged common app/SDK/native jobs/MCP, separate checker, counterexamples and import isolation; no Foundry writes, models or publication",
+      "checks": [
+        {
+          "id": "h56-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/byo_worker_check.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 30
+        }
+      ]
+    },
+    {
+      "id": "H57",
+      "title": "Independent domain profile, solver and checker extension",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H56"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Fresh separate profile/DP solver/subset checker packages, unchanged common app/SDK/server, actual MCP, maximization and corruption rejection; no models or Foundry writes",
+      "checks": [
+        {
+          "id": "h57-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/extension_check.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 29
+        }
+      ]
+    },
+    {
+      "id": "H58",
+      "title": "BYO and custom-profile platform/binding matrix",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H57"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Same input and app across macOS Node SDK and Linux amd64 offline Python/MCP, engine quality gaps and unknown/null preserved; no Windows/Linux Node/human claim",
+      "checks": [
+        {
+          "id": "h58-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/extension_matrix.py"
+          ],
+          "timeout_seconds": 1200,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 48
+        }
+      ]
+    },
+    {
+      "id": "H59",
+      "title": "Independent native project and durable review workflow",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H58"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_PROJECT_WORKFLOW.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Fresh no-Node project installation; common SDK/server across three domains and BYO/custom profile; new-only result directory, independent offline recheck and uncertainty records; no Foundry writes or human acceptance",
+      "checks": [
+        {
+          "id": "h59-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/project_check.py"
+          ],
+          "timeout_seconds": 1200,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 22
+        }
+      ]
+    },
+    {
+      "id": "H60",
+      "title": "Independent project Linux installation and evidence regressions",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H59"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_PROJECT_WORKFLOW.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Exact project guide commands in network-disabled Linux amd64 emulation; real jobs/MCP, changed conditions, BYO engine and corrupt/uncertain record rejection; no external human claim",
+      "checks": [
+        {
+          "id": "h60-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/project_linux.py"
+          ],
+          "timeout_seconds": 1200,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 19
+        }
+      ]
+    },
+    {
+      "id": "H61",
+      "title": "Fixed-time inspection business adoption exercise",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H60"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_PROJECT_WORKFLOW.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Fresh no-Node installation; CSV mapping, actual jobs, workload and availability changes, eligibility infeasibility, BYO and MCP, independently checked reports; owner acceptance remains NOT_RUN",
+      "checks": [
+        {
+          "id": "h61-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/inspection_check.py"
+          ],
+          "timeout_seconds": 1200,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 13
+        }
+      ]
+    },
+    {
+      "id": "H62",
+      "title": "Inspection project offline Linux acceptance regression",
+      "tasks": [
+        "OSS-01",
+        "OSS-03",
+        "OSS-07",
+        "OSS-10",
+        "OSS-11"
+      ],
+      "depends_on": [
+        "H61"
+      ],
+      "mode": "local",
+      "inputs": [
+        "tools/foundry_convergence/",
+        "examples/native/",
+        "sdk/",
+        "runtime/",
+        "adapters/python/",
+        "conformance/",
+        "spec/",
+        "cases/",
+        "README.md",
+        "docs/users/NATIVE_LOCAL_CANDIDATE.md",
+        "tools/build_candidate.py",
+        "tools/build_conformance.py",
+        "tools/requirements-dev.lock",
+        "tools/dependency-wheels.json",
+        "tools/isolated_candidate.py",
+        "docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md",
+        "docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md",
+        "authoring/native_server_template.py",
+        "docs/users/NATIVE_EXTERNAL_EVALUATION.md",
+        "authoring/worker_greedy/",
+        "tools/build_worker_greedy.py",
+        "docs/users/NATIVE_BYO_WORKER.md",
+        "authoring/budget_example/",
+        "tools/build_budget_example.py",
+        "docs/users/NATIVE_PROFILE_EXTENSION.md",
+        "docs/users/NATIVE_PROJECT_WORKFLOW.md",
+        "docs/users/NATIVE_INSPECTION_ACCEPTANCE.md"
+      ],
+      "acceptance": "Same documented inspection project and error cases in offline Linux amd64 emulation; real solver/MCP and report validation; no Foundry writes or human adoption claim",
+      "checks": [
+        {
+          "id": "h62-check",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/foundry_convergence/inspection_linux.py"
+          ],
+          "timeout_seconds": 1200,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 13
         }
       ]
     }

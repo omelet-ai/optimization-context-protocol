@@ -88,3 +88,131 @@ feasibility, objective recomputation and proof checks in installed app/MCP flows
 Each stage requires current predecessor PASS. Package publication, additional
 model runs, external developers and new site deployments are outside these local
 checks. See harness status for results; this plan is not evidence of completion.
+
+H37 → H38 → H39 → H40 is the Foundry-first convergence lane. Its pinned native
+contract is independent of the older public Core 0.1/trial lane. H37 verifies the
+source mapping and checkout boundaries after H00. H38 packages unchanged Foundry
+contract validators, H39 exercises the unchanged shared SDK, and H40 installs the
+same artifacts in an external-style app and an isolated real internal Routing OCP
+module against the actual local Routing API solver. It does not change shared
+Foundry checkouts, certify all domains, advance H10, or authorize publication.
+The local plan is `docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md`; source pin and
+reproducible tooling are in `tools/foundry_convergence/`. New extracted sources
+and artifacts remain excluded from the public selection pending scoped review.
+
+H41–H43 continue that lane with a distinct native-contract package, an opt-in
+`./native` export in an isolated copy of the complete Foundry candidate-consumer
+project, and fresh installed internal/external consumers against the real engine.
+The original consumer entrypoint and source remain compatible. Node 22 project
+checks, exact import-rebinding provenance and patch rollback are required. No
+shared Foundry package replacement or repository/registry publication is implied.
+
+H44-H47 extend the pinned lane to public Python/TypeScript SDK native entries and
+a common three-domain server. Installed Foundry router/store/process workers run
+real jobs and preserve domain payload semantics. H46 uses actual stdio MCP with
+no model execution; H47 checks the original pinned Routing API. Existing Core
+0.1 entrypoints remain available. Publication and shared Foundry edits are separate.
+
+H48 runs the native review bundle's documented commands in a fresh environment
+with no Node on the Python/MCP path, then checks the optional Node consumer.
+H49 requires both H48 and the refreshed Core onboarding chain through H36;
+its inventory check does not authorize newly extracted source publication.
+H50 reproduces cancellation uncertainty in the pinned SDK, applies one proposal
+to isolated canonical source, installs a distinct version through both public
+and complete internal consumers, runs the real Routing API, and restores the
+exact baseline packages/lock. Expected failing counterexamples in baseline and
+rollback are reported separately from candidate success. No model or shared
+Foundry mutation occurs; upstream adoption is still a separate decision.
+
+H51 follows H50 and installs the exact native review kit independently for three
+domain personas. Documented commands apply new synthetic problems, change their
+conditions, retain mathematical result states, reject invalid units/JSON, save
+app-consumable output and catch corrupted costs/solutions with the installed
+independent checker. H52 uses those same installed artifacts for real stdio MCP
+context → requirements → validation → jobs → results → evaluation and replay.
+No source checkout/configuration is exposed to these subprocesses; Python works
+without Node. Optional Node clients run the changed problems too. These are local
+agent-operated tests on macOS, not external-human, Linux/Windows or LLM evidence.
+
+
+H53–H55는 기존 Foundry 저장소 무변경을 전제로 현재 main의 독립 복사본 적용,
+Linux amd64 오프라인 설치·실제 세 도메인 앱/MCP, 외부 평가 준비를 검사한다.
+H53은 현재 source pin과 선택 hash가 다른 경우 중단한다. H54는 검토된 Docker
+이미지와 wheelhouse가 없으면 실패하며 skip으로 통과하지 않는다. H55의 준비 PASS는
+외부 참여자나 LLM의 수락이 아니다. 실제 사람 시험은 참여자 미정으로 NOT_RUN이다.
+
+
+H56은 H55의 현재 PASS 후 독립 BYO 워커 엔진을 검사한다. 새 환경에서 선택 wheel을
+설치하고 같은 앱의 엔진만 바꾸며 실제 native job과 MCP, 별도 checker로 검증한다.
+탐욕 미발견은 unknown, 완전 해는 feasible로만 보고한다. 참조 솔버/checker import
+차단, 80개 고정 난수 사례, 해·비용·제약 변조, 품질 차이와 탐욕 반례를 포함한다.
+이 PASS는 외부 개발자의 독립 저작·사용 수락이나 공개 게시 승인이 아니다.
+
+
+## 2026-10-28: H57–H58 독립 profile 확장과 교차 검증
+
+H56 이후에는 내장 도메인을 복제하지 않고 별도 설치 패키지로 새 문제를 추가한다.
+H57은 `example.budget-selection@0.1.0`의 schema 패키지, 동적계획법 솔버,
+독립 부분집합 검산기를 각각 설치한다. 공통 `ProfileRegistry`와 명시적
+`Extension`/`CheckerRegistry` 등록만 사용한다. 공통 앱·MCP·SDK·native router/job
+소스를 도메인별로 수정하지 않는다. `total_cost` 대신 효익 최대화 목적을 사용해
+범용성을 검사한다. 빈 해의 0과 해 없음의 null, 시간 제한의 feasible과 optimal을
+구분하며 80개 고정 난수·변조·등록 충돌·버전 오류·독립 import 검사를 포함한다.
+
+H58은 같은 입력을 macOS arm64 Node SDK와 네트워크를 끈 Linux amd64 Python·MCP로
+실행한다. BYO 워커와 reference의 같은 해·품질 차이·휴리스틱 미발견·불가능·단위
+오류, 새 profile의 정상·예산 변경·0·단위 오류까지 상태와 목적값을 비교한다.
+Linux는 Docker emulation이며 Windows·Linux Node·native Linux arm64는 검증하지 않는다.
+H57→H58 순서로 현재 PASS를 확보하며 이전 게이트가 만료되면 현 소스로 갱신한다.
+
+이는 로컬 등록 API 0.1.0 추가이며 Core 0.1/native v1 wire와 Foundry pin은 유지한다.
+기존 서버는 확장을 설치해도 자동 활성화하지 않는다. host가 지정한 설치된 factory만
+실행하며 LLM/문제/catalog에 실행 코드 선택권을 주지 않는다. checker는 정확한
+profile 버전·목적 metric·검산 범위·자기 identity를 명시하며 등록만으로 인증되지 않는다.
+Foundry 기존 checkout·worktree·Git 메타데이터는 쓰기 차단과 전후 해시로 보존한다.
+이번 예제/후보 꾸러미는 동시 진행된 native 소스 공개 승인에 포함하지 않는다.
+추가 모델·외부 개발자 수락·commit/push·공유·배포·유료 실행은 별도 승인 대상이다.
+
+
+## 2026-10-29: H59–H60 독립 프로젝트 적용 흐름
+
+H58 이후 새 프로젝트 생성→독립 설치→입력 변경→같은 앱의 엔진 교체→실제 native
+job/MCP→독립 검산→기록 재검토를 하나의 작업 흐름으로 제공한다.
+`examples/native/project.py`는 교체 가능한 앱 예제이며 Core/native wire나
+Foundry 정본의 새 필수 계층이 아니다. 입력/config/기록에서 실행할 factory를
+불러오지 않고 host가 명시적으로 선택한 설치 패키지만 사용한다.
+
+H59는 macOS 새 HOME/venv와 별도 프로젝트 폴더에서 라우팅·워커·재고 및
+BYO·새 profile을 실행한다. 워커 근무시간 변경의 비용 7→9, heuristic unknown과
+증명된 infeasible의 null, 출력 덮어쓰기 거부, 실제 stdio MCP, 변조된 해/요약/
+job identity 거부를 확인한다. 제출 전에 key를 기록하고 불확실한 응답은 자동
+재시도하지 않는다. 저장된 PASS 대신 별도 checker로 원래 요청·결과를 재검산한다.
+H60은 네트워크 없는 Linux amd64 emulation에서 같은 문서 명령과 실패 회귀를
+검사한다. 장애 주입 검사는 실제 외부 네트워크 장애 실적과 구분한다.
+
+이 검증은 기존 H53 내부 모듈 적용 리허설에 독립 프로젝트 운영 흐름을 더한다.
+기존 Foundry checkout/worktree/Git 메타데이터 무변경과 전후 hash 검사를 유지한다.
+공통 계약 pin 7547036d1bc9, 후속 내부 리허설 pin acbc2d6f368e는 유지하며 현재
+checkout 또는 최신 원격 main 전체 일치로 표현하지 않는다. Gateway/ocps1/Studio
+전체 제품 수렴은 별도 범위다. 실제 내부 owner 수락과 외부 독립 개발자 시험은
+`ADOPTION_REVIEW.json`에 NOT_RUN으로 남고 자동 검사로 바꾸지 않는다.
+추가 모델 실행·비용·커밋·푸시·공유·게시·배포는 승인 전 수행하지 않는다.
+
+
+## 2026-10-29: H61–H62 고정 시간 점검 업무 수락 준비
+
+사용자가 선택한 고정 시간 점검 작업 배정을 첫 합성 내부 적용 후보로 만든다.
+H61은 작업자 3명·점검 6개의 CSV→표준 worker.scheduling 입력→같은 native v1
+job/MCP→독립 검산→배정표·작업자 부하 보고서 흐름을 새 HOME/venv에서 검사한다.
+CSV 오류는 파일·행·필드를 표시하고 알 수 없는 열·참조·중복·단위 변환을 묵인하지
+않는다. 기준 비용 16, 작업량 축소 19, 가용시간 축소 25, 자격 누락의 infeasible과
+BYO unknown을 구분한다. 보고서는 저장된 PASS를 믿지 않고 다시 검산한다.
+H62는 같은 안내 명령과 입력/변조 회귀를 네트워크 없는 Linux amd64 emulation에서
+반복한다. Node나 추가 LLM 없이 실행한다. Core/native wire/Foundry pin은 바꾸지
+않으며 CSV와 보고서는 교체 가능한 업무 앱이다. 내부 공유 Foundry에 쓰지 않는다.
+
+수락 안내는 `docs/users/NATIVE_INSPECTION_ACCEPTANCE.md`에 둔다. 자동 검증은
+실제 내부 담당자의 업무 적합성 수락을 대신하지 않는다. 생성된 OWNER_REVIEW.json과
+외부 개발자 수락은 NOT_RUN으로 남긴다. 이동·휴식·공정성·노동 규칙·불확실성은
+미지원이며 실제 업무에 필요하면 적합성 실패로 기록해야 한다. 새 꾸러미는 로컬
+검토용이다. 커밋·푸시·외부 공유·배포·추가 모델 실행·비용은 별도 승인 대상이다.

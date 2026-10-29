@@ -206,6 +206,23 @@ asyncio.run(main())
         self.assertEqual(assess(request, result)['status'], 'FAIL')
         with self.assertRaises(ValueError): assess(request, result, mode='guess')
 
+    def test_19_other_metric_names_preserve_existing_profiles(self):
+        fixture = json.loads((ROOT / 'cases/assignment/fixture.json').read_text())
+        report = assess(fixture['request'], fixture['result'])
+        self.assertEqual(report['status'], 'PASS')
+        self.assertEqual(report['checks']['objective_recomputation']['value'], fixture['expected_cost'])
+        coordinate = json.loads((ROOT / 'cases/routing/coordinates.json').read_text())
+        request = routing_request(coordinate['input']); result = routing_result(request)
+        request['domain_profile']['id'] = result['domain_profile']['id'] = 'routing.coordinates'
+        result['solution'] = coordinate['witness']; result['metrics'][0]['value'] = coordinate['expected_total_m']
+        for item in result['metrics'] + result['constraints']:
+            item['definition'] = item['definition'].replace('routing.basic.', 'routing.coordinates.')
+        report = assess(request, result)
+        self.assertEqual(report['status'], 'PASS')
+        self.assertEqual(report['checks']['objective_recomputation']['value'], coordinate['expected_total_m'])
+        result['metrics'][0]['value'] += 1
+        self.assertEqual(assess(request, result)['status'], 'FAIL')
+
 
 if __name__ == '__main__':
     result = unittest.TextTestRunner(resultclass=DiagnosticResult).run(unittest.defaultTestLoader.loadTestsFromTestCase(VerificationScope))

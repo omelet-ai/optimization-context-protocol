@@ -6,7 +6,8 @@
 - 규격·적합성은 중립적으로 유지하고 Omelet 제한 trial을 권장 첫 체험으로 제공한다. no-key·BYO 경로도 유지한다.
 - Core, domain/execution/environment profile, binding, 제품 정책을 구분한다. 특정 endpoint·OIP·AppKit·앱 구조를 공통 필수로 만들지 않는다.
 - 기존 Foundry 구현은 근거 자료다. 더 나은 규격을 위해 새로 설계할 수 있고 내부 consumer도 별도 migration으로 바뀔 수 있다.
-- 2026-10-28 사용자는 기존 Foundry checkout·worktree·Git 메타데이터를 수정하지 말라고 명시했다. 해당 저장소에서 fetch·branch 생성·worktree 등록·의존성 설치도 하지 않는다. 원본 조회에는 `GIT_OPTIONAL_LOCKS=0`을 사용하고, 실행 검증은 Git 메타데이터를 공유하지 않는 독립 공간에서 한다. 공통 계약은 기록된 Foundry pin을 기준으로 재사용하며 넓은 내부 migration을 이 공개 작업에 포함하지 않는다.
+- 2026-10-27 사용자 지시에 따른 수렴 작업은 Foundry의 고정된 main 계약을 우선 기준으로 삼는다. 공개 OCP에서 파생한 변경을 여러 개발자가 사용하는 Foundry 전체에 전파하지 않는다. 공통 계약·SDK·계약 검증기는 정본에서 재사용하고, 내부 적용은 격리 공간의 한 프로젝트부터 검증한다. 버전 갱신·넓은 migration은 영향 검토가 필요하다.
+- 2026-10-28 사용자는 기존 Foundry 프로젝트 저장소를 절대 수정하지 말라고 명시했다. 기존 checkout·연결된 worktree·Git 메타데이터에 쓰지 않는다. fetch, branch 생성, worktree 등록, 의존성 설치도 그 저장소에서 하지 않는다. 내부 적용은 Git 메타데이터를 공유하지 않는 별도 복사본에서만 시험한다. 원본 조회에는 `GIT_OPTIONAL_LOCKS=0`을 쓰고 실행 전후 상태·hash 및 쓰기 차단 정책을 확인한다. 외부 개발자 참여자는 아직 없으므로 사람 시험은 준비 상태로 기록한다.
 
 ## 소유 경로
 

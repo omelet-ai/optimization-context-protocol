@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.46.3"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "ocp-budget-profile-example"
+version = "0.1.0"
+requires-python = ">=3.12"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+classifiers = ["Private :: Do Not Upload"]
+dependencies = []
+[tool.setuptools.packages.find]
+where = ["src"]
+[tool.setuptools.package-data]
+ocp_budget_profile = ["*.json"]

@@ -109,6 +109,13 @@ See [installation, input changes and Node usage](docs/users/NATIVE_LOCAL_CANDIDA
 [three-domain examples](docs/users/NATIVE_THREE_DOMAIN_WALKTHROUGH.md), and the
 [engine registration template](authoring/native_server_template.py).
 
+For an end-to-end business exercise, follow [fixed-time inspection assignment](docs/users/NATIVE_INSPECTION_ACCEPTANCE.md):
+import worker/task/cost CSVs, solve, inspect assignment and workload tables, change
+a condition, swap the worker engine, and recheck the result independently.
+The kit now includes `project.py`, `inspection.py` and optional BYO/profile example
+wheels. See [independent projects](docs/users/NATIVE_PROJECT_WORKFLOW.md) for the
+same app across domains. These are local builds from public source, not registry releases.
+
 Validation covers macOS arm64 and Linux amd64 in a network-disabled Python 3.12
 container under Docker on an arm64 host. Windows and native Linux arm64 are not
 verified. Automated checks do not establish external-human or model-host acceptance.

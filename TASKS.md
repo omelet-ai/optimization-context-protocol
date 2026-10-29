@@ -150,6 +150,49 @@ fresh online install and URL results are recorded there after remote checks.
 These standalone results do not promote stale harness dependencies or establish
 external-human acceptance.
 
+## 2026-10-27: Foundry-first standard convergence
+
+The owner requested one authoritative contract, SDK and contract validator for
+internal and external use, with existing Foundry work as the baseline. H37–H40
+record source/mapping, standalone packages, shared SDK regressions and isolated
+real Routing OCP integration. The detailed local plan is
+`docs/plans/FOUNDRY_STANDARD_CONVERGENCE.md`. Existing shared Foundry checkouts are
+read only; public Core 0.1 remains a separately identified compatibility lane.
+Current results belong to harness evidence, not this task entry. New extracted
+source/artifacts remain local and unapproved for publication. Commit, push,
+deployment, paid execution and broad Foundry migration need separate approval.
+
+The follow-up H41–H43 scopes a separately named native-contract artifact and an
+opt-in native export for the complete existing Foundry candidate-consumer package.
+Build, typecheck, legacy/native regressions, patch rollback and real fresh-install
+execution run on isolated pinned source. Shared Foundry code, original imports,
+root lock and deployed defaults remain outside this local change. Results follow
+the current harness; source extraction and publication approval remain separate.
+
+The 2026-10-28 continuation H44-H47 connects public Python/TypeScript SDK source
+to the pinned native contract and uses the unchanged Foundry router/store/worker
+for routing, worker and inventory reference providers. Real stdio MCP uses the
+same jobs. Core 0.1 entrypoints remain available. Extraction artifacts stay local;
+shared Foundry edits, commits, pushes, publication, paid/model runs are excluded.
+
+H48-H50 continue with the native review bundle, exact documented no-Node Python
+installation, generated MCP configuration and optional Node app. The existing
+Core onboarding gates are refreshed through H36 before the two paths converge
+at H49. H50 verifies a single-source cancellation-uncertainty proposal through
+public and isolated internal consumers, including exact artifact rollback.
+The proposal has a separate version; it does not silently update the pinned
+Foundry authority, default artifacts, publication inventory or shared checkout.
+
+H51-H52 extend the local candidate to three external-style engineering journeys:
+independent no-Node Python installations, new synthetic business inputs, changed
+conditions, valid infeasibility, actionable validation failures, saved application
+results and corrupt-result rejection. Optional Node and real MCP clients reuse
+the same problems. MCP replays retain the job identity and separate provider
+evaluation from independent checks. These agent-run exercises do not certify
+external-human adoption, other operating systems or production-scale solvers.
+Results follow current harness evidence. Shared Foundry, commits/pushes, new
+publication, model runs and paid resources remain outside this local scope.
+
 ## 2026-10-27: Omelet color palette preview
 
 The owner requested purple and light green using the Omelet website as the visual
@@ -174,6 +217,45 @@ checks before publishing. Deployment hashes and published viewport/contrast
 results are recorded locally under `.harness/work/brand-palette-20261027/` after
 execution. This approval does not include trial or package publication.
 
+## 2026-10-27: Wider opening text preview
+
+The owner requested a wider, more stable opening text layout. The hero copy
+column now has more space and its lead uses up to 60ch; capped desktop padding
+keeps the title from rewrapping on very wide screens. At 1440px, copy width is
+601px (previously 540px), the lead is 601px (previously 480px), and the unchanged
+82px heading occupies three lines. Chrome checks at 11 widths from 320 to 2560px
+found no page overflow; 320px retains natural wrapping. Nine existing static
+artifact checks and 307-file workspace transfer verification passed within their
+scopes. Only the stylesheet differs in the reused public preview artifact. Local
+evidence is under `.harness/work/hero-width-20261027/`; this update is uncommitted
+and undeployed and does not advance stale harness dependencies.
+
+
+## 2026-10-28: 기존 Foundry 무변경 원칙과 H53–H55
+
+사용자는 기존 Foundry 저장소를 절대 수정하지 말라고 명시했다. 기존 checkout,
+연결된 worktree, Git index/refs/config를 포함하며 worktree 등록과 fetch도 하지 않는다.
+별도 Git 메타데이터를 가진 임시 bare clone에서 고정 main을 읽고 선택 파일만
+복사한다. 원본 inventory는 GIT_OPTIONAL_LOCKS=0으로 읽으며, 실제 실행은 모든
+등록 worktree/Git 디렉터리 쓰기 차단과 실행 전후 hash 비교를 동반한다.
+
+| 단계 | 선행 | 검증 범위 |
+| --- | --- | --- |
+| H53 | H52 | 원격 main acbc2d6f368e 고정, 공통 계약/SDK/전체 consumer 동일성 확인, 독립 복사본 opt-in build/typecheck/legacy/native 회귀와 patch rollback, 현재 실제 Routing API 실행 및 검산 |
+| H54 | H53 | 고정 공개 Python Docker 이미지, Linux amd64 emulation, 새 HOME/venv, Node 없음, offline 설치, 세 도메인의 정상/변경/불가능/단위 오류를 앱과 실제 MCP로 실행 |
+| H55 | H54 | 정확한 bundle ZIP/hash, 계약 소스 권리 검토 목록, 실행 가능한 등록 template, 독립 사용자 과제/평가표, 9개 합성 모델 과제와 실행 상한의 준비 검사 |
+
+기존 canonical pin 7547036d1bc9와 공개 224-file 목록은 유지한다. 현재 main의
+선택 파일 중 5개 엔진/metadata 변경은 H53에서 별도로 실행 검증하며, 정본의
+조용한 갱신이나 회사 전체 채택을 뜻하지 않는다. 취소 불확실성 수정 제안은 H50의
+별도 review 버전이며 upstream 반영을 주장하지 않는다.
+
+외부 참여자가 아직 없다는 사용자 답변에 따라 사람 시험은 PREPARED/NOT_RUN이다.
+모델 9개 과제는 각 1회, 재시도 0, 새 job 총 6개 이하, 시도당 120초로 제안하며
+실제 추가 모델 실행 승인은 별도다. H55 PASS는 준비 검사만 뜻한다. 과거 H24의
+Core 모델 결과를 native 결과로 옮기지 않는다. 새 추출 소스 권리, 정확한 commit/push,
+패키지·사이트·외부 공유/배포는 승인 전 실행하지 않는다.
+
 ## 2026-10-28: Core/native documentation and wider hero publication
 
 The owner authorized README/site guidance distinguishing public Core 0.1 from
@@ -188,18 +270,32 @@ Commit/push targets `main` and the existing Pages `gh-pages` branch only.
 Existing Foundry repositories are not modified. These documentation checks do
 not promote stale harness stages or establish native publication or acceptance.
 
-## 2026-10-28: native source publication preparation
 
-The owner requested a reviewable, validated native v1 publication candidate,
-without modifying any existing Foundry repository and without publishing yet.
-The portable build uses the explicitly extracted contract sources in
-`sdk/native-contracts`, preserves Core entrypoints and selects the distinct
-`cancel-uncertainty-1` TypeScript proposal version. Installed native, Core and
-Linux checks are standalone candidate evidence, not promotion of historic
-H37–H55 stages. Source/license/patent and exact GitHub publication decisions
-remain false in `provenance/native-publication.json`. The current approved
-Core allowlist is unchanged. This preparation invokes no model; model acceptance
-of this exact portable candidate and external-human adoption remain unrun.
+## 2026-10-28: 승인된 native 모델 시험과 평가 출처 수정
+
+사용자가 기존 Codex 계정으로 native 합성 과제 9개를 각 1회 승인했다. 고정된 준비 꾸러미로 실제 MCP 호출·답변을 실행하고 원문·사용량·서버 감사 기록은 비공개 증거에 보관한다. 재시도·대체 과제·추가 모델 호출은 하지 않는다. 이 제한 시험은 독립 외부 개발자 수락이나 수정본의 모델 재시험을 대신하지 않는다.
+
+시험 중 발견한 라우팅 제공자 평가의 `independent` 출처 표기를 `engine`으로 바로잡고, 별도 checker와 제공자 내부 재평가의 차이를 명시했다. 해가 null이면 evaluate를 호출하지 않도록 native MCP 안내를 보강했다. 불가능 사례에서 평가를 필수 호출로 요구하던 준비 평가표도 수정했다. 실제 거절 응답과 최초 판정 기록은 보존한다. 계약 형식과 Foundry 정본은 변경하지 않으며 관련 하네스로 새 빌드의 회귀를 확인한다. 기존 Foundry checkout·worktree·Git 메타데이터 무변경 원칙, 커밋·푸시·공유·게시 보류를 유지한다.
+
+
+## 2026-10-28: H56 독립 BYO 워커 엔진과 같은 앱 교체
+
+H55 다음 단계로 H56을 추가한다. `authoring/worker_greedy/`에 기존 워커 솔버를
+호출하지 않는 시간순 탐욕 배정 엔진과 별도 Core provider를 구현한다. 공통 SDK와
+`worker.scheduling@0.1.0` 스키마, native router/job/MCP 구조만 재사용하며, Foundry
+정본·기존 저장소는 수정하지 않는다. 별도 wheel을 새 HOME/venv에 오프라인 설치하고
+같은 앱의 등록 지점만 바꿔 발견→검증→실제 job→결과→독립 검산까지 확인한다.
+
+H56은 80개 고정 난수 사례와 별도 전수탐색 oracle, 5개 제약/비용/해 변조 탐지,
+실제 MCP, reference/checker import 차단 프로세스를 검사한다. 참조 엔진 비용 3과
+탐욕 엔진 비용 101의 차이, 해가 존재해도 탐욕 엔진이 `unknown`인 반례를 포함한다.
+BYO가 찾은 해는 `feasible`, 미발견은 `unknown`이며 최적성·불가능 증명을 만들지
+않는다. 공통 계약 호환은 해 품질의 동일성이나 전체 엔진 인증이 아니다.
+
+독립 구현과 외부 독립 저작자를 구분한다. 이 예제는 같은 개발 작업에서 작성한
+두 번째 알고리즘의 기술 검증이며 실제 외부 개발자 수락은 여전히 NOT_RUN이다.
+추가 모델 실행·비용·커밋·푸시·외부 공유·게시·배포는 별도 승인 전 수행하지 않는다.
+명령과 검증 범위는 `docs/users/NATIVE_BYO_WORKER.md`에 기록한다.
 
 ## 2026-10-28 native source publication approval
 
@@ -210,3 +306,72 @@ selection. The independent source checks and installed-runtime checks apply to
 this candidate; historic harness stages are not promoted. Concurrent BYO worker
 work and existing Foundry repositories are excluded. See
 [publication scope](provenance/PUBLICATION_APPROVAL.md).
+
+
+## 2026-10-28: H57–H58 독립 profile 확장과 교차 검증
+
+H56 이후에는 내장 도메인을 복제하지 않고 별도 설치 패키지로 새 문제를 추가한다.
+H57은 `example.budget-selection@0.1.0`의 schema 패키지, 동적계획법 솔버,
+독립 부분집합 검산기를 각각 설치한다. 공통 `ProfileRegistry`와 명시적
+`Extension`/`CheckerRegistry` 등록만 사용한다. 공통 앱·MCP·SDK·native router/job
+소스를 도메인별로 수정하지 않는다. `total_cost` 대신 효익 최대화 목적을 사용해
+범용성을 검사한다. 빈 해의 0과 해 없음의 null, 시간 제한의 feasible과 optimal을
+구분하며 80개 고정 난수·변조·등록 충돌·버전 오류·독립 import 검사를 포함한다.
+
+H58은 같은 입력을 macOS arm64 Node SDK와 네트워크를 끈 Linux amd64 Python·MCP로
+실행한다. BYO 워커와 reference의 같은 해·품질 차이·휴리스틱 미발견·불가능·단위
+오류, 새 profile의 정상·예산 변경·0·단위 오류까지 상태와 목적값을 비교한다.
+Linux는 Docker emulation이며 Windows·Linux Node·native Linux arm64는 검증하지 않는다.
+H57→H58 순서로 현재 PASS를 확보하며 이전 게이트가 만료되면 현 소스로 갱신한다.
+
+이는 로컬 등록 API 0.1.0 추가이며 Core 0.1/native v1 wire와 Foundry pin은 유지한다.
+기존 서버는 확장을 설치해도 자동 활성화하지 않는다. host가 지정한 설치된 factory만
+실행하며 LLM/문제/catalog에 실행 코드 선택권을 주지 않는다. checker는 정확한
+profile 버전·목적 metric·검산 범위·자기 identity를 명시하며 등록만으로 인증되지 않는다.
+Foundry 기존 checkout·worktree·Git 메타데이터는 쓰기 차단과 전후 해시로 보존한다.
+이번 예제/후보 꾸러미는 동시 진행된 native 소스 공개 승인에 포함하지 않는다.
+추가 모델·외부 개발자 수락·commit/push·공유·배포·유료 실행은 별도 승인 대상이다.
+
+
+## 2026-10-29: H59–H60 독립 프로젝트 적용 흐름
+
+H58 이후 새 프로젝트 생성→독립 설치→입력 변경→같은 앱의 엔진 교체→실제 native
+job/MCP→독립 검산→기록 재검토를 하나의 작업 흐름으로 제공한다.
+`examples/native/project.py`는 교체 가능한 앱 예제이며 Core/native wire나
+Foundry 정본의 새 필수 계층이 아니다. 입력/config/기록에서 실행할 factory를
+불러오지 않고 host가 명시적으로 선택한 설치 패키지만 사용한다.
+
+H59는 macOS 새 HOME/venv와 별도 프로젝트 폴더에서 라우팅·워커·재고 및
+BYO·새 profile을 실행한다. 워커 근무시간 변경의 비용 7→9, heuristic unknown과
+증명된 infeasible의 null, 출력 덮어쓰기 거부, 실제 stdio MCP, 변조된 해/요약/
+job identity 거부를 확인한다. 제출 전에 key를 기록하고 불확실한 응답은 자동
+재시도하지 않는다. 저장된 PASS 대신 별도 checker로 원래 요청·결과를 재검산한다.
+H60은 네트워크 없는 Linux amd64 emulation에서 같은 문서 명령과 실패 회귀를
+검사한다. 장애 주입 검사는 실제 외부 네트워크 장애 실적과 구분한다.
+
+이 검증은 기존 H53 내부 모듈 적용 리허설에 독립 프로젝트 운영 흐름을 더한다.
+기존 Foundry checkout/worktree/Git 메타데이터 무변경과 전후 hash 검사를 유지한다.
+공통 계약 pin 7547036d1bc9, 후속 내부 리허설 pin acbc2d6f368e는 유지하며 현재
+checkout 또는 최신 원격 main 전체 일치로 표현하지 않는다. Gateway/ocps1/Studio
+전체 제품 수렴은 별도 범위다. 실제 내부 owner 수락과 외부 독립 개발자 시험은
+`ADOPTION_REVIEW.json`에 NOT_RUN으로 남고 자동 검사로 바꾸지 않는다.
+추가 모델 실행·비용·커밋·푸시·공유·게시·배포는 승인 전 수행하지 않는다.
+
+
+## 2026-10-29: H61–H62 고정 시간 점검 업무 수락 준비
+
+사용자가 선택한 고정 시간 점검 작업 배정을 첫 합성 내부 적용 후보로 만든다.
+H61은 작업자 3명·점검 6개의 CSV→표준 worker.scheduling 입력→같은 native v1
+job/MCP→독립 검산→배정표·작업자 부하 보고서 흐름을 새 HOME/venv에서 검사한다.
+CSV 오류는 파일·행·필드를 표시하고 알 수 없는 열·참조·중복·단위 변환을 묵인하지
+않는다. 기준 비용 16, 작업량 축소 19, 가용시간 축소 25, 자격 누락의 infeasible과
+BYO unknown을 구분한다. 보고서는 저장된 PASS를 믿지 않고 다시 검산한다.
+H62는 같은 안내 명령과 입력/변조 회귀를 네트워크 없는 Linux amd64 emulation에서
+반복한다. Node나 추가 LLM 없이 실행한다. Core/native wire/Foundry pin은 바꾸지
+않으며 CSV와 보고서는 교체 가능한 업무 앱이다. 내부 공유 Foundry에 쓰지 않는다.
+
+수락 안내는 `docs/users/NATIVE_INSPECTION_ACCEPTANCE.md`에 둔다. 자동 검증은
+실제 내부 담당자의 업무 적합성 수락을 대신하지 않는다. 생성된 OWNER_REVIEW.json과
+외부 개발자 수락은 NOT_RUN으로 남긴다. 이동·휴식·공정성·노동 규칙·불확실성은
+미지원이며 실제 업무에 필요하면 적합성 실패로 기록해야 한다. 새 꾸러미는 로컬
+검토용이다. 커밋·푸시·외부 공유·배포·추가 모델 실행·비용은 별도 승인 대상이다.

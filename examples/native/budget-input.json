@@ -1,0 +1,10 @@
+{
+  "cost_unit": "credit",
+  "benefit_unit": "benefit_unit",
+  "capacity": 7,
+  "items": [
+    {"id": "a", "cost": 3, "benefit": 4},
+    {"id": "b", "cost": 4, "benefit": 7},
+    {"id": "c", "cost": 5, "benefit": 8}
+  ]
+}

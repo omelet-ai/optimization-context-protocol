@@ -2,7 +2,7 @@
 
 Status: public source candidate; source rights and Apache-2.0 notices approved 2026-10-28.
 This is a source developer preview proposal, not a stable v1 or production service.
-The currently published GitHub quickstart remains Core 0.1.
+The original Core 0.1 quickstart remains available alongside the native source path.
 
 ## What changed
 
@@ -69,11 +69,37 @@ in `tools/linux-dependencies.json`, with no network and no project checkout moun
 Linux amd64 on an arm64 Docker host is emulation, not native arm64 evidence.
 
 These are standalone checks against the exact candidate; they do not refresh or
-promote the historic H37–H55 chain. External-human acceptance and LLM/host
+promote the historic H37–H62 chain. External-human acceptance and LLM/host
 acceptance of this exact portable candidate remain NOT_RUN; historical tests of
 other artifacts do not transfer to this candidate. No participant has been
 assigned. They are limits to
 the preview claim, not invented proof of independent adoption.
+
+### Portable inspection checks
+
+The public builder includes the independent project, inspection CSV application,
+and optional worker/budget example wheels. The example SDK dependency accepts only
+the tested `0.1.0` through `0.1.1.dev1` interval; `pip check` must pass after installation.
+The public native SDK remains `0.1.1.dev1`; no registry artifact has been published.
+
+`tools/check_inspection_candidate.py` runs the H61/H62 inspection exercise using
+only the generated kit and the public `tools/native_tests/inspection_suite.py`.
+It performs 13 checks of actual jobs/MCP, CSV errors, changed conditions and
+independent report validation, then checks optional dependencies and the custom
+budget profile. It requires a fresh output path and reviewed dependency caches:
+
+```sh
+python3.12 -B tools/check_inspection_candidate.py --kit /tmp/ocp-native-kit --wheelhouse /path/to/python-wheels --wheelhouse /path/to/native-wheels --output /tmp/ocp-inspection-macos
+python3.12 -B tools/check_inspection_candidate.py --kit /tmp/ocp-native-kit --linux --wheelhouse /path/to/linux-wheels --output /tmp/ocp-inspection-linux
+```
+
+The Linux command requires the already available image and exact wheel hashes in
+`tools/linux-dependencies.json`. It never pulls an image or enables container
+networking. Neither command needs `tools/foundry_convergence/`, internal plans,
+Foundry snapshots, keys, execution evidence, an external participant or a model.
+The historical harness plan retains local-only stages for owners who hold those
+materials; public clones use these standalone checks and do not claim H00
+snapshot validation or internal adoption.
 
 ## Publication scope
 

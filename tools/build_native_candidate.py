@@ -15,6 +15,8 @@ import tempfile
 
 from build_candidate import build as sdk_build
 from build_conformance import build as checker_build
+from build_worker_greedy import build as worker_build
+from build_budget_example import build as budget_build
 
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE = ROOT / 'sdk/native-contracts'
@@ -120,8 +122,20 @@ def build(output, with_typescript=False):
         call([sys.executable, '-B', '-m', 'build', '--wheel', '--no-isolation', '--outdir', output, contracts], staging, environment)
         sdk = Path(sdk_build(output, version=SDK_VERSION)['wheel'])
         checker = Path(checker_build(output)['wheel'])
+        worker = Path(worker_build(output)['wheel'])
+        budget = budget_build(output)
         node_files = typescript_build(output, staging, environment) if with_typescript else []
     mappings = {'install.py': 'examples/native/install.py', 'demo.py': 'examples/native/demo.py',
+                'project.py': 'examples/native/project.py', 'inspection.py': 'examples/native/inspection.py',
+                'PROJECT_GUIDE.md': 'docs/users/NATIVE_PROJECT_WORKFLOW.md',
+                'INSPECTION_GUIDE.md': 'docs/users/NATIVE_INSPECTION_ACCEPTANCE.md',
+                'inspection-workers.csv': 'examples/native/inspection-workers.csv',
+                'inspection-tasks.csv': 'examples/native/inspection-tasks.csv',
+                'inspection-costs.csv': 'examples/native/inspection-costs.csv',
+                'byo_worker_scenarios.py': 'examples/native/byo_worker_scenarios.py',
+                'BYO_WORKER.md': 'docs/users/NATIVE_BYO_WORKER.md',
+                'PROFILE_EXTENSION.md': 'docs/users/NATIVE_PROFILE_EXTENSION.md',
+                'budget-input.json': 'examples/native/budget-input.json',
                 'mcp_config.py': 'examples/native/mcp_config.py', 'node_app.mjs': 'examples/native/node_app.mjs',
                 'scenarios.py': 'examples/native/scenarios.py', 'mcp_walkthrough.py': 'examples/native/mcp_walkthrough.py',
                 'native_server_template.py': 'authoring/native_server_template.py',
@@ -142,6 +156,8 @@ def build(output, with_typescript=False):
     contracts_wheel = next(output.glob('ocp_foundry_contracts_candidate-*.whl'))
     write(output / 'manifest.json', {'format': 'ocp-native-review-kit/1', 'publication_authorized': False, 'source_publication_authorized': True,
           'python_wheels': {'sdk': sdk.name, 'contracts': contracts_wheel.name, 'checker': checker.name},
+          'example_wheels': {'worker_greedy': worker.name,
+                            **{'budget_' + name: Path(value['wheel']).name for name, value in budget.items()}},
           'node_archives': node_files,
           'files': {p.name: sha(p) for p in sorted(output.iterdir())}})
     return {'directory': str(output), 'files': len(list(output.iterdir())), 'manifest_sha256': sha(output / 'manifest.json'),

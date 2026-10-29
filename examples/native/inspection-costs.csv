@@ -1,0 +1,13 @@
+task_id,worker_id,cost
+pump,alex,2
+pump,blair,5
+panel,alex,4
+panel,casey,3
+valve,alex,2
+valve,blair,4
+safety,blair,3
+safety,casey,6
+meter,alex,2
+meter,casey,4
+report,blair,2
+report,casey,5

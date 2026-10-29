@@ -82,13 +82,11 @@ gateway or ocps1 environment profile.
 
 ## Optional Node app
 
-Only this section requires Node 22 or 24 and npm. It also requires a bundle built
-with `--with-typescript`; the default Python-only build excludes Node archives.
-From a bundle containing both `.tgz` files:
+Only this section requires Node 22 or 24 and npm. From the same bundle directory:
 
 <!-- ocp:native-node-install -->
 ```sh
-npm install --ignore-scripts --save-exact ./omelet-ocp-native-contracts-0.0.0-foundry.7547036d1bc9.review.1.tgz ./ocp-candidate-0.1.1-native.7547036d1bc9.review.1.tgz
+npm install --ignore-scripts --save-exact ./omelet-ocp-native-contracts-0.0.0-foundry.7547036d1bc9.tgz ./ocp-candidate-0.1.1-native.7547036d1bc9.tgz
 ```
 
 <!-- ocp:native-node-demo -->
@@ -123,3 +121,26 @@ Limits: small reference problems, localhost only, volatile two-hour jobs, defaul
 solver retry. These are local product policies, not universal protocol limits.
 No external trial entitlement is created. Publishing this bundle, changing
 company services or running an LLM requires its own approved scope.
+
+
+## Optional independent worker engine
+
+`BYO_WORKER.md` in the kit provides an optional wheel and the same-app engine
+switch. Unlike the registration template above, this greedy provider does not
+reuse the reference solver. Install the wheel, then select `--worker-engine byo`
+in `demo.py` or `mcp_walkthrough.py`. Read the cost-gap and unknown-result examples:
+compatibility does not guarantee equal optimization quality. Default installations
+and the three-domain launcher retain their reference engines.
+
+
+## Independent project workflow (local candidate)
+
+A review kit containing `project.py` and `PROJECT_GUIDE.md` can create a new,
+self-contained project with its own installer and inputs. The same application
+runs three domains, swaps engines, records jobs and rechecks saved results without
+a solver. This additive workflow is a local candidate; it is not implied to be
+included in the earlier public native kit. See `PROJECT_GUIDE.md` in that review
+kit (source: `docs/users/NATIVE_PROJECT_WORKFLOW.md`). The local kit also includes
+`INSPECTION_GUIDE.md` for CSV input, checked business reports and owner review of
+a six-task fixed-time inspection exercise. Human acceptance remains
+separate from its automated checks.

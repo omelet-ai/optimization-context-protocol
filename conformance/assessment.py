@@ -5,6 +5,9 @@ remain unchanged. Solution-only assessment never verifies a proof claim.
 """
 import argparse
 from copy import deepcopy
+from dataclasses import dataclass
+from importlib import import_module
+import re
 import hashlib
 import json
 from pathlib import Path
@@ -26,6 +29,72 @@ SCOPES = {
 }
 
 
+
+@dataclass(frozen=True)
+class ProfileCheck:
+    verify: object
+    scope: dict
+    metric_id: str
+    value_key: str
+    identity: dict
+
+
+class CheckerRegistry:
+    """Explicit trusted checker selection, keyed by exact profile ID/version.
+
+    Registration is not certification of the supplied Python code. No automatic
+    entry-point discovery, network fetch, or import from a problem/result field.
+    """
+    def __init__(self):
+        self._checks = {}
+
+    def register(self, reference, verify, *, scope, metric_id, value_key, identity):
+        for ref in [reference, identity]:
+            if not isinstance(ref, dict) or set(ref) != {'id', 'version'} or any(not isinstance(v, str) or not v for v in ref.values()):
+                raise ContractError('INVALID_CHECKER_REGISTRATION')
+        if not callable(verify) or not all(isinstance(v, str) and v for v in [metric_id, value_key]):
+            raise ContractError('INVALID_CHECKER_REGISTRATION')
+        if not isinstance(scope, dict) or set(scope) != {'solution', 'proof'} or any(not isinstance(v, str) or not v for v in scope.values()):
+            raise ContractError('INVALID_CHECKER_SCOPE')
+        key = (reference['id'], reference['version'])
+        if key in self._checks:
+            raise ContractError('DUPLICATE_CHECKER')
+        self._checks[key] = ProfileCheck(verify, deepcopy(scope), metric_id, value_key, deepcopy(identity))
+
+    def resolve(self, reference):
+        entry = self._checks.get((reference['id'], reference['version']))
+        if entry is None:
+            raise ContractError('UNSUPPORTED_PROFILE')
+        return ProfileCheck(entry.verify, deepcopy(entry.scope), entry.metric_id, entry.value_key, deepcopy(entry.identity))
+
+
+def builtin_checkers():
+    registry = CheckerRegistry()
+    metrics = {'routing.basic': 'minimize_total_route_cost', 'routing.coordinates': 'minimize_total_route_cost',
+               'assignment.fixture': 'cost', 'worker.scheduling': 'total_cost', 'inventory.replenishment': 'total_cost'}
+    for (identifier, version), verify in CHECKERS.items():
+        registry.register({'id': identifier, 'version': version}, verify,
+                          scope=SCOPES[identifier], metric_id=metrics[identifier], value_key='total_cost',
+                          identity={'id': 'ocp-conformance-candidate', 'version': '0.1.0'})
+    return registry
+
+
+def load_registry(factory=None):
+    """Load only a host-selected, already installed MODULE:FACTORY."""
+    if factory is None:
+        return builtin_checkers()
+    if not isinstance(factory, str) or not re.fullmatch(r'[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)*:[A-Za-z_]\w*', factory):
+        raise ContractError('INVALID_CHECKER_FACTORY')
+    module, function = factory.split(':')
+    try:
+        value = getattr(import_module(module), function)()
+    except Exception as error:
+        raise ContractError('INVALID_CHECKER_FACTORY') from error
+    if not isinstance(value, CheckerRegistry):
+        raise ContractError('INVALID_CHECKER_FACTORY')
+    return value
+
+
 def digest(value):
     json_values(value)
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
@@ -35,7 +104,7 @@ def check(status, reason, **details):
     return {'status': status, 'reason': reason, **details}
 
 
-def assess(request, response, *, mode='full'):
+def assess(request, response, *, mode='full', registry=None):
     """Report exactly what was checked; PASS is bounded transcript evidence.
 
     full: check any optimal/infeasible claim with the existing profile checker.
@@ -59,10 +128,13 @@ def assess(request, response, *, mode='full'):
         if request['kind'] != 'request' or response['kind'] != 'result':
             raise ContractError('INVALID_TRANSCRIPT')
         ref = request['domain_profile']
-        checker = CHECKERS.get((ref['id'], ref['version']))
-        if checker is None:
-            raise ContractError('UNSUPPORTED_PROFILE')
-        report.update(domain_profile=deepcopy(ref), response_status=response['status'], profile_scope=deepcopy(SCOPES[ref['id']]))
+        entry = (registry if registry is not None else builtin_checkers()).resolve(ref)
+        checker = entry.verify
+        for field in ('request_id', 'capability', 'domain_profile', 'execution_profile'):
+            if request[field] != response[field]: raise ContractError('RESULT_MISMATCH')
+        if request['configuration'] != response['effective_configuration']: raise ContractError('RESULT_MISMATCH')
+        report.update(domain_profile=deepcopy(ref), response_status=response['status'], profile_scope=entry.scope)
+        report['checker'] = entry.identity
         claimed = response['status'] if response['status'] in ('optimal', 'infeasible') else None
         report['claim_requires_proof'] = claimed
         # A private projection lets the strict checker verify solution semantics
@@ -71,7 +143,12 @@ def assess(request, response, *, mode='full'):
         projected = deepcopy(response)
         if claimed:
             projected.update(status='feasible' if claimed == 'optimal' else 'unknown', proof=None)
-        measured = checker(request, projected)
+        measured = checker(deepcopy(request), projected)
+        if (measured is None) != (response['solution'] is None): raise ContractError('INVALID_CHECKER_REPORT')
+        if measured is not None:
+            if not isinstance(measured, dict) or measured.get('feasible') is not True or type(measured.get(entry.value_key)) not in (int, float):
+                raise ContractError('INVALID_CHECKER_REPORT')
+            json_values(measured)
         checks['structure_and_semantics'] = check('PASS', 'Original envelope, request identity, configuration and solution/evaluation semantics; proof claim is a separate check.')
         if measured is None:
             checks['feasibility'] = check('NOT_APPLICABLE', 'No solution was supplied. This is not evidence of infeasibility.', constraints_checked=[])
@@ -79,9 +156,12 @@ def assess(request, response, *, mode='full'):
         else:
             checks['feasibility'] = check('PASS', 'Supplied solution satisfies the profile checks.',
                                           constraints_checked=[c['id'] for c in response['constraints']])
-            metric = response['metrics'][0]
-            checks['objective_recomputation'] = check('PASS', 'Cost recomputed by the independent checker and matched to the declared metric.',
-                                                       value=measured['total_cost'], definition=metric['definition'], unit=metric['unit'])
+            metrics = [m for m in response['metrics'] if m['id'] == entry.metric_id]
+            if len(metrics) != 1 or metrics[0]['status'] != 'evaluated' or metrics[0]['value'] != measured[entry.value_key]:
+                raise ContractError('EVALUATION_MISMATCH')
+            metric = metrics[0]
+            checks['objective_recomputation'] = check('PASS', 'Objective recomputed by the independent checker and matched to the declared metric.',
+                                                       value=measured[entry.value_key], definition=metric['definition'], unit=metric['unit'])
         for name, status in (('optimality', 'optimal'), ('infeasibility', 'infeasible')):
             checks[name] = check('NOT_CLAIMED', 'The response does not make this claim.')
             if claimed == status:
@@ -95,7 +175,7 @@ def assess(request, response, *, mode='full'):
             checks[dimension] = check('NOT_CHECKED', 'Solution-only mode deliberately does not verify this claim. Do not report it as proven.')
             return report
         try:
-            checker(request, response)
+            checker(deepcopy(request), deepcopy(response))
         except ContractError as error:
             unsupported = error.code in ('ORACLE_SCOPE_EXCEEDED', 'UNTESTED_PROOF_CLAIM')
             report['status'] = 'INCOMPLETE' if unsupported else 'FAIL'
@@ -108,12 +188,16 @@ def assess(request, response, *, mode='full'):
     except ContractError as error:
         checks['structure_and_semantics'] = check('FAIL', error.code)
         return report
+    except Exception:
+        checks['structure_and_semantics'] = check('FAIL', 'CHECKER_ERROR')
+        return report
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--transcript', required=True, help='JSON containing request and response; existing report fields are ignored')
     parser.add_argument('--mode', choices=('full', 'solution'), default='full')
+    parser.add_argument('--checker-factory', help='Trusted installed MODULE:FACTORY; never taken from a transcript')
     args = parser.parse_args()
     try:
         with Path(args.transcript).open('rb') as stream:
@@ -121,7 +205,7 @@ def main():
         if len(raw) > 1048576:
             raise ContractError('TRANSCRIPT_TOO_LARGE')
         transcript = parse_json(raw.decode())
-        result = assess(transcript['request'], transcript['response'], mode=args.mode)
+        result = assess(transcript['request'], transcript['response'], mode=args.mode, registry=load_registry(args.checker_factory))
     except (ContractError, OSError, UnicodeError, KeyError, TypeError):
         result = {'status': 'FAIL', 'reason': 'INVALID_TRANSCRIPT_INPUT'}
     print(json.dumps(result, allow_nan=False))
@@ -129,4 +213,6 @@ def main():
 
 
 if __name__ == '__main__':
-    raise SystemExit(main())
+    # Factories import CheckerRegistry from the package, not from __main__.
+    from .assessment import main as installed_main
+    raise SystemExit(installed_main())

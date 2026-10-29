@@ -60,8 +60,10 @@ class Bindings(unittest.TestCase):
         import sys
         for name,module in list(sys.modules.items()):
             if name.startswith(('ocp_candidate','ocp_runtime','foundry_capability_contract')) and getattr(module,'__file__',None):
-                self.assertIn('site-packages',module.__file__)
-                self.assertNotIn('/Projects/',module.__file__)
+                installed = Path(module.__file__).resolve()
+                self.assertIn('site-packages',installed.parts)
+                self.assertTrue(installed.is_relative_to(Path(sys.prefix).resolve()),
+                                'Import escaped the fresh installed environment: ' + name)
 
 
 if __name__=='__main__':

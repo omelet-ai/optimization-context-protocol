@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:example:budget.selection:0.1.0:input",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "cost_unit": {
+      "const": "credit"
+    },
+    "benefit_unit": {
+      "const": "benefit_unit"
+    },
+    "capacity": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "cost": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000
+          },
+          "benefit": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          }
+        },
+        "required": [
+          "id",
+          "cost",
+          "benefit"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 12
+    }
+  },
+  "required": [
+    "cost_unit",
+    "benefit_unit",
+    "capacity",
+    "items"
+  ]
+}

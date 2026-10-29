@@ -1,0 +1,7 @@
+task_id,start,end
+pump,09:00,10:00
+panel,09:00,10:00
+valve,10:00,11:00
+safety,10:00,11:00
+meter,11:00,12:00
+report,11:00,12:00

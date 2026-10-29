@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:example:budget.selection:0.1.0:configuration",
+  "const": {
+    "objectives": [
+      {
+        "id": "total_benefit",
+        "weight": 1
+      }
+    ],
+    "constraints": [
+      "capacity",
+      "unique_selection"
+    ],
+    "parameters": {}
+  }
+}
