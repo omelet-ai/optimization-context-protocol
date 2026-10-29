@@ -20,6 +20,10 @@ export OCP_NPM_OFFLINE=1
 
 ## Clone에서 실행하는 독립 검사
 
+[공개 CI 검사](PUBLIC_CI.md)는 내부 자료 없이 선택 소스를 복사하고 새 환경에서
+Core·native Python/Node·MCP·독립 검산·점검 CSV를 실행한다. GitHub에서 실제 실행한
+결과와 로컬 리허설은 구분하며, Windows 항목은 미지원 오류 안내만 검사한다.
+
 ```sh
 /tmp/ocp-dev/bin/python -B tools/verify_repository.py
 /tmp/ocp-dev/bin/python -B tools/tests/test_harness.py

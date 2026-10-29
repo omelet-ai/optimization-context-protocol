@@ -1,0 +1,74 @@
+{
+  "name": "Public source CI",
+  "on": {
+    "push": {"branches": ["main"]},
+    "pull_request": {},
+    "workflow_dispatch": {}
+  },
+  "permissions": {"contents": "read"},
+  "concurrency": {
+    "group": "public-ci-${{ github.workflow }}-${{ github.ref }}",
+    "cancel-in-progress": true
+  },
+  "jobs": {
+    "public-source": {
+      "name": "Public Python, Node and MCP (${{ matrix.os }})",
+      "runs-on": "${{ matrix.os }}",
+      "timeout-minutes": 25,
+      "strategy": {"fail-fast": false, "matrix": {"os": ["ubuntu-24.04", "macos-14"]}},
+      "steps": [
+        {
+          "uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "with": {"persist-credentials": false}
+        },
+        {
+          "uses": "actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0",
+          "with": {"python-version": "3.12.15"}
+        },
+        {
+          "uses": "actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1",
+          "with": {"node-version": "24.22.0"}
+        },
+        {
+          "name": "Fresh selected-source build and installed consumers",
+          "run": "python -B tools/check_public_ci.py --output \"$RUNNER_TEMP/ocp-public-ci\" --with-typescript",
+          "shell": "bash"
+        }
+      ]
+    },
+    "windows-boundary": {
+      "name": "Windows diagnostics only (installation unsupported)",
+      "runs-on": "windows-2022",
+      "timeout-minutes": 5,
+      "steps": [
+        {
+          "uses": "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "with": {"persist-credentials": false}
+        },
+        {
+          "uses": "actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0",
+          "with": {"python-version": "3.12.15"}
+        },
+        {"run": "python -B tools/check_windows_boundary.py", "shell": "pwsh"}
+      ]
+    },
+    "required": {
+      "name": "Public CI required",
+      "needs": ["public-source", "windows-boundary"],
+      "if": "${{ always() }}",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 2,
+      "steps": [
+        {
+          "name": "Require every lane to succeed",
+          "env": {
+            "PUBLIC_RESULT": "${{ needs.public-source.result }}",
+            "WINDOWS_RESULT": "${{ needs.windows-boundary.result }}"
+          },
+          "run": "test \"$PUBLIC_RESULT\" = success && test \"$WINDOWS_RESULT\" = success",
+          "shell": "bash"
+        }
+      ]
+    }
+  }
+}

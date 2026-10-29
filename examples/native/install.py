@@ -46,7 +46,7 @@ def main():
     command = [str(python), '-B', '-m', 'pip', 'install', '--no-compile', '--disable-pip-version-check', '--no-cache-dir', '-c', str(root / 'constraints.txt')]
     if sources: command += ['--no-index', *sources]
     command += [str(root / wheels['contracts']), str(root / wheels['sdk']) + '[reference,mcp,native]', str(root / wheels['checker'])]
-    env = {'PATH': os.defpath, 'HOME': str(Path.home()), 'PYTHONDONTWRITEBYTECODE': '1', 'PIP_CONFIG_FILE': os.devnull}
+    env = {'PATH': os.environ.get('PATH', os.defpath), 'HOME': str(Path.home()), 'PYTHONDONTWRITEBYTECODE': '1', 'PIP_CONFIG_FILE': os.devnull}
     env.update({k: os.environ[k] for k in ['PIP_NO_INDEX', 'PIP_FIND_LINKS'] if k in os.environ})
     subprocess.run(command, check=True, stdout=sys.stderr, env=env, timeout=300)
     subprocess.run([str(python), '-B', '-m', 'pip', 'check'], check=True, stdout=sys.stderr, env=env, timeout=30)

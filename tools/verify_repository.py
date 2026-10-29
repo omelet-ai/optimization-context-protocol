@@ -12,6 +12,7 @@ import posixpath
 import re
 import subprocess
 import sys
+from ci_policy import WORKFLOW, validate as validate_ci
 
 ROOT = Path(__file__).resolve().parents[1]
 SELECTION = "provenance/repository-selection.json"
@@ -66,13 +67,15 @@ def verify(index=False):
         path = PurePosixPath(name)
         if path.is_absolute() or ".." in path.parts or "\\" in name or path.as_posix() != name:
             raise ValueError("Invalid repository path")
-        if name.startswith(FORBIDDEN) or any(part.startswith(".env") or part in {".git", "node_modules", "__pycache__", ".venv"} for part in path.parts):
+        if (name != WORKFLOW and name.startswith(FORBIDDEN)) or any(part.startswith(".env") or part in {".git", "node_modules", "__pycache__", ".venv"} for part in path.parts):
             raise ValueError("Excluded repository path: " + name)
         if path.suffix.lower() in {".pem", ".key", ".p12", ".pfx", ".pyc", ".sqlite", ".sqlite3", ".db", ".whl", ".tgz", ".zip", ".gz"}:
             raise ValueError("Excluded file type: " + name)
         content = read(name)
         if len(content) > 1024 * 1024: raise ValueError("Unexpected source size: " + name)
         text = content.decode("utf-8")
+        if name == WORKFLOW:
+            validate_ci(text)
         for label, pattern in PATTERNS.items():
             if re.search(pattern, text): raise ValueError("Review required: " + name + " (" + label + ")")
         if name.endswith(".md"):

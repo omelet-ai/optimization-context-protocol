@@ -223,3 +223,12 @@ H62는 같은 안내 명령과 입력/변조 회귀를 네트워크 없는 Linux
 H62 현재 PASS 뒤 H63을 실행한다. 공개 선택 소스로만 만든 `v0.1.1-preview.1` 후보 ZIP을 해시로 고정하고, 실제 추출한 동일 파일을 macOS Python/Node·오프라인 Linux amd64 Python/MCP에 새로 설치한다. 세 도메인과 점검 CSV·독립 검산·오류 거절을 재현한다. 원래 Foundry checkout/worktree/Git metadata는 쓰기 차단과 전후 조회로 보호한다. 설치 꾸러미에는 안내·합성 입력·빈 수락 양식만 포함하며 실행 증거는 비공개 영역에 둔다.
 
 [프리릴리스 안내](../docs/development/PREVIEW_RELEASE.md)의 계획은 게시 승인이 아니다. 레지스트리 보호 표시를 유지하고, 사람 시험 NOT_RUN·추가 모델 실행 0·미게시 상태를 명시한다. 로컬 개발 검사와 기존 외부 게이트를 임의 병합하지 않는다.
+
+## H64: public CI implementation
+
+H64 follows the current H00 baseline on an independent local development branch.
+It runs CI-policy negative tests and the public-source checker using local
+dependency stores. It verifies selected-source installation and actual consumer
+execution; it does not imply a hosted GitHub run or regenerate H63 release
+acceptance. The public workflow runs this independent checker directly without
+H00 or any private snapshot. See [scope and reproduction](../docs/development/PUBLIC_CI.md).

@@ -3708,6 +3708,75 @@
           "min_tests": 100
         }
       ]
+    },
+    {
+      "id": "H64",
+      "title": "Public-source CI and platform boundaries",
+      "tasks": [
+        "OSS-10",
+        "OSS-11",
+        "OSS-12"
+      ],
+      "depends_on": [
+        "H00"
+      ],
+      "mode": "local",
+      "inputs": [
+        ".github/workflows/public-ci.yml",
+        "tools/",
+        "sdk/",
+        "runtime/",
+        "adapters/",
+        "authoring/",
+        "conformance/",
+        "examples/",
+        "spec/",
+        "cases/",
+        "provenance/",
+        "docs/development/PUBLIC_CI.md"
+      ],
+      "acceptance": "Selected-source CI policy and actual fresh consumers; no hosted-run, human-acceptance or historical release promotion",
+      "checks": [
+        {
+          "id": "ci-policy-negative-cases",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/tests/test_public_ci.py"
+          ],
+          "timeout_seconds": 60,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 18
+        },
+        {
+          "id": "public-ci-installed-consumers",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_public_ci.py",
+            "--wheelhouse",
+            ".harness/work/wheels",
+            "--wheelhouse",
+            ".harness/work/preview-native-wheels",
+            "--with-typescript"
+          ],
+          "timeout_seconds": 1800,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0,
+            "model_calls": 0,
+            "human_acceptance": "NOT_RUN"
+          },
+          "min_tests": 200
+        }
+      ]
     }
   ]
 }

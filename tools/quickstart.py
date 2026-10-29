@@ -20,8 +20,10 @@ class SetupError(ValueError):
 
 
 def setup(destination, wheelhouse=None):
-    if sys.version_info[:2] != (3, 12) or os.name != 'posix':
+    if sys.version_info[:2] != (3, 12):
         raise SetupError('PYTHON_VERSION_UNSUPPORTED', 'Use Python 3.12 on macOS/Linux; Windows is not supported.')
+    if os.name != 'posix':
+        raise SetupError('PLATFORM_NOT_SUPPORTED', 'Use macOS/Linux with Python 3.12; Windows is not supported.')
     target = Path(destination).expanduser().absolute()
     aliases = {Path('/var'): Path('/private/var'), Path('/tmp'): Path('/private/tmp')}
     for path in (target, *target.parents):

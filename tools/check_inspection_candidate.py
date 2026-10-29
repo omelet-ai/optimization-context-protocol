@@ -21,7 +21,7 @@ def exercise(kit, wheelhouses, output, suite):
     bundle=output/'kit';shutil.copytree(kit,bundle)
     home=output/'empty-home';home.mkdir()
     binary=output/'bin';binary.mkdir();(binary/'python3.12').symlink_to(sys._base_executable)
-    env={'HOME':str(home),'PATH':str(binary)+os.pathsep+os.defpath,'PIP_CONFIG_FILE':os.devnull,
+    env={'HOME':str(home),'PATH':str(binary),'PIP_CONFIG_FILE':os.devnull,
          'PIP_NO_INDEX':'1','PYTHONDONTWRITEBYTECODE':'1',
          'PIP_FIND_LINKS':' '.join(Path(p).resolve().as_uri() for p in wheelhouses)}
     if shutil.which('node',path=env['PATH']):raise ValueError('NODE_PRESENT')

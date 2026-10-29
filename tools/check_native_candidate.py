@@ -47,7 +47,10 @@ def check(kit, wheelhouses, output, node=None, npm=None):
     output.mkdir(exist_ok=False)
     bundle = output / 'bundle with spaces'; shutil.copytree(kit, bundle)
     home = output / 'empty-home'; home.mkdir()
-    environment = {'PATH': os.defpath, 'HOME': str(home), 'PYTHONDONTWRITEBYTECODE': '1',
+    # /usr/bin can contain Node on CI/Linux. An empty executable search path
+    # tests independence from Node without depending on the runner image.
+    binary = output / 'python-only-bin'; binary.mkdir()
+    environment = {'PATH': str(binary), 'HOME': str(home), 'PYTHONDONTWRITEBYTECODE': '1',
                    'PIP_CONFIG_FILE': os.devnull, 'PIP_NO_INDEX': '1'}
     notice_count = check_notices(kit)
     results = ['archive-notices']

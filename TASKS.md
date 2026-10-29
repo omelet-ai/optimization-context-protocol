@@ -402,3 +402,20 @@ H62는 같은 안내 명령과 입력/변조 회귀를 네트워크 없는 Linux
   approval; anonymously redownload and run after delivery. Completed logs remain
   private. External-human/internal-owner acceptance and registry/model trials
   remain separate; Foundry original repositories remain unchanged.
+
+## H64: public-source CI and explicit platform boundaries
+
+Build one read-only workflow for public macOS/Linux Python and optional Node,
+plus Windows unsupported-platform diagnostics. `tools/check_public_ci.py` uses
+only selected source in a new directory, a fresh build environment, real
+three-domain jobs/MCP and independent checker/inspection regressions. It does
+not require or promote private Foundry migration evidence. H64 is an independent
+development branch after H00, not a rerun or automatic promotion of H63's
+immutable published kit. Its check output binds the actual source and kit hashes.
+
+The workflow source/policy tests are local preparation. Hosted workflow execution,
+repository branch protection, source push and further publication are separate
+actions. Configure native Linux/Node as a target; claim support only after the
+actual lane passes. Windows remains unsupported. Existing Foundry repositories
+are never modified; no model calls or human acceptance are inferred. See
+[Public CI](docs/development/PUBLIC_CI.md).
