@@ -11,8 +11,14 @@ maintainer workspace after the current H00 baseline passes.
 | Lane | Execution | Meaning of success |
 | --- | --- | --- |
 | `ubuntu-24.04` | Python 3.12.15, Node 24.22.0, native Linux x64 runner | Public build, fresh installation, real three-domain jobs/MCP, independent checker, optional Node consumer, inspection CSV regressions |
-| `macos-14` | Same runtimes, macOS arm64 runner | Same checks on macOS |
-| `windows-2022` | Python 3.12.15, no dependencies installed | Both installers reject the unsupported platform before creating output and preserve existing files |
+| `macos-14` | Python 3.12.10, Node 24.22.0, macOS arm64 runner | Same checks on macOS |
+| `windows-2022` | Python 3.12.10, no dependencies installed | Both installers reject the unsupported platform before creating output and preserve existing files |
+
+Python patch versions are pinned per platform. The official
+[Actions Python manifest](https://github.com/actions/python-versions/blob/main/versions-manifest.json)
+provides 3.12.15 for Linux, while 3.12.10 is the last 3.12 installer it provides
+for macOS and Windows. OCP's supported Python minor version remains 3.12; these
+disposable CI environments do not prescribe a production runtime patch level.
 
 These are configured lanes, not a claim that a hosted run has passed. A local
 container rehearsal is emulated Linux, not a native hosted runner result.

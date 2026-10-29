@@ -28,6 +28,13 @@ class PublicCI(unittest.TestCase):
     def test_read_only_workflow(self):
         validate(json.dumps(self.flow))
 
+    def test_platform_runtime_selection_cannot_drift(self):
+        self.flow['jobs']['public-source']['strategy']['matrix']['include'][1]['python'] = '3.12.15'
+        self.rejected()
+        self.setUp()
+        self.flow['jobs']['windows-boundary']['steps'][1]['with']['python-version'] = '3.12.15'
+        self.rejected()
+
     def test_privileged_event_rejected(self):
         self.flow['on']['pull_request_target'] = {}; self.rejected()
 

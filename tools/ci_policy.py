@@ -26,7 +26,9 @@ def validate(content):
     if set(jobs) != {'public-source', 'windows-boundary', 'required'}:
         raise ValueError('CI_JOBS')
     public = jobs['public-source']
-    if public.get('strategy') != {'fail-fast': False, 'matrix': {'os': ['ubuntu-24.04', 'macos-14']}}:
+    if public.get('strategy') != {'fail-fast': False, 'matrix': {'include': [
+            {'os': 'ubuntu-24.04', 'python': '3.12.15'},
+            {'os': 'macos-14', 'python': '3.12.10'}]}}:
         raise ValueError('CI_MATRIX')
     if public['runs-on'] != '${{ matrix.os }}' or jobs['windows-boundary']['runs-on'] != 'windows-2022':
         raise ValueError('CI_RUNNER')
@@ -40,7 +42,7 @@ def validate(content):
                              'run': 'test "$PUBLIC_RESULT" = success && test "$WINDOWS_RESULT" = success',
                              'shell': 'bash'}]:
         raise ValueError('CI_REQUIRED_GATE_COMMAND')
-    for job in jobs.values():
+    for job_id, job in jobs.items():
         if set(job) - {'name', 'runs-on', 'timeout-minutes', 'strategy', 'steps', 'needs', 'if'}:
             raise ValueError('CI_JOB_OPTIONS')
         if not 1 <= job['timeout-minutes'] <= 25:
@@ -54,6 +56,9 @@ def validate(content):
                     raise ValueError('CI_ACTION_PIN')
                 if action == 'actions/checkout' and step.get('with') != {'persist-credentials': False}:
                     raise ValueError('CI_CHECKOUT_CREDENTIALS')
+                if action == 'actions/setup-python' and step.get('with') != {
+                        'python-version': '${{ matrix.python }}' if job_id == 'public-source' else '3.12.10'}:
+                    raise ValueError('CI_PYTHON_VERSION')
     text = json.dumps(data)
     if any(word in text for word in ['secrets.', 'pull_request_target', 'self-hosted', 'upload-artifact',
                                      'continue-on-error', 'environment', 'id-token', 'deploy', 'publish']):
