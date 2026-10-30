@@ -116,3 +116,26 @@ static documentation, not packages or completed test evidence. Verify the releas
 link and the deployed Pages content after each separately authorized update.
 Native implementation, extracted contracts and review bundles are not included
 by documenting them. Do not link to unpublished repository files or packages.
+
+## Visual language
+
+The website uses a small, locally defined palette aligned with the shared design
+kit. It does not import a private UI library or require a Foundry runtime.
+
+| Role | Token reference | Color | Use |
+| --- | --- | --- | --- |
+| Navy | `color.text.main` / `color.gray.900` | `#101828` | Text, primary actions, code blocks, closing panel |
+| Light green | `color.green.100` | `#C2F0E9` | Invitation accents, highlights, action on dark surfaces |
+| Light purple | `color.purple.100` | `#D6CCFF` | Heading emphasis, illustration, secondary accents |
+| Soft surfaces | `color.green.50` / `color.purple.50` | `#E6F9F6` / `#F2EFFF` | Large tinted areas |
+| Supporting text | `color.gray.600` | `#475467` | Descriptions on light surfaces |
+
+Pastels are surfaces or accents, not small text on white. Body text and controls
+use navy; text on navy uses light tokens. Keep keyboard focus visible on both
+light and dark surfaces. Route labels and invitation limits remain explicit, so
+color never carries access policy or solver status by itself.
+
+Check the homepage, setup commands, examples and Korean introduction at desktop,
+tablet and mobile widths after palette changes. Compare rendered text contrast,
+keyboard focus, menu operation, copy controls and example states; a successful
+static build alone is not a visual or accessibility review.
