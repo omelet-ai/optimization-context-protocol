@@ -1,5 +1,21 @@
 # 작업 원장
 
+## 2026-10-30: TMS adoption preparation — local review
+
+The owner selected TMS/dispatch as the first commercial-adoption evaluation.
+This candidate adds a reproducible routing exercise, an application-field and
+unsupported-requirement mapping, explicit human-study evidence rules, and links
+from README/site to Omelet's existing commercial contact page. It changes no
+protocol, solver, runtime package or existing Foundry repository. The website
+palette from main a612d2a is retained in this isolated review candidate.
+
+Validation and the TMS pilot plan are local review evidence; automated sample
+execution is not external-human acceptance or a customer pilot. Harness stages
+are not advanced by standalone document/site/release checks. Publication,
+participant contact, commercial-engine access and real customer data are not
+performed by this preparation. The exact patch and local preview are reviewed
+before any new scoped publication.
+
 현재 공개 상태(2026-10-29): Core·native 소스와 Apache-2.0 고지는 공개되었고 기존 Pages 사이트가 운영 중이다. 아래 초기 표와 날짜별 기록은 개발 이력이다. 최신 준비 범위는 [프리릴리스 계획](docs/development/PREVIEW_RELEASE.md)과 H63을 따른다. H63은 선택 소스로 만든 동일 ZIP의 새 설치·실제 앱/MCP·검산을 검사하며 전체 로컬 선행을 갱신한 뒤 진급한다. 실제 외부 개발자와 내부 담당자 수락은 NOT_RUN이다. 2026-10-29 사용자는 검증된 소스 commit/push, 첫 GitHub 프리릴리스 자산 게시와 기존 Pages 갱신을 승인했다. 레지스트리·추가 모델 실행·외부 trial은 별도 범위다.
 
 ## 초기 개발 이력

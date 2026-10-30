@@ -75,3 +75,91 @@ time to first verified solution, reproducible example and severity. Mark each
 task as NOT_STARTED, BLOCKED, PASS or FAIL. Do not mark a task passed solely
 because this project's own harness passed. The maintainer records human
 acceptance only after reviewing an actual participant's submission.
+
+## TMS integration evaluation
+
+This exercise helps a delivery-app developer evaluate the public native preview.
+Use the published `v0.1.1-preview.1` ZIP, its checksum and bundled installation
+instructions. Record the exact artifact hash. It runs a local reference engine,
+not Omelet's commercial TMS engine; no customer system or model is called.
+
+### Run, change and explain a delivery problem
+
+From the freshly installed native kit directory, use new input/output names:
+
+```sh
+.native/bin/python -I -B scenarios.py --output tms-inputs
+.native/bin/python -I -B demo.py --domain routing-basic --input tms-inputs/routing-basic-base.json --output tms-base-result.json
+.native/bin/python -I -B demo.py --domain routing-basic --input tms-inputs/routing-basic-changed.json --output tms-changed-result.json
+.native/bin/python -I -B demo.py --domain routing-basic --input tms-inputs/routing-basic-infeasible.json --output tms-infeasible-result.json
+.native/bin/python -I -B demo.py --domain routing-basic --input tms-inputs/routing-basic-invalid.json
+```
+
+The last command is intentionally rejected and exits nonzero. Keep that outcome;
+do not silently discard the bad unit or turn a rejected request into a solve.
+
+| Scenario | Expected interpretation |
+| --- | --- |
+| Base | Three 2 kg deliveries, one 6 kg van; feasible, 12 meter distance, feasibility and objective independently checked, optimality not claimed |
+| Changed | Farthest point moves from 6 to 10 meters; all related matrix entries change; feasible, 20 meter distance |
+| Infeasible | One mandatory delivery is 7 kg and the van holds 6 kg; independently checked capacity proof, no solution or numeric objective |
+| Invalid | Matrix unit is `km`; validation rejects the input before a solver job is submitted |
+
+These are deliberately tiny synthetic distances, not road-network distances.
+The 12-to-20 change is a changed-input example, not a savings percentage or an
+engine-quality comparison. Do not claim global optimality from a feasible result.
+Inspect the mathematical response and verification dimensions separately from
+the completed job status. The independent checker verifies supported claims;
+it does not attest that a commercial service executed the request.
+
+Next, create a different synthetic input and a minimal consumer owned by your
+app project. Document its expected constraints before running. Exercise an invalid
+input and preserve errors and null values in the app. Replaying these sample
+commands counts as sample replay, not independent app integration.
+
+### Map your application's requirements before connecting an engine
+
+| TMS input or behavior | Current basic routing exercise | Additional integration work |
+| --- | --- | --- |
+| Delivery IDs and quantities | Unique visit IDs, nonnegative integer kg demands | Define order aggregation, explicit unit conversion and ID mapping |
+| Vehicle IDs and capacity | Positive integer kg capacities; one depot and one trip per vehicle | Document fleet selection; do not drop volume, mixed loads or multi-trip rules |
+| Distances | Explicit integer-meter matrix covering every depot/visit pair | Record the source/version of road data, directionality and rounding outside the profile |
+| Time windows, travel/service time, shifts, breaks, skills | Unsupported | Agree a suitable profile, implementation and independent checking scope; do not remove required constraints to fit the example |
+| Result | Visit order, total distance, status and separate checks | Map to a draft dispatch plan; business approval and operational dispatch belong to the app |
+| Execution | Local preview jobs with bounded, volatile state | Assess persistence, authentication, isolation, retries, monitoring and support for the intended deployment |
+
+The basic profile allows at most 64 visits and 16 vehicles; inspect the selected
+engine's advertised limits, which may be narrower. Only compare engines on an
+explicit common profile, units, objective, constraints, input and execution budget.
+Keep this mapping in an independent app project. This exercise requires no
+changes to an existing Foundry repository or product deployment.
+
+### Record adoption evidence
+
+Use the bundled `REVIEW_FORM.json` and record the release/hash, OS/architecture,
+Python version, first attempted command, first error, support interventions and
+result files. Record elapsed time both from opening the instructions and, as a
+separate measurement, after Python 3.12 is ready. Retain failed and incomplete
+attempts. Do not combine different releases or assisted/unaided results into one
+success rate. Record later attempts separately instead of replacing the first.
+
+Maintain separate outcomes for installation, sample replay, own input, own app,
+own engine and business-owner review. Mark unperformed tasks NOT_STARTED or
+NOT_RUN. Automation is an automated rehearsal, never an external participant.
+Thirty minutes after runtime readiness is a proposed TMS onboarding observation
+target, not a measured result or a change to the existing H12 criteria. Actual
+participation, consent and review remain necessary for human acceptance.
+
+### Discuss commercial fit
+
+For a commercial TMS or engine integration, [contact Omelet](https://www.omelet.ai/en/contact/)
+with approximate daily stops/vehicles, required constraints, current dispatch
+workflow, preferred deployment environment and a proposed success measure.
+Use descriptions or permitted synthetic examples for the first conversation;
+agree access and handling before sharing customer records or credentials.
+
+Assess integration effort, planning time and comparable route quality separately.
+Agree the business baseline and acceptance criteria before a customer pilot.
+Inquiry is not OCP trial enrollment or confirmation that a feature is available.
+The OCP trial remains recommended when invited. The protocol and local/BYO paths
+do not require purchasing an Omelet product.

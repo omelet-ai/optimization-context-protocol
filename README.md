@@ -60,6 +60,23 @@ replacement, or `PROFILE_EXTENSION.md` for a new problem profile. If `.native`
 already exists, reuse its Python; do not rerun the installer over it. Moving the
 kit requires a fresh environment and regenerated MCP configuration.
 
+## Evaluate a TMS integration
+
+Use the [TMS integration exercise](docs/users/NATIVE_EXTERNAL_EVALUATION.md#tms-integration-evaluation)
+to run a synthetic delivery problem, change its distance matrix, check results
+independently and document the mapping from your application's fields. The
+current basic routing profile covers a single depot, explicit distances and
+vehicle weight capacity. Road travel times, delivery time windows, driver shifts
+and production deployment need a separately agreed profile and implementation.
+The exercise is not a production TMS or a commercial-engine benchmark.
+
+For a commercial TMS or engine integration, [contact Omelet](https://www.omelet.ai/en/contact/)
+with your problem size, required constraints and preferred deployment environment.
+An inquiry does not create an OCP trial account or promise a supported feature;
+the OCP trial remains recommended when invited. Local and BYO-engine use remain
+available without an Omelet account. Keep customer data and credentials out of
+public issues and initial inquiries.
+
 ## Choose a version and check its scope
 
 | Starting point | Use it for | Verified scope |

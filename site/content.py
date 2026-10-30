@@ -353,4 +353,39 @@ def public_pages(commands, demo, command_blocks, comparison):
         'Windows CI는 미지원 안내만 확인합니다. 실제 외부 사람의 수락도 별도입니다.</p>'
         '<p><a href="../start/local/index.html#download">설치·실제 계산·MCP 안내</a> · '
         '<a href="../project/index.html#delivery-scope">버전별 지원 범위</a></p></section>')
+    tms = (
+        '<h2>Evaluate a TMS integration</h2>'
+        '<p>Connect a delivery application to a checked routing example. Start with '
+        'one depot, explicit distances and vehicle weight capacity; change an input '
+        'and inspect the result before planning a larger integration.</p>'
+        '<p>Road travel times, delivery time windows and driver shifts need a separately '
+        'agreed profile and implementation. The local example is not a production TMS '
+        'or a commercial-engine benchmark.</p>'
+        '<p><a href="https://github.com/omelet-ai/optimization-context-protocol/blob/main/docs/users/NATIVE_EXTERNAL_EVALUATION.md#tms-integration-evaluation">'
+        'Follow the TMS integration exercise →</a></p>'
+        '<h3>Discuss a commercial deployment</h3>'
+        '<p>Share your problem size, required constraints and preferred deployment '
+        'environment with Omelet. Keep customer records and credentials out of the '
+        'initial inquiry.</p><p><a class="button" href="https://www.omelet.ai/en/contact/">'
+        'Contact Omelet about TMS ↗</a></p>'
+        '<p class="small-note">An inquiry does not create an OCP trial account or promise '
+        'feature availability. The OCP trial remains recommended when invited; '
+        'local and BYO-engine use require no Omelet account.</p>'
+    )
+    rendered['index.html']['body'] += '<section class="wrap section" id="tms-integration">' + tms + '</section>'
+    for path in ('start/omelet/index.html', 'project/index.html'):
+        rendered[path]['body'] = rendered[path]['body'].replace(
+            '</article></div>', '<section id="tms-integration">' + tms + '</section></article></div>')
+    rendered['ko/index.html']['body'] += (
+        '<section class="wrap section" id="tms-integration"><h2>TMS·배차 연동을 검토하세요</h2>'
+        '<p>단일 출발지·명시 거리 행렬·차량 중량 용량으로 배송 예제를 실행하고, '
+        '입력을 바꿔 독립 검산 결과를 확인할 수 있습니다. 실도로 이동시간·배송 시간창·'
+        '기사 근무시간은 별도 프로파일과 구현 범위를 합의해야 합니다. '
+        '참조 예제는 상용 TMS나 상용 엔진의 성능 벤치마크가 아닙니다.</p>'
+        '<p><a href="https://github.com/omelet-ai/optimization-context-protocol/blob/main/docs/users/NATIVE_EXTERNAL_EVALUATION.md#tms-integration-evaluation">'
+        'TMS 연동 과제 안내 →</a></p><p><a class="button" href="https://www.omelet.ai/en/contact/">'
+        '오믈렛 TMS 도입 문의 ↗</a></p>'
+        '<p>문제 규모·필수 제약·희망 실행 환경을 알려주세요. 첫 문의에는 고객 데이터나 '
+        '인증정보를 넣지 마세요. 문의가 OCP trial 가입이나 기능 지원을 확정하지는 않습니다. '
+        'OCP trial은 초대 시 권장하며, 로컬·자체 엔진 사용에는 오믈렛 계정이 필요하지 않습니다.</p></section>')
     return rendered
