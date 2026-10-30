@@ -57,6 +57,18 @@ h1 em{color:var(--navy);box-shadow:inset 0 -.22em var(--lavender)}
 .nav-cta:hover{background:var(--accent-hover)}
 ::selection{background:var(--mint);color:var(--ink)}
 
+/* The language switch stays visible when the mobile navigation is closed. */
+.language-switch{display:inline-flex;align-items:center;flex-shrink:0;gap:3px;padding:3px;border:1px solid var(--line);border-radius:10px;background:var(--white);width:max-content}
+.language-switch a{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:38px;padding:6px 10px;font-size:13px;font-weight:600;line-height:1.3;text-decoration:none;border-radius:7px;white-space:nowrap}
+.language-switch a[aria-current=page]{background:var(--navy);color:var(--white)}
+.language-switch a:not([aria-current]):hover{background:var(--soft)}
+.site-header nav{margin-left:auto}
+html[lang=ko] :is(h1,h2,h3,p,li,td,th){word-break:keep-all;overflow-wrap:anywhere}
+html[lang=ko] :is(h1,h2){line-height:1.3;letter-spacing:-.045em}
+html[lang=ko] .eyebrow{letter-spacing:.06em}
+@media(max-width:1000px){.site-header{gap:14px}.site-header nav{gap:16px}.brand>span{display:none}}
+@media(max-width:680px){.site-header{gap:8px;flex-wrap:wrap}.site-header>.language-switch{margin-left:auto}.menu-toggle{order:4}.site-header nav{order:5;margin-left:0}.language-switch a{min-height:38px;padding-inline:8px}.site-footer .language-switch{margin-top:12px}html[lang=ko] .hero h1{font-size:clamp(38px,9vw,48px)}}
+
 /* Give the opening copy a wider measure while keeping the diagram alongside it. */
 .hero .lead{max-width:60ch}
 @media(min-width:681px){

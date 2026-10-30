@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>직접 확인하는 세 가지 최적화 예제 · OCP</title>
+<meta name="description" content="실제 라우팅·작업자 배정·재고 결과와 별도 독립 검산을 확인하세요.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://omelet-ai.github.io/optimization-context-protocol/ko/examples/"><meta property="og:url" content="https://omelet-ai.github.io/optimization-context-protocol/ko/examples/"><link rel="alternate" hreflang="en" href="https://omelet-ai.github.io/optimization-context-protocol/examples/"><link rel="alternate" hreflang="ko" href="https://omelet-ai.github.io/optimization-context-protocol/ko/examples/"><link rel="alternate" hreflang="x-default" href="https://omelet-ai.github.io/optimization-context-protocol/examples/">
+<meta name="theme-color" content="#faf9fd">
+<meta property="og:title" content="직접 확인하는 세 가지 최적화 예제 · Optimization Context Protocol">
+<meta property="og:description" content="실제 라우팅·작업자 배정·재고 결과와 별도 독립 검산을 확인하세요.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">본문으로 바로가기</a>
+<header class="site-header">
+<a class="brand" href="../index.html" aria-label="OCP 홈"><img src="../../assets/mark.svg" width="33" height="33" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
+<button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">메뉴 <span aria-hidden="true">☰</span></button>
+<nav id="primary-nav" aria-label="주 메뉴"><a href="../start/index.html">시작하기</a><a href="index.html" aria-current="page">예제</a><a href="../guides/apps/index.html#mcp">AI 에이전트</a><a href="../reference/index.html">문서</a><a class="nav-cta" href="https://github.com/omelet-ai/optimization-context-protocol">GitHub ↗</a></nav>
+<div class="language-switch" role="group" aria-label="언어 선택"><a href="../../examples/index.html" lang="en" hreflang="en" data-language-link aria-label="Read this page in English">EN</a><a href="index.html" lang="ko" hreflang="ko" data-language-link aria-label="이 페이지를 한국어로 보기" aria-current="page">한국어</a></div>
+</header>
+<main id="main" tabindex="-1"><div class="wrap page-head "><p class="breadcrumbs"><a href="../index.html">OCP</a> / 실행 예제</p><p class="eyebrow">실행 예제</p><h1>세 가지 문제.<br><em>검산된 결과.</em></h1><p class="lead">라우팅·고정 시간 작업 배정·재고 보충을 살펴보세요. 아래 결과는 모두 사이트 빌드 시 계산하고 검산했습니다.</p></div><div class="wrap"><div class="notice" data-edition-status><strong>Core 0.1과 native v1 후보를 공개 소스로 제공합니다.</strong><p>native 프리릴리스 ZIP으로 시작하고, 개발하려면 Core 또는 native 소스 빌드를 선택하세요. 모두 Apache-2.0을 사용합니다. native ZIP은 GitHub Releases에서 제공하며 PyPI/npm에는 게시하지 않았습니다. <a href="../reference/index.html#core-native">형식과 공개 상태 비교 →</a> · <a href="../start/local/index.html#native">native v1 빌드 →</a></p></div></div><section class="wrap" data-example id="routing"><h2>라우팅: 방문과 용량</h2><div class="example-shell"><div class="example-toolbar"><strong>라우팅 / 0.1 후보</strong><button class="example-toggle" data-scenario="routing" aria-pressed="true">유효한 문제</button><button class="example-toggle" data-scenario="rejected" aria-pressed="false">미지원 단위</button></div><div class="example-body"><div class="example-canvas"><div id="route-picture"><svg viewbox="0 0 320 220" role="img" aria-label="반환된 차량 경로 개략도"><path d="M160,110 L45,155 L70,40 L160,110" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="6 4"/><path d="M160,110 L250,40 L270,170 L160,110" fill="none" stroke="var(--chart-secondary)" stroke-width="2.5" stroke-dasharray="6 4"/><circle cx="160" cy="110" r="24" fill="var(--accent)" stroke="var(--accent)"/><text x="160" y="115" text-anchor="middle" font-size="16" font-family="sans-serif" fill="#fff">hub</text><circle cx="70" cy="40" r="18" fill="#fff" stroke="var(--accent)"/><text x="70" y="45" text-anchor="middle" font-size="16" font-family="sans-serif" fill="var(--accent)">a</text><circle cx="45" cy="155" r="18" fill="#fff" stroke="var(--accent)"/><text x="45" y="160" text-anchor="middle" font-size="16" font-family="sans-serif" fill="var(--accent)">b</text><circle cx="250" cy="40" r="18" fill="#fff" stroke="var(--accent)"/><text x="250" y="45" text-anchor="middle" font-size="16" font-family="sans-serif" fill="var(--accent)">c</text><circle cx="270" cy="170" r="18" fill="#fff" stroke="var(--accent)"/><text x="270" y="175" text-anchor="middle" font-size="16" font-family="sans-serif" fill="var(--accent)">d</text></svg><p class="small-note">이 그림은 개략도입니다. 거리는 그림이 아닌 명시적 행렬에서 가져옵니다.</p></div><div id="rejection-picture" hidden><p class="eyebrow">검증 단계에서 요청 중단</p><h2>“lb”와 “kg”는 다릅니다.</h2><p>이 프로파일은 kg를 선언합니다. 다른 단위는 조용히 변환하지 않고 계산 전에 거절합니다.</p></div><p class="result-summary" id="example-summary">실행 가능한 경로 · 총비용 18미터 · 용량과 방문 충족 여부 독립 검산 완료. 최적성을 주장하지 않습니다.</p></div><div class="example-data"><div class="tabs" role="tablist" aria-label="예제 단계"><button role="tab" id="tab-input" data-view="input" aria-selected="true" aria-controls="example-panel">입력</button><button role="tab" id="tab-result" data-view="result" aria-selected="false" aria-controls="example-panel" tabindex="-1">결과</button><button role="tab" id="tab-evaluation" data-view="evaluation" aria-selected="false" aria-controls="example-panel" tabindex="-1">평가</button></div><pre id="example-panel" role="tabpanel" tabindex="0" aria-labelledby="tab-input">{
+  "depot": "hub",
+  "load_unit": "kg",
+  "visits": [
+    {
+      "id": "a",
+      "demand": 1
+    },
+    {
+      "id": "b",
+      "demand": 1
+    },
+    {
+      "id": "c",
+      "demand": 1
+    },
+    {
+      "id": "d",
+      "demand": 1
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "v1",
+      "capacity": 2
+    },
+    {
+      "id": "v2",
+      "capacity": 2
+    }
+  ],
+  "matrix": {
+    "node_ids": [
+      "hub",
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "unit": "meter",
+    "model": "explicit_matrix",
+    "rounding": "none",
+    "values": [
+      [
+        0,
+        2,
+        3,
+        4,
+        6
+      ],
+      [
+        2,
+        0,
+        1,
+        3,
+        5
+      ],
+      [
+        3,
+        1,
+        0,
+        2,
+        3
+      ],
+      [
+        4,
+        3,
+        2,
+        0,
+        2
+      ],
+      [
+        6,
+        5,
+        3,
+        2,
+        0
+      ]
+    ]
+  }
+}</pre></div></div></div><p class="small-note">사이트 빌드 시 실제 OR-Tools 참조 엔진으로 미리 계산하고 독립 검산했습니다. 이 화면은 저장된 합성 결과를 보여주며 엔진을 호출하지 않습니다.</p><noscript><p>전체 예제는 다음 형식으로도 제공합니다: <a href="../../assets/example.json">다운로드 가능한 JSON</a>. 단계 선택에는 JavaScript를 사용합니다.</p></noscript><script id="example-data" type="application/json">{"routing": {"input": {"depot": "hub", "load_unit": "kg", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "request": {"core_version": "0.1.0", "kind": "request", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "configuration": {"objectives": [{"id": "minimize_total_route_cost", "weight": 1}], "constraints": ["weight_capacity"], "parameters": {"distance_coefficient": 1, "time_coefficient": 0, "fixed_cost": 0}}, "input": {"depot": "hub", "load_unit": "kg", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "budget": {"time_limit_ms": 1000}}, "result": {"core_version": "0.1.0", "kind": "result", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "effective_configuration": {"objectives": [{"id": "minimize_total_route_cost", "weight": 1}], "constraints": ["weight_capacity"], "parameters": {"distance_coefficient": 1, "time_coefficient": 0, "fixed_cost": 0}}, "status": "feasible", "termination": "completed", "solution": {"routes": [{"vehicle_id": "v1", "visits": ["b", "a"]}, {"vehicle_id": "v2", "visits": ["c", "d"]}]}, "proof": null, "metrics": [{"id": "minimize_total_route_cost", "role": "optimized", "definition": "routing.basic.total_distance.v1", "unit": "meter", "source": "engine", "status": "evaluated", "value": 18, "reason": null}], "constraints": [{"id": "weight_capacity", "role": "enforced", "definition": "routing.basic.weight_capacity.v1", "unit": "kg", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "all_visits_once", "role": "enforced", "definition": "routing.basic.all_visits_once.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "provenance": {"implementation": {"id": "ocp-candidate.routing-adapter", "version": "0.1.0"}, "engine": {"id": "ortools.routing", "version": "9.15.6755"}, "request_id": "site-routing-example", "limitations": ["Found solutions are feasible, not certified optimal"]}}, "evaluation": {"core_version": "0.1.0", "kind": "evaluation", "request_id": "site-routing-example", "capability": {"id": "routing.reference", "version": "0.1.0"}, "domain_profile": {"id": "routing.basic", "version": "0.1.0"}, "metrics": [{"id": "minimize_total_route_cost", "role": "optimized", "definition": "routing.basic.total_distance.v1", "unit": "meter", "source": "engine", "status": "evaluated", "value": 18, "reason": null}], "constraints": [{"id": "weight_capacity", "role": "enforced", "definition": "routing.basic.weight_capacity.v1", "unit": "kg", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "all_visits_once", "role": "enforced", "definition": "routing.basic.all_visits_once.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "evaluator": {"id": "ocp-candidate.routing-evaluator", "version": "0.1.0"}, "limitations": ["Provider evaluation reuses provider logic; use the separately packaged independent checker.", "Feasibility and cost evaluation; no optimality proof"]}, "independent_check": {"feasible": true, "total_cost": 18, "route_costs": {"v1": 6, "v2": 12}, "loads": {"v1": 2, "v2": 2}, "violations": {"weight_capacity": 0, "all_visits_once": 0}}, "summary": "실행 가능한 경로 · 총비용 18미터 · 용량과 방문 충족 여부 독립 검산 완료. 최적성을 주장하지 않습니다."}, "rejected": {"input": {"depot": "hub", "load_unit": "lb", "visits": [{"id": "a", "demand": 1}, {"id": "b", "demand": 1}, {"id": "c", "demand": 1}, {"id": "d", "demand": 1}], "vehicles": [{"id": "v1", "capacity": 2}, {"id": "v2", "capacity": 2}], "matrix": {"node_ids": ["hub", "a", "b", "c", "d"], "unit": "meter", "model": "explicit_matrix", "rounding": "none", "values": [[0, 2, 3, 4, 6], [2, 0, 1, 3, 5], [3, 1, 0, 2, 3], [4, 3, 2, 0, 2], [6, 5, 3, 2, 0]]}}, "result": {"core_version": "0.1.0", "kind": "failure", "request_id": "site-unsupported-unit", "error": {"code": "INVALID_DATA", "message": "Value does not match routing-input contract", "retryable": false, "issues": [{"code": "INVALID_DATA", "path": "/load_unit", "message": "Value does not match routing-input contract"}]}}, "evaluation": null, "summary": "INVALID_DATA · 지원하지 않는 적재 단위를 계산 전에 거절했습니다. 평가할 결과가 없습니다."}, "worker": {"input": {"time_unit": "minute", "cost_unit": "cost_unit", "workers": [{"id": "alice", "availability": [{"start": 0, "end": 180}], "max_minutes": 120}, {"id": "bob", "availability": [{"start": 0, "end": 180}], "max_minutes": 120}], "tasks": [{"id": "pack", "start": 0, "end": 60, "eligible_workers": ["alice", "bob"], "costs": {"alice": 2, "bob": 5}}, {"id": "inspect", "start": 30, "end": 90, "eligible_workers": ["alice", "bob"], "costs": {"alice": 1, "bob": 3}}, {"id": "ship", "start": 90, "end": 150, "eligible_workers": ["alice", "bob"], "costs": {"alice": 2, "bob": 4}}]}, "request": {"core_version": "0.1.0", "kind": "request", "request_id": "site-worker-example", "capability": {"id": "worker.scheduling.reference", "version": "0.1.0"}, "domain_profile": {"id": "worker.scheduling", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "configuration": {"objectives": [{"id": "total_cost", "weight": 1}], "constraints": ["task_coverage", "eligibility", "availability", "no_overlap", "workload"], "parameters": {}}, "input": {"time_unit": "minute", "cost_unit": "cost_unit", "workers": [{"id": "alice", "availability": [{"start": 0, "end": 180}], "max_minutes": 120}, {"id": "bob", "availability": [{"start": 0, "end": 180}], "max_minutes": 120}], "tasks": [{"id": "pack", "start": 0, "end": 60, "eligible_workers": ["alice", "bob"], "costs": {"alice": 2, "bob": 5}}, {"id": "inspect", "start": 30, "end": 90, "eligible_workers": ["alice", "bob"], "costs": {"alice": 1, "bob": 3}}, {"id": "ship", "start": 90, "end": 150, "eligible_workers": ["alice", "bob"], "costs": {"alice": 2, "bob": 4}}]}, "budget": {"time_limit_ms": 1000}}, "result": {"core_version": "0.1.0", "kind": "result", "request_id": "site-worker-example", "capability": {"id": "worker.scheduling.reference", "version": "0.1.0"}, "domain_profile": {"id": "worker.scheduling", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "effective_configuration": {"objectives": [{"id": "total_cost", "weight": 1}], "constraints": ["task_coverage", "eligibility", "availability", "no_overlap", "workload"], "parameters": {}}, "status": "optimal", "termination": "completed", "solution": {"assignments": [{"task_id": "pack", "worker_id": "alice"}, {"task_id": "inspect", "worker_id": "bob"}, {"task_id": "ship", "worker_id": "alice"}]}, "proof": {"claim": "optimal", "method": "bounded-assignment-enumeration", "scope": "worker.scheduling:0.1.0", "evidence": {"objective": 7}}, "metrics": [{"id": "total_cost", "role": "optimized", "definition": "worker.scheduling.total_cost.v1", "unit": "cost_unit", "source": "engine", "status": "evaluated", "value": 7, "reason": null}], "constraints": [{"id": "task_coverage", "role": "enforced", "definition": "worker.scheduling.task_coverage.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "eligibility", "role": "enforced", "definition": "worker.scheduling.eligibility.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "availability", "role": "enforced", "definition": "worker.scheduling.availability.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "no_overlap", "role": "enforced", "definition": "worker.scheduling.no_overlap.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "workload", "role": "enforced", "definition": "worker.scheduling.workload.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "provenance": {"implementation": {"id": "ocp-candidate.planning-adapter", "version": "0.1.0"}, "engine": {"id": "ocp.worker-branch-and-bound", "version": "0.1.0"}, "request_id": "site-worker-example", "limitations": ["1-8 fixed-time tasks, 1-4 workers; half-open integer minute intervals; one worker per task", "No shift generation, overtime, breaks, travel, fairness or automatic constraint relaxation", "Budget 1-5000 ms; optimal/infeasible proof requires independent bounded enumeration"]}}, "evaluation": {"core_version": "0.1.0", "kind": "evaluation", "request_id": "site-worker-example", "capability": {"id": "worker.scheduling.reference", "version": "0.1.0"}, "domain_profile": {"id": "worker.scheduling", "version": "0.1.0"}, "metrics": [{"id": "total_cost", "role": "optimized", "definition": "worker.scheduling.total_cost.v1", "unit": "cost_unit", "source": "engine", "status": "evaluated", "value": 7, "reason": null}], "constraints": [{"id": "task_coverage", "role": "enforced", "definition": "worker.scheduling.task_coverage.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "eligibility", "role": "enforced", "definition": "worker.scheduling.eligibility.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "availability", "role": "enforced", "definition": "worker.scheduling.availability.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "no_overlap", "role": "enforced", "definition": "worker.scheduling.no_overlap.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "workload", "role": "enforced", "definition": "worker.scheduling.workload.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "evaluator": {"id": "ocp-candidate.planning-evaluator", "version": "0.1.0"}, "limitations": ["Provider evaluation reuses provider logic; use the separately packaged independent checker."]}, "independent_check": {"feasible": true, "total_cost": 7, "violations": {"task_coverage": 0, "eligibility": 0, "availability": 0, "no_overlap": 0, "workload": 0}}}, "inventory": {"input": {"quantity_unit": "item", "period_unit": "day", "cost_unit": "cost_unit", "periods": 4, "products": [{"id": "widget", "demand": [2, 1, 3, 2], "scheduled_receipts": [0, 0, 0, 0], "initial_inventory": 2, "lead_time": 1, "max_order_quantity": 5, "storage_capacity": 8, "terminal_min_inventory": 0, "unit_order_cost": 1, "fixed_order_cost": 4, "holding_cost": 1}]}, "request": {"core_version": "0.1.0", "kind": "request", "request_id": "site-inventory-example", "capability": {"id": "inventory.replenishment.reference", "version": "0.1.0"}, "domain_profile": {"id": "inventory.replenishment", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "configuration": {"objectives": [{"id": "total_cost", "weight": 1}], "constraints": ["inventory_balance", "no_stockout", "storage_capacity", "order_limit", "terminal_inventory"], "parameters": {}}, "input": {"quantity_unit": "item", "period_unit": "day", "cost_unit": "cost_unit", "periods": 4, "products": [{"id": "widget", "demand": [2, 1, 3, 2], "scheduled_receipts": [0, 0, 0, 0], "initial_inventory": 2, "lead_time": 1, "max_order_quantity": 5, "storage_capacity": 8, "terminal_min_inventory": 0, "unit_order_cost": 1, "fixed_order_cost": 4, "holding_cost": 1}]}, "budget": {"time_limit_ms": 1000}}, "result": {"core_version": "0.1.0", "kind": "result", "request_id": "site-inventory-example", "capability": {"id": "inventory.replenishment.reference", "version": "0.1.0"}, "domain_profile": {"id": "inventory.replenishment", "version": "0.1.0"}, "execution_profile": {"id": "execution.sync", "version": "0.1.0"}, "effective_configuration": {"objectives": [{"id": "total_cost", "weight": 1}], "constraints": ["inventory_balance", "no_stockout", "storage_capacity", "order_limit", "terminal_inventory"], "parameters": {}}, "status": "optimal", "termination": "completed", "solution": {"plans": [{"product_id": "widget", "orders": [1, 5, 0, 0], "ending_inventory": [0, 0, 2, 0]}]}, "proof": {"claim": "optimal", "method": "bounded-order-enumeration", "scope": "inventory.replenishment:0.1.0", "evidence": {"objective": 16}}, "metrics": [{"id": "total_cost", "role": "optimized", "definition": "inventory.replenishment.total_cost.v1", "unit": "cost_unit", "source": "engine", "status": "evaluated", "value": 16, "reason": null}], "constraints": [{"id": "inventory_balance", "role": "enforced", "definition": "inventory.replenishment.inventory_balance.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "no_stockout", "role": "enforced", "definition": "inventory.replenishment.no_stockout.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "storage_capacity", "role": "enforced", "definition": "inventory.replenishment.storage_capacity.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "order_limit", "role": "enforced", "definition": "inventory.replenishment.order_limit.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "terminal_inventory", "role": "enforced", "definition": "inventory.replenishment.terminal_inventory.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "provenance": {"implementation": {"id": "ocp-candidate.planning-adapter", "version": "0.1.0"}, "engine": {"id": "ocp.inventory-dynamic-programming", "version": "0.1.0"}, "request_id": "site-inventory-example", "limitations": ["1-4 independent products, 1-6 daily periods; integer items; orders \u003c=5, capacity \u003c=50", "Demand is an explicit forecast, not inferred; no backlog, lost sales, uncertainty or shared capacity", "Receipts before demand, holding cost on ending stock; late-horizon orders must be zero", "Budget 1-5000 ms; independent enumeration required to verify optimal/infeasible proofs"]}}, "evaluation": {"core_version": "0.1.0", "kind": "evaluation", "request_id": "site-inventory-example", "capability": {"id": "inventory.replenishment.reference", "version": "0.1.0"}, "domain_profile": {"id": "inventory.replenishment", "version": "0.1.0"}, "metrics": [{"id": "total_cost", "role": "optimized", "definition": "inventory.replenishment.total_cost.v1", "unit": "cost_unit", "source": "engine", "status": "evaluated", "value": 16, "reason": null}], "constraints": [{"id": "inventory_balance", "role": "enforced", "definition": "inventory.replenishment.inventory_balance.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "no_stockout", "role": "enforced", "definition": "inventory.replenishment.no_stockout.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "storage_capacity", "role": "enforced", "definition": "inventory.replenishment.storage_capacity.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "order_limit", "role": "enforced", "definition": "inventory.replenishment.order_limit.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}, {"id": "terminal_inventory", "role": "enforced", "definition": "inventory.replenishment.terminal_inventory.v1", "unit": "count", "source": "engine", "status": "evaluated", "violation": 0, "satisfied": true, "reason": null}], "evaluator": {"id": "ocp-candidate.planning-evaluator", "version": "0.1.0"}, "limitations": ["Provider evaluation reuses provider logic; use the separately packaged independent checker."]}, "independent_check": {"feasible": true, "total_cost": 16, "violations": {"inventory_balance": 0, "no_stockout": 0, "storage_capacity": 0, "order_limit": 0, "terminal_inventory": 0}}}}</script><div class="file-links"><a href="../../assets/example.json" download>전체 예제 다운로드</a><a href="../../assets/basic-input.json" download>입력 다운로드</a><a href="../start/local/index.html">로컬에서 재현 →</a></div></section>
+<section class="wrap section"><div class="principles"><article><h3>무엇을 최적화하나요?</h3><p>거리 계수 1·시간 계수 0·고정 비용 0의 총 경로 비용을 최적화하며 중량 용량을 강제합니다.</p></article><article><h3>무엇을 검산하나요?</h3><p>방문 충족·차량 용량·경로 거리·결과의 의미와 총비용을 독립적으로 확인합니다.</p></article><article><h3>무엇을 주장하지 않나요?</h3><p>운영 성능 벤치마크·실도로 거리·모든 산업과의 호환·최적성 인증을 주장하지 않습니다.</p></article></div></section><section class="wrap section" id="worker"><p class="eyebrow">worker.scheduling · 0.1.0</p><h2>작업자 배정: 시간과 가용 조건을 지킵니다.</h2><p class="lead">고정 시간 작업 3개와 작업자 2명. 자격·가용 시간·작업량을 지키면서 배정 비용을 최소화합니다.</p><p><strong>optimal · 7 cost_unit</strong></p><div class="table-scroll"><table><thead><tr><th>작업</th><th>고정 시간</th><th>배정 작업자</th></tr></thead><tbody><tr><td>pack</td><td>0–60분</td><td>alice</td></tr><tr><td>inspect</td><td>30–90분</td><td>bob</td></tr><tr><td>ship</td><td>90–150분</td><td>alice</td></tr></tbody></table></div><p>가용 시간·자격·중복·작업량을 독립 검산합니다. 기존 고정 시간 작업을 배정하며 교대 근무표를 생성하지는 않습니다. 제한된 범위의 최적해는 별도 전수 탐색 oracle로 검사합니다.</p><details><summary>입력 JSON</summary><div class="code-window"><pre><code>{
+  "time_unit": "minute",
+  "cost_unit": "cost_unit",
+  "workers": [
+    {
+      "id": "alice",
+      "availability": [
+        {
+          "start": 0,
+          "end": 180
+        }
+      ],
+      "max_minutes": 120
+    },
+    {
+      "id": "bob",
+      "availability": [
+        {
+          "start": 0,
+          "end": 180
+        }
+      ],
+      "max_minutes": 120
+    }
+  ],
+  "tasks": [
+    {
+      "id": "pack",
+      "start": 0,
+      "end": 60,
+      "eligible_workers": [
+        "alice",
+        "bob"
+      ],
+      "costs": {
+        "alice": 2,
+        "bob": 5
+      }
+    },
+    {
+      "id": "inspect",
+      "start": 30,
+      "end": 90,
+      "eligible_workers": [
+        "alice",
+        "bob"
+      ],
+      "costs": {
+        "alice": 1,
+        "bob": 3
+      }
+    },
+    {
+      "id": "ship",
+      "start": 90,
+      "end": 150,
+      "eligible_workers": [
+        "alice",
+        "bob"
+      ],
+      "costs": {
+        "alice": 2,
+        "bob": 4
+      }
+    }
+  ]
+}</code></pre></div></details><details><summary>엔진 결과</summary><div class="code-window"><pre><code>{
+  "core_version": "0.1.0",
+  "kind": "result",
+  "request_id": "site-worker-example",
+  "capability": {
+    "id": "worker.scheduling.reference",
+    "version": "0.1.0"
+  },
+  "domain_profile": {
+    "id": "worker.scheduling",
+    "version": "0.1.0"
+  },
+  "execution_profile": {
+    "id": "execution.sync",
+    "version": "0.1.0"
+  },
+  "effective_configuration": {
+    "objectives": [
+      {
+        "id": "total_cost",
+        "weight": 1
+      }
+    ],
+    "constraints": [
+      "task_coverage",
+      "eligibility",
+      "availability",
+      "no_overlap",
+      "workload"
+    ],
+    "parameters": {}
+  },
+  "status": "optimal",
+  "termination": "completed",
+  "solution": {
+    "assignments": [
+      {
+        "task_id": "pack",
+        "worker_id": "alice"
+      },
+      {
+        "task_id": "inspect",
+        "worker_id": "bob"
+      },
+      {
+        "task_id": "ship",
+        "worker_id": "alice"
+      }
+    ]
+  },
+  "proof": {
+    "claim": "optimal",
+    "method": "bounded-assignment-enumeration",
+    "scope": "worker.scheduling:0.1.0",
+    "evidence": {
+      "objective": 7
+    }
+  },
+  "metrics": [
+    {
+      "id": "total_cost",
+      "role": "optimized",
+      "definition": "worker.scheduling.total_cost.v1",
+      "unit": "cost_unit",
+      "source": "engine",
+      "status": "evaluated",
+      "value": 7,
+      "reason": null
+    }
+  ],
+  "constraints": [
+    {
+      "id": "task_coverage",
+      "role": "enforced",
+      "definition": "worker.scheduling.task_coverage.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "eligibility",
+      "role": "enforced",
+      "definition": "worker.scheduling.eligibility.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "availability",
+      "role": "enforced",
+      "definition": "worker.scheduling.availability.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "no_overlap",
+      "role": "enforced",
+      "definition": "worker.scheduling.no_overlap.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "workload",
+      "role": "enforced",
+      "definition": "worker.scheduling.workload.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    }
+  ],
+  "provenance": {
+    "implementation": {
+      "id": "ocp-candidate.planning-adapter",
+      "version": "0.1.0"
+    },
+    "engine": {
+      "id": "ocp.worker-branch-and-bound",
+      "version": "0.1.0"
+    },
+    "request_id": "site-worker-example",
+    "limitations": [
+      "1-8 fixed-time tasks, 1-4 workers; half-open integer minute intervals; one worker per task",
+      "No shift generation, overtime, breaks, travel, fairness or automatic constraint relaxation",
+      "Budget 1-5000 ms; optimal/infeasible proof requires independent bounded enumeration"
+    ]
+  }
+}</code></pre></div></details><details><summary>제공자 평가</summary><div class="code-window"><pre><code>{
+  "core_version": "0.1.0",
+  "kind": "evaluation",
+  "request_id": "site-worker-example",
+  "capability": {
+    "id": "worker.scheduling.reference",
+    "version": "0.1.0"
+  },
+  "domain_profile": {
+    "id": "worker.scheduling",
+    "version": "0.1.0"
+  },
+  "metrics": [
+    {
+      "id": "total_cost",
+      "role": "optimized",
+      "definition": "worker.scheduling.total_cost.v1",
+      "unit": "cost_unit",
+      "source": "engine",
+      "status": "evaluated",
+      "value": 7,
+      "reason": null
+    }
+  ],
+  "constraints": [
+    {
+      "id": "task_coverage",
+      "role": "enforced",
+      "definition": "worker.scheduling.task_coverage.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "eligibility",
+      "role": "enforced",
+      "definition": "worker.scheduling.eligibility.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "availability",
+      "role": "enforced",
+      "definition": "worker.scheduling.availability.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "no_overlap",
+      "role": "enforced",
+      "definition": "worker.scheduling.no_overlap.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "workload",
+      "role": "enforced",
+      "definition": "worker.scheduling.workload.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    }
+  ],
+  "evaluator": {
+    "id": "ocp-candidate.planning-evaluator",
+    "version": "0.1.0"
+  },
+  "limitations": [
+    "Provider evaluation reuses provider logic; use the separately packaged independent checker."
+  ]
+}</code></pre></div></details><details><summary>독립 검산</summary><div class="code-window"><pre><code>{
+  "feasible": true,
+  "total_cost": 7,
+  "violations": {
+    "task_coverage": 0,
+    "eligibility": 0,
+    "availability": 0,
+    "no_overlap": 0,
+    "workload": 0
+  }
+}</code></pre></div></details><p><a href="../start/local/index.html">세 예제를 모두 로컬에서 재현 →</a></p></section><section class="wrap section" id="inventory"><p class="eyebrow">inventory.replenishment · 0.1.0</p><h2>재고: 수요 발생 전에 주문하세요.</h2><p class="lead">상품 하나의 4일 계획입니다. 리드타임과 보관 한도를 지키면서 주문·발주 고정·보유 비용의 균형을 구합니다.</p><p><strong>optimal · 16 cost_unit</strong></p><div class="table-scroll"><table><thead><tr><th>상품</th><th>일별 주문량</th><th>일별 기말 재고</th></tr></thead><tbody><tr><td>widget</td><td>1, 5, 0, 0</td><td>0, 0, 2, 0</td></tr></tbody></table></div><p>재고 수지·용량·최종 재고·비용을 독립 검산합니다. 수요는 입력으로 주어지며 엔진이 예측하지 않습니다. 제한된 범위의 최적해는 별도 전수 탐색 oracle로 검사합니다.</p><details><summary>입력 JSON</summary><div class="code-window"><pre><code>{
+  "quantity_unit": "item",
+  "period_unit": "day",
+  "cost_unit": "cost_unit",
+  "periods": 4,
+  "products": [
+    {
+      "id": "widget",
+      "demand": [
+        2,
+        1,
+        3,
+        2
+      ],
+      "scheduled_receipts": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "initial_inventory": 2,
+      "lead_time": 1,
+      "max_order_quantity": 5,
+      "storage_capacity": 8,
+      "terminal_min_inventory": 0,
+      "unit_order_cost": 1,
+      "fixed_order_cost": 4,
+      "holding_cost": 1
+    }
+  ]
+}</code></pre></div></details><details><summary>엔진 결과</summary><div class="code-window"><pre><code>{
+  "core_version": "0.1.0",
+  "kind": "result",
+  "request_id": "site-inventory-example",
+  "capability": {
+    "id": "inventory.replenishment.reference",
+    "version": "0.1.0"
+  },
+  "domain_profile": {
+    "id": "inventory.replenishment",
+    "version": "0.1.0"
+  },
+  "execution_profile": {
+    "id": "execution.sync",
+    "version": "0.1.0"
+  },
+  "effective_configuration": {
+    "objectives": [
+      {
+        "id": "total_cost",
+        "weight": 1
+      }
+    ],
+    "constraints": [
+      "inventory_balance",
+      "no_stockout",
+      "storage_capacity",
+      "order_limit",
+      "terminal_inventory"
+    ],
+    "parameters": {}
+  },
+  "status": "optimal",
+  "termination": "completed",
+  "solution": {
+    "plans": [
+      {
+        "product_id": "widget",
+        "orders": [
+          1,
+          5,
+          0,
+          0
+        ],
+        "ending_inventory": [
+          0,
+          0,
+          2,
+          0
+        ]
+      }
+    ]
+  },
+  "proof": {
+    "claim": "optimal",
+    "method": "bounded-order-enumeration",
+    "scope": "inventory.replenishment:0.1.0",
+    "evidence": {
+      "objective": 16
+    }
+  },
+  "metrics": [
+    {
+      "id": "total_cost",
+      "role": "optimized",
+      "definition": "inventory.replenishment.total_cost.v1",
+      "unit": "cost_unit",
+      "source": "engine",
+      "status": "evaluated",
+      "value": 16,
+      "reason": null
+    }
+  ],
+  "constraints": [
+    {
+      "id": "inventory_balance",
+      "role": "enforced",
+      "definition": "inventory.replenishment.inventory_balance.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "no_stockout",
+      "role": "enforced",
+      "definition": "inventory.replenishment.no_stockout.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "storage_capacity",
+      "role": "enforced",
+      "definition": "inventory.replenishment.storage_capacity.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "order_limit",
+      "role": "enforced",
+      "definition": "inventory.replenishment.order_limit.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "terminal_inventory",
+      "role": "enforced",
+      "definition": "inventory.replenishment.terminal_inventory.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    }
+  ],
+  "provenance": {
+    "implementation": {
+      "id": "ocp-candidate.planning-adapter",
+      "version": "0.1.0"
+    },
+    "engine": {
+      "id": "ocp.inventory-dynamic-programming",
+      "version": "0.1.0"
+    },
+    "request_id": "site-inventory-example",
+    "limitations": [
+      "1-4 independent products, 1-6 daily periods; integer items; orders &lt;=5, capacity &lt;=50",
+      "Demand is an explicit forecast, not inferred; no backlog, lost sales, uncertainty or shared capacity",
+      "Receipts before demand, holding cost on ending stock; late-horizon orders must be zero",
+      "Budget 1-5000 ms; independent enumeration required to verify optimal/infeasible proofs"
+    ]
+  }
+}</code></pre></div></details><details><summary>제공자 평가</summary><div class="code-window"><pre><code>{
+  "core_version": "0.1.0",
+  "kind": "evaluation",
+  "request_id": "site-inventory-example",
+  "capability": {
+    "id": "inventory.replenishment.reference",
+    "version": "0.1.0"
+  },
+  "domain_profile": {
+    "id": "inventory.replenishment",
+    "version": "0.1.0"
+  },
+  "metrics": [
+    {
+      "id": "total_cost",
+      "role": "optimized",
+      "definition": "inventory.replenishment.total_cost.v1",
+      "unit": "cost_unit",
+      "source": "engine",
+      "status": "evaluated",
+      "value": 16,
+      "reason": null
+    }
+  ],
+  "constraints": [
+    {
+      "id": "inventory_balance",
+      "role": "enforced",
+      "definition": "inventory.replenishment.inventory_balance.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "no_stockout",
+      "role": "enforced",
+      "definition": "inventory.replenishment.no_stockout.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "storage_capacity",
+      "role": "enforced",
+      "definition": "inventory.replenishment.storage_capacity.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "order_limit",
+      "role": "enforced",
+      "definition": "inventory.replenishment.order_limit.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    },
+    {
+      "id": "terminal_inventory",
+      "role": "enforced",
+      "definition": "inventory.replenishment.terminal_inventory.v1",
+      "unit": "count",
+      "source": "engine",
+      "status": "evaluated",
+      "violation": 0,
+      "satisfied": true,
+      "reason": null
+    }
+  ],
+  "evaluator": {
+    "id": "ocp-candidate.planning-evaluator",
+    "version": "0.1.0"
+  },
+  "limitations": [
+    "Provider evaluation reuses provider logic; use the separately packaged independent checker."
+  ]
+}</code></pre></div></details><details><summary>독립 검산</summary><div class="code-window"><pre><code>{
+  "feasible": true,
+  "total_cost": 16,
+  "violations": {
+    "inventory_balance": 0,
+    "no_stockout": 0,
+    "storage_capacity": 0,
+    "order_limit": 0,
+    "terminal_inventory": 0
+  }
+}</code></pre></div></details><p><a href="../start/local/index.html">세 예제를 모두 로컬에서 재현 →</a></p></section><section class="wrap section"><p class="small-note">서로 다른 프로파일의 비용을 직접 비교할 수 없습니다. 저장된 합성 예제이며 브라우저 실시간 계산이나 운영 성능 벤치마크가 아닙니다. <a href="../reference/index.html#profile-limits">현재 프로파일 한도 보기.</a></p></section><section class="wrap section"><h2>CSV에서 검산된 작업 배정까지</h2><p>별도 CSV 데이터로 기준값·배정 비용 변경·가용 시간 변경을 비교합니다. 예상 합성 결과는 비용 12와 14, 그리고 비용값이 없는 증명된 불가능 시나리오입니다. 명령은 배정 표와 정확한 실행 기록을 저장합니다.</p><div class="code-window"><div class="code-caption"><span>작업자 시나리오 분석을 로컬에서 실행</span><button class="copy-button" data-copy="code-worker-analysis" aria-label="작업자 시나리오 분석을 로컬에서 실행 복사">복사</button></div><pre><code id="code-worker-analysis" data-command="worker-analysis">.agent/bin/python -I -B worker_analysis.py --workers worker-workers.csv --tasks worker-tasks.csv --costs worker-costs.csv --scenarios worker-scenarios.json --output worker-analysis-first --run-id worker-first</code></pre></div><p><a href="https://github.com/omelet-ai/optimization-context-protocol/blob/main/docs/users/WORKER_ANALYSIS.md">CSV 계약·분석 안내 보기</a>. 로컬 명령이며 브라우저의 실시간 솔버 호출이 아닙니다.</p></section></main>
+<footer class="site-footer"><div><a class="footer-brand" href="../index.html">OCP<span class="dot">●</span></a><p>최적화를 위한 공통 언어.</p></div><div><a href="../reference/index.html">프로토콜·호환성</a><a href="../project/index.html">공개 상태·접근 안내</a><div class="language-switch" role="group" aria-label="언어 선택"><a href="../../examples/index.html" lang="en" hreflang="en" data-language-link aria-label="Read this page in English">EN</a><a href="index.html" lang="ko" hreflang="ko" data-language-link aria-label="이 페이지를 한국어로 보기" aria-current="page">한국어</a></div></div><p class="footer-note">0.1 후보 · Omelet이 시작한 프로젝트<br>오픈소스 개발자 프리뷰 · Apache-2.0</p></footer>
+<p id="copy-status" class="sr-only" aria-live="polite"></p>
+</body>
+</html>
