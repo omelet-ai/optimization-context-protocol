@@ -232,3 +232,25 @@ dependency stores. It verifies selected-source installation and actual consumer
 execution; it does not imply a hosted GitHub run or regenerate H63 release
 acceptance. The public workflow runs this independent checker directly without
 H00 or any private snapshot. See [scope and reproduction](../docs/development/PUBLIC_CI.md).
+
+
+## H65: public onboarding and independent agent rehearsal
+
+H65 follows the current H64 public-source installation gate. README and the
+public site recommend the immutable native ZIP for a first run, share checksum
+and install/MCP commands, and distinguish its original acceptance from newer
+macOS/native Linux source CI. Ten minutes is an estimate after Python setup,
+not a measured human success rate. Optional Node commands are executed from the
+kit documentation so filename drift cannot hide behind manifest-based tests.
+
+Three fresh-context agents independently rehearse public ZIP usage, app/engine
+integration and MCP semantics with synthetic inputs. Their findings guide fixes
+and reproducible regressions; raw evidence remains private. These are agent
+simulations, not external-human or model-host acceptance. Existing Foundry is
+write-protected. Commit/push, Pages updates, replacement release assets, package
+registries and additional model trials remain separately scoped actions.
+
+H64's installed consumers also exercise the rehearsal fixes: documented Node
+archive names, actionable worker-cost validation, malformed MCP input rejection
+before client startup, and the shared contract's terminal job states in MCP
+discovery. H65 verifies the first-run documentation and local site artifact.

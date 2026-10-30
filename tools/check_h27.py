@@ -6,6 +6,7 @@ import random
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 R=Path(__file__).resolve().parents[1];sys.path.insert(0,str(R))
 from build_candidate import build
 from conformance import worker
@@ -73,6 +74,21 @@ class Workers(unittest.TestCase):
         import time
         from ocp_planning.worker import solve
         self.assertEqual(solve(self.p,time.monotonic()-1,time.monotonic),(None,False))
+    def test_16_eligibility_error_identifies_fix_without_executing(self):
+        for mode,field in [('missing_cost','costs'),('extra_cost','costs'),('unknown_worker','eligible_workers')]:
+            p=deepcopy(self.p)
+            if mode=='missing_cost':p['tasks'][0]['costs'].pop(p['tasks'][0]['eligible_workers'][0])
+            elif mode=='extra_cost':p['tasks'][0]['costs']['ghost']=1
+            else:p['tasks'][0]['eligible_workers'].append('ghost')
+            r=self.c.request(p)
+            with patch.object(self.a.profile,'solve',side_effect=AssertionError('invalid input reached solver')):
+                checked=self.a.validate(r);failed=self.a.execute(r)
+            self.assertFalse(checked['valid']);issue=checked['issues'][0]
+            self.assertEqual(issue['code'],'INVALID_ELIGIBILITY')
+            self.assertEqual(issue['path'],'/tasks/0/'+field)
+            self.assertNotEqual(issue['message'],'Request cannot be processed')
+            self.assertEqual(failed['kind'],'failure')
+            self.assertEqual(failed['error']['code'],issue['code'])
 if __name__=='__main__':
     r=unittest.TextTestRunner().run(unittest.defaultTestLoader.loadTestsFromTestCase(Workers));ok=r.wasSuccessful() and not r.skipped
     print(json.dumps({'artifact_sha256':WHEEL['sha256'],'status':'PASS' if ok else 'FAIL','tests_run':r.testsRun,'failures':len(r.failures),'errors':len(r.errors),'skipped':len(r.skipped),'scope':'Actual bounded worker solver, 30 differential cases and independent faults; no model'}));WORK.cleanup();sys.exit(0 if ok else 1)

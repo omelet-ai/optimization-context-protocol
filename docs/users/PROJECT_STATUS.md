@@ -12,7 +12,7 @@ an independently adopted industry standard.
 | Runtime examples | Routing, fixed-time worker assignment and deterministic inventory replenishment; bounded reference profiles |
 | Omelet trial | Separate invitation, environment and operating limits; no public self-service signup |
 | Compatibility | Preview contracts, explicit profile versions and artifact hashes; not a frozen stable API |
-| Verification | Automated local consumer and checker tests; each report names its actual scope |
+| Verification | Public-source CI checks macOS arm64 and native Linux x64 Python/Node consumers; exact ZIP acceptance and local rehearsals are separate |
 | Adoption | Agent rehearsals and SDK tests are not external developers independently integrating their own engines |
 
 The website displays precomputed synthetic routing, worker and inventory examples,
@@ -49,3 +49,14 @@ a developer prerelease delivered through [GitHub assets](https://github.com/omel
 local harness are separate evidence records. Actual external developer and
 internal business-owner acceptance remain pending; the blank forms do not imply
 that a participant has performed the tasks.
+
+For a first run, follow the README's native ZIP instructions (about 10 minutes
+after Python 3.12 is installed; an estimate, not a measured human success rate).
+The ZIP includes project, inspection, BYO worker and profile-extension examples.
+Its verified matrix is macOS arm64 Python/Node and emulated Linux amd64 Python/MCP.
+The [source CI](https://github.com/omelet-ai/optimization-context-protocol/actions/workflows/public-ci.yml)
+adds native Linux x64 Python/Node for the exact tested source commit. Source
+fixes and CI results do not update the existing ZIP. Windows CI checks only
+unsupported-platform errors and file preservation. Windows installation and
+native Linux arm64 are unverified. Use one artifact or source commit throughout
+an evaluation; disclose which it was when reporting a problem.

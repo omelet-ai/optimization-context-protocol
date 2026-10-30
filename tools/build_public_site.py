@@ -20,6 +20,8 @@ from build_site import ROOT, CONTRACTS, SCHEMAS, build as build_review, source
 
 REPO = "https://github.com/omelet-ai/optimization-context-protocol"
 ASSETS = ("site.css", "site.js", "mark.svg", "example.json", "basic-input.json")
+README_COMMANDS = ("readme-build", "readme-examples", "readme-mcp", "readme-native-build",
+                   "readme-native-mcp", "readme-native-verify", "readme-native-install")
 
 
 def document_commands(path, marker):
@@ -77,7 +79,7 @@ def build(output, base_url):
         module_spec.loader.exec_module(content)
         pages = content.public_pages(json.loads(source("site/commands.json").read_text()),
                                      json.loads((review / "assets/example.json").read_text()),
-                                     {**{key: readme_commands(key) for key in ("readme-build", "readme-examples", "readme-mcp", "readme-native-build", "readme-native-mcp")},
+                                     {**{key: readme_commands(key) for key in README_COMMANDS},
                                       "worker-analysis": document_commands("docs/users/WORKER_ANALYSIS.md", "worker-analysis")},
                                      comparison_table())
         template_text = source("site/templates/page.html").read_text().replace(

@@ -1,4 +1,4 @@
-# Native v1: local review quickstart
+# Native v1: developer preview quickstart
 
 Use this candidate when developing against Foundry Capability Contract v1 jobs.
 It is an **Apache-2.0 developer preview**. Download the native ZIP and checksum
@@ -12,10 +12,11 @@ file integrity, not the identity or trustworthiness of their source.
 ## Install and solve
 
 Use Python 3.12 on macOS or Linux. This installation needs no Node, Foundry
-checkout, account, API key or model. The current native bundle has been tested
-on macOS arm64 and Linux amd64 (Python 3.12, offline Docker on an arm64 host
-using amd64 emulation). Native Linux arm64 is unverified. Windows is not supported
-by this installer. Current stage evidence records the exact bundle and image.
+checkout, account, API key or model. The published `v0.1.1-preview.1` ZIP was tested
+on macOS arm64 and Linux amd64 (Python 3.12, offline Docker using amd64 emulation).
+Newer public source has a separate macOS arm64 and native Linux x64 Python/Node
+CI lane; inspect the run for the commit you build. Source CI does not retest the
+immutable ZIP. Native Linux arm64 is unverified. Windows installation is unsupported.
 
 Open a terminal **inside the generated native kit directory**, then run:
 
@@ -64,6 +65,16 @@ and rerun; invalid data is different from a valid problem with no feasible solut
 
 ## Connect MCP without running a model
 
+For your own MCP client, keep `job.jobId` and the idempotency key from
+`ocp_native_submit`'s `{job, replayed}` response. Poll `ocp_native_job` while
+`status` is `queued` or `running`; **all four terminal states** are `succeeded`,
+`infeasible`, `failed` and `cancelled`. Fetch `ocp_native_result` for the first
+two: its envelope is `{jobId, status, result}`. Read the inner `result.status`
+and proof before claiming feasibility or optimality. `failed` and `cancelled`
+have no mathematical result and return `JOB_FAILED` / `JOB_CANCELLED`; preserve
+the job and inspect the error instead of resubmitting automatically. The current
+source also exposes this guide as `jobLifecycle` in `ocp_native_context`.
+
 <!-- ocp:native-config -->
 ```sh
 .native/bin/python -I -B mcp_config.py
@@ -84,11 +95,13 @@ gateway or ocps1 environment profile.
 
 ## Optional Node app
 
-Only this section requires Node 22 or 24 and npm. From the same bundle directory:
+Only this section requires Node 24 and npm. Use a kit built with
+`--with-typescript`, or the published `v0.1.1-preview.1` ZIP, which includes these
+two archives. From the same bundle directory:
 
 <!-- ocp:native-node-install -->
 ```sh
-npm install --ignore-scripts --save-exact ./omelet-ocp-native-contracts-0.0.0-foundry.7547036d1bc9.tgz ./ocp-candidate-0.1.1-native.7547036d1bc9.tgz
+npm install --ignore-scripts --save-exact ./omelet-ocp-native-contracts-0.0.0-foundry.7547036d1bc9.review.1.tgz ./ocp-candidate-0.1.1-native.7547036d1bc9.review.1.tgz
 ```
 
 <!-- ocp:native-node-demo -->
@@ -135,14 +148,14 @@ compatibility does not guarantee equal optimization quality. Default installatio
 and the three-domain launcher retain their reference engines.
 
 
-## Independent project workflow (local candidate)
+## Independent project workflow
 
 A review kit containing `project.py` and `PROJECT_GUIDE.md` can create a new,
 self-contained project with its own installer and inputs. The same application
 runs three domains, swaps engines, records jobs and rechecks saved results without
-a solver. This additive workflow is a local candidate; it is not implied to be
-included in the earlier public native kit. See `PROJECT_GUIDE.md` in that review
-kit (source: `docs/users/NATIVE_PROJECT_WORKFLOW.md`). The local kit also includes
+a solver. The public `v0.1.1-preview.1` ZIP and current source-built kits include
+this additive example workflow. See `PROJECT_GUIDE.md` in your kit (source:
+`docs/users/NATIVE_PROJECT_WORKFLOW.md`). The kit also includes
 `INSPECTION_GUIDE.md` for CSV input, checked business reports and owner review of
 a six-task fixed-time inspection exercise. Human acceptance remains
 separate from its automated checks.

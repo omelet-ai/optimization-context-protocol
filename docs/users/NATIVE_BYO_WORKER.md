@@ -1,9 +1,10 @@
 # Bring a separate worker engine to the same native app
 
-Public source preview, built locally with `tools/build_native_candidate.py`.
+Public source preview, included in the `v0.1.1-preview.1` native ZIP or built
+locally with `tools/build_native_candidate.py`.
 These commands run after the native kit's `README.md`
 installation in a new Python 3.12 environment. No Node, account or model call is
-needed. This example wheel is bundled locally; it is not published to a registry.
+needed. This optional example wheel is bundled in the kit; it is not published to a registry.
 Do not use these commands against a shared Foundry checkout.
 
 The reference provider uses bounded branch-and-bound search. The separate

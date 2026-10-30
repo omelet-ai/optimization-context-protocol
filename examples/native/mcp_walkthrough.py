@@ -78,7 +78,14 @@ def main():
         parser.error('--worker-engine byo needs --domain worker-scheduling')
     if args.extension and args.worker_engine != 'reference': parser.error('Choose --extension or --worker-engine byo')
     if not args.extension and args.domain not in ['routing-basic', 'worker-scheduling', 'inventory-replenishment']: parser.error('Unknown built-in domain; supply --extension')
-    result = asyncio.run(run(args.domain, parse_json(args.input.read_text()), worker_engine=args.worker_engine, extension=args.extension, checker_factory=args.checker_factory))
+    try:
+        data = parse_json(args.input.read_text(encoding='utf-8'))
+    except (ValueError, OSError, UnicodeError):
+        print(json.dumps({'status': 'FAIL', 'code': 'INPUT_FILE_INVALID', 'domain': args.domain,
+            'message': 'Provide a readable UTF-8 JSON input object; duplicate keys and non-finite numbers are rejected.',
+            'execute_calls': 0, 'model_calls': 0, 'tool_calls': []}))
+        return 1
+    result = asyncio.run(run(args.domain, data, worker_engine=args.worker_engine, extension=args.extension, checker_factory=args.checker_factory))
     print(json.dumps(result, allow_nan=False))
     return result['status'] != 'PASS'
 

@@ -9,7 +9,7 @@ import unittest
 from urllib.parse import unquote, urljoin, urlsplit
 import xml.etree.ElementTree as ET
 
-from build_public_site import ASSETS, CONTRACTS, REPO, ROOT, SCHEMAS, canonical_base, readme_commands
+from build_public_site import ASSETS, CONTRACTS, REPO, ROOT, SCHEMAS, README_COMMANDS, canonical_base, readme_commands
 from check_h21 import Page
 
 
@@ -82,7 +82,7 @@ class PublicSite(unittest.TestCase):
         observed = {}
         for page in self.pages.values():
             observed.update(page.commands)
-        for marker in ("readme-build", "readme-examples", "readme-mcp", "readme-native-build", "readme-native-mcp"):
+        for marker in README_COMMANDS:
             self.assertEqual(observed[marker], readme_commands(marker))
         self.assertIn("--profile all", observed["readme-mcp"])
         worker = re.search(r'<!-- ocp:worker-analysis -->\s*```sh\n(.*?)\n```',
@@ -194,6 +194,29 @@ class PublicSite(unittest.TestCase):
                         'confirm a terminal job state', 'not mathematical optimality',
                         'not the full', 'no removal date is set'):
             self.assertIn(meaning, reference)
+
+    def test_13_download_first_journey_is_complete_and_shared(self):
+        local = self.html['start/local/index.html']
+        self.assertLess(local.index('id="download"'), local.index('id="core"'))
+        for marker in ('readme-native-verify', 'readme-native-install'):
+            self.assertEqual(self.pages['start/local/index.html'].commands[marker], readme_commands(marker))
+        command = self.pages['start/local/index.html'].commands['readme-native-install']
+        for executable in ('install.py', 'demo.py', 'mcp_config.py'):
+            self.assertIn(executable, command)
+        self.assertIn('stop if they differ', local)
+        self.assertIn('not a measured external-user success rate', local)
+        for path in ('start/index.html', 'ko/index.html'):
+            self.assertTrue(any(link.endswith('local/index.html#download') for link in self.pages[path].links))
+
+    def test_14_zip_and_source_verification_cannot_be_conflated(self):
+        body = self.html['project/index.html']
+        self.assertIn('delivery-scope', self.pages['project/index.html'].ids)
+        for phrase in ('v0.1.1-preview.1', 'Docker emulation', 'native Linux x64',
+                       'does not update or retest the immutable ZIP', 'Windows CI checks',
+                       'external-human adoption remain unverified'):
+            self.assertIn(phrase, body)
+        self.assertTrue(any(link.endswith('/actions/workflows/public-ci.yml') for link in self.pages['project/index.html'].links))
+        self.assertIn('기존 ZIP의 수정이나 재검증을 뜻하지 않습니다', self.html['ko/index.html'])
 
 
 if __name__ == "__main__":

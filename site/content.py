@@ -158,7 +158,7 @@ def planning_example(demo, key, title, description):
 def edition_notice(root, *, korean=False):
     if korean:
         return f'''<div class="notice" data-edition-status><strong>Core 0.1과 native v1 후보를 공개 소스로 제공합니다.</strong><p>Core 설치 경로와 native 프리릴리스 ZIP 또는 소스 빌드 경로를 선택하세요. 모두 Apache-2.0 개발자 프리뷰입니다. Native ZIP은 GitHub Releases에서 제공하며 PyPI/npm 패키지는 아직 게시하지 않았습니다. <a href="{root}/reference/index.html#core-native">두 경로의 차이와 공개 상태 →</a></p></div>'''
-    return f'''<div class="notice" data-edition-status><strong>Core 0.1 and the native v1 candidate are public source previews.</strong><p>Choose the Core quickstart, the native prerelease ZIP, or a native source build. All use Apache-2.0. The native ZIP is available on GitHub Releases; PyPI/npm releases are not offered. <a href="{root}/reference/index.html#core-native">Compare formats and availability →</a> · <a href="{root}/start/local/index.html#native">Build native v1 →</a></p></div>'''
+    return f'''<div class="notice" data-edition-status><strong>Core 0.1 and the native v1 candidate are public source previews.</strong><p>Start with the native prerelease ZIP; choose a Core or native source build for development. All use Apache-2.0. The native ZIP is available on GitHub Releases; PyPI/npm releases are not offered. <a href="{root}/reference/index.html#core-native">Compare formats and availability →</a> · <a href="{root}/start/local/index.html#native">Build native v1 →</a></p></div>'''
 
 
 def native_protocol(comparison):
@@ -198,7 +198,7 @@ def public_pages(commands, demo, command_blocks, comparison):
         rendered[path] = {"title": label, "description": description, "lang": lang,
                        "body": docs(path, label, title, description, body)}
 
-    intro = '''<p>OCP is an Apache-2.0 open-source developer preview. Start from the public source: no account, trial key or model call is required. Package registries and hosted trial enrollment are not open.</p>'''
+    intro = '''<p>OCP is an Apache-2.0 open-source developer preview. Start with the native ZIP, or choose a source build for development. No account, trial key or model call is required. Package registries and hosted trial enrollment are not open.</p>'''
     domains = domain_scope()
     source_link = f'<p><a class="button" href="{REPOSITORY}">View source on GitHub ↗</a></p>'
     rendered["index.html"].update(title="Your app. Your engine. Shared meaning.",
@@ -217,14 +217,14 @@ def public_pages(commands, demo, command_blocks, comparison):
 
     replace("start/index.html", "Get started", "Choose your<br><em>starting point.</em>",
             "Use a local solver, connect your own engine, or learn about a limited Omelet trial.",
-            intro + '<div class="notice"><strong>No invitation? Start now.</strong><p><a href="local/index.html">Run locally without an account or key</a>, then <a href="../guides/apps/index.html#mcp">connect your AI agent</a>. Omelet remains the recommended trial when you have an invitation.</p></div>' + routes("..") + '<h2>Start from public source</h2><p>Git and Python 3.12 are required. Python/MCP setup needs no Node or npm; Node 24/npm are optional for the TypeScript kit. Windows installation is not supported.</p><p><a href="local/index.html">Follow the complete source installation →</a></p>' + source_link)
+            intro + '<div class="notice"><strong>No invitation? Start now.</strong><p><a href="local/index.html">Run locally without an account or key</a>, then <a href="../guides/apps/index.html#mcp">connect your AI agent</a>. Omelet remains the recommended trial when you have an invitation.</p></div>' + routes("..") + '<h2>Start from public source</h2><p>Git and Python 3.12 are required. Python/MCP setup needs no Node or npm; Node 24/npm are optional for the TypeScript kit. Windows installation is not supported.</p><p><a href="local/index.html#core">Follow the complete source installation →</a></p>' + source_link)
 
     install = block("github-clone", "Clone the public source", f"git clone {REPOSITORY}.git\ncd optimization-context-protocol")
     install += block("readme-build", "Build, install, solve and independently check", command_blocks["readme-build"])
     examples = block("readme-examples", "Use the same app across three domains", command_blocks["readme-examples"])
     mcp = block("readme-mcp", "Inspect and configure the local MCP server", command_blocks["readme-mcp"])
     replace("start/local/index.html", "Run locally", "A real solver.<br><em>On your machine.</em>",
-            "Build from public GitHub source, then execute and independently check three problems.",
+            "Download the native preview, then execute and independently check three problems.",
             intro + '<h2>1. Prepare your machine</h2><p>Use Git and Python 3.12 on PATH; no Node/npm are needed for this path. Full local regression is on macOS Apple Silicon; a limited Linux x86_64 container path was checked. Native Linux and Windows are not fully verified. The installer rejects Windows.</p><h2>2. Build and install</h2><p>Run both blocks in the same terminal. Public PyPI dependencies are downloaded. The setup command runs two real routing engines and checks both results, plus deliberate invalid inputs and outputs.</p>' + install + '<p><code>start.py</code> and sample files are generated inside the kit. Keep the terminal there. For a lasting installation, replace <code>mktemp -d</code> with a new directory outside the checkout and retain it. To rerun without reinstalling, use <code>.agent/bin/python -B demo.py --diagnostics</code>.</p><h2>3. Solve three problems</h2>' + examples + '<p>Expected checked costs: 18 meter, 7 cost_unit and 16 cost_unit. Also inspect <code>solution_found</code> and <code>response.status</code>. PASS is a transcript check, not a guarantee of optimality.</p><p>Copy a sample before editing it and use a new request ID for changed input. ' + link("docs/users/MULTI_DOMAIN_QUICKSTART.md", "See changes with known answers and supported limits") + '.</p><h2>4. Connect an agent</h2><p><a href="../../guides/apps/index.html#mcp">Continue to MCP setup →</a></p><h2>Troubleshooting</h2><p>If a sample is missing, change to the generated kit directory. If <code>ENVIRONMENT_EXISTS</code> appears, reuse its Python rather than reinstalling. If a dependency download fails, check public registry access. ' + link("README.md", "The README includes recovery steps") + '.</p>')
 
     replace("guides/apps/index.html", "Connect your app and agent", "Your application.<br><em>Explicit context.</em>",
@@ -249,7 +249,7 @@ def public_pages(commands, demo, command_blocks, comparison):
 
     replace("ko/index.html", "한국어 소개", "최적화 엔진과 앱을,<br><em>같은 언어로.</em>",
             "OCP는 앱·AI 에이전트와 최적화 엔진 사이의 기능·요청·결과·검증을 명시하는 공통 인터페이스입니다.",
-            '<p>Apache-2.0으로 공개한 개발자 프리뷰입니다. 오믈렛 계정이나 키 없이 내 앱과 내 엔진에 활용할 수 있습니다. 현재 라우팅, 고정 시간 태스크의 워커 배정, 수요·리드타임 기반 재고 발주를 같은 앱과 MCP 도구로 다룹니다.</p><h2>세 가지 시작 경로</h2><p><a href="../start/local/index.html">Run locally</a>: 공개 GitHub 소스로 설치하고 실제 계산과 독립 검증까지 실행합니다. <a href="../start/engine/index.html">Bring your engine</a>: 내 솔버의 지원 범위를 선언하고 연결합니다. <a href="../start/omelet/index.html">Try Omelet</a>: 초대가 있을 때 권장하는 첫 체험입니다. 제한된 실제 엔진을 사용합니다. 상시 trial 가입은 아직 열지 않았습니다.</p><h2>왜 OCP인가?</h2><p>지원 기능을 먼저 확인하고, 미지원 제약을 거절하며, 시간 초과와 불가능 판정을 구분하고, 별도 checker로 결과를 검산합니다. MCP binding은 이 의미와 도구를 AI 호스트에 전달하는 선택적 연결 방식입니다.</p><h2>설치와 MCP</h2><p>Git과 Python 3.12로 설치하며 Python·MCP 경로에는 Node/npm이 필요하지 않습니다. 패키지 레지스트리 출시는 아직 하지 않았습니다. MCP doctor는 세 도메인의 컨텍스트를 조회하고, smoke는 실제 라우팅 계산과 검산을 수행합니다. 이 명령은 LLM을 호출하지 않습니다.</p><p><a class="button" href="../start/local/index.html">설치·실행 안내 →</a></p><h2>현재 프로파일의 범위</h2><p>라우팅은 방문 64개·차량 16대, 워커는 고정 시간 작업 8개·4명, 재고는 독립 상품 4개·6일이 상한입니다. 이 수치는 현재 0.1 프로파일의 계약이며 OCP Core 전체의 한도가 아닙니다. 개별 엔진은 더 좁은 범위를 지원할 수 있습니다.</p><h2>결과를 정확히 해석하세요</h2><p>실행 가능한 해를 최적해로, 시간 초과를 불가능 판정으로 바꾸지 않습니다. 지원하지 않는 목적·제약은 명시적으로 거부합니다. 웹 예제는 실제 계산을 저장한 설명용 화면이며 브라우저에서 솔버를 실행하지 않습니다.</p><p><a href="../examples/index.html">예제 보기</a> · <a href="../guides/apps/index.html#mcp">MCP 연결</a> · <a href="../project/index.html">검증 범위와 기여 안내</a></p>' + source_link, "ko")
+            '<p>Apache-2.0으로 공개한 개발자 프리뷰입니다. 오믈렛 계정이나 키 없이 내 앱과 내 엔진에 활용할 수 있습니다. 현재 라우팅, 고정 시간 태스크의 워커 배정, 수요·리드타임 기반 재고 발주를 같은 앱과 MCP 도구로 다룹니다.</p><h2>세 가지 시작 경로</h2><p><a href="../start/local/index.html">Run locally</a>: 프리릴리스 ZIP 또는 공개 GitHub 소스로 설치하고 실제 계산과 독립 검증까지 실행합니다. <a href="../start/engine/index.html">Bring your engine</a>: 내 솔버의 지원 범위를 선언하고 연결합니다. <a href="../start/omelet/index.html">Try Omelet</a>: 초대가 있을 때 권장하는 첫 체험입니다. 제한된 실제 엔진을 사용합니다. 상시 trial 가입은 아직 열지 않았습니다.</p><h2>왜 OCP인가?</h2><p>지원 기능을 먼저 확인하고, 미지원 제약을 거절하며, 시간 초과와 불가능 판정을 구분하고, 별도 checker로 결과를 검산합니다. MCP binding은 이 의미와 도구를 AI 호스트에 전달하는 선택적 연결 방식입니다.</p><h2>설치와 MCP</h2><p>Git과 Python 3.12로 설치하며 Python·MCP 경로에는 Node/npm이 필요하지 않습니다. 패키지 레지스트리 출시는 아직 하지 않았습니다. native ZIP에서는 <code>mcp_config.py</code>로 설정을 만들고 <code>mcp_walkthrough.py</code>로 실제 도구 호출을 확인합니다. 별도 Core 경로의 MCP doctor는 세 도메인의 컨텍스트를 조회하고, smoke는 실제 라우팅 계산과 검산을 수행합니다. 이 명령은 LLM을 호출하지 않습니다.</p><p><a class="button" href="../start/local/index.html">설치·실행 안내 →</a></p><h2>현재 프로파일의 범위</h2><p>라우팅은 방문 64개·차량 16대, 워커는 고정 시간 작업 8개·4명, 재고는 독립 상품 4개·6일이 상한입니다. 이 수치는 현재 0.1 프로파일의 계약이며 OCP Core 전체의 한도가 아닙니다. 개별 엔진은 더 좁은 범위를 지원할 수 있습니다.</p><h2>결과를 정확히 해석하세요</h2><p>실행 가능한 해를 최적해로, 시간 초과를 불가능 판정으로 바꾸지 않습니다. 지원하지 않는 목적·제약은 명시적으로 거부합니다. 웹 예제는 실제 계산을 저장한 설명용 화면이며 브라우저에서 솔버를 실행하지 않습니다.</p><p><a href="../examples/index.html">예제 보기</a> · <a href="../guides/apps/index.html#mcp">MCP 연결</a> · <a href="../project/index.html">검증 범위와 기여 안내</a></p>' + source_link, "ko")
     rendered['examples/index.html']['body'] += '<section class="wrap section"><h2>From CSV to a checked worker assignment</h2><p>Use a separate CSV dataset to compare baseline, changed assignment cost and changed availability. Expected synthetic outcomes are costs 12 and 14, followed by a proven infeasible scenario with no cost. The command writes assignment tables and exact transcripts.</p>' + block('worker-analysis', 'Run the worker scenario analysis locally', command_blocks['worker-analysis']) + '<p>' + link('docs/users/WORKER_ANALYSIS.md', 'Read the CSV contract and analysis walkthrough') + '. These are local commands, not live browser solver calls.</p></section>'
     verification = '<h2>Show exactly what was verified</h2><p>Read the <code>verification</code> report beside the legacy measurement. Feasibility, cost recomputation, optimality and infeasibility have separate statuses. PARTIAL or INCOMPLETE never establishes an untested proof claim. Offline checking cannot attest engine execution.</p><p>' + link('docs/users/VERIFICATION_SCOPE.md', 'Verification dimensions, limits and independent CLI') + '.</p>'
     rendered['guides/apps/index.html']['body'] = rendered['guides/apps/index.html']['body'].replace('</article></div>', verification + '</article></div>')
@@ -283,4 +283,74 @@ def public_pages(commands, demo, command_blocks, comparison):
     for path, addition in additions.items():
         rendered[path]['body'] = rendered[path]['body'].replace('</article></div>', addition + '</article></div>')
     rendered['project/index.html']['body'] = rendered['project/index.html']['body'].replace('<h2>Why use OCP?</h2>', '<h2>What is public?</h2><p>Core 0.1, the native v1 source candidate and this documentation are public under Apache-2.0. The native source includes the selected shared contracts and portable build tools. Use the <a href="https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1">native prerelease ZIP</a> or build a local kit using the native quickstart. Existing Core imports remain supported. Package registries and public self-service trial signup are not open.</p><p><a href="../reference/index.html#core-native">Compare the two contracts and their availability →</a></p><h2>Why use OCP?</h2>', 1)
+    # One recommended first run, using the README's exact commands. The release
+    # artifact and moving source branch retain separate verification scopes.
+    quickstart = (
+        '<section id="download"><h2>Start here: native preview in about 10 minutes</h2>'
+        '<p>Download <code>ocp-native-v0.1.1-preview.1.zip</code> and <code>SHA256SUMS</code> from '
+        '<a href="https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1">'
+        'the v0.1.1-preview.1 prerelease</a> into one folder. Python 3.12 on macOS or Linux is required; '
+        'check <code>python3.12 --version</code> first. No Git, Node, source build, key or model call is needed '
+        'for Python/MCP. Dependencies download from public PyPI. Ten minutes is an estimate after Python '
+        'is installed, not a measured external-user success rate.</p><h3>1. Verify your download</h3>'
+        + block('readme-native-verify', 'Calculate the native ZIP checksum', command_blocks['readme-native-verify'])
+        + '<p>Compare with the native ZIP line in SHA256SUMS; stop if they differ. On Linux, '
+        '<code>sha256sum</code> is also available. Checksums detect changed bytes, not publisher identity.</p>'
+        '<h3>2. Install, calculate and print MCP configuration</h3><p>Use a new extraction folder.</p>'
+        + block('readme-native-install', 'Install and run the native preview', command_blocks['readme-native-install'])
+        + '<p>Expect PASS, three actual jobs, zero model calls, and independently checked costs: routing '
+        '18 meters, worker 7 cost units, inventory 16 cost units. The routing result is feasible; the small '
+        'planning examples have checked optimality proofs. Add the printed configuration to the MCP host '
+        'on this same machine and reload it; configuration generation does not establish LLM acceptance.</p>'
+        '<h3>3. Apply your own problem</h3><p>Stay in the kit. Read <code>WORKED_EXAMPLES.md</code> for input '
+        'changes, <code>PROJECT_GUIDE.md</code> for an independent app, <code>BYO_WORKER.md</code> for engine '
+        'replacement or <code>PROFILE_EXTENSION.md</code> for another problem. Reuse an existing '
+        '<code>.native</code> environment; after moving the kit, reinstall into a new environment and '
+        'regenerate configuration.</p><p>Optional Node correction for the first ZIP: its bundled README '
+        'omits <code>.review.1</code> in the archive names. Use the '
+        + link('docs/users/NATIVE_LOCAL_CANDIDATE.md#optional-node', 'corrected Node installation command')
+        + '. Python/MCP are unaffected.</p><p><a href="../../project/index.html#delivery-scope">'
+        'Release and source support boundaries →</a></p></section>'
+    )
+    local = rendered['start/local/index.html']['body']
+    local = local.replace('<h2>1. Prepare your machine</h2>', quickstart + '<h2 id="core">Core 0.1 from source</h2><h3>1. Prepare your machine</h3>', 1)
+    local = local.replace('Full local regression is on macOS Apple Silicon; a limited Linux x86_64 container path was checked. Native Linux and Windows are not fully verified.',
+                          'Public-source CI runs Python/Node on macOS arm64 and native Linux x64 for the exact checked commit. Windows installation and native Linux arm64 remain unverified.')
+    local = local.replace('Verified on macOS arm64 and in a network-disabled Linux amd64 Python 3.12 container under Docker on an arm64 host.',
+                          'Source CI checks macOS arm64 and native Linux x64 with Python/Node; offline Linux emulation is a separate rehearsal. This does not extend the immutable ZIP acceptance.')
+    rendered['start/local/index.html']['body'] = local
+    scope = (
+        '<section id="delivery-scope" data-delivery-scope><h2>Choose a version and check its scope</h2>'
+        '<div class="table-scroll"><table><caption>Published ZIP and source CI are separate deliveries</caption>'
+        '<thead><tr><th>Starting point</th><th>Use</th><th>Verified scope</th></tr></thead><tbody>'
+        '<tr><th scope="row">v0.1.1-preview.1 native ZIP</th><td>Recommended first run; three domains, MCP, '
+        'project, inspection, optional BYO/profile examples</td><td>macOS arm64 Python/Node; Linux amd64 '
+        'Python/MCP under Docker emulation</td></tr><tr><th scope="row">Source checkout: pin a commit</th>'
+        '<td>Develop OCP or take newer fixes</td><td>Public CI: macOS arm64 and native Linux x64, Python 3.12 '
+        'and Node 24; inspect the run for your commit</td></tr></tbody></table></div>'
+        '<p>A passing source CI run does not update or retest the immutable ZIP. Follow the docs bundled '
+        'with your ZIP or from your source commit. Report that version with a bug. Windows CI checks '
+        'unsupported-platform diagnostics only. Windows installation, native Linux arm64 and external-human '
+        'adoption remain unverified.</p><p><a href="https://github.com/omelet-ai/optimization-context-protocol/actions/workflows/public-ci.yml">'
+        'Inspect public CI runs</a> · <a href="../start/local/index.html#download">Start the native ZIP walkthrough</a>'
+        '</p></section>'
+    )
+    rendered['project/index.html']['body'] = rendered['project/index.html']['body'].replace('</article></div>', scope + '</article></div>')
+    rendered['start/index.html']['body'] = rendered['start/index.html']['body'].replace(
+        '<h2>Start from public source</h2>',
+        '<h2>Recommended: native ZIP</h2><p><a href="local/index.html#download">Follow the 10-minute native ZIP walkthrough</a>. '
+        'It needs Python 3.12 and public PyPI access, with no Git, Node or source build. '
+        'Ten minutes is a planning estimate after Python installation.</p><h2>Develop from public source</h2>')
+    rendered['ko/index.html']['body'] = rendered['ko/index.html']['body'].replace(
+        '<h2>설치와 MCP</h2><p>Git과 Python 3.12로 설치하며',
+        '<h2>설치와 MCP</h2><p>첫 사용에는 v0.1.1-preview.1 native ZIP을 권장합니다. Python 3.12 설치 후 약 10분을 예상하되 사람 시험으로 측정한 수치는 아닙니다. '
+        'ZIP 경로에는 Git·소스 빌드가 필요하지 않습니다. 소스 개발 경로는 Git과 Python 3.12로 설치하며')
+    rendered['ko/index.html']['body'] += (
+        '<section class="wrap section"><h2>다운로드 버전과 최신 소스를 구분하세요</h2>'
+        '<p>기존 ZIP은 macOS arm64 Python/Node와 Docker에서 실행한 Linux amd64 Python/MCP로 검증했습니다. '
+        '최신 소스 CI는 macOS arm64·native Linux x64에서 Python/Node를 검사하며 해당 커밋의 실행 결과를 확인해야 합니다. '
+        '소스 CI 통과가 기존 ZIP의 수정이나 재검증을 뜻하지 않습니다. Windows 설치와 Linux arm64는 검증하지 않았고, '
+        'Windows CI는 미지원 안내만 확인합니다. 실제 외부 사람의 수락도 별도입니다.</p>'
+        '<p><a href="../start/local/index.html#download">설치·실제 계산·MCP 안내</a> · '
+        '<a href="../project/index.html#delivery-scope">버전별 지원 범위</a></p></section>')
     return rendered

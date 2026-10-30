@@ -1,9 +1,11 @@
 # Add your own problem without changing the SDK or server
 
-This local extension candidate adds an opt-in Python registration API, version
+This developer preview adds an opt-in Python registration API, version
 `0.1.0`, alongside the unchanged Core 0.1 and native v1 wire contracts. It is not
-a new mandatory standard or a change to existing Foundry projects. Current source
-publication approvals do not publish these new example packages or kit changes.
+a new mandatory standard or a change to existing Foundry projects. Example
+source is public; its three optional wheels are included in the published
+`v0.1.1-preview.1` native ZIP and current source-built native kits. No registry
+packages are published. Install the supplied wheels explicitly to enable them.
 
 The example maximizes benefit from a subset of items within a budget. The profile
 package owns schemas and meanings; the engine uses dynamic programming; a third
@@ -96,13 +98,13 @@ execution remain separate approvals.
 
 ## Compatibility and local build
 
-The extension/checker APIs are additive local candidates. Existing default
+The extension/checker APIs are additive preview interfaces. Existing default
 registrations, six-tool Core MCP and eight-tool native MCP behavior remain in
 the regression lane. Core envelopes and native wire v1 are unchanged; no new
 field is mandatory. The verification report format remains 0.1.0, with the
-actual selected checker's identity and objective semantics. New example packages
-require this local SDK/checker build; an older published installation does not
-implicitly gain these APIs. A later release needs an explicit package version
+actual selected checker's identity and objective semantics. Use the matching
+SDK/checker and example wheels from `v0.1.1-preview.1` or one source-built kit;
+unrelated older installations do not implicitly gain these APIs. A later release needs an explicit package version
 and publication review. Do not replace installed packages silently.
 
 From the source workspace, `tools/build_budget_example.py` builds the three

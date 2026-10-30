@@ -62,7 +62,9 @@ that does not fabricate H00's private migration evidence or historical gates.
 
 The intended preview support is Python 3.12/macOS arm64 and the tested Linux
 amd64 container environment; Node 24/macOS is optional. Windows, native Linux
-arm64 and Linux Node are outside the verified matrix. Compatibility is preview
+arm64 and Linux Node are outside this immutable ZIP's verified matrix. Newer
+source commits have a separate native Linux x64 Python/Node CI lane; this does
+not extend the published ZIP's acceptance or change its bytes. Compatibility is preview
 quality; pin the artifact hash and declared profile. No production SLA or stable
 API guarantee is made. Use GitHub Issues for non-sensitive bugs and the existing
 security reporting guide for vulnerabilities.

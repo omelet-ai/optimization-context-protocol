@@ -300,6 +300,21 @@ print(json.dumps(app.report(Path('runs/inspection-baseline'),Path('reviews/impor
         result=self.scenario('overlap-new',data)
         self.assertEqual(result['solution_status'],'infeasible');self.assertIsNone(result['objective_value'])
 
+    def test_22_bad_mcp_input_never_starts_a_client(self):
+        app=module('mcp_walkthrough'); folder=self.temp()
+        for name,raw in [('malformed',b'{'),('duplicate',b'{"x":1,"x":2}'),
+                         ('nonfinite',b'{"x":NaN}'),('encoding',b'\xff'),('missing',None)]:
+            path=folder/(name+'.json')
+            if raw is not None:path.write_bytes(raw)
+            output=io.StringIO()
+            with patch.object(sys,'argv',['mcp_walkthrough.py','--domain','worker-scheduling','--input',str(path)]), \
+                 patch.object(app,'Client',side_effect=AssertionError('Unexpected MCP process')), \
+                 patch.object(app,'run',side_effect=AssertionError('Unexpected workflow')), contextlib.redirect_stdout(output):
+                self.assertEqual(app.main(),1)
+            result=json.loads(output.getvalue())
+            self.assertEqual(result['code'],'INPUT_FILE_INVALID');self.assertEqual(result['execute_calls'],0)
+            self.assertEqual(result['tool_calls'],[]);self.assertEqual(result['model_calls'],0)
+
     def test_21_mcp_lease_failure_and_cancellation_preserve_job_without_result_or_retry(self):
         from datetime import datetime, timedelta, UTC
         from foundry_capability_contract import MemoryJobStore

@@ -19,9 +19,14 @@ def validate_problem(p):
         for a in sorted(w['availability'],key=lambda a:a['start']):
             if a['start']>=a['end'] or a['start']<previous:raise OCPError('INVALID_AVAILABILITY')
             previous=a['end']
-    for t in tasks:
+    for index,t in enumerate(tasks):
         if t['start']>=t['end']:raise OCPError('INVALID_INTERVAL')
-        if not set(t['eligible_workers'])<=ids or set(t['costs'])!=set(t['eligible_workers']):raise OCPError('INVALID_ELIGIBILITY')
+        if not set(t['eligible_workers'])<=ids:
+            raise OCPError('INVALID_ELIGIBILITY',f'/tasks/{index}/eligible_workers',
+                           'Eligible workers must reference IDs declared in workers')
+        if set(t['costs'])!=set(t['eligible_workers']):
+            raise OCPError('INVALID_ELIGIBILITY',f'/tasks/{index}/costs',
+                           'Provide exactly one cost for every eligible worker and no other worker')
 
 def evaluate(p,s):
     workers={w['id']:w for w in p['workers']};tasks={t['id']:t for t in p['tasks']}

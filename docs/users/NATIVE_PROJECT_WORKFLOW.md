@@ -1,14 +1,15 @@
 # Start an independent optimization project
 
-This local candidate turns the native review kit into a separate project.
+This developer preview turns the native kit into a separate project.
 Omelet engineers and external developers use the same installed contracts, SDK,
 server and checker. The project does not copy or modify a Foundry checkout.
 `project.py` is an example application you may replace, not a new protocol layer.
 Its `ocp-project/1` files are application settings, not a universal OCP contract.
 
-Build the current public source with `tools/build_native_candidate.py` to obtain
-the project workflow and optional example wheels. Older native kits lack these files.
-Use the resulting kit containing `project.py` and this guide. Python 3.12 is required;
+The published `v0.1.1-preview.1` native ZIP includes this workflow and optional
+example wheels. Extract it, or build public source with
+`tools/build_native_candidate.py`. Use the kit containing `project.py` and this
+guide; rebuilding source is unnecessary if you already have it. Python 3.12 is required;
 Node, Git, a Foundry checkout, accounts and model API keys are not needed at runtime.
 The harness tests fresh macOS arm64 and offline Linux amd64 under emulation.
 No Windows or native Linux arm64 support is claimed.

@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -83,6 +84,15 @@ def check(kit, wheelhouses, output, node=None, npm=None):
     config = json.loads(run('mcp_config', [python, '-I', '-B', 'mcp_config.py']))
     assert config['mcpServers']['ocp-native-local']['command'] == str(python)
     tests += 1; results.append('mcp_config')
+    for label, payload in [('malformed', b'{'), ('duplicate', b'{"x":1,"x":2}'),
+                           ('nonfinite', b'{"x":NaN}'), ('nonutf8', b'\xff')]:
+        path = bundle / ('invalid-' + label + '.json'); path.write_bytes(payload)
+        result = json.loads(run('mcp-input-' + label, [python, '-I', '-B', 'mcp_walkthrough.py',
+            '--domain', 'worker-scheduling', '--input', path], expected=1))
+        assert result['code'] == 'INPUT_FILE_INVALID' and result['execute_calls'] == 0
+        assert result['tool_calls'] == [] and result['model_calls'] == 0
+        tests += 1
+    results.append('mcp-input-errors')
     authored = json.loads(run('authoring', [python, '-I', '-B', 'native_server_template.py', 'worker-input.json']))
     assert authored['response']['metrics'][0]['value'] == 7
     tests += 1; results.append('authoring')
@@ -117,7 +127,15 @@ print(json.dumps({'checks':count}))
                 environment_node[{'OCP_NPM_CACHE': 'npm_config_cache', 'OCP_NPM_OFFLINE': 'npm_config_offline'}[key]] = os.environ[key]
         archives = json.loads((bundle / 'manifest.json').read_text())['node_archives']
         assert len(archives) == 2
-        run('node-install', [npm, 'install', '--ignore-scripts', '--save-exact', *[bundle / n for n in archives]], env=environment_node)
+        # Execute the user's copied command, not a manifest-derived substitute
+        # that could conceal stale filenames in the installation guide.
+        blocks = re.findall(r'<!-- ocp:native-node-install -->\s*```sh\n(.*?)\n```',
+                            (bundle / 'README.md').read_text(), re.S)
+        assert len(blocks) == 1 and '\n' not in blocks[0]
+        install_command = shlex.split(blocks[0])
+        assert install_command[:4] == ['npm', 'install', '--ignore-scripts', '--save-exact']
+        assert install_command[4:] == ['./' + name for name in archives], 'DOCUMENTED_NODE_ARCHIVES_MISMATCH'
+        run('node-install', [npm, *install_command[1:]], env=environment_node)
         for name in ['binding-contract.test.mjs', 'public-live.test.mjs']:
             shutil.copy2(ROOT / 'tools/native_tests' / name, bundle / name)
         upstream = (ROOT / 'tools/native_tests/upstream.test.ts').read_text()

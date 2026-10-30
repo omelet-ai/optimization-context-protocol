@@ -419,3 +419,26 @@ actions. Configure native Linux/Node as a target; claim support only after the
 actual lane passes. Windows remains unsupported. Existing Foundry repositories
 are never modified; no model calls or human acceptance are inferred. See
 [Public CI](docs/development/PUBLIC_CI.md).
+
+
+## H65: public onboarding and independent agent rehearsal
+
+H65 follows the current H64 public-source installation gate. README and the
+public site recommend the immutable native ZIP for a first run, share checksum
+and install/MCP commands, and distinguish its original acceptance from newer
+macOS/native Linux source CI. Ten minutes is an estimate after Python setup,
+not a measured human success rate. Optional Node commands are executed from the
+kit documentation so filename drift cannot hide behind manifest-based tests.
+
+Three fresh-context agents independently rehearse public ZIP usage, app/engine
+integration and MCP semantics with synthetic inputs. Their findings guide fixes
+and reproducible regressions; raw evidence remains private. These are agent
+simulations, not external-human or model-host acceptance. Existing Foundry is
+write-protected. Commit/push, Pages updates, replacement release assets, package
+registries and additional model trials remain separately scoped actions.
+
+Rehearsal regressions cover missing worker costs with actionable field paths,
+malformed/duplicate/non-finite MCP input rejected before any client starts, and
+MCP job states/response shapes derived from the shared native contract. The
+immutable published ZIP remains unchanged; its Node filename correction is
+documented in the current README/guide and exercised in newly built kits.

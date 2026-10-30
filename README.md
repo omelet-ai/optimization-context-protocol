@@ -16,16 +16,30 @@ or evidence of unaided external adoption.
 
 See [project status and verification boundaries](docs/users/PROJECT_STATUS.md)
 and the [first immutable preview plan](docs/development/PREVIEW_RELEASE.md).
-## Download and run the native preview
+## Start here: native preview in about 10 minutes
 
 Start with the [v0.1.1-preview.1 prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1). Download
-`ocp-native-v0.1.1-preview.1.zip` and `SHA256SUMS`, compare the ZIP's SHA-256,
-and extract into a new folder. Python 3.12 on macOS or Linux is required.
+`ocp-native-v0.1.1-preview.1.zip` and `SHA256SUMS` into the same folder.
+Use Python 3.12 on macOS or Linux; check `python3.12 --version` first. If that
+command is missing, install Python 3.12 or use your interpreter's absolute path.
 Git, Node, a source build, an Omelet key and model calls are unnecessary for
-this Python/MCP path. Dependencies are installed from public PyPI.
+this Python/MCP path. Dependencies are installed from public PyPI. Allow about
+10 minutes after Python is installed; this is a planning estimate, not a measured
+external-user success rate.
 
+In a terminal in your download folder, calculate the native ZIP's checksum:
+
+<!-- ocp:readme-native-verify -->
 ```sh
 shasum -a 256 ocp-native-v0.1.1-preview.1.zip
+```
+
+Compare it with the **native ZIP line** in `SHA256SUMS`. Stop if they differ.
+On Linux, `sha256sum` is also available. Checksums detect changed bytes; they are
+not signatures. Then extract into a **new** folder and run:
+
+<!-- ocp:readme-native-install -->
+```sh
 unzip ocp-native-v0.1.1-preview.1.zip -d ocp-native-preview
 cd ocp-native-preview
 python3.12 -B install.py
@@ -33,13 +47,38 @@ python3.12 -B install.py
 .native/bin/python -I -B mcp_config.py
 ```
 
-Compare the first command's output with the native ZIP line in `SHA256SUMS`
-before continuing. On Linux, `sha256sum` is also available. Checksums detect
-changed bytes; they are not signatures. Read `START_HERE.md` inside the ZIP for
-MCP, your own inputs, engine replacement and the blank independent review form.
-The demo's checked costs are routing 18, worker 7 and inventory 16; units and
-mathematical status are reported separately. See the source-build path below
-if you want to develop OCP itself.
+Expect `status: "PASS"`, three real jobs, `model_calls: 0`, and independently
+checked costs **routing 18 meters, worker 7 cost units, inventory 16 cost units**.
+The routing result is feasible; the two small planning examples have checked
+optimality proofs. MCP configuration prints absolute paths; add it to the host
+on this same machine and reload its configuration. Printing configuration does
+not call a model or prove that a particular LLM can use the tools correctly.
+
+Stay in the extracted kit and follow `START_HERE.md`. Next, use `WORKED_EXAMPLES.md`
+for changed inputs, `PROJECT_GUIDE.md` for your own app, `BYO_WORKER.md` for engine
+replacement, or `PROFILE_EXTENSION.md` for a new problem profile. If `.native`
+already exists, reuse its Python; do not rerun the installer over it. Moving the
+kit requires a fresh environment and regenerated MCP configuration.
+
+## Choose a version and check its scope
+
+| Starting point | Use it for | Verified scope |
+| --- | --- | --- |
+| **Recommended download: `v0.1.1-preview.1` native ZIP** | First run, three-domain examples, MCP, independent project and optional BYO/profile examples | Exact published artifact: macOS arm64 Python/Node; Linux amd64 Python/MCP in Docker emulation |
+| **Source checkout: pin a commit** | Developing OCP or taking newer fixes; Core 0.1 or native v1 | [Public CI](https://github.com/omelet-ai/optimization-context-protocol/actions/workflows/public-ci.yml) tests macOS arm64 and native Linux x64 with Python 3.12 and Node 24; inspect the run for your commit |
+
+The immutable ZIP and moving `main` are separate deliveries. A successful source
+CI run does **not** update or retest the published ZIP. Use the docs bundled with
+your ZIP, or docs from your exact source commit, and report that version with a bug.
+Windows installation and native Linux arm64 remain unsupported or unverified.
+Windows CI checks unsupported-platform diagnostics only. There is no PyPI/npm
+release, public hosted solver or open Omelet trial signup. The website explains
+saved examples; real calculations run in your local installation.
+
+**Optional Node documentation correction:** the first ZIP's bundled README shows
+archive names without the `.review.1` suffix. Use the exact two filenames in the
+[corrected Node command](docs/users/NATIVE_LOCAL_CANDIDATE.md#optional-node).
+This does not affect the Python/MCP starting path or replace the published ZIP.
 
 ## Core 0.1 and native v1
 
@@ -141,9 +180,12 @@ The kit now includes `project.py`, `inspection.py` and optional BYO/profile exam
 wheels. See [independent projects](docs/users/NATIVE_PROJECT_WORKFLOW.md) for the
 same app across domains. These are local builds from public source, not registry releases.
 
-Validation covers macOS arm64 and Linux amd64 in a network-disabled Python 3.12
-container under Docker on an arm64 host. Windows and native Linux arm64 are not
-verified. Automated checks do not establish external-human or model-host acceptance.
+Public-source CI checks fresh Python/Node installations, actual three-domain
+jobs/MCP, independent checking and inspection scenarios on macOS arm64 and native
+Linux x64. Offline Linux emulation is a separate rehearsal. Check the exact commit's
+CI result; this source coverage does not expand the immutable ZIP's tested scope.
+Windows installation and native Linux arm64 are not verified. Automated checks
+do not establish external-human or model-host acceptance.
 
 ## Why add OCP to a solver?
 

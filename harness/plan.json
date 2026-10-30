@@ -3777,6 +3777,47 @@
           "min_tests": 200
         }
       ]
+    },
+    {
+      "id": "H65",
+      "title": "Public onboarding, delivery scopes and engineer-rehearsal regressions",
+      "tasks": [
+        "OSS-10",
+        "OSS-11",
+        "OSS-12"
+      ],
+      "depends_on": [
+        "H64"
+      ],
+      "mode": "local",
+      "inputs": [
+        "README.md",
+        "docs/users/",
+        "site/",
+        "tools/build_public_site.py",
+        "tools/check_public_site.py",
+        "tools/check_h33.py",
+        "tools/check_native_candidate.py"
+      ],
+      "acceptance": "README/site first-run parity, distinct immutable ZIP and source CI scopes, documented installation commands; agent simulation does not establish human adoption or new publication",
+      "checks": [
+        {
+          "id": "public-onboarding-and-artifact",
+          "argv": [
+            "{python}",
+            "-B",
+            "tools/check_h33.py"
+          ],
+          "timeout_seconds": 600,
+          "expect": {
+            "status": "PASS",
+            "errors": 0,
+            "failures": 0,
+            "skipped": 0
+          },
+          "min_tests": 21
+        }
+      ]
     }
   ]
 }

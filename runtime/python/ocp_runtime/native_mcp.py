@@ -6,6 +6,7 @@ import json
 from mcp.server import MCPServer
 from mcp.types import CallToolResult, TextContent, ToolAnnotations
 from ocp_candidate.native import NativeError
+from foundry_capability_contract import JobStatus, TERMINAL
 
 
 def create_native_mcp(clients, *, tenant='local-engineer'):
@@ -14,7 +15,9 @@ def create_native_mcp(clients, *, tenant='local-engineer'):
         'Start with ocp_native_context. Choose an exact domain and use advertised schemas/templates when present. '
         'If the catalog does not provide enough input information, request domain documentation; never guess its payload. '
         'Ask for missing data; do not invent units or constraints. Validate before submitting. '
-        'Submit returns a real queued job, not a solved result. Poll job then fetch result. '
+        'Submit returns {job, replayed}; retain job.jobId. Poll job.status while queued or running. '
+        'Terminal states are succeeded, infeasible, failed, cancelled. Fetch result for succeeded or infeasible; '
+        'failed and cancelled have no mathematical result. Result returns {jobId, status, result}. '
         'A succeeded job does not prove optimality. Read the domain result and proof. '
         'Call evaluate only when result.solution is not null; it cannot verify infeasibility or optimality proofs. '
         'Keep the same idempotency key after uncertainty; never automatically submit a new job. '
@@ -37,7 +40,17 @@ def create_native_mcp(clients, *, tenant='local-engineer'):
     @server.tool(annotations=readonly)
     def ocp_native_context(domain: str | None = None) -> CallToolResult:
         """Read available domains or exact catalog, schemas, template and limits; does not solve."""
-        return respond(lambda: {'availableDomains':list(clients), 'catalog':select(domain).capabilities() if domain else None})
+        return respond(lambda: {'availableDomains':list(clients), 'catalog':select(domain).capabilities() if domain else None,
+            'jobLifecycle': {
+                'activeStates': [s.value for s in JobStatus if s not in TERMINAL],
+                'terminalStates': [s.value for s in JobStatus if s in TERMINAL],
+                'resultStates': [JobStatus.SUCCEEDED.value, JobStatus.INFEASIBLE.value],
+                'submitShape': {'job': {'jobId': 'string', 'status': 'JobStatus'}, 'replayed': 'boolean'},
+                'resultShape': {'jobId': 'string', 'status': 'succeeded | infeasible', 'result': 'domain result'},
+                'failureRule': 'failed and cancelled have no mathematical result; result returns JOB_FAILED or JOB_CANCELLED. '
+                    'Keep the job ID and key, inspect the error, and do not resubmit automatically.',
+                'interpretation': 'succeeded can contain a feasible, optimal or unknown domain result. Read result.status and proof; '
+                    'infeasible requires its domain evidence. Timeout is not proof of infeasibility.'}})
 
     @server.tool(annotations=readonly)
     def ocp_native_requirements(domain: str, selection: dict) -> CallToolResult:
@@ -52,17 +65,23 @@ def create_native_mcp(clients, *, tenant='local-engineer'):
 
     @server.tool(annotations=mutation)
     def ocp_native_submit(domain: str, problem: dict, idempotency_key: str) -> CallToolResult:
-        """Spend compute for an explicitly requested solve. Return job; retain its ID and key."""
+        """Spend compute for an explicitly requested solve. Return {job, replayed}; retain job.jobId and the key."""
         return respond(lambda: select(domain).submit(problem, tenant=tenant, idempotency_key=idempotency_key))
 
     @server.tool(annotations=readonly)
     def ocp_native_job(domain: str, job_id: str) -> CallToolResult:
-        """Read asynchronous job state. succeeded is not a claim of mathematical optimality."""
+        """Read a job object with jobId and status. Poll queued/running; stop on succeeded/infeasible/failed/cancelled.
+
+        succeeded is not a claim of mathematical optimality. Fetch result for succeeded or infeasible only.
+        """
         return respond(lambda: select(domain).job(job_id, tenant=tenant))
 
     @server.tool(annotations=readonly)
     def ocp_native_result(domain: str, job_id: str) -> CallToolResult:
-        """Read a completed domain result including original status, nulls, constraints and proof."""
+        """Return {jobId, status, result} for succeeded or infeasible; preserve domain status, nulls and proof.
+
+        queued/running returns JOB_NOT_FINISHED; failed/cancelled returns JOB_FAILED/JOB_CANCELLED, with no result.
+        """
         return respond(lambda: select(domain).result(job_id, tenant=tenant))
 
     @server.tool(annotations=mutation)
