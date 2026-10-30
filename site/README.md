@@ -1,7 +1,8 @@
 # OCP website
 
-A static, English-first site with a Korean introduction, three starting paths,
-worked examples, installation commands, application guidance, and protocol reference.
+A static bilingual public site with matching English and Korean pages, three
+starting paths, worked examples, installation commands, application guidance,
+and protocol reference. The older local-review edition retains its Korean introduction.
 No remote service or frontend framework is required to serve it.
 
 The public documentation is hosted at
@@ -30,6 +31,11 @@ Generated output stays out of Git. Stop the preview server after review.
 ## Sources and checks
 
 - `content.py`: English pages and Korean introduction, including `public_pages` for the public edition. Shared route labels, scope tables and agent guidance live here rather than in the build tool.
+- `localization.py`, `ko.json`: full Korean counterparts for the public edition.
+  The public builder replaces the older introduction with the same nine-page
+  structure as English. Translate prose and accessible labels; preserve commands,
+  inline API names, result JSON and section IDs. Missing prose translations fail
+  the build. Review translations whenever the English source changes.
 - `commands.json`: canonical CLI blocks used both by the site and executable tests.
 - `example.py`: actual installed SDK/reference/checker calculation on the canonical synthetic fixture.
 - `templates/`, `assets/`: semantic HTML, responsive CSS, menu, copy, and accessible example tabs.
@@ -139,3 +145,18 @@ Check the homepage, setup commands, examples and Korean introduction at desktop,
 tablet and mobile widths after palette changes. Compare rendered text contrast,
 keyboard focus, menu operation, copy controls and example states; a successful
 static build alone is not a visual or accessibility review.
+
+## Language switching
+
+The public header and footer provide `EN / 한국어` on every content page. Each
+link opens the same page in the other language; the URL retains the locale across
+navigation and reloads without cookies, local storage or automatic redirects.
+JavaScript additionally preserves the current query and section when switching.
+Without JavaScript, the links still open the matching page. Mobile users can
+switch without opening the navigation menu. The current language has a visible
+selected state and `aria-current`; each page has canonical and hreflang metadata.
+
+Site pages are translated; linked repository files, downloads and normative
+contracts remain in their original language. The checker compares language pairs
+for commands, inline code, example data, anchors and internal navigation. Review
+the actual switch, menu, copying and example interactions in a browser as well.

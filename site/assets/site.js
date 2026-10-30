@@ -1,5 +1,19 @@
 'use strict';
 document.documentElement.classList.add('js');
+const korean = document.documentElement.lang === 'ko';
+// Keep the current section and query when switching the same page's language.
+// Plain links still work without JavaScript; locale-relative links retain choice.
+for (const link of document.querySelectorAll('[data-language-link]')) {
+  const target = new URL(link.href);
+  const syncLocation = () => {
+    target.search = location.search;
+    target.hash = location.hash;
+    link.href = target.href;
+  };
+  syncLocation();
+  window.addEventListener('hashchange', syncLocation);
+  link.addEventListener('click', syncLocation);
+}
 const menu = document.querySelector('.menu-toggle');
 const nav = document.querySelector('#primary-nav');
 menu.addEventListener('click', () => {
@@ -20,17 +34,17 @@ for (const button of document.querySelectorAll('[data-copy]')) {
     const live = document.getElementById('copy-status');
     try {
       await navigator.clipboard.writeText(code.textContent);
-      button.textContent = 'Copied';
-      live.textContent = button.getAttribute('aria-label') + ': copied to clipboard.';
+      button.textContent = korean ? '복사됨' : 'Copied';
+      live.textContent = button.getAttribute('aria-label') + (korean ? ': 클립보드에 복사했습니다.' : ': copied to clipboard.');
     } catch {
       const range = document.createRange();
       range.selectNodeContents(code);
       const selection = window.getSelection();
       selection.removeAllRanges(); selection.addRange(range);
-      live.textContent = 'Clipboard unavailable. Code selected; use your copy shortcut.';
-      button.textContent = 'Selected';
+      live.textContent = korean ? '클립보드를 사용할 수 없습니다. 선택된 코드를 단축키로 복사하세요.' : 'Clipboard unavailable. Code selected; use your copy shortcut.';
+      button.textContent = korean ? '선택됨' : 'Selected';
     }
-    setTimeout(() => { button.textContent = 'Copy'; }, 2200);
+    setTimeout(() => { button.textContent = korean ? '복사' : 'Copy'; }, 2200);
   });
 }
 const explorer = document.querySelector('[data-example]');

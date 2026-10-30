@@ -30,6 +30,8 @@ class PublicSite(unittest.TestCase):
         expected |= {"assets/" + name for name in ASSETS}
         expected |= {"contracts/" + name for name in CONTRACTS.values()}
         expected |= {"contracts/schemas/" + name for name in SCHEMAS}
+        expected |= {'ko/' + name for name in expected.copy()
+                     if name.endswith('index.html') and not name.startswith('ko/')}
         paths = list(self.directory.rglob("*"))
         self.assertFalse(any(p.is_symlink() for p in paths))
         self.assertEqual({p.relative_to(self.directory).as_posix() for p in paths if p.is_file()}, expected)
@@ -205,7 +207,7 @@ class PublicSite(unittest.TestCase):
             self.assertIn(executable, command)
         self.assertIn('stop if they differ', local)
         self.assertIn('not a measured external-user success rate', local)
-        for path in ('start/index.html', 'ko/index.html'):
+        for path in ('start/index.html', 'ko/start/index.html'):
             self.assertTrue(any(link.endswith('local/index.html#download') for link in self.pages[path].links))
 
     def test_14_zip_and_source_verification_cannot_be_conflated(self):
@@ -216,7 +218,57 @@ class PublicSite(unittest.TestCase):
                        'external-human adoption remain unverified'):
             self.assertIn(phrase, body)
         self.assertTrue(any(link.endswith('/actions/workflows/public-ci.yml') for link in self.pages['project/index.html'].links))
-        self.assertIn('기존 ZIP의 수정이나 재검증을 뜻하지 않습니다', self.html['ko/index.html'])
+        self.assertIn('기존 ZIP의 수정이나 재검증을 뜻하지 않습니다', self.html['ko/project/index.html'])
+
+    def test_15_each_page_has_a_matching_language_switch(self):
+        english = [name for name in self.pages if name != '404.html' and not name.startswith('ko/')]
+        self.assertEqual(len(english), 9)
+        for name in english:
+            for current, lang in ((name, 'en'), ('ko/' + name, 'ko')):
+                page = self.pages[current]
+                self.assertIn(('html', {'lang': lang}), page.tags)
+                self.assertNotIn('한국어 소개', self.html[current])
+                links = [a for t, a in page.tags if t == 'a' and 'data-language-link' in a]
+                self.assertEqual(len(links), 4)  # Header and footer, two languages each.
+                for link in links:
+                    destination = ('ko/' if link['hreflang'] == 'ko' else '') + name
+                    self.assertEqual(urljoin(self.base + current, link['href']), self.base + destination)
+                    self.assertEqual(link.get('aria-current') == 'page', link['hreflang'] == lang)
+                for locale, target in (('en', name), ('ko', 'ko/' + name), ('x-default', name)):
+                    href = self.base + ('' if target == 'index.html' else target.removesuffix('index.html'))
+                    self.assertIn(('link', {'rel': 'alternate', 'hreflang': locale, 'href': href}), page.tags)
+
+    def test_16_translation_preserves_code_results_and_navigation(self):
+        for name, page in self.pages.items():
+            if not name.startswith('ko/'):
+                continue
+            english = self.pages[name[3:]]
+            self.assertEqual(set(page.ids), set(english.ids), name)
+            self.assertEqual(page.commands, english.commands, name)
+            code = lambda body: [unescape(re.sub(r'<[^>]+>', '', value)) for value in re.findall(r'<code\b[^>]*>(.*?)</code>', body, re.S)]
+            self.assertEqual(code(self.html[name]), code(self.html[name[3:]]), name)
+            for tag, attrs in page.tags:
+                if tag != 'a' or 'data-language-link' in attrs:
+                    continue
+                target = urljoin(self.base + name, attrs.get('href', ''))
+                if target.startswith(self.base) and urlsplit(target).path.endswith('index.html'):
+                    self.assertTrue(target.startswith(self.base + 'ko/'), (name, target))
+        data = lambda name: json.loads(re.search(r'<script[^>]+id="example-data"[^>]*>(.*?)</script>', self.html[name], re.S)[1])
+        en, ko = data('examples/index.html'), data('ko/examples/index.html')
+        for key in en:
+            if isinstance(en[key], dict) and 'summary' in en[key]:
+                self.assertNotEqual(en[key].pop('summary'), ko[key].pop('summary'))
+        self.assertEqual(en, ko)
+
+    def test_17_missing_translation_fails_closed(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location('site_localization_check', ROOT / 'site/localization.py')
+        locale = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(locale)
+        with self.assertRaisesRegex(ValueError, 'Missing Korean translation'):
+            locale.KoreanPage('index.html', ['index.html'], {}).render('<p>New untranslated copy</p>')
+        literal = '<pre><code>run --option &lt;input&gt;</code></pre>'
+        self.assertEqual(locale.KoreanPage('index.html', [], {}).render(literal), literal)
 
 
 if __name__ == "__main__":

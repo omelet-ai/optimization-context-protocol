@@ -1,5 +1,21 @@
 # 작업 원장
 
+## 2026-10-30: bilingual website — publication approved
+
+Replace the public Korean introduction link with an explicit EN/Korean switch.
+Generate nine matching page pairs, retain the selected locale across navigation,
+and preserve page/section identity when switching. Prose, navigation, accessible
+labels and example summaries are localized; executable commands, identifiers and
+result payloads remain identical. Missing translations fail the public build.
+
+Validate the real static build, links, metadata, language-pair parity and browser
+interaction at desktop and narrow widths. These are documentation checks, not
+external-human acceptance. This work does not modify any existing Foundry
+repository. The owner approved main commit/push and the existing GitHub Pages deployment
+after reviewing the bilingual candidate. The two new translation sources are
+now included in the explicit publication selection. Hosted verification is
+recorded separately after deployment.
+
 ## 2026-10-30: TMS adoption preparation — local review
 
 The owner selected TMS/dispatch as the first commercial-adoption evaluation.

@@ -120,12 +120,12 @@ def build(output):
         nav.append(f'<a class="nav-cta" href="{prefix}/start/local/index.html">Run locally <span aria-hidden="true">↗</span></a>')
         path=target/name;path.parent.mkdir(parents=True,exist_ok=True)
         path.write_text(template.substitute(lang=page['lang'],title=escape(page['title']),description=escape(page['description'],quote=True),
-                                           root=prefix,nav=''.join(nav),body=page['body'],skip='본문으로 바로가기' if page['lang']=='ko' else 'Skip to content'))
+                                           root=prefix,nav=''.join(nav),language_switch='',body=page['body'],skip='본문으로 바로가기' if page['lang']=='ko' else 'Skip to content'))
     for name in ("site.css","site.js","mark.svg"):shutil.copyfile(source("site/assets/"+name),target/"assets"/name)
     for name,dest in CONTRACTS.items():shutil.copyfile(source(name),target/"contracts"/dest)
     for name in SCHEMAS:shutil.copyfile(source("spec/schemas/"+name),target/"contracts/schemas"/name)
     (target/"robots.txt").write_text("User-agent: *\nDisallow: /\n")
-    (target/"404.html").write_text(template.substitute(lang='en',title='Page not found',description='This page is not part of the OCP review site.',root='.',nav='',skip='Skip to content',body='<section class="wrap section"><p class="eyebrow">404</p><h1>That path ends here.</h1><p><a class="button" href="/index.html">Return to OCP</a></p></section>'))
+    (target/"404.html").write_text(template.substitute(lang='en',title='Page not found',description='This page is not part of the OCP review site.',root='.',nav='',language_switch='',skip='Skip to content',body='<section class="wrap section"><p class="eyebrow">404</p><h1>That path ends here.</h1><p><a class="button" href="/index.html">Return to OCP</a></p></section>'))
     files={p.relative_to(target).as_posix():sha(p) for p in sorted(target.rglob('*')) if p.is_file()}
     manifest={"schema":"ocp-site-review/v1","audience":"local_review_only","publication_authorized":False,
               "candidate_version":"0.1.0-candidate","files":files,"pages":list(pages),"kit_sha256":kit_hash,

@@ -140,3 +140,29 @@ This approval does not publish to PyPI/npm, provision a trial, permit additional
 model calls or spending, or authorize future release versions. Local builder
 flags continue to state that preparation itself grants no publication authority;
 GitHub delivery is verified separately after the authorized publication.
+
+## Bilingual website update, 2026-10-30
+
+After reviewing the EN/Korean switch, nine matching page pairs, static checks
+and responsive browser preview, the owner approved proceeding with the proposed
+main commit/push and deployment to the existing GitHub Pages site. The source
+target is `omelet-ai/optimization-context-protocol` on `main`; the documentation
+target is `https://omelet-ai.github.io/optimization-context-protocol/` through
+`gh-pages`. The reviewed source baseline is
+`1221d47d6fd37caa87c26abae45399b97c8727f5`.
+
+The update includes the Korean translation catalog `site/ko.json`, the static
+localization helper `site/localization.py`, the header/footer switch, accessible
+labels, locale navigation and matching build/check/documentation changes. The
+explicit source inventory increases from 354 to 356 files. No new Foundry source
+is extracted, and the existing Apache-2.0 license and notices remain unchanged.
+Commands, API identifiers, result payloads and section IDs are preserved across
+languages. The exact documentation artifact has 18 content pages and 41 files,
+including its deployment marker; execution evidence remains private.
+
+This is approval for the reviewed source and documentation update, not a new
+registry release, replacement release asset, hosted trial, customer contact,
+spending or model call. Existing Foundry repositories, worktrees and Git metadata
+remain untouched. Post-deployment checks must verify the served content and
+language navigation. The source-only deployment flags in publication.json
+remain separate from this specific Pages approval.

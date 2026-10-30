@@ -242,6 +242,8 @@
     "site/commands.json",
     "site/content.py",
     "site/example.py",
+    "site/ko.json",
+    "site/localization.py",
     "site/templates/page.html",
     "site/versioning.txt",
     "spec/README.md",
