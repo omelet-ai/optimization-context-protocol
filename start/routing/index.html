@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connect a routing solver · OCP</title>
+<meta name="description" content="Use a local optimization engine from your MCP host.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://omelet-ai.github.io/optimization-context-protocol/start/routing/"><meta property="og:url" content="https://omelet-ai.github.io/optimization-context-protocol/start/routing/"><link rel="alternate" hreflang="en" href="https://omelet-ai.github.io/optimization-context-protocol/start/routing/"><link rel="alternate" hreflang="ko" href="https://omelet-ai.github.io/optimization-context-protocol/ko/start/routing/"><link rel="alternate" hreflang="x-default" href="https://omelet-ai.github.io/optimization-context-protocol/start/routing/">
+<meta name="theme-color" content="#faf9fd">
+<meta property="og:title" content="Connect a routing solver · Optimization Context Protocol">
+<meta property="og:description" content="Use a local optimization engine from your MCP host.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/site.css">
+<script src="../../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<a class="brand" href="../../index.html" aria-label="OCP home"><img src="../../assets/mark.svg" width="33" height="33" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
+<button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
+<nav id="primary-nav" aria-label="Main navigation"><a href="../../start/index.html">Get started</a><a href="../../examples/index.html">Examples</a><a href="../../guides/apps/index.html#mcp">AI agents</a><a href="../../reference/index.html">Docs</a><a class="nav-cta" href="https://github.com/omelet-ai/optimization-context-protocol">GitHub ↗</a></nav>
+<div class="language-switch" role="group" aria-label="Language"><a href="index.html" lang="en" hreflang="en" data-language-link aria-label="Read this page in English" aria-current="page">EN</a><a href="../../ko/start/routing/index.html" lang="ko" hreflang="ko" data-language-link aria-label="이 페이지를 한국어로 보기">한국어</a></div>
+</header>
+<main id="main" tabindex="-1"><div class="wrap page-head "><p class="breadcrumbs"><a href="../../index.html">OCP</a> / Routing</p><p class="eyebrow">Routing</p><h1>Connect a routing solver</h1><p class="lead">Use a local optimization engine from your MCP host.</p></div><div class="wrap page-layout"><aside class="sidebar" aria-label="Documentation navigation"><strong>Developer guide</strong><a href="../../start/index.html">Choose a path</a><a href="../../start/omelet/index.html">Try Omelet</a><a href="../../start/local/index.html">Run locally</a><a href="../../start/engine/index.html">Bring your engine</a><a href="../../guides/apps/index.html">Connect your app</a><a href="../../guides/apps/index.html#mcp">Connect your AI agent</a><a href="../../examples/index.html">Examples</a><a href="../../reference/index.html">Protocol reference</a><a href="../../project/index.html">Status & access</a></aside><article class="prose"><h2>Routing preview v0.2.0-preview.1</h2><p>Download the native ZIP and SHA256SUMS from the matching GitHub release.</p><p><a href="https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1">v0.2.0-preview.1 native ZIP and SHA256SUMS</a></p><p>Start with local OR-Tools routing: discover supported rules, ask for missing inputs, solve, and explain independently checked results.</p><h2>Install and connect</h2><p>Download, verify and extract the native ZIP, then run these commands inside the kit with Python 3.12.</p><div class="code-window"><div class="code-caption"><span>Check and connect the routing solver</span><button class="copy-button" data-copy="code-readme-routing-setup" aria-label="Copy Check and connect the routing solver">Copy</button></div><pre><code id="code-readme-routing-setup" data-command="readme-routing-setup">python3.12 -B install.py
+.native/bin/ocp-native doctor --domain routing-basic --evidence --probe
+.native/bin/ocp-native config --domain routing-basic --evidence --name ocp-routing
+.native/bin/python -I -B mcp_walkthrough.py --domain routing-basic --input routing-input.json</code></pre></div><p>Expect a passing probe, eleven tools, one routing catalog and an independently checked 18-meter example. Copy the printed configuration into your local stdio MCP host.</p><h2>Bring explicit distances</h2><p>Supply one depot, mandatory visits, an integer meter distance matrix and kg vehicle capacities. Addresses, road travel times and time windows need a supporting profile and implementation.</p><p>The reference supports up to 64 visits and 16 vehicles. Other domains and BYO engines remain available through the same interface.</p><h2>Keep the versions distinct</h2><p>Python package 0.2.0a1; evidence feature 0.5.0; native contract 1; Core and routing profile 0.1.0.</p><p><a href="../local/index.html">Published download and source build instructions →</a></p><p><a href="../../start/omelet/index.html">Have an invitation? Omelet trial is recommended when invited →</a></p></article></div></main>
+<footer class="site-footer"><div><a class="footer-brand" href="../../index.html">OCP<span class="dot">●</span></a><p>A common language for optimization.</p></div><div><a href="../../reference/index.html">Protocol & compatibility</a><a href="../../project/index.html">Project status & access</a><div class="language-switch" role="group" aria-label="Language"><a href="index.html" lang="en" hreflang="en" data-language-link aria-label="Read this page in English" aria-current="page">EN</a><a href="../../ko/start/routing/index.html" lang="ko" hreflang="ko" data-language-link aria-label="이 페이지를 한국어로 보기">한국어</a></div></div><p class="footer-note">0.1 candidate · Initiated by Omelet<br>Open-source developer preview · Apache-2.0</p></footer>
+<p id="copy-status" class="sr-only" aria-live="polite"></p>
+</body>
+</html>

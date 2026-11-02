@@ -465,13 +465,13 @@
       "request_id": "site-unsupported-unit",
       "error": {
         "code": "INVALID_DATA",
-        "message": "Value does not match routing-input contract",
+        "message": "Value is not one of the declared choices; consult the field schema",
         "retryable": false,
         "issues": [
           {
             "code": "INVALID_DATA",
             "path": "/load_unit",
-            "message": "Value does not match routing-input contract"
+            "message": "Value is not one of the declared choices; consult the field schema"
           }
         ]
       }

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>라우팅 솔버 연결하기 · OCP</title>
+<meta name="description" content="MCP 호스트에서 로컬 최적화 엔진을 사용하세요.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://omelet-ai.github.io/optimization-context-protocol/ko/start/routing/"><meta property="og:url" content="https://omelet-ai.github.io/optimization-context-protocol/ko/start/routing/"><link rel="alternate" hreflang="en" href="https://omelet-ai.github.io/optimization-context-protocol/start/routing/"><link rel="alternate" hreflang="ko" href="https://omelet-ai.github.io/optimization-context-protocol/ko/start/routing/"><link rel="alternate" hreflang="x-default" href="https://omelet-ai.github.io/optimization-context-protocol/start/routing/">
+<meta name="theme-color" content="#faf9fd">
+<meta property="og:title" content="라우팅 솔버 연결하기 · Optimization Context Protocol">
+<meta property="og:description" content="MCP 호스트에서 로컬 최적화 엔진을 사용하세요.">
+<meta property="og:type" content="website">
+<link rel="icon" href="../../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/site.css">
+<script src="../../../assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#main">본문으로 바로가기</a>
+<header class="site-header">
+<a class="brand" href="../../index.html" aria-label="OCP 홈"><img src="../../../assets/mark.svg" width="33" height="33" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
+<button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">메뉴 <span aria-hidden="true">☰</span></button>
+<nav id="primary-nav" aria-label="주 메뉴"><a href="../index.html">시작하기</a><a href="../../examples/index.html">예제</a><a href="../../guides/apps/index.html#mcp">AI 에이전트</a><a href="../../reference/index.html">문서</a><a class="nav-cta" href="https://github.com/omelet-ai/optimization-context-protocol">GitHub ↗</a></nav>
+<div class="language-switch" role="group" aria-label="언어 선택"><a href="../../../start/routing/index.html" lang="en" hreflang="en" data-language-link aria-label="Read this page in English">EN</a><a href="index.html" lang="ko" hreflang="ko" data-language-link aria-label="이 페이지를 한국어로 보기" aria-current="page">한국어</a></div>
+</header>
+<main id="main" tabindex="-1"><div class="wrap page-head "><p class="breadcrumbs"><a href="../../index.html">OCP</a> / 라우팅</p><p class="eyebrow">라우팅</p><h1>라우팅 솔버 연결하기</h1><p class="lead">MCP 호스트에서 로컬 최적화 엔진을 사용하세요.</p></div><div class="wrap page-layout"><aside class="sidebar" aria-label="문서 탐색"><strong>개발자 안내</strong><a href="../index.html">경로 선택</a><a href="../omelet/index.html">Omelet 체험</a><a href="../local/index.html">로컬 실행</a><a href="../engine/index.html">자체 엔진 연결</a><a href="../../guides/apps/index.html">앱 연결</a><a href="../../guides/apps/index.html#mcp">AI 에이전트 연결</a><a href="../../examples/index.html">예제</a><a href="../../reference/index.html">프로토콜 문서</a><a href="../../project/index.html">공개 상태·접근 안내</a></aside><article class="prose"><h2>라우팅 프리뷰 v0.2.0-preview.1</h2><p>해당 GitHub 릴리스에서 native ZIP과 SHA256SUMS를 내려받으세요.</p><p><a href="https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1">v0.2.0-preview.1 native ZIP과 SHA256SUMS</a></p><p>로컬 OR-Tools 라우팅으로 시작하세요. 지원 규칙을 조회하고, 빠진 입력을 질문하고, 문제를 풀어 독립 검산한 결과를 설명합니다.</p><h2>설치와 연결</h2><p>native ZIP을 내려받아 체크섬을 확인하고 압축을 푼 뒤, kit 안에서 Python 3.12로 다음 명령을 실행하세요.</p><div class="code-window"><div class="code-caption"><span>라우팅 솔버 점검과 연결</span><button class="copy-button" data-copy="code-readme-routing-setup" aria-label="라우팅 솔버 점검과 연결 복사">복사</button></div><pre><code id="code-readme-routing-setup" data-command="readme-routing-setup">python3.12 -B install.py
+.native/bin/ocp-native doctor --domain routing-basic --evidence --probe
+.native/bin/ocp-native config --domain routing-basic --evidence --name ocp-routing
+.native/bin/python -I -B mcp_walkthrough.py --domain routing-basic --input routing-input.json</code></pre></div><p>연결 점검 통과, 도구 11개, 라우팅 카탈로그 1개와 독립 검산한 18미터 예제를 확인하세요. 출력된 설정을 로컬 stdio MCP 호스트에 복사하세요.</p><h2>명시적인 거리 데이터를 준비하세요</h2><p>출발지 1곳, 필수 방문지, 정수 미터 거리 행렬과 kg 단위 차량 용량을 입력하세요. 주소, 도로 이동시간과 시간창은 이를 지원하는 프로파일과 구현이 필요합니다.</p><p>참조 구현은 방문지 최대 64곳과 차량 16대를 지원합니다. 같은 인터페이스로 다른 도메인과 자체 엔진도 사용할 수 있습니다.</p><h2>버전을 구분하세요</h2><p>Python 패키지 0.2.0a1, evidence 기능 0.5.0, native 계약 1, Core와 라우팅 프로파일 0.1.0입니다.</p><p><a href="../local/index.html">공개 다운로드와 소스 빌드 안내 →</a></p><p><a href="../omelet/index.html">초대받으셨나요? 초대 시에는 Omelet trial을 권장합니다 →</a></p></article></div></main>
+<footer class="site-footer"><div><a class="footer-brand" href="../../index.html">OCP<span class="dot">●</span></a><p>최적화를 위한 공통 언어.</p></div><div><a href="../../reference/index.html">프로토콜·호환성</a><a href="../../project/index.html">공개 상태·접근 안내</a><div class="language-switch" role="group" aria-label="언어 선택"><a href="../../../start/routing/index.html" lang="en" hreflang="en" data-language-link aria-label="Read this page in English">EN</a><a href="index.html" lang="ko" hreflang="ko" data-language-link aria-label="이 페이지를 한국어로 보기" aria-current="page">한국어</a></div></div><p class="footer-note">0.1 후보 · Omelet이 시작한 프로젝트<br>오픈소스 개발자 프리뷰 · Apache-2.0</p></footer>
+<p id="copy-status" class="sr-only" aria-live="polite"></p>
+</body>
+</html>
