@@ -21,7 +21,7 @@ from build_budget_example import build as budget_build
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE = ROOT / 'sdk/native-contracts'
 PIN = '7547036d1bc9464d6c43a9bdf7cff0a78e8560d7'
-SDK_VERSION = '0.1.1.dev1'
+SDK_VERSION = '0.2.0a1'
 TS_VERSION = '0.1.1-native.7547036d1bc9.review.1'
 
 
@@ -137,6 +137,9 @@ def build(output, with_typescript=False):
                 'PROFILE_EXTENSION.md': 'docs/users/NATIVE_PROFILE_EXTENSION.md',
                 'budget-input.json': 'examples/native/budget-input.json',
                 'mcp_config.py': 'examples/native/mcp_config.py', 'node_app.mjs': 'examples/native/node_app.mjs',
+                'HOST_SETUP.md': 'docs/users/NATIVE_HOST_SETUP.md',
+                'ROUTING_START_HERE.md': 'docs/users/NATIVE_ROUTING_QUICKSTART.md',
+                'EVIDENCE_EXTENSION.md': 'docs/development/NATIVE_EVIDENCE_EXTENSIONS.md',
                 'scenarios.py': 'examples/native/scenarios.py', 'mcp_walkthrough.py': 'examples/native/mcp_walkthrough.py',
                 'native_server_template.py': 'authoring/native_server_template.py',
                 'README.md': 'docs/users/NATIVE_LOCAL_CANDIDATE.md',
@@ -152,16 +155,16 @@ def build(output, with_typescript=False):
     (output / 'constraints.txt').write_text((ROOT / 'tools/requirements-dev.lock').read_text() + '\nfastapi==0.135.1\nannotated-doc==0.0.4\n')
     write(output / 'ORIGIN.json', {'foundry_commit': PIN, 'typescript_proposal': 'cancel-uncertainty-1',
           'upstream_accepted': False, 'source': 'sdk/native-contracts in this source tree',
-          'publication_authorized': False, 'source_publication_authorized': True})
+          'publication_authorized': False, 'source_publication_authorized': False})
     contracts_wheel = next(output.glob('ocp_foundry_contracts_candidate-*.whl'))
-    write(output / 'manifest.json', {'format': 'ocp-native-review-kit/1', 'publication_authorized': False, 'source_publication_authorized': True,
+    write(output / 'manifest.json', {'format': 'ocp-native-review-kit/1', 'publication_authorized': False, 'source_publication_authorized': False,
           'python_wheels': {'sdk': sdk.name, 'contracts': contracts_wheel.name, 'checker': checker.name},
           'example_wheels': {'worker_greedy': worker.name,
                             **{'budget_' + name: Path(value['wheel']).name for name, value in budget.items()}},
           'node_archives': node_files,
           'files': {p.name: sha(p) for p in sorted(output.iterdir())}})
     return {'directory': str(output), 'files': len(list(output.iterdir())), 'manifest_sha256': sha(output / 'manifest.json'),
-            'typescript_built': with_typescript, 'foundry_checkout_required': False, 'publication_authorized': False, 'source_publication_authorized': True}
+            'typescript_built': with_typescript, 'foundry_checkout_required': False, 'publication_authorized': False, 'source_publication_authorized': False}
 
 
 if __name__ == '__main__':

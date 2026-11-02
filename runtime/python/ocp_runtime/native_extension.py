@@ -41,10 +41,35 @@ def load_extension(factory):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--extension', required=True)
+    parser.add_argument('--verification', action='store_true', help='Expose independent local job verification')
+    parser.add_argument('--evidence', action='store_true', help='Expose preparation and checked explanation (requires --verification)')
+    parser.add_argument('--checker-factory', help='Trusted installed checker MODULE:FACTORY, used only with --verification')
+    parser.add_argument('--evidence-factory', help='Trusted installed evidence MODULE:FACTORY, used only with --evidence')
     args = parser.parse_args()
+    if args.checker_factory and not args.verification:
+        parser.error('--checker-factory requires --verification')
+    if args.evidence and not args.verification:
+        parser.error('--evidence requires --verification')
+    if args.evidence_factory and not args.evidence:
+        parser.error('--evidence-factory requires --evidence')
+    registry = None
+    if args.verification:
+        from conformance.assessment import load_registry
+        registry = load_registry(args.checker_factory)
     from .native_mcp import create_native_mcp
     with LocalAPI(load_extension(args.extension)) as local:
-        create_native_mcp({name: local.client(name) for name in local.app.state.domain_ids}).run(transport='stdio')
+        clients = {name: local.client(name) for name in local.app.state.domain_ids}
+        verifier = None
+        if args.verification:
+            from .native_verification import local_verifier
+            verifier = local_verifier(local.app.state.native_store, registry=registry)
+        evidence = None
+        if args.evidence:
+            from .native_evidence import EvidenceService
+            from .native_evidence_registry import load_evidence_registry
+            evidence = EvidenceService(clients, local.app.state.native_store, registry=registry,
+                                       evidence_registry=load_evidence_registry(args.evidence_factory))
+        create_native_mcp(clients, verifier=verifier, evidence=evidence).run(transport='stdio')
 
 
 if __name__ == '__main__':

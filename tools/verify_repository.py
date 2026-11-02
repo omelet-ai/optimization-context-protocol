@@ -36,7 +36,11 @@ def git(*args):
     return result.stdout
 
 
-def verify(index=False):
+def verify(index=False, selection_path=SELECTION):
+    candidate_path = PurePosixPath(selection_path)
+    if (candidate_path.is_absolute() or '..' in candidate_path.parts or '\\' in selection_path
+            or candidate_path.as_posix() != selection_path):
+        raise ValueError("Invalid selection path")
     def read(name):
         if index: return git("show", ":" + name)
         source = ROOT / name
@@ -44,15 +48,16 @@ def verify(index=False):
             raise ValueError("Symlink source: " + name)
         return source.read_bytes()
 
-    selection = json.loads(read(SELECTION))
+    selection = json.loads(read(selection_path))
     public_source = selection["scope"] == "public_source_repository"
-    if selection["scope"] not in {"private_repository_only", "public_source_repository"} or selection["repository"] != "omelet-ai/optimization-context-protocol":
+    candidate = selection["scope"] == "public_source_candidate"
+    if selection["scope"] not in {"private_repository_only", "public_source_repository", "public_source_candidate"} or selection["repository"] != "omelet-ai/optimization-context-protocol":
         raise ValueError("Unexpected repository scope")
     if selection["publication_approved"] is not public_source: raise ValueError("Repository approval does not match scope")
-    if selection.get("visibility") != ("public" if public_source else "private"):
+    if selection.get("visibility") != ("public" if public_source or candidate else "private"):
         raise ValueError("Repository visibility does not match scope")
     files = selection["files"]
-    if not files or len(files) != len(set(files)) or SELECTION not in files: raise ValueError("Invalid selection")
+    if not files or len(files) != len(set(files)) or selection_path not in files: raise ValueError("Invalid selection")
     if index:
         staged = git("ls-files", "--stage", "-z").decode().split("\0")
         actual = set()
@@ -100,19 +105,28 @@ def verify(index=False):
         if public.get("license") != "Apache-2.0" or hashes.get("LICENSE") != public.get("license_sha256"):
             raise ValueError("Approved license missing or changed")
         if not {"NOTICE", "THIRD_PARTY_NOTICES.md"}.issubset(files): raise ValueError("Missing license notices")
+    elif candidate:
+        if (selection.get('approval_status') != 'PENDING_EXACT_CANDIDATE_REVIEW'
+                or selection.get('license') != 'Apache-2.0'
+                or hashes.get('LICENSE') != public.get('license_sha256')
+                or not {'NOTICE', 'THIRD_PARTY_NOTICES.md'}.issubset(files)):
+            raise ValueError('Candidate license or review state missing')
+        if any(name.startswith('tools/foundry_convergence/') for name in files):
+            raise ValueError('Unrelated convergence work is outside this candidate')
     elif public["publication_authorized"] or public["public_allowlist"]:
         raise ValueError("Private selection cannot authorize publication")
     digest = hashlib.sha256(json.dumps(hashes, sort_keys=True).encode()).hexdigest()
-    return {"status": "PASS", "scope": "public_source_selection" if public_source else "private_repository_selection", "source": "git_index" if index else "working_files",
+    return {"status": "PASS", "scope": "pending_public_source_candidate" if candidate else ("public_source_selection" if public_source else "private_repository_selection"), "source": "git_index" if index else "working_files",
             "files": len(files), "tree_content_sha256": digest, "public_release_authorized": public_source}
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--index", action="store_true")
+    parser.add_argument("--selection", default=SELECTION)
     args = parser.parse_args()
     try:
-        print(json.dumps(verify(args.index), ensure_ascii=False))
+        print(json.dumps(verify(args.index, args.selection), ensure_ascii=False))
     except (ValueError, KeyError, OSError, UnicodeError) as exc:
         print(json.dumps({"status": "FAIL", "reason": str(exc)}, ensure_ascii=False))
         sys.exit(1)

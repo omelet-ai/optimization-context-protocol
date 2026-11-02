@@ -6,7 +6,7 @@ inside the domain payload. The outer lifecycle is the actual shared job worker.
 """
 from copy import deepcopy
 from ocp_candidate import Client
-from ocp_candidate.contract import envelope
+from ocp_candidate.contract import OCPError, envelope
 from ocp_candidate.native import native_validate
 from ocp_candidate.profiles import packaged_registry
 from foundry_capability_contract import CapabilityAdapter, CapabilityError, SolveFailed, SolveCancelled
@@ -54,6 +54,9 @@ class ReferenceDomain:
             answer = {'valid': result['valid'], 'issues': [
                 {'code': i['code'], 'message': i['message'], 'fieldPath': i['path']} for i in result['issues']]}
             return native_validate('Validation', answer)
+        except OCPError as error:
+            return native_validate('Validation', {'valid': False, 'issues': [
+                {'code': error.code, 'message': error.message, 'fieldPath': error.path}]})
         except (ValueError, KeyError, TypeError):
             return {'valid': False, 'issues': [{'code': 'INVALID_REQUEST', 'message': 'Request does not match the declared domain payload'}]}
 

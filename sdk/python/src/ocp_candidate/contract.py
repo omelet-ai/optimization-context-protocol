@@ -4,6 +4,7 @@ from functools import lru_cache
 from importlib.resources import files
 import json
 import math
+import re
 
 from jsonschema import Draft202012Validator
 
@@ -69,8 +70,42 @@ def validate(name, value, code="INVALID_REQUEST"):
     strict_json(value)
     error = next(validator(name).iter_errors(value), None)
     if error is not None:
-        path = "/" + "/".join(str(x).replace("~", "~0").replace("/", "~1") for x in error.absolute_path)
-        raise OCPError(code, path, "Value does not match " + name + " contract")
+        # Core is a tagged union. Report the declared kind's failure, not
+        # unrelated required fields from other envelope kinds.
+        if name == "core" and error.validator == "oneOf" and isinstance(value, dict):
+            document = schema(name)
+            for index, branch in enumerate(document['oneOf']):
+                target = document['$defs'][branch['$ref'].removeprefix('#/$defs/')]
+                if target.get('properties', {}).get('kind', {}).get('const') == value.get('kind'):
+                    error = next((child for child in error.context
+                                  if list(child.absolute_schema_path)[:2] == ['oneOf', index]), error)
+                    break
+        parts = list(error.absolute_path)
+        message = "Value does not match " + name + " contract"
+        # Identify the field without echoing user-supplied values in messages.
+        # Keep the existing error code and envelope for existing consumers.
+        if error.validator == "required" and isinstance(error.instance, dict):
+            missing = next(key for key in error.validator_value if key not in error.instance)
+            parts.append(missing)
+            message = "Required field is missing; request its value before solving"
+        elif error.validator == "additionalProperties" and error.validator_value is False:
+            properties = error.schema.get("properties", {})
+            patterns = error.schema.get("patternProperties", {})
+            extra = sorted(key for key in error.instance
+                           if key not in properties and not any(re.search(pattern, key) for pattern in patterns))
+            if extra:
+                parts.append(extra[0])
+                message = "Field is not supported by this contract; preserve the requirement and select a supporting profile"
+        elif error.validator == "type":
+            message = "Value has the wrong type; consult the declared field schema"
+        elif error.validator in ("const", "enum"):
+            message = "Value is not one of the declared choices; consult the field schema"
+        elif error.validator in ("minimum", "maximum", "exclusiveMinimum", "exclusiveMaximum"):
+            message = "Value is outside the declared numeric bounds"
+        elif error.validator in ("minItems", "maxItems"):
+            message = "Item count is outside the declared profile limits"
+        path = "/" + "/".join(str(x).replace("~", "~0").replace("/", "~1") for x in parts)
+        raise OCPError(code, path, message)
 
 
 def envelope(value):

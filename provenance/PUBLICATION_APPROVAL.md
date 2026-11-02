@@ -166,3 +166,35 @@ spending or model call. Existing Foundry repositories, worktrees and Git metadat
 remain untouched. Post-deployment checks must verify the served content and
 language navigation. The source-only deployment flags in publication.json
 remain separate from this specific Pages approval.
+
+## Routing-first preview publication, 2026-11-03
+
+After reviewing the 392-file candidate, 67 changed files (36 new), four release
+assets, local installation/site checks and 48 synthetic model sessions, the
+owner explicitly approved: “main 커밋·push → 새 릴리스 게시 → Pages 배포 진행하자.”
+This authorizes the reviewed routing-first source on this repository's main,
+GitHub prerelease `v0.2.0-preview.1` with the source/native ZIPs, `preview.json`
+and `SHA256SUMS`, and the existing GitHub Pages site through `gh-pages`.
+The reviewed source digest was
+`2ea0f99d5544c5497b5d6704a0443193b672d0bd6992e7180d3e493c6f362a19`.
+Finalization updates release links, bundled guidance and the approval inventories;
+these changes are revalidated before the exact final assets are uploaded.
+
+The final source inventory remains 392 files. New implementation/example files
+were authored in the public OCP development area; no new Foundry source is
+extracted. Existing Apache-2.0 license, notices and pinned native contracts remain
+unchanged. The historical company rights confirmation is preserved; this entry
+records the scoped publication instruction, not a new independent legal opinion.
+Source-only authorization flags remain distinct from this release/Pages approval.
+Local builder flags describe preparation and do not automatically authorize uploads.
+
+The first delivery is local OR-Tools routing.basic through stdio MCP with optional
+checked preparation/explanation. It is a developer preview, not a production
+routing service. Source CI, exact ZIP checks, synthetic host sessions and human
+acceptance are recorded separately. The 0.3.0/0.4.0 model comparison is not an
+acceptance test of evidence feature 0.5.0. Completed model transcripts stay local.
+
+The approval excludes package registries, hosted-trial provisioning, additional
+model calls and spending. Existing Foundry checkouts, worktrees and Git metadata,
+concurrent convergence work, private plans, credentials and operating data are
+excluded from this publication. No external-human acceptance is claimed.

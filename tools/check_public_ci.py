@@ -16,6 +16,7 @@ import tempfile
 
 from ci_policy import WORKFLOW, validate
 from verify_repository import verify
+from prepare_preview import read_plan
 
 ROOT = Path(__file__).resolve().parents[1]
 UNIT_CHECKS = ['tools/tests/test_harness.py', 'tools/tests/test_repository_selection.py',
@@ -44,14 +45,15 @@ def require_success(label, result):
 def check(output, wheelhouses=(), with_typescript=False):
     if sys.version_info[:2] != (3, 12) or os.name != 'posix':
         raise ValueError('PYTHON_3_12_POSIX_REQUIRED')
-    selection = verify()
+    selection_path = read_plan().get('source_selection', 'provenance/repository-selection.json')
+    selection = verify(selection_path=selection_path)
     validate((ROOT / WORKFLOW).read_text())
     work = Path(output).resolve()
     if work == ROOT or work.is_relative_to(ROOT):
         raise ValueError('OUTPUT_MUST_BE_OUTSIDE_SOURCE')
     work.mkdir(parents=True, exist_ok=False)
     source = work / 'public source'; source.mkdir()
-    for name in json.loads((ROOT / 'provenance/repository-selection.json').read_text())['files']:
+    for name in json.loads((ROOT / selection_path).read_text())['files']:
         target = source / name; target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / name, target)
     home = work / 'empty-home'; home.mkdir()
@@ -112,6 +114,8 @@ def check(output, wheelhouses=(), with_typescript=False):
               'machine': platform.machine(), 'python': platform.python_version(),
               'node_checked': with_typescript, 'model_calls': 0, 'human_acceptance': 'NOT_RUN',
               'scope': 'Public source and installed synthetic consumers; no historical gate promotion',
+              'source_selection': selection_path,
+              'publication_authorized': False,
               'source_tree_sha256': selection['tree_content_sha256'], 'dependency_wheels': dependency_hashes,
               'kit_manifest_sha256': hashlib.sha256((work / 'kit/manifest.json').read_bytes()).hexdigest(),
               'checks': {k: v['tests_run'] for k, v in reports.items()}}

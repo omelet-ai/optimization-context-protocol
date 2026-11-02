@@ -21,7 +21,7 @@ from build_site import ROOT, CONTRACTS, SCHEMAS, build as build_review, source
 REPO = "https://github.com/omelet-ai/optimization-context-protocol"
 ASSETS = ("site.css", "site.js", "mark.svg", "example.json", "basic-input.json")
 README_COMMANDS = ("readme-build", "readme-examples", "readme-mcp", "readme-native-build",
-                   "readme-native-mcp", "readme-native-verify", "readme-native-install")
+                   "readme-native-mcp", "readme-native-verify", "readme-native-install", "readme-routing-setup")
 
 
 def document_commands(path, marker):

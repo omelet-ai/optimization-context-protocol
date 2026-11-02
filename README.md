@@ -9,17 +9,50 @@ engines independently of Omelet, Foundry, Studio, or a particular transport.
 **Status: open-source developer preview, licensed under [Apache-2.0](LICENSE).**
 Source code is available in this GitHub repository. Visit the
 [public documentation site](https://omelet-ai.github.io/optimization-context-protocol/)
-and [한국어 소개](https://omelet-ai.github.io/optimization-context-protocol/ko/).
+and [한국어](https://omelet-ai.github.io/optimization-context-protocol/ko/).
 Package-registry releases and open trial enrollment are not available yet.
 A passing local check is not engine certification
 or evidence of unaided external adoption.
 
 See [project status and verification boundaries](docs/users/PROJECT_STATUS.md)
-and the [first immutable preview plan](docs/development/PREVIEW_RELEASE.md).
+and the [immutable preview plan](docs/development/PREVIEW_RELEASE.md).
+
+## Connect a routing solver
+
+**[Download v0.2.0-preview.1](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1)** — the routing-first developer preview.
+The first recommended connection is local OR-Tools routing through any host
+supporting stdio MCP. Discover supported rules, ask for missing inputs, solve,
+and explain independently checked results. No Omelet account is required.
+Download the native ZIP and SHA256SUMS using the walkthrough below.
+
+Download, verify and extract the native ZIP, then run these commands inside
+the new kit (a source build is also available):
+
+<!-- ocp:readme-routing-setup -->
+```sh
+python3.12 -B install.py
+.native/bin/ocp-native doctor --domain routing-basic --evidence --probe
+.native/bin/ocp-native config --domain routing-basic --evidence --name ocp-routing
+.native/bin/python -I -B mcp_walkthrough.py --domain routing-basic --input routing-input.json
+```
+
+Expect a passing probe, eleven tools, one routing catalog, and a checked
+18-meter synthetic route. Copy the printed configuration into your local MCP
+host. Follow the [routing quickstart](docs/users/NATIVE_ROUTING_QUICKSTART.md)
+and [host setup](docs/users/NATIVE_HOST_SETUP.md) for a real conversation.
+Input is an explicit meter distance matrix and kg capacities; addresses, road
+travel times and time windows require a different supporting implementation.
+Other domains and BYO engines remain available through the same interface.
+Omelet trial remains recommended when invited.
+
+This release uses Python package `0.2.0a1`, evidence feature `0.5.0`, native
+contract `1` and domain/Core payload `0.1.0`. These versions describe different
+layers. See the [routing release scope](docs/development/ROUTING_FIRST_RELEASE.md).
+
 ## Start here: native preview in about 10 minutes
 
-Start with the [v0.1.1-preview.1 prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1). Download
-`ocp-native-v0.1.1-preview.1.zip` and `SHA256SUMS` into the same folder.
+Start with the [v0.2.0-preview.1 prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1). Download
+`ocp-native-v0.2.0-preview.1.zip` and `SHA256SUMS` into the same folder.
 Use Python 3.12 on macOS or Linux; check `python3.12 --version` first. If that
 command is missing, install Python 3.12 or use your interpreter's absolute path.
 Git, Node, a source build, an Omelet key and model calls are unnecessary for
@@ -31,7 +64,7 @@ In a terminal in your download folder, calculate the native ZIP's checksum:
 
 <!-- ocp:readme-native-verify -->
 ```sh
-shasum -a 256 ocp-native-v0.1.1-preview.1.zip
+shasum -a 256 ocp-native-v0.2.0-preview.1.zip
 ```
 
 Compare it with the **native ZIP line** in `SHA256SUMS`. Stop if they differ.
@@ -40,7 +73,7 @@ not signatures. Then extract into a **new** folder and run:
 
 <!-- ocp:readme-native-install -->
 ```sh
-unzip ocp-native-v0.1.1-preview.1.zip -d ocp-native-preview
+unzip ocp-native-v0.2.0-preview.1.zip -d ocp-native-preview
 cd ocp-native-preview
 python3.12 -B install.py
 .native/bin/python -I -B demo.py
@@ -59,6 +92,12 @@ for changed inputs, `PROJECT_GUIDE.md` for your own app, `BYO_WORKER.md` for eng
 replacement, or `PROFILE_EXTENSION.md` for a new problem profile. If `.native`
 already exists, reuse its Python; do not rerun the installer over it. Moving the
 kit requires a fresh environment and regenerated MCP configuration.
+
+The [host setup guide](docs/users/NATIVE_HOST_SETUP.md) covers the included
+`ocp-native doctor --evidence --probe` and `ocp-native config --evidence` commands.
+Use `--domain routing-basic --evidence` for eleven tools and a single routing
+catalog. The default multi-domain reference and extension interfaces remain
+available in the same kit.
 
 ## Evaluate a TMS integration
 
@@ -81,7 +120,7 @@ public issues and initial inquiries.
 
 | Starting point | Use it for | Verified scope |
 | --- | --- | --- |
-| **Recommended download: `v0.1.1-preview.1` native ZIP** | First run, three-domain examples, MCP, independent project and optional BYO/profile examples | Exact published artifact: macOS arm64 Python/Node; Linux amd64 Python/MCP in Docker emulation |
+| **Recommended download: `v0.2.0-preview.1` native ZIP** | First run, three-domain examples, MCP, independent project and optional BYO/profile examples | Exact native ZIP: macOS arm64 Python/MCP; Linux amd64 Python/MCP in Docker emulation; TypeScript is a separate source build |
 | **Source checkout: pin a commit** | Developing OCP or taking newer fixes; Core 0.1 or native v1 | [Public CI](https://github.com/omelet-ai/optimization-context-protocol/actions/workflows/public-ci.yml) tests macOS arm64 and native Linux x64 with Python 3.12 and Node 24; inspect the run for your commit |
 
 The immutable ZIP and moving `main` are separate deliveries. A successful source
@@ -92,10 +131,8 @@ Windows CI checks unsupported-platform diagnostics only. There is no PyPI/npm
 release, public hosted solver or open Omelet trial signup. The website explains
 saved examples; real calculations run in your local installation.
 
-**Optional Node documentation correction:** the first ZIP's bundled README shows
-archive names without the `.review.1` suffix. Use the exact two filenames in the
-[corrected Node command](docs/users/NATIVE_LOCAL_CANDIDATE.md#optional-node).
-This does not affect the Python/MCP starting path or replace the published ZIP.
+Optional TypeScript uses Node 24 and a source build with `--with-typescript`.
+The routing-first ZIP contains the Python path.
 
 ## Core 0.1 and native v1
 
@@ -104,7 +141,7 @@ Both are licensed under Apache-2.0. The Core quickstart below retains the existi
 synchronous interface; the [native source quickstart](#native-v1-from-public-source)
 builds a separate opt-in kit aligned with Foundry Capability Contract v1.
 Native implementation, pinned shared contracts and build tools are included here.
-This is not a stable v1 or full gateway/ocps1 release. The [native ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1)
+This is not a stable v1 or full gateway/ocps1 release. The [native ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1)
 is a prerelease; PyPI/npm packages are not published.
 
 <!-- ocp:core-native-table:start -->

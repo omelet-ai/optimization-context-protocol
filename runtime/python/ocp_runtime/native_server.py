@@ -27,10 +27,16 @@ class Registration:
     solve: object  # module-level callable or pickleable partial for ProcessSolveRunner
 
 
-def reference_domains():
+def reference_domains(names=None):
     from .providers import PROVIDERS, make_provider
+    available = {profile.replace('.', '-'): profile for profile in PROVIDERS}
+    if names is not None and (not isinstance(names, (list, tuple)) or not names
+            or any(not isinstance(name, str) or name not in available for name in names)
+            or len(set(names)) != len(names)):
+        raise ValueError('INVALID_DOMAIN_SELECTION')
     return [Registration(ReferenceDomain(make_provider(profile), problem_type=profile.replace('.', '-')),
-                         partial(solve_reference, profile)) for profile in PROVIDERS]
+                         partial(solve_reference, profile)) for profile in PROVIDERS
+            if names is None or profile.replace('.', '-') in names]
 
 
 class BoundedLocalStore:

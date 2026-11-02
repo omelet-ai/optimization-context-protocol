@@ -24,9 +24,13 @@ def validate_problem(p):
         if not set(t['eligible_workers'])<=ids:
             raise OCPError('INVALID_ELIGIBILITY',f'/tasks/{index}/eligible_workers',
                            'Eligible workers must reference IDs declared in workers')
-        if set(t['costs'])!=set(t['eligible_workers']):
-            raise OCPError('INVALID_ELIGIBILITY',f'/tasks/{index}/costs',
-                           'Provide exactly one cost for every eligible worker and no other worker')
+        missing = [wid for wid in t['eligible_workers'] if wid not in t['costs']]
+        extra = sorted(set(t['costs']) - set(t['eligible_workers']))
+        if missing or extra:
+            wid = (missing or extra)[0].replace('~', '~0').replace('/', '~1')
+            message = ('Cost for an eligible worker is missing; ask for this value before solving'
+                       if missing else 'Cost is supplied for an ineligible worker; confirm the eligibility and cost data')
+            raise OCPError('INVALID_ELIGIBILITY',f'/tasks/{index}/costs/{wid}',message)
 
 def evaluate(p,s):
     workers={w['id']:w for w in p['workers']};tasks={t['id']:t for t in p['tasks']}

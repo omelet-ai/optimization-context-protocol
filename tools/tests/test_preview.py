@@ -78,6 +78,13 @@ class Preview(unittest.TestCase):
         (self.root / PLAN).write_text(json.dumps(plan))
         with self.assertRaisesRegex(ValueError, 'INVALID_PREVIEW'): read_plan(self.root)
 
+    def test_source_selection_cannot_escape_snapshot(self):
+        (self.root / PLAN).parent.mkdir(parents=True)
+        plan = read_plan(); plan['source_selection'] = '../private.json'
+        write(self.root / PLAN, plan)
+        with self.assertRaisesRegex(ValueError, 'INVALID_SOURCE_SELECTION'):
+            read_plan(self.root)
+
     def test_existing_output_is_preserved(self):
         with patch('prepare_preview.verify_source', return_value={}):
             with self.assertRaises(FileExistsError): prepare(self.data)
@@ -87,7 +94,8 @@ class Preview(unittest.TestCase):
         source = self.root / 'source'; (source / PLAN).parent.mkdir(parents=True)
         plan = read_plan(); write(source / PLAN, plan)
         (source / 'provenance').mkdir()
-        write(source / 'provenance/repository-selection.json', {'files': [PLAN, 'provenance/repository-selection.json']})
+        selected = plan.get('source_selection', 'provenance/repository-selection.json')
+        write(source / selected, {'files': [PLAN, selected]})
         kit = self.root / 'kit'; kit.mkdir()
         write(kit / 'REVIEW_FORM.json', json.loads((ROOT / FORM).read_text()))
         write(kit / 'manifest.json', {'files': files(kit)})

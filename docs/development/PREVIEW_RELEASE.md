@@ -1,84 +1,56 @@
-# First immutable developer preview
+# Routing preview preparation
 
-The release identifier is **v0.1.1-preview.1**, targeting the
-[GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1) in
-`omelet-ai/optimization-context-protocol`. The owner approved this first asset
-publication and the existing Pages update on 2026-10-29; see the
-[scoped approval record](../../provenance/PUBLICATION_APPROVAL.md). This build
-plan never grants authority to publish a future candidate. The machine-readable
-[plan](preview-release.json) fixes the package versions without renaming the
-Core or Foundry contracts. SDK `0.1.1.dev1`, native contract `1`, Core `0.1.0`
-and the release identifier describe different layers.
+**v0.2.0-preview.1 is the routing-first GitHub developer prerelease.**
+The owner approved its main push, four release assets and Pages update on
+2026-11-03; see the [publication record](../../provenance/PUBLICATION_APPROVAL.md).
+Older v0.1.1-preview.1 assets remain unchanged.
 
-## Prepare and check locally
+## Delivery
 
-Use the [development environment](LOCAL_RUNTIME.md). No original Foundry
-checkout is needed by the public preview preparation/checking tools.
+The target is a GitHub developer prerelease in
+`omelet-ai/optimization-context-protocol`, with these four assets:
 
-```sh
-python3.12 -B tools/prepare_preview.py build --directory /tmp/ocp-preview-new --with-typescript
-python3.12 -B tools/prepare_preview.py verify --directory /tmp/ocp-preview-new
-```
+- `ocp-native-v0.2.0-preview.1.zip`: Python kit, routing quickstart and notices.
+- `ocp-source-v0.2.0-preview.1.zip`: explicitly selected source snapshot.
+- `preview.json`: version, source and archive hashes.
+- `SHA256SUMS`: checksums for the two ZIP files.
 
-Omit `--with-typescript` for a Python-only kit. Existing output is never
-overwritten. Preparation builds from only the explicit public source selection
-in a separate directory. `assets/` contains a source ZIP, native ZIP,
-`SHA256SUMS` and `preview.json`. The generated `PREPARED_NOT_PUBLISHED` and
-`publication_authorized: false` fields describe the local builder output: the
-builder neither checks nor changes GitHub publication state. The release page
-and its immutable tag establish delivery; these flags are not current repository
-visibility or a revocation of the separately recorded approval. The native kit includes a first-use guide,
-synthetic tasks and a blank review form. It contains no completed test reports,
-internal snapshots, keys or Foundry checkout. Local logs remain outside assets.
-ZIP entry ordering and timestamps are deterministic for the same input bytes.
-Rebuilding wheels may produce different bytes: test and retain one exact kit;
-do not rebuild it after acceptance or claim the checksum authenticates its author.
+The [version plan](preview-release.json) pins Python package `0.2.0a1`, evidence
+feature `0.5.0`, native contract `1` and Core/domain payload `0.1.0`. The first
+recommended configuration uses OR-Tools with `--domain routing-basic --evidence`.
+Optional TypeScript remains a separate source build. PyPI/npm and hosted trials
+are outside this delivery.
 
-For the complete local candidate regression, pass reviewed dependency stores:
+## Prepare and inspect
+
+Use the [local development environment](LOCAL_RUNTIME.md), then:
 
 ```sh
-python3.12 -B tools/check_preview_candidate.py \
-  --wheelhouse /path/to/reviewed-macos-wheels \
-  --wheelhouse /path/to/reviewed-native-extra-wheels \
-  --linux-wheelhouse /path/to/reviewed-linux-wheels \
-  --output /tmp/ocp-preview-checked-new
+python -B tools/verify_repository.py --selection provenance/routing-preview-selection.json
+python -B tools/prepare_preview.py build --directory /tmp/ocp-routing-preview
+python -B tools/prepare_preview.py verify --directory /tmp/ocp-routing-preview
 ```
 
-Node 24/npm and a running local Docker daemon with the pinned Linux image are
-required for this complete matrix. No image pull, dependency registry upload,
-model execution or external service solve occurs. Missing dependencies fail;
-they are not skipped. Tests install the extracted native ZIP in fresh homes,
-run real three-domain jobs and MCP, test independent rejection of corrupt
-results, and exercise the CSV inspection project on macOS and offline Linux
-amd64 emulation. Optional Node installation/consumer tests run on macOS.
+Choose a new output directory. Preparation uses only the explicit candidate
+selection and never uploads or modifies a host configuration. Installation tests
+must use the exact extracted native archive on each declared platform. Record
+macOS arm64 and Linux amd64 Docker emulation separately. Verify routing-only
+catalogs, calculation, comparison, invalid/missing inputs, idempotency and
+independent rejection of corrupted results. Human review forms stay blank until
+participants actually complete them.
 
-The source content digest and exact kit manifest digest bind the result to
-the candidate. Source or artifact changes require rerunning affected checks.
-H63 follows the refreshed local H62 chain and adds this portable public-source
-check and release-guard regression tests. A public clone can run it directly;
-that does not fabricate H00's private migration evidence or historical gates.
+## Source and notices
 
-## Supported preview and remaining exits
+`provenance/routing-preview-selection.json` and the canonical source allowlist
+record the approved 392-file inventory. Builder plan flags stay false because
+creating another local artifact does not authorize its publication. LICENSE, NOTICE and THIRD_PARTY_NOTICES are unchanged;
+pinned contract sources and their notices remain intact. Dependencies install
+separately under their own licenses. Native contract registry-upload guards
+remain enabled. Local build metadata is preparation evidence, not live GitHub
+publication state.
 
-The intended preview support is Python 3.12/macOS arm64 and the tested Linux
-amd64 container environment; Node 24/macOS is optional. Windows, native Linux
-arm64 and Linux Node are outside this immutable ZIP's verified matrix. Newer
-source commits have a separate native Linux x64 Python/Node CI lane; this does
-not extend the published ZIP's acceptance or change its bytes. Compatibility is preview
-quality; pin the artifact hash and declared profile. No production SLA or stable
-API guarantee is made. Use GitHub Issues for non-sensitive bugs and the existing
-security reporting guide for vulnerabilities.
-
-For each subsequent publication, obtain scoped approval for the source, release
-tag, tested assets and target actions. A main-source push does not publish these assets. The first
-release is deliberately an installable ZIP; PyPI/npm are a later channel that
-needs separate package-name ownership, dependency publication order and policy
-review. Native contracts retain their `Private :: Do Not Upload` / `private`
-guards. Do not remove those guards as part of a ZIP release.
-
-The existing Pages site is live; synchronizing its latest content is a separate
-deployment. Neither this plan nor H63 deploys it. Additional model calls are also
-held. Actual external developer and internal owner acceptance remain `NOT_RUN`
-until real people perform the [review tasks](../users/NATIVE_EXTERNAL_EVALUATION.md)
-and [inspection review](../users/NATIVE_INSPECTION_ACCEPTANCE.md). These are
-adoption evidence requirements, not reasons to pretend source is still private.
+For future updates, review the source changes and obtain the exact main push,
+release and Pages scope before publishing. Reconcile the approved source
+allowlist, rerun the index/source guards and archive checks, then check the live
+version, checksums, installation links and bilingual site.
+See the [routing delivery scope](ROUTING_FIRST_RELEASE.md).

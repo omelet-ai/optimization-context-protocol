@@ -19,12 +19,17 @@ class RepositorySelectionTests(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory(prefix="ocp-public-selection-")
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
-        self.selection = json.loads((ROOT / guard.SELECTION).read_text())
+        self.selection = json.loads((ROOT / 'provenance/routing-preview-selection.json').read_text())
         for name in self.selection["files"]:
             target = self.root / name
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(ROOT / name, target)
         self.policy = json.loads((self.root / "provenance/publication.json").read_text())
+        # Temporary fixtures exercise granted-source rules without changing any
+        # real approval record or allowing new source to inherit an old grant.
+        self.selection.update(scope='public_source_repository', publication_approved=True)
+        self.policy['public_allowlist'] = self.selection['files'][:]
+        self.save()
         self.root_patch = patch.object(guard, "ROOT", self.root)
         self.root_patch.start()
         self.addCleanup(self.root_patch.stop)
@@ -123,6 +128,37 @@ class RepositorySelectionTests(unittest.TestCase):
             result = subprocess.run([sys.executable, "-B", "tools/check_public_release.py"],
                                     cwd=self.root, capture_output=True, text=True, timeout=20)
             self.assertEqual(result.returncode, expected, result.stdout + result.stderr)
+
+    def candidate(self):
+        name = 'provenance/routing-preview-selection.json'
+        value = deepcopy(self.selection)
+        value.update(scope='public_source_candidate', publication_approved=False,
+                     approval_status='PENDING_EXACT_CANDIDATE_REVIEW', license='Apache-2.0')
+        (self.root / name).write_text(json.dumps(value))
+        return name, value
+
+    def test_15_candidate_does_not_inherit_historical_approval(self):
+        name, _ = self.candidate()
+        report = guard.verify(selection_path=name)
+        self.assertEqual(report['scope'], 'pending_public_source_candidate')
+        self.assertFalse(report['public_release_authorized'])
+
+    def test_16_candidate_cannot_claim_publication(self):
+        name, value = self.candidate(); value['publication_approved'] = True
+        (self.root / name).write_text(json.dumps(value))
+        with self.assertRaisesRegex(ValueError, 'approval does not match'):
+            guard.verify(selection_path=name)
+
+    def test_17_candidate_rejects_unrelated_convergence_sources(self):
+        name, value = self.candidate(); extra = 'tools/foundry_convergence/fixture.py'
+        (self.root / extra).parent.mkdir(parents=True); (self.root / extra).write_text('pass')
+        value['files'].append(extra); (self.root / name).write_text(json.dumps(value))
+        with self.assertRaisesRegex(ValueError, 'outside this candidate'):
+            guard.verify(selection_path=name)
+
+    def test_18_selection_path_cannot_escape_root(self):
+        with self.assertRaisesRegex(ValueError, 'Invalid selection path'):
+            guard.verify(selection_path='../outside.json')
 
 
 if __name__ == "__main__":

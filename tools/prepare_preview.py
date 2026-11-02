@@ -36,6 +36,9 @@ def read_plan(root=ROOT):
         raise ValueError('PREPARATION_CANNOT_AUTHORIZE_PUBLICATION')
     if plan['maturity'] != 'developer-preview':
         raise ValueError('NOT_A_STABLE_RELEASE')
+    selected = plan.get('source_selection', 'provenance/repository-selection.json')
+    if selected not in {'provenance/repository-selection.json', 'provenance/routing-preview-selection.json'}:
+        raise ValueError('INVALID_SOURCE_SELECTION')
     return plan
 
 
@@ -102,7 +105,8 @@ def verify(directory):
     source = files(directory / 'source')
     if source != metadata['source_files'] or hashlib.sha256(json.dumps(source, sort_keys=True).encode()).hexdigest() != metadata['source_tree_sha256']:
         raise ValueError('SOURCE_INVENTORY_DRIFT')
-    selected = json.loads((directory / 'source/provenance/repository-selection.json').read_text())['files']
+    selection_path = plan.get('source_selection', 'provenance/repository-selection.json')
+    selected = json.loads((directory / 'source' / selection_path).read_text())['files']
     if set(source) != set(selected):
         raise ValueError('SOURCE_NOT_EXPLICITLY_SELECTED')
     check_versions(kit, plan)
@@ -142,11 +146,12 @@ def check_versions(kit, plan):
 def prepare(output, with_typescript=False):
     plan = read_plan()
     blank_form(json.loads((ROOT / FORM).read_text()))
-    selection = verify_source()
+    selection_path = plan.get('source_selection', 'provenance/repository-selection.json')
+    selection = verify_source(selection_path=selection_path)
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     source = output / 'source'; source.mkdir()
-    for name in json.loads((ROOT / 'provenance/repository-selection.json').read_text())['files']:
+    for name in json.loads((ROOT / selection_path).read_text())['files']:
         dest = source / name; dest.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / name, dest)
     kit = output / 'kit'

@@ -1,0 +1,986 @@
+{
+  "format": "ocp-multidomain-evaluation/1",
+  "scope": "New synthetic questions; held out from previous model trials. Participant/reviewer separation is performed by the preparer.",
+  "cases": [
+    {
+      "id": "G-R01",
+      "domain": "routing-basic",
+      "category": "solve",
+      "prompt": "Use the explicit synthetic distance matrix to plan all deliveries with capacity respected. Explain route distances and what optimality is actually verified. Do not interpret matrix entries as road travel times.",
+      "inputs": {
+        "current": {
+          "depot": "hub",
+          "load_unit": "kg",
+          "visits": [
+            {
+              "id": "oak",
+              "demand": 2
+            },
+            {
+              "id": "ridge",
+              "demand": 1
+            },
+            {
+              "id": "pier",
+              "demand": 2
+            }
+          ],
+          "vehicles": [
+            {
+              "id": "van-a",
+              "capacity": 3
+            },
+            {
+              "id": "van-b",
+              "capacity": 3
+            }
+          ],
+          "matrix": {
+            "node_ids": [
+              "hub",
+              "oak",
+              "ridge",
+              "pier"
+            ],
+            "unit": "meter",
+            "model": "explicit_matrix",
+            "rounding": "none",
+            "values": [
+              [
+                0,
+                7,
+                11,
+                5
+              ],
+              [
+                6,
+                0,
+                4,
+                9
+              ],
+              [
+                10,
+                3,
+                0,
+                8
+              ],
+              [
+                5,
+                9,
+                7,
+                0
+              ]
+            ]
+          }
+        }
+      },
+      "review": {}
+    },
+    {
+      "id": "G-R02",
+      "domain": "routing-basic",
+      "category": "solve",
+      "prompt": "Can these two vehicles deliver all visits with the supplied capacities? Solve and verify the conclusion. Do not increase capacities or omit deliveries.",
+      "inputs": {
+        "current": {
+          "depot": "hub",
+          "load_unit": "kg",
+          "visits": [
+            {
+              "id": "oak",
+              "demand": 2
+            },
+            {
+              "id": "ridge",
+              "demand": 1
+            },
+            {
+              "id": "pier",
+              "demand": 2
+            }
+          ],
+          "vehicles": [
+            {
+              "id": "van-a",
+              "capacity": 1
+            },
+            {
+              "id": "van-b",
+              "capacity": 1
+            }
+          ],
+          "matrix": {
+            "node_ids": [
+              "hub",
+              "oak",
+              "ridge",
+              "pier"
+            ],
+            "unit": "meter",
+            "model": "explicit_matrix",
+            "rounding": "none",
+            "values": [
+              [
+                0,
+                7,
+                11,
+                5
+              ],
+              [
+                6,
+                0,
+                4,
+                9
+              ],
+              [
+                10,
+                3,
+                0,
+                8
+              ],
+              [
+                5,
+                9,
+                7,
+                0
+              ]
+            ]
+          }
+        }
+      },
+      "review": {}
+    },
+    {
+      "id": "G-R03",
+      "domain": "routing-basic",
+      "category": "missing",
+      "prompt": "Plan the deliveries after confirming any missing required data. Do not assume a unit or run a reduced problem.",
+      "inputs": {
+        "current": {
+          "depot": "hub",
+          "load_unit": "kg",
+          "visits": [
+            {
+              "id": "oak",
+              "demand": 2
+            },
+            {
+              "id": "ridge",
+              "demand": 1
+            },
+            {
+              "id": "pier",
+              "demand": 2
+            }
+          ],
+          "vehicles": [
+            {
+              "id": "van-a",
+              "capacity": 3
+            },
+            {
+              "id": "van-b",
+              "capacity": 3
+            }
+          ],
+          "matrix": {
+            "node_ids": [
+              "hub",
+              "oak",
+              "ridge",
+              "pier"
+            ],
+            "model": "explicit_matrix",
+            "rounding": "none",
+            "values": [
+              [
+                0,
+                7,
+                11,
+                5
+              ],
+              [
+                6,
+                0,
+                4,
+                9
+              ],
+              [
+                10,
+                3,
+                0,
+                8
+              ],
+              [
+                5,
+                9,
+                7,
+                0
+              ]
+            ]
+          }
+        }
+      },
+      "review": {
+        "required_question": "/matrix/unit"
+      }
+    },
+    {
+      "id": "G-R04",
+      "domain": "routing-basic",
+      "category": "unsupported",
+      "prompt": "Oak must be served between 08:30 and 09:00. This is mandatory. Check support first; if unsupported, explain and ask before solving. Do not drop the time window or invent travel durations.",
+      "inputs": {
+        "current": {
+          "depot": "hub",
+          "load_unit": "kg",
+          "visits": [
+            {
+              "id": "oak",
+              "demand": 2,
+              "arrival_window": {
+                "start": "08:30",
+                "end": "09:00"
+              }
+            },
+            {
+              "id": "ridge",
+              "demand": 1
+            },
+            {
+              "id": "pier",
+              "demand": 2
+            }
+          ],
+          "vehicles": [
+            {
+              "id": "van-a",
+              "capacity": 3
+            },
+            {
+              "id": "van-b",
+              "capacity": 3
+            }
+          ],
+          "matrix": {
+            "node_ids": [
+              "hub",
+              "oak",
+              "ridge",
+              "pier"
+            ],
+            "unit": "meter",
+            "model": "explicit_matrix",
+            "rounding": "none",
+            "values": [
+              [
+                0,
+                7,
+                11,
+                5
+              ],
+              [
+                6,
+                0,
+                4,
+                9
+              ],
+              [
+                10,
+                3,
+                0,
+                8
+              ],
+              [
+                5,
+                9,
+                7,
+                0
+              ]
+            ]
+          }
+        }
+      },
+      "review": {
+        "unsupported_requirement": "arrival time window",
+        "unsupported_path": "/visits/0/arrival_window"
+      }
+    },
+    {
+      "id": "G-W01",
+      "domain": "worker-scheduling",
+      "category": "solve",
+      "prompt": "Assign every fixed-time task to an eligible available worker within their workload limits. Check the result and explain the total cost and worker workload.",
+      "inputs": {
+        "current": {
+          "time_unit": "minute",
+          "cost_unit": "cost_unit",
+          "workers": [
+            {
+              "id": "mina",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 90
+            },
+            {
+              "id": "omar",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 90
+            },
+            {
+              "id": "erin",
+              "availability": [
+                {
+                  "start": 570,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 60
+            }
+          ],
+          "tasks": [
+            {
+              "id": "intake",
+              "start": 540,
+              "end": 570,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 4,
+                "omar": 7
+              }
+            },
+            {
+              "id": "lab",
+              "start": 555,
+              "end": 585,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 3,
+                "omar": 5
+              }
+            },
+            {
+              "id": "sample",
+              "start": 585,
+              "end": 615,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 6,
+                "omar": 3,
+                "erin": 4
+              }
+            },
+            {
+              "id": "close",
+              "start": 615,
+              "end": 645,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 2,
+                "omar": 5,
+                "erin": 3
+              }
+            }
+          ]
+        }
+      },
+      "review": {}
+    },
+    {
+      "id": "G-W02",
+      "domain": "worker-scheduling",
+      "category": "compare",
+      "prompt": "Solve and independently check both supplied scenarios. Compare current against baseline after Mina's workload limit changes. Explain the numerical difference using both recorded results; keep all other requirements unchanged.",
+      "inputs": {
+        "baseline": {
+          "time_unit": "minute",
+          "cost_unit": "cost_unit",
+          "workers": [
+            {
+              "id": "mina",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 90
+            },
+            {
+              "id": "omar",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 90
+            },
+            {
+              "id": "erin",
+              "availability": [
+                {
+                  "start": 570,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 60
+            }
+          ],
+          "tasks": [
+            {
+              "id": "intake",
+              "start": 540,
+              "end": 570,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 4,
+                "omar": 7
+              }
+            },
+            {
+              "id": "lab",
+              "start": 555,
+              "end": 585,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 3,
+                "omar": 5
+              }
+            },
+            {
+              "id": "sample",
+              "start": 585,
+              "end": 615,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 6,
+                "omar": 3,
+                "erin": 4
+              }
+            },
+            {
+              "id": "close",
+              "start": 615,
+              "end": 645,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 2,
+                "omar": 5,
+                "erin": 3
+              }
+            }
+          ]
+        },
+        "current": {
+          "time_unit": "minute",
+          "cost_unit": "cost_unit",
+          "workers": [
+            {
+              "id": "mina",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 30
+            },
+            {
+              "id": "omar",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 90
+            },
+            {
+              "id": "erin",
+              "availability": [
+                {
+                  "start": 570,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 60
+            }
+          ],
+          "tasks": [
+            {
+              "id": "intake",
+              "start": 540,
+              "end": 570,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 4,
+                "omar": 7
+              }
+            },
+            {
+              "id": "lab",
+              "start": 555,
+              "end": 585,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 3,
+                "omar": 5
+              }
+            },
+            {
+              "id": "sample",
+              "start": 585,
+              "end": 615,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 6,
+                "omar": 3,
+                "erin": 4
+              }
+            },
+            {
+              "id": "close",
+              "start": 615,
+              "end": 645,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 2,
+                "omar": 5,
+                "erin": 3
+              }
+            }
+          ]
+        }
+      },
+      "review": {}
+    },
+    {
+      "id": "G-W03",
+      "domain": "worker-scheduling",
+      "category": "missing",
+      "prompt": "Assign all tasks after confirming any required missing worker limit. Do not infer it from availability or another worker.",
+      "inputs": {
+        "current": {
+          "time_unit": "minute",
+          "cost_unit": "cost_unit",
+          "workers": [
+            {
+              "id": "mina",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 90
+            },
+            {
+              "id": "omar",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ]
+            },
+            {
+              "id": "erin",
+              "availability": [
+                {
+                  "start": 570,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 60
+            }
+          ],
+          "tasks": [
+            {
+              "id": "intake",
+              "start": 540,
+              "end": 570,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 4,
+                "omar": 7
+              }
+            },
+            {
+              "id": "lab",
+              "start": 555,
+              "end": 585,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 3,
+                "omar": 5
+              }
+            },
+            {
+              "id": "sample",
+              "start": 585,
+              "end": 615,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 6,
+                "omar": 3,
+                "erin": 4
+              }
+            },
+            {
+              "id": "close",
+              "start": 615,
+              "end": 645,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 2,
+                "omar": 5,
+                "erin": 3
+              }
+            }
+          ]
+        }
+      },
+      "review": {
+        "required_question": "/workers/1/max_minutes"
+      }
+    },
+    {
+      "id": "G-W04",
+      "domain": "worker-scheduling",
+      "category": "unsupported",
+      "prompt": "The start of intake must be chosen between the supplied allowed start times as part of optimization. It is not fixed. Check support and ask before reducing the requirement.",
+      "inputs": {
+        "current": {
+          "time_unit": "minute",
+          "cost_unit": "cost_unit",
+          "workers": [
+            {
+              "id": "mina",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 90
+            },
+            {
+              "id": "omar",
+              "availability": [
+                {
+                  "start": 540,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 90
+            },
+            {
+              "id": "erin",
+              "availability": [
+                {
+                  "start": 570,
+                  "end": 660
+                }
+              ],
+              "max_minutes": 60
+            }
+          ],
+          "tasks": [
+            {
+              "id": "intake",
+              "start": 540,
+              "end": 570,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 4,
+                "omar": 7
+              },
+              "allowed_start_times": [
+                540,
+                570
+              ]
+            },
+            {
+              "id": "lab",
+              "start": 555,
+              "end": 585,
+              "eligible_workers": [
+                "mina",
+                "omar"
+              ],
+              "costs": {
+                "mina": 3,
+                "omar": 5
+              }
+            },
+            {
+              "id": "sample",
+              "start": 585,
+              "end": 615,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 6,
+                "omar": 3,
+                "erin": 4
+              }
+            },
+            {
+              "id": "close",
+              "start": 615,
+              "end": 645,
+              "eligible_workers": [
+                "mina",
+                "omar",
+                "erin"
+              ],
+              "costs": {
+                "mina": 2,
+                "omar": 5,
+                "erin": 3
+              }
+            }
+          ]
+        }
+      },
+      "review": {
+        "unsupported_requirement": "optimize task start time",
+        "unsupported_path": "/tasks/0/allowed_start_times"
+      }
+    },
+    {
+      "id": "G-I01",
+      "domain": "inventory-replenishment",
+      "category": "solve",
+      "prompt": "Choose replenishment orders for the supplied horizon. Respect lead time, stock limits and terminal inventory. Verify the result and explain order, fixed and holding costs.",
+      "inputs": {
+        "current": {
+          "quantity_unit": "item",
+          "period_unit": "day",
+          "cost_unit": "cost_unit",
+          "periods": 3,
+          "products": [
+            {
+              "id": "sensor",
+              "demand": [
+                1,
+                2,
+                1
+              ],
+              "scheduled_receipts": [
+                0,
+                0,
+                0
+              ],
+              "initial_inventory": 2,
+              "lead_time": 1,
+              "max_order_quantity": 3,
+              "storage_capacity": 6,
+              "terminal_min_inventory": 1,
+              "unit_order_cost": 2,
+              "fixed_order_cost": 3,
+              "holding_cost": 1
+            }
+          ]
+        }
+      },
+      "review": {}
+    },
+    {
+      "id": "G-I02",
+      "domain": "inventory-replenishment",
+      "category": "solve",
+      "prompt": "Determine whether all demand can be met without shortages from this initial inventory. Preserve lead time and do not invent an early shipment. Verify the conclusion.",
+      "inputs": {
+        "current": {
+          "quantity_unit": "item",
+          "period_unit": "day",
+          "cost_unit": "cost_unit",
+          "periods": 3,
+          "products": [
+            {
+              "id": "sensor",
+              "demand": [
+                1,
+                2,
+                1
+              ],
+              "scheduled_receipts": [
+                0,
+                0,
+                0
+              ],
+              "initial_inventory": 0,
+              "lead_time": 1,
+              "max_order_quantity": 3,
+              "storage_capacity": 6,
+              "terminal_min_inventory": 1,
+              "unit_order_cost": 2,
+              "fixed_order_cost": 3,
+              "holding_cost": 1
+            }
+          ]
+        }
+      },
+      "review": {}
+    },
+    {
+      "id": "G-I03",
+      "domain": "inventory-replenishment",
+      "category": "missing",
+      "prompt": "Prepare an order plan after asking for any missing required cost. Do not substitute zero or use another cost coefficient.",
+      "inputs": {
+        "current": {
+          "quantity_unit": "item",
+          "period_unit": "day",
+          "cost_unit": "cost_unit",
+          "periods": 3,
+          "products": [
+            {
+              "id": "sensor",
+              "demand": [
+                1,
+                2,
+                1
+              ],
+              "scheduled_receipts": [
+                0,
+                0,
+                0
+              ],
+              "initial_inventory": 2,
+              "lead_time": 1,
+              "max_order_quantity": 3,
+              "storage_capacity": 6,
+              "terminal_min_inventory": 1,
+              "fixed_order_cost": 3,
+              "holding_cost": 1
+            }
+          ]
+        }
+      },
+      "review": {
+        "required_question": "/products/0/unit_order_cost"
+      }
+    },
+    {
+      "id": "G-I04",
+      "domain": "inventory-replenishment",
+      "category": "unsupported",
+      "prompt": "Orders of two or more units must use the supplied quantity discount. Include that rule or explain that it is unsupported and ask before solving a simplified problem.",
+      "inputs": {
+        "current": {
+          "quantity_unit": "item",
+          "period_unit": "day",
+          "cost_unit": "cost_unit",
+          "periods": 3,
+          "products": [
+            {
+              "id": "sensor",
+              "demand": [
+                1,
+                2,
+                1
+              ],
+              "scheduled_receipts": [
+                0,
+                0,
+                0
+              ],
+              "initial_inventory": 2,
+              "lead_time": 1,
+              "max_order_quantity": 3,
+              "storage_capacity": 6,
+              "terminal_min_inventory": 1,
+              "unit_order_cost": 2,
+              "fixed_order_cost": 3,
+              "holding_cost": 1,
+              "quantity_discounts": [
+                {
+                  "minimum_quantity": 2,
+                  "unit_order_cost": 1
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "review": {
+        "unsupported_requirement": "quantity dependent price",
+        "unsupported_path": "/products/0/quantity_discounts"
+      }
+    }
+  ]
+}

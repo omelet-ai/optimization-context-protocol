@@ -1,13 +1,15 @@
 # Start with the OCP native developer preview
 
-Use the native ZIP and `SHA256SUMS` from the
-[v0.1.1-preview.1 prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1). Run
-`shasum -a 256 ocp-native-v0.1.1-preview.1.zip` (or Linux `sha256sum`) and compare
-the result with the matching filename in `SHA256SUMS` before extracting.
-Checksums detect changed bytes; they are not signatures. Locally rebuilt kits
-have their own hashes and are not the published artifact.
+This kit is **v0.2.0-preview.1**, the routing-first developer preview. Download
+the native ZIP and SHA256SUMS from the matching GitHub release. The older
+v0.1.1-preview.1 assets remain unchanged.
 
-## Your first result
+For a received v0.2.0-preview.1 archive, compare
+`shasum -a 256 ocp-native-v0.2.0-preview.1.zip` with its line in `SHA256SUMS`
+before extracting. Linux users may use `sha256sum`. Checksums detect byte
+changes; they are not signatures. Keep the checksum with your test report.
+
+## First: connect the routing solver
 
 Extract the native ZIP into a new directory and open a terminal there. You need
 Python 3.12 on macOS or Linux, and public PyPI access for dependencies. No Node,
@@ -15,13 +17,15 @@ Foundry checkout, Omelet key, or model call is needed for Python and MCP.
 
 ```sh
 python3.12 -B install.py
-.native/bin/python -I -B demo.py
-.native/bin/python -I -B mcp_config.py
-.native/bin/python -I -B mcp_walkthrough.py --domain worker-scheduling --input worker-input.json
+.native/bin/ocp-native doctor --domain routing-basic --evidence --probe
+.native/bin/ocp-native config --domain routing-basic --evidence --name ocp-routing
+.native/bin/python -I -B mcp_walkthrough.py --domain routing-basic --input routing-input.json
 ```
 
-The demo runs three real jobs and independent checks: routing cost 18 meters,
-worker cost 7 cost units and inventory cost 16 cost units. Read mathematical
+The probe reports eleven tools and one routing catalog. The walkthrough solves
+and independently checks the bundled 18-meter routing example. Follow
+`ROUTING_START_HERE.md` and `HOST_SETUP.md` to connect a host and use your inputs.
+The optional `demo.py` still checks all three reference domains. Read mathematical
 status separately from job status. `feasible` does not mean `optimal`.
 MCP configuration is printed for review; the command does not edit your host or
 call a language model. Install on the machine where your MCP host runs.
@@ -61,6 +65,6 @@ Never submit keys, customer data, local credentials or a full HOME directory.
 Model execution and service trials require separately scoped approval.
 
 Validation targets are macOS arm64 and Linux amd64 Docker emulation, Python
-3.12; optional TypeScript uses Node 24 on macOS. Windows, native Linux arm64
-and Linux Node are unverified. The exact candidate's test report determines
+3.12. This release packages the Python path. Optional TypeScript is
+a separate source build. Windows and native Linux arm64 are unverified. The exact candidate's test report determines
 which targets actually passed. Automated tests cannot establish human acceptance.

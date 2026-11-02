@@ -1,0 +1,38 @@
+{
+  "format": "ocp-evidence-regressions/1",
+  "synthetic": true,
+  "scope": "Deterministic regression for observed host explanation errors; no model response fixture or success claim.",
+  "input": {
+    "time_unit": "minute",
+    "cost_unit": "cost_unit",
+    "workers": [
+      {"id": "alex", "availability": [{"start": 540, "end": 720}], "max_minutes": 120},
+      {"id": "blair", "availability": [{"start": 540, "end": 720}], "max_minutes": 180},
+      {"id": "casey", "availability": [{"start": 540, "end": 720}], "max_minutes": 120}
+    ],
+    "tasks": [
+      {"id": "pump", "start": 540, "end": 600, "eligible_workers": ["alex", "blair"], "costs": {"alex": 2, "blair": 5}},
+      {"id": "panel", "start": 540, "end": 600, "eligible_workers": ["alex", "casey"], "costs": {"alex": 4, "casey": 3}},
+      {"id": "valve", "start": 600, "end": 660, "eligible_workers": ["alex", "blair"], "costs": {"alex": 2, "blair": 4}},
+      {"id": "safety", "start": 600, "end": 660, "eligible_workers": ["blair", "casey"], "costs": {"blair": 3, "casey": 6}},
+      {"id": "meter", "start": 660, "end": 720, "eligible_workers": ["alex", "casey"], "costs": {"alex": 2, "casey": 4}},
+      {"id": "report", "start": 660, "end": 720, "eligible_workers": ["blair", "casey"], "costs": {"blair": 2, "casey": 5}}
+    ]
+  },
+  "expectations": {"base_optimum": 16, "without_panel_optimum": 13, "outside_availability_increment": 0},
+  "invalid_partial_assignment": {"assignments": [
+    {"task_id": "pump", "worker_id": "alex"},
+    {"task_id": "valve", "worker_id": "alex"},
+    {"task_id": "safety", "worker_id": "blair"},
+    {"task_id": "meter", "worker_id": "alex"},
+    {"task_id": "report", "worker_id": "blair"}
+  ]},
+  "invalid_alternative": {"assignments": [
+    {"task_id": "pump", "worker_id": "alex"},
+    {"task_id": "panel", "worker_id": "casey"},
+    {"task_id": "valve", "worker_id": "blair"},
+    {"task_id": "safety", "worker_id": "blair"},
+    {"task_id": "meter", "worker_id": "alex"},
+    {"task_id": "report", "worker_id": "blair"}
+  ]}
+}

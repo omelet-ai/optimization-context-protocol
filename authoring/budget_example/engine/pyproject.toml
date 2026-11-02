@@ -8,6 +8,6 @@ requires-python = ">=3.12"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE"]
 classifiers = ["Private :: Do Not Upload"]
-dependencies = ["ocp-candidate>=0.1.0,<=0.1.1.dev1", "ocp-budget-profile-example==0.1.0"]
+dependencies = ["ocp-candidate>=0.1.0,<=0.2.0a1", "ocp-budget-profile-example==0.1.0"]
 [tool.setuptools.packages.find]
 where = ["src"]

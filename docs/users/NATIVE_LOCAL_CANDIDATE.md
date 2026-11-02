@@ -93,6 +93,16 @@ saying computation stopped. Provider evaluation and independent checking are
 different operations. This is a stateless local MCP binding, not the full OIP
 gateway or ocps1 environment profile.
 
+Newer source-built kits also include `HOST_SETUP.md` and the `ocp-native`
+setup CLI. Use `.native/bin/ocp-native doctor --verification --probe` to check
+local stdio discovery, then `.native/bin/ocp-native config --verification` to
+print a nine-tool configuration with independent job verification. With the
+latest local source candidate, use `doctor --evidence --probe` and
+`config --evidence` for eleven tools with preparation and checked explanations;
+this option includes verification. These
+additions are not present in the immutable `v0.1.1-preview.1` ZIP. The source
+guide is `docs/users/NATIVE_HOST_SETUP.md`.
+
 ## Optional Node app
 
 Only this section requires Node 24 and npm. Use a kit built with

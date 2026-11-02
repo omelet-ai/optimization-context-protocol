@@ -1,0 +1,781 @@
+{
+  "format": "ocp-host-evaluation/1",
+  "domain": "worker-scheduling",
+  "profile": {
+    "id": "worker.scheduling",
+    "version": "0.1.0"
+  },
+  "synthetic": true,
+  "cases": [
+    {
+      "id": "N01",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": []
+    },
+    {
+      "id": "N02",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            0,
+            "max_minutes"
+          ],
+          "value": 60
+        }
+      ]
+    },
+    {
+      "id": "N03",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            0,
+            "availability",
+            0,
+            "end"
+          ],
+          "value": 600
+        }
+      ]
+    },
+    {
+      "id": "N04",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            1,
+            "eligible_workers"
+          ],
+          "value": []
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            1,
+            "costs"
+          ],
+          "value": {}
+        }
+      ]
+    },
+    {
+      "id": "N05",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            0,
+            "costs",
+            "alex"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            0,
+            "costs",
+            "blair"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            1,
+            "costs",
+            "alex"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            1,
+            "costs",
+            "casey"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            2,
+            "costs",
+            "alex"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            2,
+            "costs",
+            "blair"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            3,
+            "costs",
+            "blair"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            3,
+            "costs",
+            "casey"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            4,
+            "costs",
+            "alex"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            4,
+            "costs",
+            "casey"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            5,
+            "costs",
+            "blair"
+          ],
+          "value": 0
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            5,
+            "costs",
+            "casey"
+          ],
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "N06",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            0,
+            "max_minutes"
+          ],
+          "value": 180
+        }
+      ]
+    },
+    {
+      "id": "N07",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            5,
+            "start"
+          ],
+          "value": 720
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            5,
+            "end"
+          ],
+          "value": 780
+        },
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            0,
+            "availability",
+            0,
+            "end"
+          ],
+          "value": 780
+        },
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            1,
+            "availability",
+            0,
+            "end"
+          ],
+          "value": 780
+        },
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            2,
+            "availability",
+            0,
+            "end"
+          ],
+          "value": 780
+        }
+      ]
+    },
+    {
+      "id": "N08",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            0,
+            "costs",
+            "alex"
+          ],
+          "value": 20
+        }
+      ]
+    },
+    {
+      "id": "N09",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            0,
+            "availability",
+            0,
+            "start"
+          ],
+          "value": 600
+        },
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            1,
+            "availability",
+            0,
+            "start"
+          ],
+          "value": 600
+        },
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            2,
+            "availability",
+            0,
+            "start"
+          ],
+          "value": 600
+        },
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            0,
+            "availability",
+            0,
+            "end"
+          ],
+          "value": 780
+        },
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            1,
+            "availability",
+            0,
+            "end"
+          ],
+          "value": 780
+        },
+        {
+          "op": "set",
+          "path": [
+            "workers",
+            2,
+            "availability",
+            0,
+            "end"
+          ],
+          "value": 780
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            0,
+            "start"
+          ],
+          "value": 600
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            0,
+            "end"
+          ],
+          "value": 660
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            1,
+            "start"
+          ],
+          "value": 600
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            1,
+            "end"
+          ],
+          "value": 660
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            2,
+            "start"
+          ],
+          "value": 660
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            2,
+            "end"
+          ],
+          "value": 720
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            3,
+            "start"
+          ],
+          "value": 660
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            3,
+            "end"
+          ],
+          "value": 720
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            4,
+            "start"
+          ],
+          "value": 720
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            4,
+            "end"
+          ],
+          "value": 780
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            5,
+            "start"
+          ],
+          "value": 720
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            5,
+            "end"
+          ],
+          "value": 780
+        }
+      ]
+    },
+    {
+      "id": "N10",
+      "group": "normal",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            0,
+            "costs",
+            "alex"
+          ],
+          "value": 4
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            0,
+            "costs",
+            "blair"
+          ],
+          "value": 10
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            1,
+            "costs",
+            "alex"
+          ],
+          "value": 8
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            1,
+            "costs",
+            "casey"
+          ],
+          "value": 6
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            2,
+            "costs",
+            "alex"
+          ],
+          "value": 4
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            2,
+            "costs",
+            "blair"
+          ],
+          "value": 8
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            3,
+            "costs",
+            "blair"
+          ],
+          "value": 6
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            3,
+            "costs",
+            "casey"
+          ],
+          "value": 12
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            4,
+            "costs",
+            "alex"
+          ],
+          "value": 4
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            4,
+            "costs",
+            "casey"
+          ],
+          "value": 8
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            5,
+            "costs",
+            "blair"
+          ],
+          "value": 4
+        },
+        {
+          "op": "set",
+          "path": [
+            "tasks",
+            5,
+            "costs",
+            "casey"
+          ],
+          "value": 10
+        }
+      ]
+    },
+    {
+      "id": "M01",
+      "group": "missing",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "remove",
+          "path": [
+            "tasks",
+            0,
+            "costs",
+            "alex"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M02",
+      "group": "missing",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "remove",
+          "path": [
+            "time_unit"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M03",
+      "group": "missing",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "remove",
+          "path": [
+            "workers",
+            0,
+            "max_minutes"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M04",
+      "group": "missing",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "remove",
+          "path": [
+            "workers",
+            0,
+            "availability"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "M05",
+      "group": "missing",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result.",
+      "changes": [
+        {
+          "op": "remove",
+          "path": [
+            "tasks",
+            0,
+            "end"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "U01",
+      "group": "unsupported",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘. Alex의 10:00~10:30 휴식도 반드시 지켜줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result. Alex must also take a break from 10:00 to 10:30.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "breaks"
+          ],
+          "value": [
+            {
+              "worker_id": "alex",
+              "start": 600,
+              "end": 630
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "U02",
+      "group": "unsupported",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘. 작업자별 작업시간을 반드시 동일하게 해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result. All workers must have exactly equal workloads.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "fairness"
+          ],
+          "value": {
+            "max_workload_difference": 0
+          }
+        }
+      ]
+    },
+    {
+      "id": "U03",
+      "group": "unsupported",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘. 기존 가용시간을 넘는 작업은 분당 비용 1의 초과근무로 반드시 고려해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result. Allow work outside availability as overtime at 1 cost unit per minute.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "overtime"
+          ],
+          "value": {
+            "allowed": true,
+            "cost_per_minute": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "U04",
+      "group": "unsupported",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘. 연속 작업 사이 이동시간 15분을 반드시 반영해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result. Require 15 minutes of travel between consecutive tasks.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "travel_time"
+          ],
+          "value": {
+            "between_tasks_minutes": 15
+          }
+        }
+      ]
+    },
+    {
+      "id": "U05",
+      "group": "unsupported",
+      "prompt_ko": "주어진 점검 작업을 모두 배정하고 총비용을 최소화해줘. 배정표와 총비용, 결과를 검산한 내용을 설명해줘. 고정된 시작시간을 바꾸어서 작업시간표 자체를 최적화해줘.",
+      "prompt_en": "Assign all the supplied inspection tasks and minimize total cost. Explain the assignments, total cost and verification of the result. Optimize the task start times themselves instead of keeping them fixed.",
+      "changes": [
+        {
+          "op": "set",
+          "path": [
+            "shift_generation"
+          ],
+          "value": {
+            "choose_start": true
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-"""Build three local extension wheels; never publish or modify canonical sources."""
+"""Build local profile, engine, checker and evidence wheels without publishing."""
 import hashlib
 import json
 import os
@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 def build(output_dir):
     output = Path(output_dir).resolve(); output.mkdir(parents=True, exist_ok=True)
     records = {}
-    for component in ['profile', 'engine', 'checker']:
+    for component in ['profile', 'engine', 'checker', 'evidence']:
         with tempfile.TemporaryDirectory(prefix='ocp-budget-build-') as temp:
             stage = Path(temp)
             source = ROOT / 'authoring/budget_example' / component

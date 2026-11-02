@@ -1,5 +1,6 @@
 """H03 real OR-Tools port, generic client and negative adapter checks."""
 
+import ast
 from copy import deepcopy
 import importlib.metadata
 import json
@@ -13,6 +14,7 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 sys.path.insert(0,str(ROOT/"tools"))
 from build_candidate import build
+from build_conformance import build as build_checker
 from conformance.core_contract import validate_message
 from conformance.routing import verify_result
 
@@ -151,13 +153,33 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(self.client.execute(self.problem)["error"]["code"],"INVALID_RESPONSE")
 
     def test_20_standalone_wheel_has_no_workspace_import(self):
+        # Core remains independent of the checker. Native opt-in verification
+        # imports the separately installed public wheel, never the workspace.
+        checker = build_checker(WORK.name)
+        native_checker_clients = {
+            "ocp_runtime/" + name + ".py" for name in (
+                "native_cli", "native_mcp", "native_extension", "native_verification",
+                "native_evidence", "native_evidence_registry", "native_evidence_facts",
+                "native_evidence_validation", "native_evidence_worker")
+        }
+        with zipfile.ZipFile(checker["wheel"]) as archive:
+            checker_modules = {name[:-3].replace("/", ".") for name in archive.namelist()
+                               if name.endswith(".py")}
         with zipfile.ZipFile(ARTIFACT["wheel"]) as archive:
             for name in archive.namelist():
                 self.assertFalse(name.startswith((".private/","reference/","conformance/")))
                 if name.endswith(".py"):
                     source=archive.read(name).decode()
-                    for forbidden in ("from conformance", "import conformance", "imported-foundry", "/Users/", "sys.path.insert"):
+                    for forbidden in ("imported-foundry", "/Users/", "sys.path.insert"):
                         self.assertNotIn(forbidden,source)
+                    for node in ast.walk(ast.parse(source)):
+                        modules = ([node.module] if isinstance(node, ast.ImportFrom) and node.module
+                                   else [item.name for item in node.names] if isinstance(node, ast.Import)
+                                   else [])
+                        for module in modules:
+                            if module == "conformance" or module.startswith("conformance."):
+                                self.assertIn(name, native_checker_clients)
+                                self.assertIn(module, checker_modules)
 
     def test_21_bundled_schemas_match_canonical_hashes(self):
         import hashlib

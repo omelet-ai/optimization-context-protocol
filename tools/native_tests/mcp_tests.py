@@ -101,8 +101,9 @@ class MCP(unittest.TestCase):
         checked=await self.call('ocp_native_validate',{'domain':'worker-scheduling','problem':request})
         self.assertFalse(checked['valid']);issue=checked['issues'][0]
         self.assertEqual(issue['code'],'INVALID_ELIGIBILITY')
-        self.assertEqual(issue['fieldPath'],'/tasks/0/costs')
-        self.assertIn('every eligible worker',issue['message'])
+        wid=task['eligible_workers'][0].replace('~','~0').replace('/','~1')
+        self.assertEqual(issue['fieldPath'],'/tasks/0/costs/'+wid)
+        self.assertIn('ask for this value',issue['message'])
         result=await self.host.call_tool('ocp_native_submit',{'domain':'worker-scheduling','problem':request,'idempotency_key':'missing-cost'})
         self.assertTrue(result.is_error);self.assertEqual(result.structured_content['code'],'INVALID_PROBLEM')
 

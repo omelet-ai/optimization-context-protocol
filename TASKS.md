@@ -474,3 +474,520 @@ malformed/duplicate/non-finite MCP input rejected before any client starts, and
 MCP job states/response shapes derived from the shared native contract. The
 immutable published ZIP remains unchanged; its Node filename correction is
 documented in the current README/guide and exercised in newly built kits.
+
+## 2026-10-30 host-independent interface first implementation
+
+The owner accepted two concrete user journeys, a complete local path before
+cross-host expansion, and explicit acceptance thresholds. ChatGPT desktop local
+MCP is the selected first conversational environment. The local plan is
+`docs/plans/OCP_ADOPTION_IMPLEMENTATION_PLAN.md`.
+
+The first candidate adds opt-in stored-job independent verification to native
+MCP while keeping its default eight tools and existing provider evaluation.
+Twenty shared synthetic inspection cases and a separate reviewer packet cover
+normal, missing-data and unsupported-requirement tasks. New installed-artifact
+tests are in `tests/runtime/`; instructions are in
+`docs/development/HOST_INTERFACE_ACCEPTANCE.md`.
+
+Verification uses the independent installation lane. Historical harness stages,
+actual model-host acceptance, external human trials and publication are separate
+outcomes. Existing Foundry repositories and the unrelated convergence directory
+are outside this work. New files remain local candidates outside the approved
+publication allowlist until a concrete publication review.
+
+Local result: 53 existing installed-candidate checks and seven new verification
+tests passed. All 20 common cases passed the automated MCP rehearsal; the ten
+invalid submissions created no jobs. The desktop bundled CLI registered and
+read back `ocp-native-review`; actual desktop tool/model use is still NOT_RUN.
+No extra model calls, external-user acceptance, commits or publication occurred.
+
+## 2026-10-31 actual desktop smoke and input diagnostics
+
+The registered server was loaded in this Codex desktop agent conversation.
+Actual tool calls completed discovery, requirements, validation, submission,
+job/result retrieval and independent verification. N01 returned optimum 16;
+N04 returned independently checked infeasibility with a null objective; N05
+returned a genuine optimum of zero. Missing cost M01 and unsupported breaks
+U01 were rejected without submission. This implementation-aware smoke does not
+fill the fresh-session benchmark or ordinary ChatGPT/Claude Code acceptance.
+
+The smoke exposed a vague root-only diagnostic for unsupported rules. Python
+Core/native validation now identifies missing and extra fields, distinguishes
+type/choice/bound failures, and retains existing error codes and envelopes.
+Worker pair-cost errors identify the exact escaped field. Validation preserves
+the input; schemas, profile meaning and pinned contract sources are unchanged.
+
+Final standalone installation checks: 53 existing checks, 10 new diagnostic
+tests, seven independent-verification tests, and 20 automated MCP cases passed.
+All ten missing/unsupported cases report the expected field and create no jobs.
+The workspace source/hash/link check also passed. Initial diagnostic failures
+and the installation-location correction remain recorded in the local review.
+
+The verified runtime was installed outside the source workspace in a dedicated
+user directory and `ocp-native-review` registration was updated and read back.
+Review artifacts: `.harness/work/host-interface-20261031/REVIEW.md`. The active
+conversation can retain an older process until MCP reconnects. This work makes
+no new model sessions, commits, pushes, publication or Foundry modifications.
+
+## 2026-10-31 installed setup CLI and reconnect confirmation
+
+Actual calls in the resumed desktop conversation now return the updated M01
+and U01 diagnostic paths. The previous reconnect item is complete for this
+Codex desktop surface; ordinary ChatGPT and Claude Code trials remain separate.
+
+The candidate wheel now installs `ocp-native serve`, `config` and `doctor`.
+The doctor checks imports/resources and optionally initializes real stdio MCP
+discovery without jobs or models. It reports missing dependencies, incomplete
+catalogs and startup failure with nonzero exit status. The existing config
+script delegates to the same implementation and keeps its default JSON shape.
+Default eight tools, optional ninth verification tool and protocol schemas stay
+unchanged. Setup documentation is included as `HOST_SETUP.md` in new kits;
+the immutable published preview ZIP is unchanged.
+
+Final installed candidate passed 53 existing checks and 11 CLI regressions.
+The console entrypoint completed a real worker job and independent verification
+at cost 7. Successful and timed-out discovery processes were observed exiting;
+missing MCP/checker and deliberately exited startup cannot pass. Workspace
+hash/link checks passed. Current server registration remains on the verified
+diagnostics installation; the new CLI is installed separately for review.
+
+Evidence: `.harness/work/host-setup-20261031/REVIEW.md`. No additional model
+sessions, registry/source publication or existing Foundry access occurred.
+Claude Code environment selection is pending; local setup work is complete.
+
+## 2026-10-31 Claude Code installation and connection
+
+The user selected installation on this Mac. The official native stable
+installer installed Claude Code 2.1.309 for darwin-arm64. Its installed SHA-256
+matches the official manifest and macOS code-signature validation passes.
+The command is on PATH. No model session was started.
+
+Registered `ocp-native-review` in Claude Code user scope using the previously
+verified `20261031-setup-final` OCP installation. Exact configuration readback
+passed and `claude mcp get ocp-native-review` reports Connected. The independent
+OCP probe initialized stdio, listed all nine tools and read all three catalogs;
+it submitted no jobs. The existing Codex desktop registration was preserved.
+
+Claude authentication reports loggedIn=false. Personal browser sign-in is the
+remaining prerequisite for a new Claude conversation. Fresh model trials and
+external user acceptance remain NOT_RUN. H00 remains STALE; no dependent gates
+were promoted. Evidence: `.harness/work/claude-setup-20261031/REVIEW.md`.
+No Foundry access, commit/push or publication occurred.
+
+## 2026-10-31 Claude authentication and initial model-test preparation
+
+The user completed personal browser authentication. A fresh auth check reports
+loggedIn=true with claude.ai authentication, and the OCP server remains
+Connected. Prepared four single-turn diagnostic cases: capability questions,
+normal worker assignment, missing cost and unsupported break requirement.
+Only synthetic participant material is staged; reviewer answers stay separate.
+
+The installed CLI flags and fixture hashes are verified. Each planned session
+uses Sonnet, a 180-second timeout and a USD 0.50 CLI API-equivalent cost setting.
+Built-in file/shell tools are disabled and only the explicit OCP MCP connects.
+The exact plan and guarded one-case runner are recorded under
+`.harness/work/claude-smoke-20261031/`. Model execution approval was requested
+for this concrete scope. No model runs have been recorded at preparation time;
+the 20-by-3 acceptance plan remains separate.
+
+## 2026-11-01 paired model evaluation preparation
+
+Prepared six synthetic tasks in two modes of the same installed candidate:
+existing nine tools versus eleven with preparation/explanation enabled. Two
+counterbalanced repetitions give 24 planned fresh sessions. Prompts are identical
+across arms; answer keys are independent and kept outside participant material.
+The read-only CLI/auth/MCP preflight and eight execution-control tests passed.
+No new model call has run. Proposed new phase target is USD 5 in CLI API-equivalent
+cost (24 per-session limits of USD 0.20 plus USD 0.20 reserve), separate from the
+earlier USD 1.8366284. The exact-plan approval is pending; its absence prevents
+model execution. See `.harness/work/claude-evidence-comparison-20261101/REVIEW.md`.
+Existing source, Foundry, user MCP registration and publication are unchanged.
+
+## 2026-11-01 preparation records and checked explanation candidate
+
+Continued the locally authorized work with an opt-in EvidenceService, independent
+bounded preparation checker, and `ocp_native_prepare` / `ocp_native_explain`.
+Recorded source text remains uninterpreted; exact original/request/requirements
+hashes bind checked transformations to stored tenant/domain-scoped jobs. Fixed
+breaks and outside-availability costs preserve fixed-task assignment semantics;
+workload stays hard. Unknown requirements and combinations fail without a reduced
+request. Explanation facts are derived only after independent result assessment;
+comparisons require two checked, comparable objectives and preserve null.
+
+Final installed candidate: 53 existing checks + 24 feature checks + 7 existing
+verification regressions PASS, zero skips/errors/failures. Tests include 80 seeded
+inputs, 65,536 assignments at the profile limit, three built-in profiles, a custom
+budget profile and actual legacy/current MCP compatibility. Candidate manifest:
+603887a50a26115b9980a0c09f7e201b214f0e93e5b1edee025e061cac568a2d.
+See docs/development/NATIVE_EVIDENCE_CANDIDATE.md and local evidence in
+`.harness/work/evidence-interface-20261101/`. Existing Foundry and unrelated
+convergence work were untouched. H00 remains STALE; no model calls, user server
+re-registration, commit/push or publication. Model explanation quality remains a
+separate subsequent measurement, not established by these local checks.
+
+## 2026-10-31 approved Claude experiments and explanation-guidance candidate
+
+After explicit approval of four Sonnet tests, the user requested continued
+thorough experiments. Executed 28 fresh Claude Code 2.1.309 sessions using
+claude-sonnet-5-5: discovery, the 20 original cases, five selected revision
+checks and two active overtime boundary cases. All recorded sessions completed
+without automatic retries. CLI API-equivalent cost totaled USD 1.8366284;
+this is not an assertion of incremental subscription billing.
+
+Baseline: all ten normal tool results matched the independent expectations;
+three final answers added invalid alternative calculations. Five missing-data
+cases asked instead of guessing. All five unsupported-field cases submitted
+after transformation or reduction, failing the original zero-submit criterion.
+Post-hoc enumeration found four mappings equivalent for the concrete input,
+but does not rewrite the original scores or excuse incorrect explanations.
+
+Strengthened native MCP instructions and submit/result descriptions to preserve
+required goals, distinguish mapping from result verification, validate the
+exact submitted request and ground alternative costs in verified results.
+A separate fresh installation passed 53 checks. Tool schemas, annotations and
+catalog digests were compared with the baseline. Five selected model checks
+improved three observed cases while N04 and U03 remained wrong in final prose.
+The two active overtime boundaries preserved the original rule meaning.
+
+Local break-mapping experiments covered 261 inputs and 1,946 assignments;
+25 mapped inputs exceeded the availability schema's bounds and were correctly
+identified as non-submittable. This is a finite experiment, not a shipped
+preprocessing capability. Required next work: explicit original-requirement
+and mapping records, separately verified explanation facts, versioned test
+groups and repeated/other-host trials. Review and raw evidence:
+`.harness/work/claude-expanded-20261031/REVIEW.md`.
+
+Existing registered installations were preserved. No Foundry access,
+commit/push, publication or historical harness promotion occurred.
+
+## 2026-11-01 approved 24-session evidence comparison completed
+
+Recorded the user's explicit approval of the pinned 24-session plan and new
+USD 5 phase target. Executed all 24 fresh Claude Code 2.1.309 sessions with
+claude-sonnet-5-5, the same installed candidate and counterbalanced arm order.
+No session retries, timeouts, model/tool drift or permission denials occurred.
+Every run remained below its 180-second/USD 0.20 setting. CLI API-equivalent
+cost totaled USD 1.9796254; this is separate from the prior USD 1.8366284 and
+does not assert actual incremental subscription billing.
+
+Both arms preserved original requirements in 12/12 sessions, produced correct
+results and completed 8/8 calculation tasks, and clarified without submission
+in 4/4 missing/unsupported tasks. Independent finite enumeration compared every
+submitted problem with the original requirements. Agent review of all final
+answers found strict numerical/scope correctness in 7/8 calculation sessions
+per arm: one invalid alternative explanation in baseline and one misattributed
+feasible-count explanation in evidence. Main solutions were correct in both.
+
+The evidence arm used prepare/explain in all four transformation sessions;
+all six ready records matched exact submitted requests and explanation links.
+It did not use explain in four normal/infeasible sessions. Its measured cost
+was 35.7% higher and mean latency 18.1% higher in this small diagnostic pilot.
+Record traceability improved; general explanation accuracy did not establish
+an improvement. Preserve opt-in status and prioritize input-shape/field
+diagnostics, checked explanation facts and unnecessary call reduction.
+
+Evidence: `.harness/work/claude-evidence-comparison-20261101/REVIEW.md`, raw
+events, per-answer reviews, independently calculated counterexamples and final
+plan/runtime/output hash checks. Model and runtime stayed unchanged throughout
+the comparison. This does not fill the original 20-by-3 matrix, another host,
+or external-user acceptance. H00 remains STALE. Existing Foundry, unrelated
+convergence work, registered servers and publication were untouched. No extra
+model sessions beyond the approved 24 were invoked.
+
+## 2026-11-01 evidence usability candidate 0.2.0 verified locally
+
+Implemented the follow-up improvements from the paired pilot. Prepare now
+advertises the packaged canonical request schema and retains field-level
+validation issues. Optional compact responses omit repeated source text/input
+while keeping the exact problem, preparation ID and verification. Explain adds
+independently checked worker assignment costs, workloads and selected overtime
+cost components. Mapping facts distinguish break overlaps from removed eligible
+pairs and identify feasible counts as covering all original constraints plus
+declared requirements. No rule-only count is inferred.
+
+A fresh offline installation passed 53 regressions, 32 evidence feature/actual
+MCP checks and 7 verification regressions: 92 total, no failures/errors/skips.
+The installed runtime and copied tests match source hashes. Previous 8/9-tool
+schemas/catalogs, three reference domains and a custom budget profile passed.
+The end-to-end compact journey needs no separate result/verify/evaluate calls
+to obtain the checked explanation. One fixed-break response measured 2,709
+bytes versus 3,801 bytes previously (28.73% smaller); this is not a model-token,
+cost or answer-quality measurement.
+
+The initial install lacked two cached dependency wheels; its failure remains
+recorded. Exact lockfile-hash-matching wheels were restored into a separate
+directory before the final fresh installation. All 24 prior sessions, their
+plan and installed runtime remain unchanged. No new model calls, user server
+registration changes, Foundry access, commit/push or deployment occurred.
+H00 remains STALE. Review: `.harness/work/evidence-usability-20261101/REVIEW.md`.
+
+## 2026-11-01 evidence 0.1.0 versus 0.2.0 model comparison prepared
+
+Prepared a new 24-session packet: the same six synthetic prompts, two evidence
+versions with 11 tools each, two repetitions with reversed arm order. Actual
+installed MCP preflight confirmed identical Python, dependency versions, nine
+existing tool definitions and catalog; only the three intended runtime files
+and prepare/explain definitions differ. Claude subscription login is available.
+
+The reviewer now accepts independently checked explain-only result retrieval,
+including a comparison's baseline, and checks every observed result without
+double-counting solved jobs. Wrong request hashes/jobs, failed verification,
+duplicate assignments and incorrect costs/units fail. No-solution empty metrics
+and null retain their meaning. Eight execution-control tests and ten reviewer
+regressions passed, including replay of all 20 submitted results in the original
+24 sessions. The original results and installed runtime remain unchanged.
+
+Plan SHA-256: `189cc59968f946668e1a5605f3d2809ff4792ec92a24eb7e38b42aa75e3e8509`.
+New phase proposal: Sonnet, 24 fresh sessions, 180 seconds/USD 0.20 per session,
+USD 5 CLI-equivalent target. This proposal has no approval record and made no
+model calls. Final answer quality, completion and requirements preservation
+remain primary; call count, response bytes, cache tokens, latency and cost are
+reported together. H00 remains STALE; publication, registrations and Foundry
+are untouched. Review:
+`.harness/work/claude-evidence-v02-comparison-20261101/PREPARATION_REVIEW.md`.
+
+## 2026-11-01 approved 0.1.0 versus 0.2.0 comparison completed
+
+Recorded direct user approval of the exact 24-session plan and additional USD 5
+target, then completed every fresh session without retries, timeout, model/tool
+drift or permission denials. CLI API-equivalent cost totaled USD 2.0804584,
+separate from prior phases and actual subscription billing. Plan, installed
+runtimes, control files and original comparison evidence remained hash-identical.
+
+Both versions preserved requirements 12/12, completed calculation/infeasibility
+tasks with correct results 8/8, and clarified without submitting 4/4. Agent
+review of final calculation prose scored 6/8 for 0.1.0 and 8/8 for 0.2.0. The
+baseline errors conflated overlapping break tasks with removed eligibility,
+and all-constraint feasible counts with break-only counts. Independent arithmetic
+confirmed two overlapping tasks, one removed eligible pair, 5 fully feasible
+assignments versus 324 obeying only the break out of 729 total mappings.
+
+Tool calls fell 88→63, mean time 29.34→24.34 seconds and cost
+USD 1.1155214→0.9649370. Candidate compact use was 4/4 transformation sessions;
+all six baseline/four candidate ready records linked to exact submissions and
+explanations. Candidate explain covered all eight calculation sessions.
+Report cache/token counts and paired differences; this is a small diagnostic
+sample, not a general improvement guarantee.
+
+Remaining observations: one candidate clarification overgeneralized the selected
+worker profile to the entire catalog; one added a correct but unexecuted baseline
+counterfactual. Explicit validate preceded 9/10 candidate submits versus 10/10
+baseline submits, although all submitted requests/results checked correctly.
+Keep these separate from task success and improve capability scope, explanation
+grounding and validation traceability next. No runtime edits were made during
+the comparison. H00 remains STALE; Foundry, registration and publication untouched.
+Evidence: `.harness/work/claude-evidence-v02-comparison-20261101/REVIEW.md`.
+
+## 2026-11-01 evidence grounding candidate 0.3.0 verified locally
+
+Implemented the three follow-ups from the completed comparison. Context now
+distinguishes configured domains from the selected provider/profile and optional
+mapping support. Explain binds current/baseline facts to stored request/result
+hashes, returns an explicit unavailable comparison when no baseline was supplied,
+and keeps additional host prose outside verification.
+
+In evidence mode, submit freshly validates the exact request before calling the
+native client. A bounded tenant/domain/job-scoped receipt separates provider input
+validation from an observed explicit host validate call and from independent
+result verification. Invalid inputs do not create jobs. Replay retains the
+original receipt; absent/evicted original history stays unknown or replay-only.
+Request/catalog drift, record tampering and uncertain submissions fail without
+automatic retries. The existing 8/9 tools and native/Core wire contracts remain
+unchanged; the opt-in binding exposes 11 tools.
+
+A fresh offline build/install passed 110 checks: 53 base regressions, 35 evidence
+checks (five actual installed MCP tests), 15 validation-receipt regressions and
+7 independent-verification regressions. Final failures/errors/skips were zero.
+Installed runtime and copied test hashes match source. Tests cover all three
+reference domains, a separately installed custom budget profile and compatibility
+with the pinned prior 0.2.0 installation. An initial test-fixture error inverted
+the job store's created flag; its failed result was retained and the fixture was
+corrected against the packaged contract before rerunning outside the checkout.
+
+The prior 24-run plan, installed runtimes and raw output hashes remain unchanged.
+Workspace checks pass for 307 source snapshot files and existing link/case scope.
+No new model calls, Foundry access, host registration edits or publication occurred.
+H00 remains STALE; these are independent candidate checks, not gate promotion.
+Review: `.harness/work/evidence-grounding-20261101/REVIEW.md`.
+
+## 2026-11-02 onboarding integration and new multi-domain acceptance prepared
+
+The installed CLI's serve/config/doctor now accepts evidence mode consistently,
+implicitly enabling verification. Default eight-tool and verification nine-tool
+behavior remains. Diagnostics distinguish package, contract, profile and feature
+versions and check real eleven-tool discovery and capability scope for all three
+reference domains. Generated config and kit/user setup instructions agree.
+
+A fresh offline macOS installation passed 53 base regressions, 15 CLI checks
+and 3 packet checks, with zero failures/errors/skips. The packet checks use
+actual MCP for seven computation scenarios and six invalid inputs. The initial
+two CLI failures were equivalent /tmp versus /private/tmp path assertions;
+parent-only path normalization fixed the tests while preserving venv identity.
+Their original failure evidence remains. Four evidence runtime modules match
+the prior 110-check checkpoint; that historical count was not rerun or added.
+
+Prepared twelve new routing/worker/inventory tasks with independent exhaustive
+reviewer answers and participant-only inputs. Forty-eight rows (two hosts, two
+repetitions) remain NOT_RUN. A separate 24-session Claude Code/Sonnet plan pins
+this runtime, prompts, configuration and controls. Eight execution-control tests
+passed; a read-only preflight confirmed current subscription authentication.
+The additional USD 5 CLI-equivalent budget is awaiting direct approval; no new
+model calls occurred. The previous comparison plan/runtime and 72 raw files
+remain unchanged.
+
+The current desktop server still advertises verification without evidence.
+Separate candidate connection examples and first-user observation forms are
+prepared; existing host registration is unchanged and participants are absent.
+The next requirements-mapping, evidence-extension and remote-MCP increment is
+designed in `docs/plans/OCP_EVIDENCE_NEXT_INCREMENT.md`, not implemented.
+H00 remains STALE; original Foundry, publication and unrelated work are untouched.
+Review: `.harness/work/onboarding-integration-20261102/REVIEW.md`.
+
+## 2026-11-02 approved multi-domain 24-session trial completed
+
+Executed the directly approved fixed 12-case/two-repeat Claude Code/Sonnet plan.
+All 24 sessions finished without retries, timeout, model/tool drift or permission
+denials. CLI API-equivalent cost was USD 1.4247095 against the additional USD 5
+target, distinct from subscription billing. Inputs, runtime and controls stayed
+pinned; 96 raw files were hashed. Prior plans/runtimes, 72 earlier raw files and
+46 unrelated convergence-work files remain unchanged.
+
+Requirements were preserved 24/24. Correct calculation/infeasibility/comparison
+completion was 12/12; missing-data questions and no submission 6/6; unsupported
+requirements and no submission 6/6. Fourteen actual jobs independently checked,
+with explicit validation and matching fresh binding receipts 14/14. There were
+93 tool calls and no tool errors. No preparation mappings were needed by these
+tasks, so they add no transformation-acceptance evidence.
+
+Strict agent review of final claims and next actions passed 20/24, or 11/12
+calculation answers. Two answers described rejected unknown fields as possibly
+ignored; one conflated configurable capacity with all enforced routing rules;
+one suggested submitting a baseline assignment, though submit accepts problems
+and explain requires stored jobs. These did not corrupt the primary solutions
+or lead to submissions dropping mandatory rules. Retain the four findings and
+improve structured behavior/scope/comparison guidance in a separate candidate.
+
+The offline reviewer initially used an incorrect routing metric definition;
+that false-negative extraction was retained and corrected against the profile.
+Six reviewer regressions cover real traces, wrong hashes/units/solutions, null
+versus zero and swapped comparison jobs. Full raw results were not retrieved
+by the model: request hashes were recomputed and response hashes matched across
+reported verification/explanation sources; independent mathematics was rechecked.
+
+No new product edits during the trial, Foundry access, registration changes,
+publication or second-host/human acceptance. H00 stays STALE. Review and exact
+scores: `.harness/work/claude-multidomain-20261102/REVIEW.md`.
+
+## 2026-11-02 — Evidence 0.4.0 behavior guidance locally verified
+
+Addressed the four observed 0.3.0 explanation errors with structured
+`input_policy`, `constraint_scope` and `comparison_inputs`. The optional
+binding now distinguishes disallowed fields from ignored fields, fixed
+configuration selections from declared/intrinsic rules, and a solved baseline
+problem from an externally supplied assignment. Unknown/drifted profile context
+gets no built-in rule summary. Missing-baseline explanations carry the supported
+next steps while preserving null. Core/native contracts and catalogs are unchanged.
+
+Fresh offline macOS arm64/Python 3.12 checks passed: 53 base + 35 evidence +
+15 validation receipts + 7 verification + 12 new guidance/MCP + 15 CLI = 137.
+Initial install lacked the second wheelhouse; preserved that failed attempt and
+completed a fresh installation with the previous validated dependencies. Actual
+stdio rejects invalid fields/solution input, then accepts a corrected problem
+under the same unused idempotency key. Legacy 8/9 tool definitions and catalogs
+match installed 0.3.0; the independent budget extension and two-job comparison
+still work. Workspace integrity separately passed with 307 source hashes.
+
+Prior trial/runtime/raw records and unrelated convergence work are preserved.
+No additional model run, registration change, Foundry access or publication.
+The historical 20/24 strict explanation result remains attached to 0.3.0;
+0.4.0 host-answer improvement is not yet measured. H00 remains STALE.
+Evidence: `.harness/work/evidence-behavior-20261102/REVIEW.md`.
+
+
+## 2026-11-02 — Version comparison prepared and evidence extension locally verified
+
+Prepared a fresh 0.3.0/0.4.0 Claude Code comparison: 12 fixed synthetic tasks,
+two versions, two repetitions, 48 sessions with balanced version order. Identical
+Python/dependencies, prompts, CLI and runtime fingerprints are pinned. Controls
+8, real-trace reviewer regressions 6 and installed MCP packet checks 3 passed.
+Per-session settings: 180 seconds and USD 0.20 CLI API equivalent; phase target
+USD 10 including USD 0.40 reserve. Approval requested separately and still
+pending; no model calls were made. The installation setup initially used a wrong
+cwd, created a new scratch .native here, then removed only that newly created
+environment and installed correctly outside the checkout. Existing environments
+were not modified. Trial packet: `.harness/work/claude-behavior-comparison-20261102`.
+
+Evidence 0.5.0 independently adds explicit profile/version/feature registration
+for requirement validation, preparation, preparation checks, mapping facts,
+solution details and independent detail checks. Worker behavior is registered
+through that interface. A separately built budget evidence package completes
+context/identity-prepare/validate/submit/explain with checked item costs and
+benefits. Generic MCP tools require no edits for the budget extension. Context
+selects the handler's schema; unregistered domains retain identity support.
+
+Registrations are frozen and callback inputs copied. Invalid versions, duplicate
+handlers, schema references, mutated inputs, invalid hashes/reports, catalog or
+handler drift, unsupported mappings, and changed identity input fail closed.
+The API is explicitly trusted installed code, not an untrusted-code sandbox or
+certification. A second callback checks detail facts; failed result checks do not
+invoke the detail builder. Source-text interpretation remains outside verification.
+
+Final fresh macOS arm64/Python 3.12 installation passed 156 checks: base 53,
+evidence 35, validation 15, verification 7, guidance 12, registry/installed package
+19, CLI 15. The earlier CLI run failed because its resource diagnostic expected
+worker requirements at the domain index; selected-domain validation fixes that
+assumption. Failed logs and intermediate candidates are preserved. Existing 8/9
+tool definitions/catalogs match installed 0.4.0. No Core/native/profile changes.
+
+Prepared a developer/conversation-user observation packet; no participants or
+sessions have been recorded. Requirement-to-input tracking and remote MCP are
+still future implementation units. No Foundry access, host registration changes,
+commit/push/publication or historical H-stage promotion. H00 remains STALE.
+Record: `.harness/work/evidence-extension-20261102/REVIEW.md`.
+
+
+### 2026-11-02 — Routing-first delivery and agent rehearsal
+
+User selected routing-solver connection as the first delivery. Added optional
+`--domain` selection to the native CLI/server; routing-only configuration exposes
+only routing-basic, and the existing multi-domain default remains compatible.
+Added a bundled routing quickstart and delivery/rehearsal scope document.
+A discovered single ExceptionGroup wrapper no longer hides domain-mismatch
+diagnostics; mixed errors remain generic.
+
+Public v0.1.1-preview.1 was downloaded/checksummed and installed from public PyPI
+in a fresh environment. Its demo and 15 routing checks passed. Final source
+candidate passed 53 base + 20 CLI + 18 routing checks on macOS and 22 setup/routing
+checks on Linux amd64 Docker emulation. Same final manifest on both platforms.
+Direct tool interaction through the existing Codex verification connection also
+solved and independently checked one synthetic route; this was not registration
+or host acceptance of the new candidate. No extra paid model sessions.
+
+The implementing agent has project knowledge; this is not blind testing or an
+external human/adoption result. Actual outside participants, another target host,
+remote operations and publication remain separate work. No original Foundry
+access, host configuration changes, commit/push/deployment or H-stage promotion.
+H00 remains STALE. Source migration integrity check passed within its own scope.
+Record: `.harness/work/routing-first-rehearsal-20261102/REVIEW.md`.
+
+
+### 2026-11-03 — Approved paired trial and routing release preparation
+
+Completed the user-approved 48-session 0.3.0/0.4.0 Claude Code/Sonnet comparison.
+Both arms passed 24/24 structured checks (12 normal, 6 missing, 6 unsupported).
+Full-answer review passed 22/24 and 23/24. Retained three explanation errors,
+including a wrong proposed start time in 0.4.0; no unsupported submission occurred.
+CLI API-equivalent cost USD 3.0489965, within USD 10; zero retries. This does not
+measure 0.5.0, external participants or another host. Source and all raw trials
+are separate. Record: `.harness/work/claude-behavior-comparison-20261102/REVIEW.md`.
+
+Prepared routing-first v0.2.0-preview.1 (Python 0.2.0a1, evidence 0.5.0), an
+explicit pending source selection, archive integrity guards and matching README/
+English/Korean routing setup. Historical rights/approval records and notices
+remain unchanged. Candidate tests are local; no source push, release assets,
+registry upload or Pages deployment occurred. Existing Foundry was not accessed.
+Record: `.harness/work/routing-release-review-20261102/REVIEW.md`.
+
+## 2026-11-03 — Routing preview publication authorization
+
+The owner approved main commit/push, the v0.2.0-preview.1 GitHub prerelease and Pages. The reviewed 392-file inventory is promoted to the explicit source allowlist. Release links, bilingual guidance and bundled instructions are finalized together; local synthetic validation remains separate from hosted CI and human acceptance. No Foundry or convergence sources are changed. Publication receipts and live checks are recorded outside the public source tree.

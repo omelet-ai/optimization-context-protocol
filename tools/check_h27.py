@@ -75,11 +75,18 @@ class Workers(unittest.TestCase):
         from ocp_planning.worker import solve
         self.assertEqual(solve(self.p,time.monotonic()-1,time.monotonic),(None,False))
     def test_16_eligibility_error_identifies_fix_without_executing(self):
-        for mode,field in [('missing_cost','costs'),('extra_cost','costs'),('unknown_worker','eligible_workers')]:
+        for mode in ('missing_cost','extra_cost','unknown_worker'):
             p=deepcopy(self.p)
-            if mode=='missing_cost':p['tasks'][0]['costs'].pop(p['tasks'][0]['eligible_workers'][0])
-            elif mode=='extra_cost':p['tasks'][0]['costs']['ghost']=1
-            else:p['tasks'][0]['eligible_workers'].append('ghost')
+            if mode=='missing_cost':
+                worker_id=p['tasks'][0]['eligible_workers'][0]
+                p['tasks'][0]['costs'].pop(worker_id)
+                field='costs/'+worker_id
+            elif mode=='extra_cost':
+                p['tasks'][0]['costs']['ghost']=1
+                field='costs/ghost'
+            else:
+                field='eligible_workers'
+                p['tasks'][0]['eligible_workers'].append('ghost')
             r=self.c.request(p)
             with patch.object(self.a.profile,'solve',side_effect=AssertionError('invalid input reached solver')):
                 checked=self.a.validate(r);failed=self.a.execute(r)
