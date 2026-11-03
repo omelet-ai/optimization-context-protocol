@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ocp-worker-greedy-example"
-version = "0.1.0"
+version = "0.1.1"
 description = "Independent, bounded greedy worker provider for the OCP candidate contract"
 requires-python = ">=3.12"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE"]
-dependencies = ["ocp-candidate>=0.1.0,<=0.2.0a1"]
+dependencies = ["ocp-candidate>=0.1.0,<=0.2.0a2"]
 classifiers = ["Private :: Do Not Upload"]
 
 [tool.setuptools.packages.find]

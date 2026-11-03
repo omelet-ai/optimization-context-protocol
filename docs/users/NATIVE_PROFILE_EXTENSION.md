@@ -4,7 +4,7 @@ This developer preview adds an opt-in Python registration API, version
 `0.1.0`, alongside the unchanged Core 0.1 and native v1 wire contracts. It is not
 a new mandatory standard or a change to existing Foundry projects. Example
 source is public; its three optional wheels are included in the published
-`v0.1.1-preview.1` native ZIP and current source-built native kits. No registry
+`v0.2.0-preview.2` native ZIP and current source-built native kits. No registry
 packages are published. Install the supplied wheels explicitly to enable them.
 
 The example maximizes benefit from a subset of items within a budget. The profile
@@ -20,7 +20,7 @@ Start with the local native kit's README installation. Inside that kit directory
 
 <!-- ocp:extension-install -->
 ```sh
-.native/bin/python -m pip install --no-index --no-deps ocp_budget_profile_example-0.1.0-py3-none-any.whl ocp_budget_engine_example-0.1.0-py3-none-any.whl ocp_budget_checker_example-0.1.0-py3-none-any.whl
+.native/bin/python -m pip install --no-index --no-deps ocp_budget_profile_example-0.1.0-py3-none-any.whl ocp_budget_engine_example-0.1.1-py3-none-any.whl ocp_budget_checker_example-0.1.0-py3-none-any.whl
 .native/bin/python -m pip check
 ```
 
@@ -103,7 +103,7 @@ registrations, six-tool Core MCP and eight-tool native MCP behavior remain in
 the regression lane. Core envelopes and native wire v1 are unchanged; no new
 field is mandatory. The verification report format remains 0.1.0, with the
 actual selected checker's identity and objective semantics. Use the matching
-SDK/checker and example wheels from `v0.1.1-preview.1` or one source-built kit;
+SDK/checker and example wheels from `v0.2.0-preview.2` or one source-built kit;
 unrelated older installations do not implicitly gain these APIs. A later release needs an explicit package version
 and publication review. Do not replace installed packages silently.
 

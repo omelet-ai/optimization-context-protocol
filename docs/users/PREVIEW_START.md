@@ -1,11 +1,11 @@
 # Start with the OCP native developer preview
 
-This kit is **v0.2.0-preview.1**, the routing-first developer preview. Download
+This kit is **v0.2.0-preview.2**, the routing-first developer preview. Download
 the native ZIP and SHA256SUMS from the matching GitHub release. The older
 v0.1.1-preview.1 assets remain unchanged.
 
-For a received v0.2.0-preview.1 archive, compare
-`shasum -a 256 ocp-native-v0.2.0-preview.1.zip` with its line in `SHA256SUMS`
+For a received v0.2.0-preview.2 archive, compare
+`shasum -a 256 ocp-native-v0.2.0-preview.2.zip` with its line in `SHA256SUMS`
 before extracting. Linux users may use `sha256sum`. Checksums detect byte
 changes; they are not signatures. Keep the checksum with your test report.
 

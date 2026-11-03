@@ -8,7 +8,7 @@ an independently adopted industry standard.
 | Source | Public at [GitHub](https://github.com/omelet-ai/optimization-context-protocol); original code is Apache-2.0, with separate third-party notices |
 | Documentation site | Public on [GitHub Pages](https://omelet-ai.github.io/optimization-context-protocol/) |
 | Native v1 | Public source candidate aligned with pinned Capability Contract v1; explicit native SDK/MCP entrypoints; not stable v1 or the full gateway/ocps1 profile |
-| Installation | [Routing-first prerelease ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1) or source build; no PyPI/npm release |
+| Installation | [Routing-first prerelease ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2) or source build; no PyPI/npm release |
 | Runtime examples | Routing, fixed-time worker assignment and deterministic inventory replenishment; bounded reference profiles |
 | Omelet trial | Separate invitation, environment and operating limits; no public self-service signup |
 | Compatibility | Preview contracts, explicit profile versions and artifact hashes; not a frozen stable API |
@@ -63,10 +63,10 @@ an evaluation; disclose which it was when reporting a problem.
 
 ## Routing-first preview
 
-[v0.2.0-preview.1](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1) is the routing-first developer prerelease.
+[v0.2.0-preview.2](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2) is the routing-first developer prerelease.
 It recommends OR-Tools routing through local stdio MCP, with a diagnostic CLI,
 routing-only discovery, preparation and checked explanations. Python package
-`0.2.0a1` is separate from native contract `1`, Core/domain payload `0.1.0` and
+`0.2.0a2` is separate from native contract `1`, Core/domain payload `0.1.0` and
 evidence feature `0.5.0`. The older ZIP remains an independent immutable artifact.
 See the [routing quickstart](NATIVE_ROUTING_QUICKSTART.md) and
 [delivery scope](../development/ROUTING_FIRST_RELEASE.md).

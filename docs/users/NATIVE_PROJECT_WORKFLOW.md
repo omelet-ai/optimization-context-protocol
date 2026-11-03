@@ -6,7 +6,7 @@ server and checker. The project does not copy or modify a Foundry checkout.
 `project.py` is an example application you may replace, not a new protocol layer.
 Its `ocp-project/1` files are application settings, not a universal OCP contract.
 
-The published `v0.1.1-preview.1` native ZIP includes this workflow and optional
+The published `v0.2.0-preview.2` native ZIP includes this workflow and optional
 example wheels. Extract it, or build public source with
 `tools/build_native_candidate.py`. Use the kit containing `project.py` and this
 guide; rebuilding source is unnecessary if you already have it. Python 3.12 is required;
@@ -93,7 +93,7 @@ The optional greedy engine is implemented independently of the reference solver:
 
 <!-- ocp:project-byo -->
 ```sh
-.native/bin/python -I -B -m pip install --no-index --no-deps ./ocp_worker_greedy_example-0.1.0-py3-none-any.whl
+.native/bin/python -I -B -m pip install --no-index --no-deps ./ocp_worker_greedy_example-0.1.1-py3-none-any.whl
 .native/bin/python -I -B project.py run --project worker-project.json --engine byo --output runs/byo
 .native/bin/python -I -B project.py compare runs/baseline runs/byo
 ```

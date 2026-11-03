@@ -65,6 +65,20 @@ it does not assert that a defect present in the baseline has disappeared.
 Domain feasibility/optimality checker code stays independently implemented.
 Sharing wire contracts and SDKs must not make a solver its own independent judge.
 
+## Local operations (Python candidate 0.2.0a2)
+
+The loopback service exposes the canonical `/health`, `/ready` and `/version`
+routes without authentication; the existing loopback/Origin restrictions still
+apply. `/ready` returns 503 before startup/after shutdown, on a failed store
+lookup, a stopped or failing worker poller, or catalog drift from startup.
+It checks local dispatch readiness without submitting a problem or consuming a
+job slot. A busy worker stays ready; readiness does not prove a particular solve
+will succeed or attest a remote engine. `/version` reports the installed package,
+contract version and each selected domain's startup catalog digest.
+All early boundary errors preserve the canonical error body and echo its
+`requestId` in `x-request-id`, including rejected JSON and framing.
+Core/domain contracts, MCP tools and the fixed Foundry sources are unchanged.
+
 Known pinned TypeScript SDK issue: its timeout exception text can say a job was
 cancelled even when the cancellation request failed. Treat the job's terminal
 state as evidence, never that exception text. The local `cancel-uncertainty-1`

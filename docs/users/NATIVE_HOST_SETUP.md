@@ -1,6 +1,6 @@
 # Connect an installed OCP server to a local MCP host
 
-This guide accompanies **v0.2.0-preview.1**, with the
+This guide accompanies **v0.2.0-preview.2**, with the
 `ocp-native` command. The immutable `v0.1.1-preview.1` ZIP does not contain this
 CLI. Use that ZIP's own README and `mcp_config.py`, or build a new candidate.
 No PyPI package or `uvx` command is being published by this change.

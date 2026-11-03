@@ -1,7 +1,7 @@
 # Connect a routing solver to your MCP host
 
-This guide accompanies `v0.2.0-preview.1` (Python package
-`0.2.0a1`, evidence feature `0.5.0`). This routing setup is not included
+This guide accompanies `v0.2.0-preview.2` (Python package
+`0.2.0a2`, evidence feature `0.5.0`). This routing setup is not included
 in the published `v0.1.1-preview.1` ZIP. The first delivery connects a local OR-Tools
 routing solver through OCP, with independent result checking. No account or key
 is needed. OCP's contracts and extension API remain usable for other domains

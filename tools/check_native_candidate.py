@@ -77,6 +77,11 @@ def check(kit, wheelhouses, output, node=None, npm=None):
     for name in ['binding_tests', 'server_tests', 'mcp_tests']:
         report = json.loads(run(name, [python, '-I', '-B', name + '.py']).strip().splitlines()[-1])
         assert report['tests_run'] > 0 and not any(report[n] for n in ['errors', 'failures', 'skipped']), report
+        if name == 'server_tests':
+            assert report.get('canonical_tests', 0) >= 37, 'Foundry contract checks must run on installed artifacts'
+            assert report.get('concurrency_recovery_tests', 0) >= 13, 'Concurrency and recovery checks must run on installed artifacts'
+            results.append('foundry-contract-v1')
+            results.append('concurrency-recovery')
         tests += report['tests_run']; results.append(name)
     demo = json.loads(run('demo', [python, '-I', '-B', 'demo.py']))
     assert demo['status'] == 'PASS' and demo['execute_calls'] == 3 and demo['model_calls'] == 0

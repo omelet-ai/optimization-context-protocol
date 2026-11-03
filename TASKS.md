@@ -991,3 +991,46 @@ Record: `.harness/work/routing-release-review-20261102/REVIEW.md`.
 ## 2026-11-03 — Routing preview publication authorization
 
 The owner approved main commit/push, the v0.2.0-preview.1 GitHub prerelease and Pages. The reviewed 392-file inventory is promoted to the explicit source allowlist. Release links, bilingual guidance and bundled instructions are finalized together; local synthetic validation remains separate from hosted CI and human acceptance. No Foundry or convergence sources are changed. Publication receipts and live checks are recorded outside the public source tree.
+
+## Native contract maintenance — 2026-11-03
+
+The user requested correction and thorough local verification of the Foundry
+compatibility audit. The public native server now mounts the pinned operations
+router and preserves request IDs on every early boundary rejection. Readiness
+observes actual lifecycle, store access, worker polling/liveness and startup
+catalog consistency without submitting a problem. The original Foundry checkout,
+fixed contract packages and local convergence work are unchanged.
+
+Installed-artifact CI now invokes the original ContractSuite (37 checks across
+three domains and a real running cancellation fixture), plus operational fault
+and recovery tests. The maintenance candidate is Python 0.2.0a2 / planned
+v0.2.0-preview.2; changed example dependency metadata uses new 0.1.1 package
+versions. The published v0.2.0-preview.1 assets remain unchanged. This is local
+implementation/test scope, not a new push/release/Pages or model-call approval.
+Detailed verification and source/artifact hashes are recorded separately under
+`.harness/work/native-contract-fix-20261103/`; these standalone checks do not
+promote the stale historical H00 chain or establish external-human acceptance.
+
+## Native concurrency and recovery audit — 2026-11-03
+
+The requested additional perspectives exposed a malformed-input defect: deeply
+nested JSON returned a retryable 500. The public server now treats the parser's
+recursion failure as a non-retryable 422 input error, using the existing canonical
+error envelope. Thirteen new installed-server regressions cover concurrent
+replay/conflict/limits, tenant and domain isolation, correlation IDs, process
+crash/exception recovery, cancellation, deadlines and lifecycle cleanup. The
+installed checker requires these tests in addition to the original 37 contract
+checks. Old published Python SDK compatibility and the macOS/Linux installed
+checks are recorded under `.harness/work/native-extra-audit-20261103/` with exact
+source and kit hashes. These are local synthetic checks; no publication, model
+calls or existing Foundry repository changes are part of this work.
+
+## 2026-11-03 — Native maintenance publication authorization
+
+The owner approved the complete proposed finalization, main push, maintenance
+prerelease and existing Pages sequence. The 392-file inventory stays unchanged;
+current user guides and bilingual download links are aligned to v0.2.0-preview.2.
+Routing host trial tasks, proposed measurable thresholds and blank host/version
+fields are prepared. Participants remain unassigned; no human acceptance or paid
+model run is claimed. Exact-asset checks and publication receipts are recorded in
+`.harness/work/native-maintenance-publication-20261103/`.

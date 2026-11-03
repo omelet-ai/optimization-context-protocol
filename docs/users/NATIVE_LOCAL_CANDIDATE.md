@@ -1,8 +1,14 @@
 # Native v1: developer preview quickstart
 
 Use this candidate when developing against Foundry Capability Contract v1 jobs.
+
+The `v0.2.0-preview.2` release uses Python `0.2.0a2`, including `/health`,
+`/ready`, `/version`, consistent error request IDs and non-retryable rejection of
+excessively nested JSON. The contract,
+domain payloads and MCP tool interface are unchanged; see the
+[compatibility scope](../../spec/bindings/FOUNDRY_NATIVE_V1_CANDIDATE.md).
 It is an **Apache-2.0 developer preview**. Download the native ZIP and checksum
-from the [GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1),
+from the [GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2),
 or build a kit using the repository README's native source quickstart. If you
 already extracted the kit, continue below without cloning or rebuilding OCP.
 The Core quickstart remains a separate path.
@@ -12,7 +18,7 @@ file integrity, not the identity or trustworthiness of their source.
 ## Install and solve
 
 Use Python 3.12 on macOS or Linux. This installation needs no Node, Foundry
-checkout, account, API key or model. The published `v0.1.1-preview.1` ZIP was tested
+checkout, account, API key or model. The release ZIP is checked
 on macOS arm64 and Linux amd64 (Python 3.12, offline Docker using amd64 emulation).
 Newer public source has a separate macOS arm64 and native Linux x64 Python/Node
 CI lane; inspect the run for the commit you build. Source CI does not retest the
@@ -93,11 +99,10 @@ saying computation stopped. Provider evaluation and independent checking are
 different operations. This is a stateless local MCP binding, not the full OIP
 gateway or ocps1 environment profile.
 
-Newer source-built kits also include `HOST_SETUP.md` and the `ocp-native`
+The current release and source-built kits include `HOST_SETUP.md` and the `ocp-native`
 setup CLI. Use `.native/bin/ocp-native doctor --verification --probe` to check
 local stdio discovery, then `.native/bin/ocp-native config --verification` to
-print a nine-tool configuration with independent job verification. With the
-latest local source candidate, use `doctor --evidence --probe` and
+print a nine-tool configuration with independent job verification. Use `doctor --evidence --probe` and
 `config --evidence` for eleven tools with preparation and checked explanations;
 this option includes verification. These
 additions are not present in the immutable `v0.1.1-preview.1` ZIP. The source
@@ -105,9 +110,9 @@ guide is `docs/users/NATIVE_HOST_SETUP.md`.
 
 ## Optional Node app
 
-Only this section requires Node 24 and npm. Use a kit built with
-`--with-typescript`, or the published `v0.1.1-preview.1` ZIP, which includes these
-two archives. From the same bundle directory:
+Only this section requires Node 24 and npm. Use a separate source-built kit with
+`--with-typescript`; the current routing-first release ZIP contains the Python
+path. From the generated TypeScript bundle directory:
 
 <!-- ocp:native-node-install -->
 ```sh
@@ -163,7 +168,7 @@ and the three-domain launcher retain their reference engines.
 A review kit containing `project.py` and `PROJECT_GUIDE.md` can create a new,
 self-contained project with its own installer and inputs. The same application
 runs three domains, swaps engines, records jobs and rechecks saved results without
-a solver. The public `v0.1.1-preview.1` ZIP and current source-built kits include
+a solver. The current native ZIP and source-built kits include
 this additive example workflow. See `PROJECT_GUIDE.md` in your kit (source:
 `docs/users/NATIVE_PROJECT_WORKFLOW.md`). The kit also includes
 `INSPECTION_GUIDE.md` for CSV input, checked business reports and owner review of

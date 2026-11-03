@@ -2,11 +2,69 @@
 
 Core and native sources are public under Apache-2.0; the native source rights
 and notices were approved in October 2026. Download the native ZIP and checksum
-from the [first GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1).
+from the [current GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2).
 A separately rebuilt evaluation bundle is a different artifact; do not replace
 the published checksum with its hash. No independent participant has been assigned yet.
 The release kit includes START_HERE.md and a blank REVIEW_FORM.json. Record
 actual outcomes and help needed; automated tests never populate human acceptance.
+
+## Routing MCP host trial
+
+Start with two or three participants who did not build OCP. Participants are
+currently unassigned; all review forms remain blank. Routing is the first
+exercise for a host-independent optimization interface, not a limitation to TMS
+or software development. One participant may ask questions and solve a problem;
+another may connect the same interface to an application.
+
+Download the current release, retain the native ZIP checksum, and follow
+`START_HERE.md` then `ROUTING_START_HERE.md`. Configure the participant's own local
+stdio MCP host using `ocp-native config --domain routing-basic --evidence`.
+Record the host name/version in `REVIEW_FORM.json`. A host that cannot start local
+stdio requires a separately configured transport; record BLOCKED with the exact
+connection error instead of changing the test or assuming remote support.
+
+With Python 3.12 already available, time from opening START_HERE.md to the first
+independently checked result. Use only bundled or synthetic data. If a host uses
+a paid model, its account owner chooses the model and authorizes its usage; this
+kit does not start model sessions or install host configuration automatically.
+
+| Task | Participant action | Expected behavior |
+| --- | --- | --- |
+| Complete input | Give the host `routing-input.json`; ask it to minimize distance within the supplied vehicle capacity and explain the result | Discover routing, prepare/validate, solve, independently verify; distinguish feasible from optimal and report meters/kg |
+| Missing input | In a copy of that input, remove a required vehicle capacity; ask the same question | Ask for the missing value before submitting; do not invent it |
+| Unsupported rule | Add a requirement for delivery time windows | Explain that routing.basic does not support the rule; do not solve a reduced problem without explicit agreement |
+| Changed conditions | Run `scenarios.py --output trial-inputs` with the kit's Python; give both routing-basic-base.json and routing-basic-changed.json from that folder | Solve and check both complete inputs; explain that distance changes from 12 to 20 synthetic meters because input changed, not because one engine is better |
+
+For each task save the original prompt/input, tools used, job IDs, final answer,
+verification dimensions, time, first error and assistance received. Attach these
+records to the existing `mcp-sdk` task in REVIEW_FORM.json; record installation
+separately under `install`. Optional own-app and own-engine tasks can remain
+NOT_STARTED. A host conversation is distinct from an SDK walkthrough.
+
+Initial pilot targets are **15 minutes or less to first checked result**, **at
+least two of three participants completing without maintainer assistance**, and
+**zero invented required values or silently dropped mandatory constraints**.
+These are proposed acceptance thresholds, not achieved rates or a statistical
+benchmark. Record all attempts, blocked runs and assistance; never remove failed
+participants from the denominator. With fewer than three participants, report
+individual outcomes and defer the cohort decision.
+
+## Use the findings to choose the next change
+
+- Installation or configuration blocks: simplify the documented setup first;
+  consider registry packaging after the package scope and publishing account are set.
+- Missing information or misleading explanations: improve schema/context/error
+  guidance, then repeat the same host tasks with versioned prompts and artifacts.
+- Required rules outside the current profile: specify a suitable profile, engine
+  and checker together; keep the common host interface unchanged.
+- A host requires remote MCP: verify its current connection requirements, then
+  select operator, deployment target, authentication and usage limits before
+  provisioning a service. Do not invent a public endpoint in a local configuration.
+
+Keep a short finding record: affected task/host/version, reproduced behavior,
+severity, proposed change, owner and retest result. The maintainer reviews actual
+submissions; automated rehearsals do not fill human acceptance. Report only
+permitted synthetic evidence in public issues, with no credentials or customer data.
 
 ## Start without project assistance
 
@@ -79,7 +137,7 @@ acceptance only after reviewing an actual participant's submission.
 ## TMS integration evaluation
 
 This exercise helps a delivery-app developer evaluate the public native preview.
-Use the published `v0.1.1-preview.1` ZIP, its checksum and bundled installation
+Use the published `v0.2.0-preview.2` ZIP, its checksum and bundled installation
 instructions. Record the exact artifact hash. It runs a local reference engine,
 not Omelet's commercial TMS engine; no customer system or model is called.
 

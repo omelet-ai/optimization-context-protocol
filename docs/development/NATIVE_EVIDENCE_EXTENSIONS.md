@@ -19,9 +19,9 @@ generated kit, install all four example wheels into that same environment:
 ```sh
 .native/bin/python -I -B -m pip install --no-index --no-deps --no-compile \
   ocp_budget_profile_example-0.1.0-py3-none-any.whl \
-  ocp_budget_engine_example-0.1.0-py3-none-any.whl \
+  ocp_budget_engine_example-0.1.1-py3-none-any.whl \
   ocp_budget_checker_example-0.1.0-py3-none-any.whl \
-  ocp_budget_evidence_example-0.1.0-py3-none-any.whl
+  ocp_budget_evidence_example-0.1.1-py3-none-any.whl
 ```
 
 Configure the MCP host with the absolute path to that installation's Python and

@@ -19,7 +19,7 @@ and the [immutable preview plan](docs/development/PREVIEW_RELEASE.md).
 
 ## Connect a routing solver
 
-**[Download v0.2.0-preview.1](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1)** — the routing-first developer preview.
+**[Download v0.2.0-preview.2](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2)** — the routing-first developer preview.
 The first recommended connection is local OR-Tools routing through any host
 supporting stdio MCP. Discover supported rules, ask for missing inputs, solve,
 and explain independently checked results. No Omelet account is required.
@@ -45,14 +45,14 @@ travel times and time windows require a different supporting implementation.
 Other domains and BYO engines remain available through the same interface.
 Omelet trial remains recommended when invited.
 
-This release uses Python package `0.2.0a1`, evidence feature `0.5.0`, native
+This release uses Python package `0.2.0a2`, evidence feature `0.5.0`, native
 contract `1` and domain/Core payload `0.1.0`. These versions describe different
 layers. See the [routing release scope](docs/development/ROUTING_FIRST_RELEASE.md).
 
 ## Start here: native preview in about 10 minutes
 
-Start with the [v0.2.0-preview.1 prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1). Download
-`ocp-native-v0.2.0-preview.1.zip` and `SHA256SUMS` into the same folder.
+Start with the [v0.2.0-preview.2 prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2). Download
+`ocp-native-v0.2.0-preview.2.zip` and `SHA256SUMS` into the same folder.
 Use Python 3.12 on macOS or Linux; check `python3.12 --version` first. If that
 command is missing, install Python 3.12 or use your interpreter's absolute path.
 Git, Node, a source build, an Omelet key and model calls are unnecessary for
@@ -64,7 +64,7 @@ In a terminal in your download folder, calculate the native ZIP's checksum:
 
 <!-- ocp:readme-native-verify -->
 ```sh
-shasum -a 256 ocp-native-v0.2.0-preview.1.zip
+shasum -a 256 ocp-native-v0.2.0-preview.2.zip
 ```
 
 Compare it with the **native ZIP line** in `SHA256SUMS`. Stop if they differ.
@@ -73,7 +73,7 @@ not signatures. Then extract into a **new** folder and run:
 
 <!-- ocp:readme-native-install -->
 ```sh
-unzip ocp-native-v0.2.0-preview.1.zip -d ocp-native-preview
+unzip ocp-native-v0.2.0-preview.2.zip -d ocp-native-preview
 cd ocp-native-preview
 python3.12 -B install.py
 .native/bin/python -I -B demo.py
@@ -99,6 +99,14 @@ Use `--domain routing-basic --evidence` for eleven tools and a single routing
 catalog. The default multi-domain reference and extension interfaces remain
 available in the same kit.
 
+## Evaluate in your MCP host
+
+Follow the [routing host trial](docs/users/NATIVE_EXTERNAL_EVALUATION.md#routing-mcp-host-trial)
+for complete, missing, unsupported and changed-input tasks in your own host.
+The kit includes a blank REVIEW_FORM.json for setup time, host version, obstacles
+and evidence. External participants are not yet assigned; pilot targets are not
+adoption results. Routing is the first exercise for the common interface.
+
 ## Evaluate a TMS integration
 
 Use the [TMS integration exercise](docs/users/NATIVE_EXTERNAL_EVALUATION.md#tms-integration-evaluation)
@@ -120,7 +128,7 @@ public issues and initial inquiries.
 
 | Starting point | Use it for | Verified scope |
 | --- | --- | --- |
-| **Recommended download: `v0.2.0-preview.1` native ZIP** | First run, three-domain examples, MCP, independent project and optional BYO/profile examples | Exact native ZIP: macOS arm64 Python/MCP; Linux amd64 Python/MCP in Docker emulation; TypeScript is a separate source build |
+| **Recommended download: `v0.2.0-preview.2` native ZIP** | First run, three-domain examples, MCP, independent project and optional BYO/profile examples | Exact native ZIP: macOS arm64 Python/MCP; Linux amd64 Python/MCP in Docker emulation; TypeScript is a separate source build |
 | **Source checkout: pin a commit** | Developing OCP or taking newer fixes; Core 0.1 or native v1 | [Public CI](https://github.com/omelet-ai/optimization-context-protocol/actions/workflows/public-ci.yml) tests macOS arm64 and native Linux x64 with Python 3.12 and Node 24; inspect the run for your commit |
 
 The immutable ZIP and moving `main` are separate deliveries. A successful source
@@ -136,12 +144,18 @@ The routing-first ZIP contains the Python path.
 
 ## Core 0.1 and native v1
 
+The `0.2.0a2` maintenance release adds canonical local health/readiness/version
+routes, preserves request IDs on rejected input, and rejects deeply nested JSON
+as a non-retryable input error. Installed-artifact checks include the original
+contract suite and concurrency/recovery regressions.
+See the [candidate scope and validation](docs/development/PREVIEW_RELEASE.md).
+
 **Core 0.1 and the native v1 candidate are public source developer previews.**
 Both are licensed under Apache-2.0. The Core quickstart below retains the existing
 synchronous interface; the [native source quickstart](#native-v1-from-public-source)
 builds a separate opt-in kit aligned with Foundry Capability Contract v1.
 Native implementation, pinned shared contracts and build tools are included here.
-This is not a stable v1 or full gateway/ocps1 release. The [native ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.1)
+This is not a stable v1 or full gateway/ocps1 release. The [native ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2)
 is a prerelease; PyPI/npm packages are not published.
 
 <!-- ocp:core-native-table:start -->

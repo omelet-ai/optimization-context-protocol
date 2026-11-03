@@ -10,7 +10,7 @@ evidence of a deployed internal project or a completed human acceptance test.
 ## Install and prepare the work
 
 Download and verify the native ZIP from the
-[GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.1.1-preview.1),
+[GitHub prerelease](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2),
 or build a kit using the repository README's native source quickstart
 (`tools/build_native_candidate.py`). Both contain `inspection.py` and this guide.
 No internal Foundry checkout or review artifact is needed. From the kit:
@@ -111,7 +111,7 @@ Changing `end` instead changes availability; workload and availability are diffe
 
 <!-- ocp:inspection-byo -->
 ```sh
-.native/bin/python -I -B -m pip install --no-index --no-deps ./ocp_worker_greedy_example-0.1.0-py3-none-any.whl
+.native/bin/python -I -B -m pip install --no-index --no-deps ./ocp_worker_greedy_example-0.1.1-py3-none-any.whl
 .native/bin/python -I -B project.py run --project scenarios/baseline/project.json --engine byo --output runs/inspection-byo
 .native/bin/python -I -B inspection.py report --run runs/inspection-byo --output reviews/byo
 .native/bin/python -I -B project.py compare runs/inspection-baseline runs/inspection-byo

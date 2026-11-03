@@ -43,7 +43,7 @@ class Inspection(unittest.TestCase):
         cls.app=module('inspection');cls.project=module('project')
         cls.base=cls.documented('inspection-baseline')
         cls.original=cls.project.read(ROOT/'scenarios/baseline/input.json')
-        cls.command('.native/bin/python -I -B -m pip install --no-index --no-deps --no-compile ./ocp_worker_greedy_example-0.1.0-py3-none-any.whl')
+        cls.command('.native/bin/python -I -B -m pip install --no-index --no-deps --no-compile ./ocp_worker_greedy_example-0.1.1-py3-none-any.whl')
 
     def temp(self):
         path=Path(tempfile.mkdtemp(prefix='inspection-case-',dir=ROOT))

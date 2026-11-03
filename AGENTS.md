@@ -52,3 +52,5 @@
 - 2026-10-28 사용자는 신규 28개 native 추출 소스의 공개·Apache-2.0 배포 권한과 특허 관점 공개 가능 여부를 확인하고, 검토한 301개 후보의 고지 확정·최종 검증·main commit/push 및 README·GitHub Pages 갱신을 승인했다. 최종 명시 목록은 두 계약 패키지의 고지 6개를 더한 307개이며 [공개 기록](provenance/PUBLICATION_APPROVAL.md)을 따른다. 레지스트리·릴리스 자산·trial·추가 모델 호출과 동시 진행 중인 BYO worker 개발은 이 게시 범위에 포함하지 않는다.
 
 - 2026-11-03 사용자는 검토한 라우팅 후보 392개 파일의 main commit/push, `v0.2.0-preview.1` GitHub 프리릴리스 자산 4개, 기존 GitHub Pages 배포를 승인했다. 공개 기록과 최종 allowlist를 따른다. 레지스트리·hosted trial·추가 모델 호출·기존 Foundry 변경은 제외한다.
+
+- 2026-11-03 사용자는 유지보수 검증 후 “모두 진행하라”로 기존 392개 공개 파일 범위의 main commit/push, `v0.2.0-preview.2` 자산 4개 게시, 기존 Pages 배포 및 공개 설치 검증·외부 시험 준비를 승인했다. 참여자는 미정이며 사람 수락은 NOT_RUN으로 유지한다. 레지스트리·신규 hosted/원격 MCP 서비스·추가 유료 모델 호출·기존 Foundry 변경은 이 게시에 포함하지 않는다.

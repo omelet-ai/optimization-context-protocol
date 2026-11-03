@@ -72,7 +72,7 @@ class PublicSite(unittest.TestCase):
                     self.assertTrue(urljoin(self.base + name, attrs["src"]).startswith(self.base))
 
     def test_native_release_is_discoverable_without_source_build(self):
-        url = REPO + '/releases/tag/v0.2.0-preview.1'
+        url = REPO + '/releases/tag/v0.2.0-preview.2'
         for name in ['index.html', 'start/index.html', 'start/local/index.html', 'ko/index.html']:
             self.assertIn(url, self.pages[name].links, name)
             self.assertIn('SHA256SUMS', self.html[name], name)
@@ -82,11 +82,11 @@ class PublicSite(unittest.TestCase):
 
     def test_routing_release_has_bilingual_download_and_shared_commands(self):
         for name in ('start/routing/index.html', 'ko/start/routing/index.html'):
-            self.assertIn('v0.2.0-preview.1', self.html[name])
+            self.assertIn('v0.2.0-preview.2', self.html[name])
             self.assertIn('--domain routing-basic --evidence', self.html[name])
             self.assertEqual(self.pages[name].commands['readme-routing-setup'],
                              readme_commands('readme-routing-setup'))
-            self.assertIn('/releases/tag/v0.2.0-preview.1', self.html[name])
+            self.assertIn('/releases/tag/v0.2.0-preview.2', self.html[name])
         self.assertNotIn('not published yet', self.html['start/routing/index.html'])
         self.assertNotIn('아직 게시하지 않았습니다', self.html['ko/start/routing/index.html'])
 
@@ -223,7 +223,7 @@ class PublicSite(unittest.TestCase):
     def test_14_zip_and_source_verification_cannot_be_conflated(self):
         body = self.html['project/index.html']
         self.assertIn('delivery-scope', self.pages['project/index.html'].ids)
-        for phrase in ('v0.2.0-preview.1', 'Docker emulation', 'native Linux x64',
+        for phrase in ('v0.2.0-preview.2', 'Docker emulation', 'native Linux x64',
                        'does not update or retest the immutable ZIP', 'Windows CI checks',
                        'external-human adoption remain unverified'):
             self.assertIn(phrase, body)

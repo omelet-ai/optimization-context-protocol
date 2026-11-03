@@ -7,6 +7,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -24,7 +25,8 @@ def build(output_dir):
             result = subprocess.run([sys.executable, '-B', '-m', 'build', '--wheel', '--no-isolation', '--outdir', str(output), str(stage)],
                                     env=dict(os.environ, PYTHONDONTWRITEBYTECODE='1'), capture_output=True, text=True, timeout=60)
             if result.returncode: raise RuntimeError(result.stderr)
-        wheel = output / ('ocp_budget_' + component + '_example-0.1.0-py3-none-any.whl')
+        metadata = tomllib.loads((source / 'pyproject.toml').read_text())['project']
+        wheel = output / f'ocp_budget_{component}_example-{metadata["version"]}-py3-none-any.whl'
         records[component] = {'wheel': str(wheel), 'sha256': hashlib.sha256(wheel.read_bytes()).hexdigest()}
     return records
 

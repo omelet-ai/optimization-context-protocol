@@ -21,7 +21,7 @@ from build_budget_example import build as budget_build
 ROOT = Path(__file__).resolve().parents[1]
 NATIVE = ROOT / 'sdk/native-contracts'
 PIN = '7547036d1bc9464d6c43a9bdf7cff0a78e8560d7'
-SDK_VERSION = '0.2.0a1'
+SDK_VERSION = '0.2.0a2'
 TS_VERSION = '0.1.1-native.7547036d1bc9.review.1'
 
 

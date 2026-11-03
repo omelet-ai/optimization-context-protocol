@@ -59,6 +59,23 @@ independent rejection of changed results, BYO worker replacement and CSV
 inspection scenarios. Python-only installation is tested with Node absent from
 the executable search path even when the runner itself has Node installed.
 
+Installed native server checks also run the unchanged pinned Foundry
+`ContractSuite`: 12 checks per reference domain and one actual running-job
+cancellation fixture (37 checks). OpenAPI schemas come from the installed
+contract package. These checks are mandatory in both Python/Node CI lanes;
+failures or missing checks stop `check_native_candidate.py` and therefore CI.
+Additional probes cover all early error paths, request ID propagation, readiness
+before startup/after shutdown, store/worker/catalog failures and recovery, and
+readiness while a solve is running. They do not certify the gateway/ocps1 profile.
+
+Thirteen additional installed-server regressions exercise concurrent replay,
+conflicting requests, atomic session limits, tenant/domain isolation, request ID
+separation, cancellation, client deadlines, partial startup, repeated shutdown,
+solver crashes and recovery. Admission-only tests explicitly pause dispatch;
+recovery tests run the real reference solver. Excessively nested JSON must return
+a non-retryable 422 with the contract error envelope. These bounded local races
+are mandatory regressions, not a production capacity benchmark.
+
 `result.json` binds counts to source and kit digests, runtime/platform and wheel
 hashes. Detailed logs remain in the output directory. The workflow uploads no
 artifacts; its console contains synthetic test summaries and failures. Test

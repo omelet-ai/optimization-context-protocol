@@ -3,11 +3,11 @@ requires = ["setuptools==80.9.0", "wheel==0.46.3"]
 build-backend = "setuptools.build_meta"
 [project]
 name = "ocp-budget-evidence-example"
-version = "0.1.0"
+version = "0.1.1"
 requires-python = ">=3.12"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE"]
 classifiers = ["Private :: Do Not Upload"]
-dependencies = ["ocp-candidate==0.2.0a1", "ocp-conformance-candidate==0.1.0", "ocp-budget-profile-example==0.1.0"]
+dependencies = ["ocp-candidate==0.2.0a2", "ocp-conformance-candidate==0.1.0", "ocp-budget-profile-example==0.1.0"]
 [tool.setuptools.packages.find]
 where = ["src"]

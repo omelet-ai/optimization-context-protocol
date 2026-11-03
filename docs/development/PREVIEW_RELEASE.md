@@ -1,21 +1,28 @@
-# Routing preview preparation
+# Native contract maintenance preview
 
-**v0.2.0-preview.1 is the routing-first GitHub developer prerelease.**
-The owner approved its main push, four release assets and Pages update on
-2026-11-03; see the [publication record](../../provenance/PUBLICATION_APPROVAL.md).
-Older v0.1.1-preview.1 assets remain unchanged.
+**v0.2.0-preview.2 / Python 0.2.0a2** is the native contract maintenance
+prerelease. It adds canonical local health/readiness/version operations, preserves
+request IDs on early input errors, rejects excessively nested JSON as a
+non-retryable 422, and makes contract/concurrency/recovery tests mandatory in
+installed-artifact CI. Existing profile payloads, catalog digests and MCP tool
+interfaces are unchanged. Earlier release assets remain immutable.
+
+On 2026-11-03 the owner approved finalization, main commit/push, this four-asset
+GitHub prerelease and the existing Pages update; see the
+[publication record](../../provenance/PUBLICATION_APPROVAL.md). Local preparation
+metadata remains distinct from live publication receipts.
 
 ## Delivery
 
 The target is a GitHub developer prerelease in
 `omelet-ai/optimization-context-protocol`, with these four assets:
 
-- `ocp-native-v0.2.0-preview.1.zip`: Python kit, routing quickstart and notices.
-- `ocp-source-v0.2.0-preview.1.zip`: explicitly selected source snapshot.
+- `ocp-native-v0.2.0-preview.2.zip`: Python kit, routing quickstart and notices.
+- `ocp-source-v0.2.0-preview.2.zip`: explicitly selected source snapshot.
 - `preview.json`: version, source and archive hashes.
 - `SHA256SUMS`: checksums for the two ZIP files.
 
-The [version plan](preview-release.json) pins Python package `0.2.0a1`, evidence
+The [version plan](preview-release.json) pins Python package `0.2.0a2`, evidence
 feature `0.5.0`, native contract `1` and Core/domain payload `0.1.0`. The first
 recommended configuration uses OR-Tools with `--domain routing-basic --evidence`.
 Optional TypeScript remains a separate source build. PyPI/npm and hosted trials
@@ -42,8 +49,10 @@ participants actually complete them.
 ## Source and notices
 
 `provenance/routing-preview-selection.json` and the canonical source allowlist
-record the approved 392-file inventory. Builder plan flags stay false because
-creating another local artifact does not authorize its publication. LICENSE, NOTICE and THIRD_PARTY_NOTICES are unchanged;
+record the previously approved 392-file inventory. This candidate changes content
+within that inventory; its exact final source and artifact hashes are checked before publication.
+Builder plan flags stay false because building alone grants no publication rights;
+the separate owner instruction authorizes this release. LICENSE, NOTICE and THIRD_PARTY_NOTICES are unchanged;
 pinned contract sources and their notices remain intact. Dependencies install
 separately under their own licenses. Native contract registry-upload guards
 remain enabled. Local build metadata is preparation evidence, not live GitHub

@@ -198,3 +198,25 @@ The approval excludes package registries, hosted-trial provisioning, additional
 model calls and spending. Existing Foundry checkouts, worktrees and Git metadata,
 concurrent convergence work, private plans, credentials and operating data are
 excluded from this publication. No external-human acceptance is claimed.
+
+## Native maintenance publication, 2026-11-03
+
+After reviewing the native compatibility fixes, additional concurrency/failure
+checks and the proposed release sequence, the owner instructed: “모두 진행하라.”
+This authorizes finalizing the existing 392-file public source inventory, main
+commit/push to omelet-ai/optimization-context-protocol, the four assets of
+v0.2.0-preview.2 (native/source ZIPs, preview.json, SHA256SUMS), and the existing
+GitHub Pages site through gh-pages. Final source/archive hashes and hosted CI
+receipts are checked and retained separately. Older assets remain immutable.
+
+This maintenance uses Python 0.2.0a2 and the unchanged pinned native contract,
+Core/domain payloads and MCP interface. No additional Foundry source is extracted;
+existing Apache-2.0 notices and the prior company rights confirmations remain
+unchanged. Local builder metadata is preparation evidence, not upload authority.
+
+The instruction includes public-download verification and external-trial
+preparation. The owner confirmed participants are unassigned; human acceptance
+remains NOT_RUN. No participant invitation is sent. Package registries, a new
+hosted solver/remote MCP service, additional paid model calls, and any changes to
+existing Foundry repositories are outside this publication. The host-independent
+interface remains the product boundary; routing is the initial evaluation case.
