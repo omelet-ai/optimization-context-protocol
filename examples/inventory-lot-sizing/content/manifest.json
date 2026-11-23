@@ -1,0 +1,205 @@
+{
+  "format_version": "0.1.0-draft.2",
+  "id": "inventory.lot-sizing",
+  "version": "1.0.0",
+  "profile": {
+    "id": "inventory.bounded-lots",
+    "version": "1.0.0"
+  },
+  "api": {
+    "id": "inventory.lot-sizing.api",
+    "version": "1.0.0",
+    "input_schema": "input",
+    "result_schema": "result",
+    "configuration_schema": "configuration"
+  },
+  "schemas": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "demand": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "capacity": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "order_fee": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "holding_fee": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        }
+      },
+      "required": [
+        "demand",
+        "capacity",
+        "order_fee",
+        "holding_fee"
+      ],
+      "additionalProperties": false
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "lot": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "orders": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "cost": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 200000000
+        }
+      },
+      "required": [
+        "lot",
+        "orders",
+        "cost"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "default_locale": "en",
+  "localizations": {
+    "en": {
+      "title": "Bounded lot sizing",
+      "summary": "Select order size to cover demand at minimum ordering and holding cost."
+    }
+  },
+  "units": {
+    "unit": {
+      "dimension": "count",
+      "definition": "One inventory unit"
+    },
+    "credit": {
+      "dimension": "cost",
+      "definition": "One synthetic cost credit"
+    }
+  },
+  "capabilities": {
+    "objectives": [
+      {
+        "id": "total_cost",
+        "definition": "Minimum ordering and holding cost",
+        "unit": "credit",
+        "direction": "minimize",
+        "role": "optimized"
+      }
+    ],
+    "constraints": [
+      {
+        "id": "capacity",
+        "definition": "Lot size cannot exceed capacity",
+        "unit": "unit",
+        "kind": "hard",
+        "role": "enforced"
+      }
+    ],
+    "execution": {
+      "mode": "sync",
+      "cancel": false,
+      "durable": false,
+      "evaluate": true
+    }
+  },
+  "configuration_defaults": {},
+  "configuration_rules": [],
+  "bindings": [
+    {
+      "id": "capacity",
+      "target": "input",
+      "pointer": "/capacity",
+      "operation": "replace",
+      "value_schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10000
+      }
+    }
+  ],
+  "metrics": [
+    {
+      "id": "cost",
+      "pointer": "/cost",
+      "definition": "Total ordering fees plus holding fees",
+      "unit": "credit",
+      "value_type": "number",
+      "direction": "minimize",
+      "comparison_basis": "invariant"
+    }
+  ],
+  "input_formats": [],
+  "playbooks": [
+    {
+      "id": "compare-storage-limits",
+      "version": "1.0.0",
+      "status": "executable",
+      "localizations": {
+        "en": {
+          "title": "Compare storage limits",
+          "summary": "Solve for each storage capacity and show exact ordering and holding cost."
+        }
+      },
+      "binding_ids": [
+        "capacity"
+      ],
+      "metric_ids": [
+        "cost"
+      ],
+      "preserve": [
+        {
+          "target": "input",
+          "pointer": "/demand"
+        },
+        {
+          "target": "input",
+          "pointer": "/order_fee"
+        },
+        {
+          "target": "input",
+          "pointer": "/holding_fee"
+        }
+      ],
+      "recipe": {
+        "kind": "independent_variations",
+        "variables": [
+          {
+            "binding": "capacity",
+            "values": [
+              4,
+              7,
+              12
+            ]
+          }
+        ]
+      },
+      "budget": {
+        "max_calls": 3,
+        "concurrency": 1,
+        "timeout_seconds": 30
+      }
+    }
+  ],
+  "required_extensions": [],
+  "extensions": {}
+}
