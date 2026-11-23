@@ -237,9 +237,18 @@ class GenericHarness(unittest.TestCase):
         receipt = json.loads(log.with_suffix('.receipt.json').read_text())
         self.assertEqual(receipt['closure'], 'UNKNOWN'); self.assertEqual(receipt['status'], 'FAIL')
         self.assertIn('INCOMPLETE', receipt['registration_error'])
-        pid = int((self.work / 'incomplete.pid').read_text()); deadline = time.monotonic() + 3
-        while harness.group_alive(pid) and time.monotonic() < deadline: time.sleep(.02)
-        self.assertFalse(harness.group_alive(pid))
+        pid = int((self.work / 'incomplete.pid').read_text())
+        deadline = time.monotonic() + 3
+        while time.monotonic() < deadline:
+            try:
+                if not harness.group_alive(pid):
+                    break
+            except PermissionError:
+                # macOS can briefly deny a signal-0 probe while the orphan exits.
+                pass
+            time.sleep(.02)
+        else:
+            self.fail(f'Did not observe the exit of fixture process group {pid}')
 
     def test_kernel_group_permission_error_is_not_an_empty_group(self):
         import ctypes, errno
