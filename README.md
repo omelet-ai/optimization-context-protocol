@@ -14,6 +14,7 @@ available without an Omelet account or key.
 | --- | --- |
 | Run an existing solver | [Download the Native preview](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2) and [solve a routing problem](docs/users/NATIVE_ROUTING_QUICKSTART.md). |
 | Build an OCP Server for your algorithm | [Package a cutting-stock solver](examples/cutting-stock/README.md), submit an order from an AI client and look up its job ID. |
+| Compare candidate solutions with an executable playbook | Plan and compare jobs using the public SDK and MCP in the [inventory lot-sizing example](examples/inventory-lot-sizing/README.md). |
 
 The generic template and runtime are **public source** that you build from a checkout.
 The **Native ZIP** is a separate versioned GitHub download. OCP has no PyPI/npm

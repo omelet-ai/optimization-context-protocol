@@ -126,6 +126,12 @@ def check(output, wheelhouses=(), with_typescript=False, selection_path=None):
         run('installed-generic', [python, '-B', 'tools/check_generic_candidate.py', '--source', source,
             '--selection', selection_path, '--expected-version', version, '--wheelhouse', wheels,
             '--output', work / 'generic'], timeout=900, report=True)
+        if 'examples/inventory-lot-sizing/content/manifest.json' in selection_files:
+            run('inventory-playbook', [work / 'generic/env/bin/python', '-IB', 'tests/installed/test_lot_sizing_playbook.py',
+                work / 'inventory'], report=True)
+        if with_typescript and 'sdk/typescript/src/server_package.ts' in selection_files:
+            run('typescript-descriptor', [node, 'tests/installed/test_typescript_descriptor.mjs',
+                work / 'native/bundle with spaces/node_modules/ocp-candidate/dist'], report=True)
     report = {'status': 'PASS', 'tests_run': sum(r['tests_run'] for r in reports.values()),
               'errors': 0, 'failures': 0, 'skipped': 0, 'platform': platform.platform(),
               'machine': platform.machine(), 'python': platform.python_version(),
