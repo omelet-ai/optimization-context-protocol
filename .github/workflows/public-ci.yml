@@ -37,7 +37,7 @@
         },
         {
           "name": "Fresh selected-source build and installed consumers",
-          "run": "python -B tools/check_public_ci.py --output \"$RUNNER_TEMP/ocp-public-ci\" --with-typescript",
+          "run": "python -B tools/check_public_ci.py --output \"$RUNNER_TEMP/ocp-public-ci\" --with-typescript --selection provenance/public-format-candidate-selection.json",
           "shell": "bash"
         }
       ]
