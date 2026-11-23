@@ -124,6 +124,28 @@ print(json.dumps({'checks':count}))
 '''
     tests += json.loads(run('independent', [python, '-I', '-B', '-c', independent]))['checks']
     results.append('independent')
+    # The base install is already exercised above. Install this explicit BYO
+    # example only for the optional custom-domain Knowledge compatibility test.
+    examples = json.loads((bundle / 'manifest.json').read_text())['example_wheels']
+    run('knowledge-example-install', [python, '-B', '-m', 'pip', 'install', '--no-index', '--no-deps',
+        '--no-compile', '--no-cache-dir', bundle / examples['budget_profile'], bundle / examples['budget_engine']])
+    run('knowledge-example-dependencies', [python, '-B', '-m', 'pip', 'check'])
+    shutil.copy2(ROOT / 'cases/routing/coordinates.json', bundle / 'coordinates.json')
+    for name in ['test_native_knowledge.py', 'test_coordinate_input.py']:
+        shutil.copy2(ROOT / 'tests/runtime' / name, bundle / name)
+        report = json.loads(run(name.removesuffix('.py'), [python, '-I', '-B', name]).strip().splitlines()[-1])
+        assert report['tests_run'] > 0 and not any(report[key] for key in ('errors', 'failures', 'skipped'))
+        tests += report['tests_run']; results.append(name.removesuffix('.py'))
+    request = json.loads(run('coordinate-csv', [python, '-I', '-B', 'coordinates.py',
+        '--depot', 'coordinates-depot.csv', '--visits', 'coordinates-visits.csv',
+        '--vehicles', 'coordinates-vehicles.csv', '--distance-model', 'haversine', '--request-id', 'csv-check']))
+    assert request['input'] == json.loads((bundle / 'coordinates.json').read_text())['input']
+    assert request['domain_profile'] == {'id': 'routing.coordinates', 'version': '0.1.0'}
+    tests += 1; results.append('coordinate-csv')
+    report = json.loads(run('knowledge-doctor', [python, '-I', '-B', '-m', 'ocp_runtime.native_cli', 'doctor',
+        '--domain', 'routing-coordinates', '--knowledge', '--snapshots', '--evidence', '--probe']))
+    assert report['status'] == 'PASS' and len(report['probe']['tools']) == 13
+    tests += 1; results.append('knowledge-doctor')
     if node:
         environment_node = dict(environment, PATH=str(Path(node).parent) + os.pathsep + os.defpath,
                                 npm_config_ignore_scripts='true', npm_config_audit='false', npm_config_fund='false')
@@ -141,6 +163,12 @@ print(json.dumps({'checks':count}))
         assert install_command[:4] == ['npm', 'install', '--ignore-scripts', '--save-exact']
         assert install_command[4:] == ['./' + name for name in archives], 'DOCUMENTED_NODE_ARCHIVES_MISMATCH'
         run('node-install', [npm, *install_command[1:]], env=environment_node)
+        shutil.copy2(ROOT / 'tests/runtime/knowledge_parity.py', bundle / 'knowledge_parity.py')
+        parity = json.loads(run('knowledge-parity', [python, '-I', '-B', 'knowledge_parity.py',
+            '--node', node, '--typescript-dist', bundle / 'node_modules/ocp-candidate/dist'], env=environment_node))
+        assert parity['status'] == 'PASS'
+        tests += parity['fingerprint_vectors'] + parity['knowledge_cases'] + parity['typescript_non_json_rejections']
+        results.append('knowledge-parity')
         for name in ['binding-contract.test.mjs', 'public-live.test.mjs']:
             shutil.copy2(ROOT / 'tools/native_tests' / name, bundle / name)
         upstream = (ROOT / 'tools/native_tests/upstream.test.ts').read_text()

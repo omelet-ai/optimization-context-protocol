@@ -1,0 +1,83 @@
+{
+  "depot_id": "depot",
+  "visits": [
+    {
+      "id": "a",
+      "demand_kg": 3
+    },
+    {
+      "id": "b",
+      "demand_kg": 4
+    },
+    {
+      "id": "c",
+      "demand_kg": 2
+    },
+    {
+      "id": "d",
+      "demand_kg": 5
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "van_a",
+      "capacity_kg": 8
+    },
+    {
+      "id": "van_b",
+      "capacity_kg": 12
+    },
+    {
+      "id": "truck",
+      "capacity_kg": 20
+    }
+  ],
+  "distance_matrix": {
+    "node_ids": [
+      "depot",
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "distances_m": [
+      [
+        0,
+        1419,
+        2224,
+        2086,
+        2393
+      ],
+      [
+        1419,
+        0,
+        1419,
+        2392,
+        3336
+      ],
+      [
+        2224,
+        1419,
+        0,
+        3774,
+        4534
+      ],
+      [
+        2086,
+        2392,
+        3774,
+        0,
+        1419
+      ],
+      [
+        2393,
+        3336,
+        4534,
+        1419,
+        0
+      ]
+    ]
+  },
+  "distance_model": "supplied_matrix",
+  "source_coordinates": null
+}

@@ -1,14 +1,36 @@
 from pathlib import Path
-import hashlib,json,re,runpy,threading,math
+import hashlib,json,re,runpy,threading,math,os
+
+
+def verify_authored_sensitive_files(root):
+    """Check authored files, not private runs or installed third-party caches.
+
+    This is not publication approval. The publication allowlist has its own
+    verifier; imported source paths are always checked explicitly below.
+    """
+    root = Path(root).resolve()
+    for directory, directories, names in os.walk(root, followlinks=False):
+        if Path(directory) == root:
+            directories[:] = [d for d in directories if d not in {'.git', '.harness', '.private'}]
+        for name in names:
+            p = Path(directory) / name
+            assert not name.startswith('.env') and p.suffix.lower() not in {'.pem','.key','.p12','.pfx','.pyc'}, str(p.relative_to(root))
 
 
 def verify_document_links(root):
     root = Path(root).resolve()
-    for path in root.rglob('*.md'):
+    # Excluded generated trees can contain installed environments and large
+    # experiment histories. Prune them before traversal, not after enumeration.
+    # Only the existing root-level exclusions apply to authored documents.
+    def unreadable(error):
+        raise error
+    paths = []
+    for directory, directories, names in os.walk(root, followlinks=False, onerror=unreadable):
+        if Path(directory) == root:
+            directories[:] = [d for d in directories if d not in {'.private', 'reference', '.harness'}]
+        paths.extend(Path(directory) / name for name in names if name.endswith('.md'))
+    for path in sorted(paths):
         relative = path.relative_to(root)
-        # Source hashes and sensitive-file checks have their own, unchanged scope.
-        # .harness contains partial build/test copies, not the authored docs tree.
-        if relative.parts[0] in {'.private', 'reference', '.harness'}: continue
         text = path.read_text()
         assert sum(line.startswith('```') for line in text.splitlines()) % 2 == 0, str(relative)
         for link in re.findall(r'\[[^\]\n]+\]\(([^)\n]+)\)', text):
@@ -23,11 +45,11 @@ def main():
  for item in m['files']:
   p=root/item['destination_path']
   assert p.is_file() and not p.is_symlink(), item['destination_path']
+  assert not p.name.startswith('.env') and p.suffix.lower() not in {'.pem','.key','.p12','.pfx','.pyc'}, item['destination_path']
   assert hashlib.sha256(p.read_bytes()).hexdigest()==item['sha256'], item['destination_path']
   assert item['publication_approved'] is False
  verify_document_links(root)
- for p in root.rglob('*'):
-  if p.is_file():assert not p.name.startswith('.env') and p.suffix.lower() not in {'.pem','.key','.p12','.pfx','.pyc'},str(p)
+ verify_authored_sensitive_files(root)
  case=json.loads((root/'cases/failure-semantics/greedy-feasible.json').read_text())
  module=runpy.run_path(str(root/'reference/imported-foundry/factory/templates/optimization-api/app/adapters/greedy_allocation.py'))
  answer=module['GreedyAllocationSolver']().solve({'resources':case['resources'],'demands':case['demands']},case['configuration'],threading.Event())

@@ -27,24 +27,25 @@ class SetupError(ValueError):
         super().__init__(code)
 
 
-def mode_flags(*, verification=False, evidence=False, domains=None):
+def mode_flags(*, verification=False, evidence=False, domains=None, knowledge=False, snapshots=False):
     if domains is not None and (not isinstance(domains, (list, tuple)) or not domains
             or any(not isinstance(name, str) or not re.fullmatch(r'[a-z][a-z0-9-]*', name) for name in domains)
             or len(set(domains)) != len(domains)):
         raise SetupError('INVALID_DOMAIN_SELECTION', 'Select each advertised built-in domain once with --domain.')
     return ((['--verification'] if verification or evidence else []) + (['--evidence'] if evidence else [])
+            + (['--knowledge'] if knowledge else []) + (['--snapshots'] if snapshots else [])
             + [part for name in (domains or []) for part in ('--domain', name)])
 
 
-def configuration(*, verification=False, evidence=False, name='ocp-native-local', domains=None):
+def configuration(*, verification=False, evidence=False, name='ocp-native-local', domains=None, knowledge=False, snapshots=False):
     if not re.fullmatch(r'[A-Za-z][A-Za-z0-9_-]{0,63}', name):
         raise SetupError('INVALID_SERVER_NAME', 'Use 1-64 ASCII letters, digits, underscores or hyphens, starting with a letter.')
     # Do not resolve the venv symlink to its base Python: that loses dependencies.
     return {'mcpServers': {name: {'command': str(Path(sys.executable).absolute()),
-        'args': ['-I', '-B', '-m', 'ocp_runtime.native_mcp'] + mode_flags(verification=verification, evidence=evidence, domains=domains)}}}
+        'args': ['-I', '-B', '-m', 'ocp_runtime.native_mcp'] + mode_flags(verification=verification, evidence=evidence, domains=domains, knowledge=knowledge, snapshots=snapshots)}}}
 
 
-def environment_report(*, verification=False, evidence=False, domains=None):
+def environment_report(*, verification=False, evidence=False, domains=None, knowledge=False, snapshots=False):
     verification = verification or evidence
     report = {'status': 'PASS', 'scope': 'Local interpreter, package imports and resources only',
         'python': str(Path(sys.executable).absolute()), 'python_version': sys.version.split()[0],
@@ -52,7 +53,11 @@ def environment_report(*, verification=False, evidence=False, domains=None):
         'model_calls': 0, 'solve_calls': 0}
     report['features'] = {'verification': {'enabled': verification, 'version': None},
                           'evidence': {'enabled': evidence, 'version': None},
-                          'expected_tool_count': 11 if evidence else 9 if verification else 8}
+                          'expected_tool_count': (11 if evidence else 9 if verification else 8) + int(knowledge) + int(snapshots)}
+    if knowledge:
+        report['features']['knowledge'] = {'enabled': True, 'version': '0.1.0-draft.1'}
+    if snapshots:
+        report['features']['snapshots'] = {'enabled': True, 'version': '0.1.0-draft.1'}
     if sys.version_info[:2] != (3, 12):
         report['issues'].append({'code': 'PYTHON_3_12_REQUIRED', 'hint': INSTALL_HINT})
     if os.name != 'posix':
@@ -79,6 +84,11 @@ def environment_report(*, verification=False, evidence=False, domains=None):
             report['domains'] = [item.domain.problem_type for item in registrations]
             report['profiles'] = {item.domain.problem_type: item.domain.capabilities()['domainProfile'] for item in registrations}
             report['contracts'] = {'native': '1', 'domain_payload': 'ocp-core-request/0.1.0'}
+            if knowledge:
+                from ocp_runtime.native_knowledge import KnowledgeService
+                knowledge_service = KnowledgeService({item.domain.problem_type: item.domain for item in registrations})
+                for domain in report['domains']:
+                    knowledge_service.describe(domain)
             if verification:
                 from conformance.assessment import builtin_checkers
                 from ocp_runtime.native_verification import VERIFICATION_VERSION
@@ -107,10 +117,15 @@ def environment_report(*, verification=False, evidence=False, domains=None):
     return report
 
 
-def check_features(content, *, verification=False, evidence=False, domains, domain=None, profile=None):
+def check_features(content, *, verification=False, evidence=False, domains, domain=None, profile=None, knowledge=False, snapshots=False):
     """Discovery must match the selected installed binding, including its scope."""
     if ('verification' in content) != bool(verification) or ('evidence' in content) != bool(evidence):
         raise SetupError('MCP_FEATURE_MISMATCH', 'The server features differ from the requested mode; reconnect to this installation.')
+    for name, enabled in (('knowledge', knowledge), ('snapshots', snapshots)):
+        if (name in content) != bool(enabled):
+            raise SetupError('MCP_FEATURE_MISMATCH', 'The optional features differ from the requested mode.')
+        if enabled and (not isinstance(content[name], dict) or content[name].get('version') != '0.1.0-draft.1'):
+            raise SetupError('MCP_FEATURE_MISMATCH', 'The optional extension version differs.')
     if verification:
         from ocp_runtime.native_verification import VERIFICATION_VERSION
         if not isinstance(content['verification'], dict) or content['verification'].get('version') != VERIFICATION_VERSION:
@@ -128,19 +143,21 @@ def check_features(content, *, verification=False, evidence=False, domains, doma
             raise SetupError('MCP_FEATURE_MISMATCH', 'The evidence version or domain scope differs; reconnect to a matching kit.')
 
 
-async def probe_stdio(*, verification=False, evidence=False, timeout=30, domains=None):
+async def probe_stdio(*, verification=False, evidence=False, timeout=30, domains=None, knowledge=False, snapshots=False):
     """Only discovery: no input data, solve, credentials or tenant arguments."""
     from mcp import Client, StdioServerParameters
     verification = verification or evidence
     selected_domains = domains
-    config = configuration(verification=verification, evidence=evidence, domains=domains)['mcpServers']['ocp-native-local']
+    config = configuration(verification=verification, evidence=evidence, domains=domains, knowledge=knowledge, snapshots=snapshots)['mcpServers']['ocp-native-local']
     parameters = StdioServerParameters(command=config['command'], args=config['args'],
         env={'PATH': os.defpath, 'HOME': str(Path.home()), 'PYTHONDONTWRITEBYTECODE': '1'})
     # The client context enters and exits in one task, including timeout cleanup.
     async with Client(parameters, read_timeout_seconds=timeout) as client:
         tools = [tool.name for tool in (await client.list_tools()).tools]
         expected = (BASE_TOOLS | ({'ocp_native_verify'} if verification else set())
-                    | ({'ocp_native_prepare', 'ocp_native_explain'} if evidence else set()))
+                    | ({'ocp_native_prepare', 'ocp_native_explain'} if evidence else set())
+                    | ({'ocp_native_describe'} if knowledge else set())
+                    | ({'ocp_native_snapshot'} if snapshots else set()))
         if len(tools) != len(expected) or set(tools) != expected:
             raise SetupError('MCP_TOOL_MISMATCH', 'The installed reference tool set differs; reinstall a complete matching kit.')
         async def context(arguments):
@@ -154,7 +171,7 @@ async def probe_stdio(*, verification=False, evidence=False, timeout=30, domains
             raise SetupError('MCP_CONTEXT_INVALID', 'The server returned an invalid domain list; reinstall a matching kit.')
         if selected_domains is not None and set(domains) != set(selected_domains):
             raise SetupError('MCP_DOMAIN_MISMATCH', 'The server exposes different domains; reconnect using the generated configuration.')
-        check_features(listing, verification=verification, evidence=evidence, domains=domains)
+        check_features(listing, verification=verification, evidence=evidence, domains=domains, knowledge=knowledge, snapshots=snapshots)
         catalogs = []
         for domain in domains:
             detail = await context({'domain': domain})
@@ -165,19 +182,25 @@ async def probe_stdio(*, verification=False, evidence=False, timeout=30, domains
             if detail.get('availableDomains') != domains:
                 raise SetupError('MCP_CONTEXT_INVALID', 'The domain list changed during discovery; inspect server configuration.')
             check_features(detail, verification=verification, evidence=evidence, domains=domains,
-                           domain=domain, profile=catalog['domainProfile'])
+                           domain=domain, profile=catalog['domainProfile'], knowledge=knowledge, snapshots=snapshots)
             catalogs.append({'domain': domain, 'profile': catalog['domainProfile'], 'catalog_digest': catalog['catalogDigest']})
+        if knowledge:
+            for domain in domains:
+                described = await client.call_tool('ocp_native_describe', {'domain': domain, 'locale': 'ko'})
+                if described.is_error or described.structured_content.get('domain') != domain:
+                    raise SetupError('MCP_DESCRIPTION_FAILED', 'Domain description could not be read.')
         return {'status': 'PASS', 'scope': 'Actual stdio initialization, tool listing and catalog discovery only',
+                'protocol_version': client.protocol_version,
                 'tools': sorted(tools), 'catalogs': catalogs, 'solve_calls': 0,
-                'feature_versions': {name: listing[name]['version'] for name in ('verification','evidence') if name in listing}}
+                'feature_versions': {name: listing[name]['version'] for name in ('verification','evidence','knowledge','snapshots') if name in listing}}
 
 
-def doctor(*, verification=False, evidence=False, probe=False, timeout=30, domains=None):
-    report = environment_report(verification=verification, evidence=evidence, domains=domains)
+def doctor(*, verification=False, evidence=False, probe=False, timeout=30, domains=None, knowledge=False, snapshots=False):
+    report = environment_report(verification=verification, evidence=evidence, domains=domains, knowledge=knowledge, snapshots=snapshots)
     if probe and report['status'] == 'PASS':
         try:
             async def bounded():
-                return await asyncio.wait_for(probe_stdio(verification=verification, evidence=evidence, timeout=timeout, domains=domains), timeout=timeout)
+                return await asyncio.wait_for(probe_stdio(verification=verification, evidence=evidence, timeout=timeout, domains=domains, knowledge=knowledge, snapshots=snapshots), timeout=timeout)
             report['probe'] = asyncio.run(bounded())
         except Exception as error:
             # The stdio client's task group can wrap a single discovery error.
@@ -206,18 +229,58 @@ def main(argv=None):
     check = commands.add_parser('doctor', help='Inspect the installed environment; optionally probe real stdio discovery')
     check.add_argument('--probe', action='store_true', help='Start a temporary local server and discover tools/catalogs; no solve')
     check.add_argument('--timeout', type=int, default=30, choices=range(1, 121), metavar='SECONDS')
+    describe = commands.add_parser('describe', help='Read one installed domain description without starting a server or solving')
+    describe.add_argument('--domain', required=True)
+    describe.add_argument('--locale', default='en')
+    describe.add_argument('--section')
+    describe.add_argument('--item')
+    describe.add_argument('--bundle', action='store_true', help='Export a complete Knowledge authoring bundle')
+    lint = commands.add_parser('lint', help='Validate a Knowledge JSON file and optionally compare its authoritative catalog')
+    lint.add_argument('file')
+    lint.add_argument('--catalog', help='Catalog JSON file for projection agreement checks')
     for command in (serve, config, check):
         command.add_argument('--verification', action='store_true', help='Enable the optional independent checker integration')
         command.add_argument('--evidence', action='store_true', help='Enable checked preparation/explanation; includes verification (11 tools)')
+        command.add_argument('--knowledge', action='store_true', help='Enable localized summaries and paged descriptions')
+        command.add_argument('--snapshots', action='store_true', help='Preserve submitted input/configuration in this session')
         command.add_argument('--domain', action='append', help='Expose only this built-in domain; repeat to select several (default: all)')
     args = parser.parse_args(argv)
+    if args.command in ('describe', 'lint'):
+        try:
+            if args.command == 'describe':
+                from .native_server import reference_domains
+                from .native_knowledge import KnowledgeService
+                registrations = reference_domains([args.domain])
+                service = KnowledgeService({r.domain.problem_type: r.domain for r in registrations})
+                value = service.bundle(args.domain) if args.bundle else service.describe(
+                    args.domain, locale=args.locale, section=args.section, item_id=args.item)
+            else:
+                from ocp_candidate.contract import parse_json
+                from ocp_candidate.knowledge import lint as lint_knowledge
+                def read(path):
+                    with Path(path).open('rb') as source:
+                        data = source.read(1048577)
+                    if len(data) > 1048576:
+                        raise ValueError('KNOWLEDGE_FILE_TOO_LARGE')
+                    return parse_json(data.decode('utf-8'))
+                value = lint_knowledge(read(args.file), catalog=read(args.catalog) if args.catalog else None)
+            print(json.dumps(value, ensure_ascii=False, indent=2))
+            return 0
+        except RecursionError:
+            print(json.dumps({'status': 'FAIL', 'code': 'KNOWLEDGE_TOO_DEEP',
+                              'hint': 'Reduce document nesting; this reader accepts bounded JSON.'}), file=sys.stderr)
+            return 1
+        except (ValueError, OSError, KeyError) as error:
+            print(json.dumps({'status': 'FAIL', 'code': getattr(error, 'code', str(error)),
+                              'hint': 'Check the selected domain or Knowledge document and its catalog.'}), file=sys.stderr)
+            return 1
     if args.command == 'doctor':
-        report = doctor(verification=args.verification, evidence=args.evidence, probe=args.probe, timeout=args.timeout, domains=args.domain)
+        report = doctor(verification=args.verification, evidence=args.evidence, probe=args.probe, timeout=args.timeout, domains=args.domain, knowledge=args.knowledge, snapshots=args.snapshots)
         print(json.dumps(report, indent=2))
         return 0 if report['status'] == 'PASS' else 1
     try:
-        value = configuration(verification=args.verification, evidence=args.evidence, name=getattr(args, 'name', 'ocp-native-local'), domains=args.domain)
-        report = environment_report(verification=args.verification, evidence=args.evidence, domains=args.domain)
+        value = configuration(verification=args.verification, evidence=args.evidence, name=getattr(args, 'name', 'ocp-native-local'), domains=args.domain, knowledge=args.knowledge, snapshots=args.snapshots)
+        report = environment_report(verification=args.verification, evidence=args.evidence, domains=args.domain, knowledge=args.knowledge, snapshots=args.snapshots)
         if report['status'] != 'PASS':
             print(json.dumps(report), file=sys.stderr)
             return 1
@@ -225,7 +288,7 @@ def main(argv=None):
             print(json.dumps(value, indent=2))
         else:
             from .native_mcp import main as serve_main
-            serve_main(mode_flags(verification=args.verification, evidence=args.evidence, domains=args.domain))
+            serve_main(mode_flags(verification=args.verification, evidence=args.evidence, domains=args.domain, knowledge=args.knowledge, snapshots=args.snapshots))
         return 0
     except SetupError as error:
         print(json.dumps({'status': 'FAIL', 'code': error.code, 'hint': error.hint}), file=sys.stderr)

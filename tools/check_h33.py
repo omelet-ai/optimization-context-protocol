@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from build_public_site import build
 from check_public_site import PublicSite
+from prepare_preview import read_plan
 
 
 class PublicDocs(unittest.TestCase):
@@ -47,10 +48,11 @@ class PublicDocs(unittest.TestCase):
         self.assertNotIn('a hosted public website and open trial enrollment are not available yet', text)
 
     def test_06_released_examples_are_not_described_as_unpublished(self):
+        release = read_plan()['release_id']
         for name in ('NATIVE_LOCAL_CANDIDATE.md', 'NATIVE_PROJECT_WORKFLOW.md',
                      'NATIVE_PROFILE_EXTENSION.md', 'NATIVE_BYO_WORKER.md'):
             text = (ROOT / 'docs/users' / name).read_text()
-            self.assertIn('v0.1.1-preview.1', text, name)
+            self.assertIn(release, text, name)
             for stale in ('publication approvals do not publish these new example packages',
                           'included in the earlier public native kit', 'Older native kits lack these files'):
                 self.assertNotIn(stale, text, name)

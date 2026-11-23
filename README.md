@@ -6,7 +6,9 @@ OCP describes what an engine supports, what an application requests, what was
 actually enforced, and how to check the result. Applications can use their own
 engines independently of Omelet, Foundry, Studio, or a particular transport.
 
-**Status: open-source developer preview, licensed under [Apache-2.0](LICENSE).**
+**Published release: open-source developer preview, licensed under [Apache-2.0](LICENSE).**
+This document is a local integration draft. New generic candidate content is
+identified below; its exact-file publication and package metadata review is pending.
 Source code is available in this GitHub repository. Visit the
 [public documentation site](https://omelet-ai.github.io/optimization-context-protocol/)
 and [한국어](https://omelet-ai.github.io/optimization-context-protocol/ko/).
@@ -16,6 +18,71 @@ or evidence of unaided external adoption.
 
 See [project status and verification boundaries](docs/users/PROJECT_STATUS.md)
 and the [immutable preview plan](docs/development/PREVIEW_RELEASE.md).
+
+## Author a server for your optimization API — local review candidate
+
+**Integration starting point: [IB-1.2 template baseline](docs/development/TEMPLATE_INTEGRATION_BASELINE_IB12.md).**
+Use its pinned interfaces, [authoring steps](docs/users/SERVER_FORMAT_PREVIEW.md)
+and [consumer integration guide](docs/users/SERVER_FORMAT_INTEGRATION.md).
+
+Put API schemas, capability descriptions, an engine connector, official file
+formats and optional optimization playbooks into `content/`. The generic template
+supplies discovery, validation, jobs and MCP bindings. Customer data integration
+and result visualization stay in the application.
+
+| Route | Version and verified scope |
+| --- | --- |
+| Released native download below | `v0.2.0-preview.2`; Python `0.2.0a2`. Its existing installation instructions remain unchanged. |
+| Generic authoring candidate in this review | Runtime `0.4.0.dev12+publicformat3`, Routing example `0.1.0.dev3`; standalone local build/install and official SDK stdio solve/checker verified. Not published. |
+| Native source-build route below | The existing builder pins Python `0.3.0.dev1`; 149 native and 22 inspection checks passed on the combined source candidate on macOS arm64 / Python 3.12.15. |
+
+For the generic candidate, start with Python 3.12 in the reviewed source tree.
+The following block was run verbatim in a fresh minimal environment using cached
+public dependencies. It builds and installs the runtime and Routing example;
+no native-contract package, account, key or running service is needed.
+
+<!-- ocp:generic-quickstart:start -->
+```sh
+python3.12 -m venv .quickstart-venv
+. .quickstart-venv/bin/activate
+python -m pip install "build==1.4.0" "setuptools==80.9.0" "wheel==0.46.3"
+python tools/build_candidate.py
+python -m build --wheel --no-isolation --outdir .harness/work/dist examples/routing-ocp-server
+python -m pip install --find-links .harness/work/dist "ocp-candidate[server]==0.4.0.dev12+publicformat3" "routing-ocp-server==0.1.0.dev3"
+python - <<'PYCONFIG'
+import json
+from pathlib import Path
+work = Path(".quickstart").resolve()
+work.mkdir(mode=0o700)
+state = work / "state"
+state.mkdir(mode=0o700)
+configuration = json.loads(Path("examples/routing-ocp-server/content/configuration.example.json").read_text())
+configuration["state_directory"] = str(state)
+path = work / "local-config.json"
+path.write_text(json.dumps(configuration, indent=2) + "\n")
+path.chmod(0o600)
+PYCONFIG
+routing-ocp-server check
+routing-ocp-server doctor --config "$PWD/.quickstart/local-config.json"
+routing-ocp-server host-config --config "$PWD/.quickstart/local-config.json" > .quickstart/host-config.json
+```
+<!-- ocp:generic-quickstart:end -->
+
+`check` validates the descriptor. `doctor` reports `READY` with zero execution
+calls; it checks metadata without solving. `host-config.json` contains a local
+stdio MCP launch configuration. Add it to a host that supports local server
+processes, then use discovery, prepare/validate, submit, job/result and evaluate.
+The independent test used the official MCP SDK and a real local OR-Tools solve;
+it did not validate Claude/ChatGPT UI or a remotely hosted server.
+
+The [Routing content guide](examples/routing-ocp-server/content/README.md) contains
+synthetic matrix/coordinate inputs and fleet/weight/budget playbooks. Coordinates
+use spherical distances; this example does not provide road travel times or time
+windows. Private `.quickstart` state/configuration stays outside source control.
+See [the package format](spec/server-package/README.md), [official inputs](spec/input-formats/README.md),
+[playbooks](spec/playbooks/README.md) and [optional operations](spec/operations/README.md)
+for the authoring contract. Core/native wire meanings remain unchanged. The
+operations extension and the new source bytes are pending exact publication review.
 
 ## Connect a routing solver
 
@@ -199,7 +266,17 @@ and [source license and origin](sdk/native-contracts/LICENSE_SCOPE.md). The sour
 selection and Apache-2.0 notices were approved on 2026-10-28; registry and hosted
 trial publication remain separate.
 
-## Native v1 from public source
+## Native v1 from source — existing build route
+
+The existing native kit builder explicitly pins Python `0.3.0.dev1`. It adds optional
+English/Korean domain descriptions, exact submission snapshots and native
+coordinate routing. Follow the [Knowledge preview guide](docs/users/NATIVE_KNOWLEDGE_PREVIEW.md)
+when building this checkout. These additions are not in the published
+`v0.2.0-preview.2` ZIP; its existing download instructions remain unchanged.
+The combined source candidate passed native build/install, 149 native checks and
+22 inspection checks on macOS arm64 / Python 3.12.15. These are separate from the
+generic MCP checks. Linux, Windows, TypeScript and external-host UI acceptance
+for this combined candidate remain unverified.
 
 Use this opt-in path for Capability Contract v1 jobs and the eight native MCP
 tools. From a fresh checkout of this repository, use Python 3.12 on macOS or Linux.

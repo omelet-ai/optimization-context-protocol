@@ -3735,7 +3735,7 @@
         "provenance/",
         "docs/development/PUBLIC_CI.md"
       ],
-      "acceptance": "Selected-source CI policy and actual fresh consumers; no hosted-run, human-acceptance or historical release promotion",
+      "acceptance": "Selected pending-source CI policy and actual fresh consumers; explicit candidate selection does not authorize publication, hosted-run, human acceptance or historical release promotion",
       "checks": [
         {
           "id": "ci-policy-negative-cases",
@@ -3763,7 +3763,9 @@
             ".harness/work/wheels",
             "--wheelhouse",
             ".harness/work/preview-native-wheels",
-            "--with-typescript"
+            "--with-typescript",
+            "--selection",
+            "provenance/public-format-candidate-selection.json"
           ],
           "timeout_seconds": 1800,
           "expect": {

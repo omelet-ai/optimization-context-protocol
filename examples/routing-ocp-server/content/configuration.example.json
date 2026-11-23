@@ -1,0 +1,8 @@
+{
+  "api_endpoint": null,
+  "credential_environment_variable": null,
+  "connector_factory": "ocp_routing_ocp_server.content.adapter:create_bundle",
+  "transport": "stdio",
+  "state_directory": "./ocp-routing-state",
+  "allowed_local_roots": []
+}

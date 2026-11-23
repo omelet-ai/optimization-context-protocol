@@ -9,6 +9,8 @@
 /docs/development/FOUNDRY_TRIAL_PREFLIGHT.md
 /spec/bindings/OMELET_MAPPING.md
 /.harness/
+/.quickstart/
+/.quickstart-venv/
 .env*
 *.pem
 *.key

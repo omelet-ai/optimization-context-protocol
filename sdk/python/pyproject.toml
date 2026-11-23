@@ -4,17 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ocp-candidate"
-version = "0.1.0"
-description = "Developer preview of independent optimization interfaces"
+version = "0.4.0.dev12+publicformat3"
+description = "Private generic OCP Server format packaging proposal"
+classifiers = ["Private :: Do Not Upload"]
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"]
 requires-python = ">=3.12"
-dependencies = ["jsonschema==4.26.0"]
+dependencies = ["jsonschema==4.26.0", "packaging==26.3"]
 
 [project.scripts]
 ocp-native = "ocp_runtime.native_cli:main"
 
 [project.optional-dependencies]
+server = ["mcp==2.3.0", "uvicorn==0.54.0"]
 reference = ["ortools==9.15.6755"]
 mcp = ["mcp==2.3.0"]
 native = ["ocp-foundry-contracts-candidate==0.0.0+foundry.7547036d1bc9.review1", "uvicorn==0.54.0"]
@@ -24,3 +26,5 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 ocp_candidate = ["schemas/*.json", "schema-manifest.json", "profiles.json"]
+"ocp_runtime.authoring" = ["_template/*", "_template/content/*"]
+"ocp_runtime._worker_contract" = ["ORIGIN.json", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"]

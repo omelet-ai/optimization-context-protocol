@@ -1,0 +1,1103 @@
+{
+  "format_version": "0.1.0-draft.2",
+  "id": "routing.example",
+  "version": "1.0.0-draft.1",
+  "profile": {
+    "id": "routing.matrix.weighted",
+    "version": "1.0.0-draft.1"
+  },
+  "api": {
+    "id": "routing.matrix.api",
+    "version": "1.0.0-draft.1",
+    "input_schema": "input",
+    "configuration_schema": "configuration",
+    "result_schema": "result"
+  },
+  "schemas": {
+    "input": {
+      "type": "object",
+      "properties": {
+        "depot_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "distance_matrix": {
+          "type": "object",
+          "properties": {
+            "node_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "minItems": 1,
+              "maxItems": 65
+            },
+            "distances_m": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 50000000
+                },
+                "minItems": 1,
+                "maxItems": 65
+              },
+              "minItems": 1,
+              "maxItems": 65
+            }
+          },
+          "required": [
+            "node_ids",
+            "distances_m"
+          ],
+          "additionalProperties": false
+        },
+        "visits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "demand_kg": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 50000000
+              }
+            },
+            "required": [
+              "id",
+              "demand_kg"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 64
+        },
+        "vehicles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "capacity_kg": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 50000000
+              }
+            },
+            "required": [
+              "id",
+              "capacity_kg"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 16
+        },
+        "distance_model": {
+          "enum": [
+            "supplied_matrix",
+            "haversine_sphere_6371008.8m_half_up"
+          ]
+        },
+        "source_coordinates": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                  },
+                  "latitude": {
+                    "type": "number",
+                    "minimum": -90,
+                    "maximum": 90
+                  },
+                  "longitude": {
+                    "type": "number",
+                    "minimum": -180,
+                    "maximum": 180
+                  }
+                },
+                "required": [
+                  "id",
+                  "latitude",
+                  "longitude"
+                ],
+                "additionalProperties": false
+              },
+              "minItems": 1,
+              "maxItems": 65
+            }
+          ]
+        }
+      },
+      "required": [
+        "depot_id",
+        "distance_matrix",
+        "visits",
+        "vehicles",
+        "distance_model",
+        "source_coordinates"
+      ],
+      "additionalProperties": false,
+      "description": "Canonical API input: explicit directed integer-metre matrix; depot return is included. All visits are mandatory. Integer kg demands/capacities. Time windows, road lookup, service time and driver hours are outside this profile. The matrix need not satisfy the triangle inequality."
+    },
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "objective": {
+          "enum": [
+            "distance",
+            "weighted_cost"
+          ]
+        },
+        "distance_weight": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10000
+        },
+        "vehicle_weight": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000000000
+        },
+        "time_limit_seconds": {
+          "type": "number",
+          "minimum": 0.001,
+          "maximum": 30
+        }
+      },
+      "required": [
+        "objective",
+        "distance_weight",
+        "vehicle_weight",
+        "time_limit_seconds"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "objective": {
+                "const": "distance"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "distance_weight": {
+                "const": 1
+              },
+              "vehicle_weight": {
+                "const": 0
+              }
+            }
+          }
+        }
+      ],
+      "description": "Weighted score = distance_weight (points/metre) * total_distance_m + vehicle_weight (points/active vehicle) * vehicles_used. Explicit integer coefficients; no implicit normalization. Distance objective requires weights 1 and 0."
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "vehicle_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "visits": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                },
+                "minItems": 1,
+                "maxItems": 64
+              },
+              "distance_m": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 3250000000
+              },
+              "load_kg": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 50000000
+              }
+            },
+            "required": [
+              "vehicle_id",
+              "visits",
+              "distance_m",
+              "load_kg"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 0,
+          "maxItems": 16
+        },
+        "metrics": {
+          "type": "object",
+          "properties": {
+            "total_distance_m": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "vehicles_used": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 16
+            },
+            "weighted_cost": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "total_distance_m",
+            "vehicles_used",
+            "weighted_cost"
+          ],
+          "additionalProperties": false
+        },
+        "input_fingerprint": {
+          "type": "object",
+          "properties": {
+            "encoding": {
+              "const": "ocp-json-binary64/1"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "required": [
+            "encoding",
+            "sha256"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "routes",
+        "metrics",
+        "input_fingerprint"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "default_locale": "en",
+  "localizations": {
+    "en": {
+      "title": "Routing OCP Server",
+      "summary": "Connect your MCP host to a real local OR-Tools routing API. Prepare official CSV/Excel, solve capacity-constrained routes, independently check results, and compare explicit fleet, weight and time candidates."
+    },
+    "ko": {
+      "title": "라우팅 OCP 서버",
+      "summary": "MCP 호스트에서 실제 OR-Tools 라우팅 API를 사용합니다. 공식 CSV·Excel 준비, 용량 제약 경로 계산, 독립 검산, 차량 구성·가중치·시간 후보 비교를 지원합니다."
+    }
+  },
+  "units": {
+    "m": {
+      "dimension": "length",
+      "definition": "Integer metres from the canonical distance matrix"
+    },
+    "kg": {
+      "dimension": "mass",
+      "definition": "Integer kilograms"
+    },
+    "vehicle": {
+      "dimension": "count",
+      "definition": "A vehicle serving at least one visit"
+    },
+    "point": {
+      "dimension": "score",
+      "definition": "Declared weighted score; coefficients fix the meaning"
+    }
+  },
+  "capabilities": {
+    "objectives": [
+      {
+        "id": "distance",
+        "definition": "Minimize total matrix distance",
+        "unit": "m",
+        "direction": "minimize",
+        "role": "optimized"
+      },
+      {
+        "id": "weighted_cost",
+        "definition": "Weighted score = distance_weight (points/metre) * total_distance_m + vehicle_weight (points/active vehicle) * vehicles_used. Explicit integer coefficients; no implicit normalization. Distance objective requires weights 1 and 0.",
+        "unit": "point",
+        "direction": "minimize",
+        "role": "optimized",
+        "weight_binding": "vehicle_weight"
+      }
+    ],
+    "constraints": [
+      {
+        "id": "visit_once",
+        "definition": "Every declared visit exactly once",
+        "unit": null,
+        "kind": "hard",
+        "role": "enforced"
+      },
+      {
+        "id": "capacity",
+        "definition": "Route demand at most assigned vehicle capacity",
+        "unit": "kg",
+        "kind": "hard",
+        "role": "enforced"
+      },
+      {
+        "id": "depot_return",
+        "definition": "Every used route starts and ends at the declared depot",
+        "unit": null,
+        "kind": "hard",
+        "role": "enforced"
+      },
+      {
+        "id": "available_fleet",
+        "definition": "Each declared vehicle serves at most one route",
+        "unit": null,
+        "kind": "hard",
+        "role": "enforced"
+      }
+    ],
+    "execution": {
+      "mode": "sync",
+      "cancel": false,
+      "durable": false,
+      "evaluate": true
+    }
+  },
+  "configuration_defaults": {
+    "objective": "weighted_cost",
+    "distance_weight": 1,
+    "vehicle_weight": 0,
+    "time_limit_seconds": 2
+  },
+  "configuration_rules": [],
+  "bindings": [
+    {
+      "id": "fleet",
+      "target": "input",
+      "pointer": "/vehicles",
+      "operation": "select_by_id",
+      "id_field": "id",
+      "value_schema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+        },
+        "minItems": 1,
+        "maxItems": 16
+      }
+    },
+    {
+      "id": "vehicle_weight",
+      "target": "configuration",
+      "pointer": "/vehicle_weight",
+      "operation": "replace",
+      "value_schema": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 1000000000
+      }
+    },
+    {
+      "id": "time_limit",
+      "target": "configuration",
+      "pointer": "/time_limit_seconds",
+      "operation": "replace",
+      "value_schema": {
+        "type": "number",
+        "minimum": 0.001,
+        "maximum": 30
+      }
+    },
+    {
+      "id": "objective_configuration",
+      "target": "configuration",
+      "pointer": "",
+      "operation": "replace",
+      "value_schema": {
+        "type": "object",
+        "properties": {
+          "objective": {
+            "enum": [
+              "distance",
+              "weighted_cost"
+            ]
+          },
+          "distance_weight": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10000
+          },
+          "vehicle_weight": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000000
+          },
+          "time_limit_seconds": {
+            "type": "number",
+            "minimum": 0.001,
+            "maximum": 30
+          }
+        },
+        "required": [
+          "objective",
+          "distance_weight",
+          "vehicle_weight",
+          "time_limit_seconds"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "objective": {
+                  "const": "distance"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "distance_weight": {
+                  "const": 1
+                },
+                "vehicle_weight": {
+                  "const": 0
+                }
+              }
+            }
+          }
+        ],
+        "description": "Weighted score = distance_weight (points/metre) * total_distance_m + vehicle_weight (points/active vehicle) * vehicles_used. Explicit integer coefficients; no implicit normalization. Distance objective requires weights 1 and 0."
+      }
+    }
+  ],
+  "metrics": [
+    {
+      "id": "total_distance_m",
+      "pointer": "/metrics/total_distance_m",
+      "definition": "Sum of every used route's matrix arcs, including return to depot",
+      "unit": "m",
+      "value_type": "integer",
+      "direction": "minimize",
+      "comparison_basis": "invariant"
+    },
+    {
+      "id": "vehicles_used",
+      "pointer": "/metrics/vehicles_used",
+      "definition": "Count of nonempty vehicle routes",
+      "unit": "vehicle",
+      "value_type": "integer",
+      "direction": "minimize",
+      "comparison_basis": "invariant"
+    },
+    {
+      "id": "weighted_cost",
+      "pointer": "/metrics/weighted_cost",
+      "definition": "Configured weighted distance and active vehicle count",
+      "unit": "point",
+      "value_type": "integer",
+      "direction": "minimize",
+      "comparison_basis": "same_configuration"
+    }
+  ],
+  "input_formats": [
+    {
+      "id": "routing-matrix-csv",
+      "version": "1.0.0",
+      "media_type": "text/csv",
+      "tables": [
+        {
+          "id": "depot",
+          "source": "depot.csv",
+          "target": "/depot",
+          "mode": "object",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "id": "visits",
+          "source": "visits.csv",
+          "target": "/visits",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "demand_kg",
+              "target": "/demand_kg",
+              "type": "integer"
+            }
+          ]
+        },
+        {
+          "id": "vehicles",
+          "source": "vehicles.csv",
+          "target": "/vehicles",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "capacity_kg",
+              "target": "/capacity_kg",
+              "type": "integer"
+            }
+          ]
+        },
+        {
+          "id": "distances",
+          "source": "distances.csv",
+          "target": "/distances",
+          "mode": "array",
+          "columns": [
+            {
+              "name": "from_id",
+              "target": "/from_id",
+              "type": "string"
+            },
+            {
+              "name": "to_id",
+              "target": "/to_id",
+              "type": "string"
+            },
+            {
+              "name": "distance_m",
+              "target": "/distance_m",
+              "type": "integer"
+            }
+          ]
+        }
+      ],
+      "max_bytes": 700000,
+      "max_rows": 5000,
+      "max_uncompressed_bytes": 4000000,
+      "converter": "routing/matrix",
+      "converter_version": "1.0.0"
+    },
+    {
+      "id": "routing-matrix-xlsx",
+      "version": "1.0.0",
+      "media_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "tables": [
+        {
+          "id": "depot",
+          "source": "routing.xlsx",
+          "target": "/depot",
+          "mode": "object",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            }
+          ],
+          "sheet": "depot"
+        },
+        {
+          "id": "visits",
+          "source": "routing.xlsx",
+          "target": "/visits",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "demand_kg",
+              "target": "/demand_kg",
+              "type": "integer"
+            }
+          ],
+          "sheet": "visits"
+        },
+        {
+          "id": "vehicles",
+          "source": "routing.xlsx",
+          "target": "/vehicles",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "capacity_kg",
+              "target": "/capacity_kg",
+              "type": "integer"
+            }
+          ],
+          "sheet": "vehicles"
+        },
+        {
+          "id": "distances",
+          "source": "routing.xlsx",
+          "target": "/distances",
+          "mode": "array",
+          "columns": [
+            {
+              "name": "from_id",
+              "target": "/from_id",
+              "type": "string"
+            },
+            {
+              "name": "to_id",
+              "target": "/to_id",
+              "type": "string"
+            },
+            {
+              "name": "distance_m",
+              "target": "/distance_m",
+              "type": "integer"
+            }
+          ],
+          "sheet": "distances"
+        }
+      ],
+      "max_bytes": 700000,
+      "max_rows": 5000,
+      "max_uncompressed_bytes": 4000000,
+      "converter": "routing/matrix",
+      "converter_version": "1.0.0"
+    },
+    {
+      "id": "routing-coordinates-csv",
+      "version": "1.0.0",
+      "media_type": "text/csv",
+      "tables": [
+        {
+          "id": "depot",
+          "source": "depot.csv",
+          "target": "/depot",
+          "mode": "object",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "id": "visits",
+          "source": "visits.csv",
+          "target": "/visits",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "demand_kg",
+              "target": "/demand_kg",
+              "type": "integer"
+            }
+          ]
+        },
+        {
+          "id": "vehicles",
+          "source": "vehicles.csv",
+          "target": "/vehicles",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "capacity_kg",
+              "target": "/capacity_kg",
+              "type": "integer"
+            }
+          ]
+        },
+        {
+          "id": "locations",
+          "source": "locations.csv",
+          "target": "/locations",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "latitude",
+              "target": "/latitude",
+              "type": "number"
+            },
+            {
+              "name": "longitude",
+              "target": "/longitude",
+              "type": "number"
+            }
+          ]
+        }
+      ],
+      "max_bytes": 700000,
+      "max_rows": 5000,
+      "max_uncompressed_bytes": 4000000,
+      "converter": "routing/coordinates",
+      "converter_version": "1.0.0"
+    },
+    {
+      "id": "routing-coordinates-xlsx",
+      "version": "1.0.0",
+      "media_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "tables": [
+        {
+          "id": "depot",
+          "source": "routing.xlsx",
+          "target": "/depot",
+          "mode": "object",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            }
+          ],
+          "sheet": "depot"
+        },
+        {
+          "id": "visits",
+          "source": "routing.xlsx",
+          "target": "/visits",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "demand_kg",
+              "target": "/demand_kg",
+              "type": "integer"
+            }
+          ],
+          "sheet": "visits"
+        },
+        {
+          "id": "vehicles",
+          "source": "routing.xlsx",
+          "target": "/vehicles",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "capacity_kg",
+              "target": "/capacity_kg",
+              "type": "integer"
+            }
+          ],
+          "sheet": "vehicles"
+        },
+        {
+          "id": "locations",
+          "source": "routing.xlsx",
+          "target": "/locations",
+          "mode": "array",
+          "key": "/id",
+          "columns": [
+            {
+              "name": "id",
+              "target": "/id",
+              "type": "string"
+            },
+            {
+              "name": "latitude",
+              "target": "/latitude",
+              "type": "number"
+            },
+            {
+              "name": "longitude",
+              "target": "/longitude",
+              "type": "number"
+            }
+          ],
+          "sheet": "locations"
+        }
+      ],
+      "max_bytes": 700000,
+      "max_rows": 5000,
+      "max_uncompressed_bytes": 4000000,
+      "converter": "routing/coordinates",
+      "converter_version": "1.0.0"
+    }
+  ],
+  "playbooks": [
+    {
+      "id": "fleet_candidates",
+      "version": "1.0.0",
+      "status": "executable",
+      "localizations": {
+        "en": {
+          "title": "Compare actual vehicle sets",
+          "summary": "Defaults are for the bundled synthetic example. Supply variables with existing vehicle IDs for your own input. No vehicles are invented or cloned."
+        },
+        "ko": {
+          "title": "차량 구성 비교",
+          "summary": "명시한 후보와 동일 기준의 지표를 비교합니다. 전역 최적을 증명하지 않습니다."
+        }
+      },
+      "binding_ids": [
+        "fleet"
+      ],
+      "metric_ids": [
+        "total_distance_m",
+        "vehicles_used",
+        "weighted_cost"
+      ],
+      "preserve": [
+        {
+          "target": "input",
+          "pointer": "/visits"
+        },
+        {
+          "target": "input",
+          "pointer": "/depot_id"
+        },
+        {
+          "target": "input",
+          "pointer": "/distance_matrix"
+        },
+        {
+          "target": "input",
+          "pointer": "/distance_model"
+        }
+      ],
+      "recipe": {
+        "kind": "independent_variations",
+        "variables": [
+          {
+            "binding": "fleet",
+            "values": [
+              [
+                "van_a",
+                "van_b"
+              ],
+              [
+                "truck"
+              ]
+            ]
+          }
+        ]
+      },
+      "budget": {
+        "max_calls": 16,
+        "timeout_seconds": 60,
+        "concurrency": 2
+      }
+    },
+    {
+      "id": "vehicle_weights",
+      "version": "1.0.0",
+      "status": "executable",
+      "localizations": {
+        "en": {
+          "title": "Compare distance versus vehicle penalties",
+          "summary": "Use the weighted_cost objective. Rank by a chosen invariant metric; weighted costs with different coefficients are not ranked against each other."
+        },
+        "ko": {
+          "title": "차량 비용 가중치 비교",
+          "summary": "명시한 후보와 동일 기준의 지표를 비교합니다. 전역 최적을 증명하지 않습니다."
+        }
+      },
+      "binding_ids": [
+        "vehicle_weight"
+      ],
+      "metric_ids": [
+        "total_distance_m",
+        "vehicles_used",
+        "weighted_cost"
+      ],
+      "preserve": [
+        {
+          "target": "input",
+          "pointer": ""
+        }
+      ],
+      "recipe": {
+        "kind": "independent_variations",
+        "variables": [
+          {
+            "binding": "vehicle_weight",
+            "values": [
+              0,
+              1000,
+              10000
+            ]
+          }
+        ]
+      },
+      "budget": {
+        "max_calls": 16,
+        "timeout_seconds": 60,
+        "concurrency": 2
+      }
+    },
+    {
+      "id": "time_budgets",
+      "version": "1.0.0",
+      "status": "executable",
+      "localizations": {
+        "en": {
+          "title": "Compare computation budgets",
+          "summary": "Only the solver time limit changes. Completed heuristic search may return before the budget; more time does not guarantee a better result."
+        },
+        "ko": {
+          "title": "계산 시간 비교",
+          "summary": "명시한 후보와 동일 기준의 지표를 비교합니다. 전역 최적을 증명하지 않습니다."
+        }
+      },
+      "binding_ids": [
+        "time_limit"
+      ],
+      "metric_ids": [
+        "total_distance_m",
+        "vehicles_used",
+        "weighted_cost"
+      ],
+      "preserve": [
+        {
+          "target": "input",
+          "pointer": ""
+        }
+      ],
+      "recipe": {
+        "kind": "independent_variations",
+        "variables": [
+          {
+            "binding": "time_limit",
+            "values": [
+              0.1,
+              1,
+              2
+            ]
+          }
+        ]
+      },
+      "budget": {
+        "max_calls": 16,
+        "timeout_seconds": 60,
+        "concurrency": 2
+      }
+    },
+    {
+      "id": "objective_candidates",
+      "version": "1.0.0",
+      "status": "executable",
+      "localizations": {
+        "en": {
+          "title": "Compare objective configurations",
+          "summary": "Compare explicit objective settings using raw distance and fleet metrics."
+        },
+        "ko": {
+          "title": "목적 설정 비교",
+          "summary": "명시한 후보와 동일 기준의 지표를 비교합니다. 전역 최적을 증명하지 않습니다."
+        }
+      },
+      "binding_ids": [
+        "objective_configuration"
+      ],
+      "metric_ids": [
+        "total_distance_m",
+        "vehicles_used",
+        "weighted_cost"
+      ],
+      "preserve": [
+        {
+          "target": "input",
+          "pointer": ""
+        }
+      ],
+      "recipe": {
+        "kind": "independent_variations",
+        "variables": [
+          {
+            "binding": "objective_configuration",
+            "values": [
+              {
+                "objective": "distance",
+                "distance_weight": 1,
+                "vehicle_weight": 0,
+                "time_limit_seconds": 2
+              },
+              {
+                "objective": "weighted_cost",
+                "distance_weight": 1,
+                "vehicle_weight": 10000,
+                "time_limit_seconds": 2
+              }
+            ]
+          }
+        ]
+      },
+      "budget": {
+        "max_calls": 16,
+        "timeout_seconds": 60,
+        "concurrency": 2
+      }
+    }
+  ],
+  "required_extensions": [],
+  "extensions": {}
+}

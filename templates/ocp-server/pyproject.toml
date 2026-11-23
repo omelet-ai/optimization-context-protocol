@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.46.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{package_name}}"
+version = "0.1.0.dev3"
+description = "An authored OCP Server"
+requires-python = "{{requires_python}}"
+dependencies = {{python_dependencies}}
+
+[project.scripts]
+"{{package_name}}" = "{{module_name}}.server:main"
+
+[tool.setuptools]
+packages = ["{{module_name}}"]
+package-dir = {"{{module_name}}" = "."}
+
+[tool.setuptools.package-data]
+"{{module_name}}" = ["content/*", "content/**/*", "config.example.json"]

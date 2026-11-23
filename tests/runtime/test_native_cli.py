@@ -66,7 +66,8 @@ class NativeCLI(unittest.TestCase):
 
     def test_help_and_version_without_optional_mcp(self):
         self.assertIn('doctor', self.command(['--help']).stdout)
-        self.assertEqual(self.command(['--version']).stdout.strip(), '0.2.0a2')
+        expected = json.loads((ARGS.kit/'manifest.json').read_text())['python_wheels']['sdk'].split('-')[1]
+        self.assertEqual(self.command(['--version']).stdout.strip(), expected)
         self.assertIn('doctor', self.command(['--help'], python=ARGS.without_mcp_python).stdout)
 
     def test_config_and_legacy_wrapper(self):

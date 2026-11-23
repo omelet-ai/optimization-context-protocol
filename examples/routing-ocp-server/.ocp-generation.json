@@ -1,0 +1,143 @@
+{
+  "files": {
+    "README.md": {
+      "role": "common",
+      "sha256": "929f7ab1f4a02114ab036522a80ae6bee9908055635d235fc27a51b95cc55268"
+    },
+    "__init__.py": {
+      "role": "common",
+      "sha256": "22ac18456101d5155df7d6898393c202733b50a4c2295cc7e42731aec9562f15"
+    },
+    "config.example.json": {
+      "role": "common",
+      "sha256": "a0521274a129b8821fc36f9fb38aa6f8fe236abd609f028fddec1803542960a2"
+    },
+    "content/LICENSE": {
+      "role": "content",
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    "content/NOTICE": {
+      "role": "content",
+      "sha256": "6437380829bb21b6d39fbda83b6e1f1d02448606164fde67a3c8fa2d1de8df1f"
+    },
+    "content/README.md": {
+      "role": "content",
+      "sha256": "d6faf1056d7c0ae4bd44aa4b8105cc09a4f7bd9d0c6f0b8dd8ccca17e00c851f"
+    },
+    "content/__init__.py": {
+      "role": "content",
+      "sha256": "b39dc47a9a182e978c9ae81964fc30744b4f6b0e838cac0069192437819e1565"
+    },
+    "content/adapter.py": {
+      "role": "content",
+      "sha256": "dcb918550fca36ef5a66ad1ca284c5dabbb48ca375497abbcf0fcfd913a3fd9c"
+    },
+    "content/checker.py": {
+      "role": "content",
+      "sha256": "6e7b53d470276c0cae0e7650e47702a00f1b85d4898ad42eff111e81f4036e26"
+    },
+    "content/configuration.example.json": {
+      "role": "content",
+      "sha256": "0d261114ecf8570b7711aec4c8b93df87f7c9d52198318fd90a97c6b23996e09"
+    },
+    "content/engine.py": {
+      "role": "content",
+      "sha256": "7a2f450f0e1f1ac8aae5a12b681bda6ee5703d376e1d345fff3c1cd67bae3f7a"
+    },
+    "content/examples/coordinates/depot.csv": {
+      "role": "content",
+      "sha256": "a6e2807306ef20f4283c78daac2b19cb7e06315875e9819835b2a06808071b39"
+    },
+    "content/examples/coordinates/input.json": {
+      "role": "content",
+      "sha256": "beecfad734b1d8ef0082ec9b44390a1dae9abc61dbb18cb7b15d6dd84de9c46c"
+    },
+    "content/examples/coordinates/locations.csv": {
+      "role": "content",
+      "sha256": "62eea1ef858c67f632c29cc3a8e53b06eb15f61378e44e3313c4d8d184ca8c18"
+    },
+    "content/examples/coordinates/routing.xlsx": {
+      "role": "content",
+      "sha256": "5f8d8ff9f87d80cff253b20661809009182cdd004af8ecc23d60bdeac6dcb930"
+    },
+    "content/examples/coordinates/vehicles.csv": {
+      "role": "content",
+      "sha256": "d04c1e656c2e66de77220299542ead58565c4b100b5f1cbf5e8b9bb6dabd05ba"
+    },
+    "content/examples/coordinates/visits.csv": {
+      "role": "content",
+      "sha256": "8bc72703842fe2d640b32ea6a89cfdf1ba8f3b953076c5e96264f966516e0247"
+    },
+    "content/examples/matrix/depot.csv": {
+      "role": "content",
+      "sha256": "a6e2807306ef20f4283c78daac2b19cb7e06315875e9819835b2a06808071b39"
+    },
+    "content/examples/matrix/distances.csv": {
+      "role": "content",
+      "sha256": "2fac668b49edb13b20d38d3c8d4725f93f5753b890a82328aa786a5905b08f70"
+    },
+    "content/examples/matrix/input.json": {
+      "role": "content",
+      "sha256": "aa415f6b9dc814b89076112c5ebc5fa8c3131ee0be883933100843b3aa55d12b"
+    },
+    "content/examples/matrix/routing.xlsx": {
+      "role": "content",
+      "sha256": "55ef4cbf6ce0ec0c4fbcbe381f41b24117189cbd511a7e58405102c9f52d36b0"
+    },
+    "content/examples/matrix/vehicles.csv": {
+      "role": "content",
+      "sha256": "d04c1e656c2e66de77220299542ead58565c4b100b5f1cbf5e8b9bb6dabd05ba"
+    },
+    "content/examples/matrix/visits.csv": {
+      "role": "content",
+      "sha256": "8bc72703842fe2d640b32ea6a89cfdf1ba8f3b953076c5e96264f966516e0247"
+    },
+    "content/http_api.py": {
+      "role": "content",
+      "sha256": "4e965c4c0a047619275ff97800f848c96f5d8283169a8e643659afe05b2a7cd8"
+    },
+    "content/input_files.py": {
+      "role": "content",
+      "sha256": "b9fb24a30a92bd67c7c6e06b4ec3e539ad22adf4c0dae3a3a9e5a279f323407e"
+    },
+    "content/manifest.json": {
+      "role": "content",
+      "sha256": "79110d526ca7dc129ab751ac74936065675fc233afd52426439561ad933492ff"
+    },
+    "content/python-dependencies.json": {
+      "role": "content",
+      "sha256": "4ac3c6223cde0ace7089eea3867aa1b40a3f80d270a05a4031e0c5533ca0b3a7"
+    },
+    "content/requirements.txt": {
+      "role": "content",
+      "sha256": "672c02ea3f723bea4a8e39643caab8c57c513418c812767096ebed55224240cf"
+    },
+    "pyproject.toml": {
+      "role": "derived",
+      "sha256": "319bc20b7439222d8bc21d3568dd57cbf5602932704d0ce52c3864fbb2bc20f0"
+    },
+    "server.py": {
+      "role": "common",
+      "sha256": "bc6888c3109baa3625395f00983e4233091209f9dea02c40236526d902181250"
+    }
+  },
+  "parameters": {
+    "module_name": "ocp_routing_ocp_server",
+    "package_name": "routing-ocp-server",
+    "python_dependencies": [
+      "ortools==9.15.6755"
+    ],
+    "requires_python": ">=3.12",
+    "runtime_version": "0.4.0.dev12+publicformat3",
+    "template_revision": "0.1.0-draft.5"
+  },
+  "schema": "ocp-generation/v1",
+  "template_hashes": {
+    "README.md": "f9f2d763fb9217bb518f9833415541b5211c23c905f38919e1fef32063a4870f",
+    "__init__.py": "22ac18456101d5155df7d6898393c202733b50a4c2295cc7e42731aec9562f15",
+    "config.example.json": "a0521274a129b8821fc36f9fb38aa6f8fe236abd609f028fddec1803542960a2",
+    "content/manifest.json": "14b376b57215c82168b7e17c66eac96fb739aa7562768a26719b8e7e33fb10ef",
+    "pyproject.toml": "bbb42307ca1369af562e22f06faacccd2bf41d3703f61c8a273d64e5d62746b9",
+    "server.py": "bc6888c3109baa3625395f00983e4233091209f9dea02c40236526d902181250"
+  }
+}

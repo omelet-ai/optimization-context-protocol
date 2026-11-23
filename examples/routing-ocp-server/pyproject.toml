@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools==80.9.0", "wheel==0.46.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "routing-ocp-server"
+version = "0.1.0.dev3"
+description = "An authored OCP Server"
+requires-python = ">=3.12"
+dependencies = ["ocp-candidate[server]==0.4.0.dev12+publicformat3", "ortools==9.15.6755"]
+
+[project.scripts]
+"routing-ocp-server" = "ocp_routing_ocp_server.server:main"
+
+[tool.setuptools]
+packages = ["ocp_routing_ocp_server"]
+package-dir = {"ocp_routing_ocp_server" = "."}
+
+[tool.setuptools.package-data]
+"ocp_routing_ocp_server" = ["content/*", "content/**/*", "config.example.json"]

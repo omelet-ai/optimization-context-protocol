@@ -20,7 +20,8 @@ def build(output_dir=None, *, version=None):
     output.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="ocp-wheel-build-") as directory:
         staging = Path(directory) / "candidate"
-        shutil.copytree(ROOT / "sdk/python", staging)
+        source_only = shutil.ignore_patterns('__pycache__', '*.pyc')
+        shutil.copytree(ROOT / "sdk/python", staging, ignore=source_only)
         metadata = staging / "pyproject.toml"
         package_version = tomllib.loads(metadata.read_text())["project"]["version"]
         if version is not None:
@@ -30,9 +31,19 @@ def build(output_dir=None, *, version=None):
             package_version = version
         for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
             shutil.copy2(ROOT / name, staging / name)
-        shutil.copytree(ROOT / "adapters/python/ocp_routing", staging / "src/ocp_routing")
-        shutil.copytree(ROOT / "runtime/python/ocp_runtime", staging / "src/ocp_runtime")
-        shutil.copytree(ROOT / "adapters/python/ocp_planning", staging / "src/ocp_planning")
+        shutil.copytree(ROOT / "adapters/python/ocp_routing", staging / "src/ocp_routing", ignore=source_only)
+        shutil.copytree(ROOT / "runtime/python/ocp_runtime", staging / "src/ocp_runtime", ignore=source_only)
+        # Generated projects must depend on this exact installed runtime artifact.
+        scaffold = staging / "src/ocp_runtime/authoring/scaffold.py"
+        authoring_source = scaffold.read_text()
+        authoring_source, replaced = re.subn(r'^RUNTIME_VERSION = "[^"\n]+"$',
+            'RUNTIME_VERSION = "' + package_version + '"', authoring_source, flags=re.MULTILINE)
+        if replaced != 1:
+            raise ValueError("Exactly one authoring runtime version must be stamped")
+        scaffold.write_text(authoring_source)
+        shutil.copytree(ROOT / "templates/ocp-server", staging / "src/ocp_runtime/authoring/_template", ignore=source_only)
+        shutil.copytree(ROOT / "adapters/python/ocp_planning", staging / "src/ocp_planning", ignore=source_only)
+        # Generic proposal excludes private catalog content and connector packages.
         resources = staging / "src/ocp_candidate/schemas"
         resources.mkdir()
         shutil.copy2(ROOT / "spec/profile-registry.json", staging / "src/ocp_candidate/profiles.json")

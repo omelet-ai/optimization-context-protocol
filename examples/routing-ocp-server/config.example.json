@@ -1,0 +1,8 @@
+{
+  "api_endpoint": null,
+  "credential_environment_variable": null,
+  "connector_factory": null,
+  "transport": "stdio",
+  "state_directory": null,
+  "allowed_local_roots": []
+}

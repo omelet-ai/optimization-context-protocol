@@ -1034,3 +1034,655 @@ Routing host trial tasks, proposed measurable thresholds and blank host/version
 fields are prepared. Participants remain unassigned; no human acceptance or paid
 model run is claimed. Exact-asset checks and publication receipts are recorded in
 `.harness/work/native-maintenance-publication-20261103/`.
+
+## 2026-11-16 — Studio adoption implementation started
+
+The owner authorized autonomous local implementation of the adoption plan.
+The first vertical slice adds a draft Knowledge schema and Python/TypeScript
+validators, a separately named cross-language fingerprint, optional localized
+description queries, exact submission snapshots, opt-in native coordinate
+routing, strict CSV preparation and installed CLI diagnostics. Core 0.1 and the
+pinned native v1 contract are unchanged; existing 8/9/11-tool modes remain.
+The local candidate is Python 0.3.0.dev1 / TypeScript 0.2.0-knowledge.dev.1.
+Changed BYO example dependency metadata uses 0.1.2.dev1 example versions.
+
+P0 contract separation and the first P1/P2 implementation are available for
+review. This is not completion of the whole adoption plan. Authored recipes,
+automated Analysis plans, remote authenticated MCP, durable recovery, authoring
+scaffolds and real-host/human acceptance remain follow-up work. Initial snapshot
+scope is the submitted Core request; it does not recover original files or
+natural-language interpretation. The new guide is
+[Native Knowledge preview](docs/users/NATIVE_KNOWLEDGE_PREVIEW.md).
+
+Verification records and source/artifact hashes are retained under
+`.harness/work/studio-adoption-20261116/`. Initial fixture/setup failures are
+retained separately from the final candidate checks. No paid model call, source
+push, release, registry upload, site deployment or external-human trial is part
+of this work. The original Foundry repository and Studio source checkouts were
+not modified. Existing untracked convergence work was preserved.
+
+## 2026-11-18 — Generic server format implementation
+
+The owner authorized autonomous implementation and intermediate verification of
+the format plan, followed by isolated Studio and Foundry adoption. The current
+implementation baseline preserves the earlier dirty Knowledge/coordinate work
+under `.private/format-implementation-20261118/`. The original Foundry repository
+remains protected; no shared Git metadata or source writes are permitted there.
+
+FMT00–FMT11 track the public-source format lane independently from historical
+snapshot/release gates. `conformance/format/` contains the required case catalog;
+`tools/format_harness/` records exact case execution, source and prerequisite
+digests, failure/timeout and stale results. Unimplemented stages remain NOT_RUN.
+Current scope is local code and synthetic verification. Actual product
+integration, model-host sessions, human participation and publication each
+require their own evidence. See `tools/format_harness/cli.py status` for current
+results; this task entry is not a PASS receipt.
+
+The first format checkpoint implemented FMT00–FMT07: API descriptor validation
+in Python/TypeScript, strip/reinject scaffolding, official file preparation,
+native-worker execution with a single-host durable store, progressive discovery,
+bounded persistent analysis plans, and authenticated loopback/stdio MCP. All 70
+required case IDs passed at the checkpoint; source changes invalidate affected
+receipts. The installed-runtime MCP case ran outside this checkout. FMT08–FMT11,
+the complete Routing example, clean deployment-artifact matrix and actual
+Studio/Foundry integrations remain in progress. No original Foundry access,
+external model call or publication has occurred in this implementation lane.
+
+The second checkpoint completed all 100 required FMT00–FMT11 case IDs against
+review-02. Fresh macOS arm64 and Linux amd64 installations of the same four
+wheels passed the installed ten-group suite, including real Routing/continuous
+blending and stdio/HTTP MCP. FMT10 retained an initial test expectation failure
+before the corrected candidate. Current receipts and exact artifact hashes are
+recorded in `.private/format-implementation-20261118/format-completion.json`.
+This accepts only the local format candidate; actual consumer adoption follows
+in independent private snapshots under `.private/format-consumer-adoption-20261118/`.
+No existing consumer checkout or original Foundry was modified.
+
+
+The final local checkpoint is review-10 (`ocp-candidate 0.4.0.dev5`), manifest
+`5f2162eba15c1b119667bd31e5b0634e5f8e9d615d00812ea00e5adf6aedacf1`.
+All 100 required FMT case IDs and the macOS/Linux installed suites are current
+PASS. Content dependency declarations, Python bounds and the server extra are
+now generated and reversible. Five byte-identical pinned public worker files
+use a private namespace, avoiding collisions with a domain engine's SDK. The
+analysis controller stops starting workers after an infrastructure fault; a
+single injected fault proves there is no second worker call.
+
+Actual Routing, Studio Nurse v2 and Foundry Nurse v3 were installed in three
+separate environments. Each ran its real engine via stdio and authenticated
+HTTP MCP, with tenant isolation and exact content round trips. Routing vehicle
+subset comparison selects only supplied IDs. Studio's real browser journey and
+three routing playbooks passed; the real pinned Foundry gateway and copied
+consumers passed solve, evaluation/repair and job journeys. Completed native
+results survive switching between compatible local installations, and an
+actual running Routing job was cancelled. Prior failed attempts are retained.
+
+Private evidence and exact artifact inventory are under
+`.private/format-consumer-adoption-20261118/handoff/`. Feature inventories distinguish
+declaration preservation, engine semantics and observed consumer journeys.
+They do not claim every UI combination, production auth, model-host/human
+acceptance or publication. Original Foundry and other source checkouts remain
+unchanged. A local workspace-verifier scope repair excludes generated dependency
+caches/private runs while retaining authored/source-manifest sensitive-file
+checks; its regression suite passes. The historical H00 lane remains separate.
+
+## 2026-11-18 — Additional acceptance and real-engine counterexamples
+
+Follow-up evidence is under `.private/format-final-acceptance-20261118/`.
+Three hash-locked standalone macOS profile installations pass 336 semantic/API
+tests. The two private Nurse profiles additionally pass 207 tests on Linux arm64
+in offline containers. Public review-10 remains unchanged and all FMT00–FMT11
+receipts remain current in their recorded environment.
+
+Negative Routing inputs exposed a real inconsistency: the engine reported
+feasible while its evaluation recorded hard weight/volume violations. A new
+private content candidate rejects those results in generic and native bindings;
+the original engine files remain byte-identical. Actual process workers, HTTP
+MCP jobs and the copied Foundry consumer propagate failure without a successful
+result. Positive flows, soft/null semantics and exact content round trips pass.
+The initial single-point radius test used the wrong geometric assumption; its
+corrected two-point test passes and is not counted as an engine defect.
+
+Studio browser journeys for both domains and copied Foundry solve/evaluate/
+repair/job journeys pass again with the corrected Routing candidate. This does
+not establish every UI combination or production deployment. The installed
+ChatGPT desktop MCP client discovers all 16 tools with temporary configuration;
+no model turn or global configuration change was performed. Six synthetic
+Claude tasks are prepared and remain pending explicit model-run approval.
+Private Routing Linux binaries, human first-use acceptance and publication
+remain outstanding. Existing original Foundry was not modified.
+
+## 2026-11-18 — Real host trial and usability corrections
+
+The approved six synthetic Claude sessions completed against review-10/runtime
+0.4.0.dev5 using the Sonnet alias (reported model: claude-sonnet-5-5). Five tasks
+met their requirements, including two that recovered from rejected tool inputs;
+one discovery answer confused optimization API execution flags with MCP jobs.
+Three real solver jobs were checked against the persisted requests and results.
+CLI list-price accounting totals USD 0.3813953, distinct from subscription billing.
+This is six one-shot tasks, not a population reliability or human acceptance rate.
+
+Review-12/runtime 0.4.0.dev7 adds explicit execution scopes and instructions for
+artifact references and playbook binding/value objects. API schemas, engines and
+checker semantics are unchanged. All twelve FMT gates and 100 required case IDs
+pass, including clean macOS arm64/Linux amd64 installs, stdio/HTTP consumers,
+template round trips and legacy tool contracts. The installed ChatGPT desktop
+client discovers all 16 tools; no ChatGPT model turn was run.
+
+Evidence: `.private/format-final-acceptance-20261118/hosts/model-results.json`
+and `hosts-review12/format-status.json`. The revised three-task Claude follow-up
+is prepared for separate approval (one session each, 180 seconds and CLI USD 0.50
+per case). Original private-engine/Studio/Foundry acceptance remains tied to dev5;
+it is not silently promoted to dev7. No publication or original Foundry write.
+
+## 2026-11-18 — Isolated product experiment plan and autonomous harness
+
+The product-lab lane now has 54 designed scenarios for Studio Routing/Nurse work,
+four fresh Foundry customer-app lifecycles, paired engine comparisons, faults,
+playbooks, isolation, performance and separate host/human/publication follow-ups.
+The detailed private plan is `docs/plans/OCP_PRODUCT_EXPERIMENT_PLAN.md` and the
+catalog/campaign/work orders are under `.private/product-lab-20261118/`.
+
+`tools/product_lab/` implements dependency-aware execution with up to four workers,
+resource locks, explicit retry, immutable attempts, per-case identity and input
+hashes, required raw artifacts, stale evidence rejection and OS-enforced write
+protection. The runner's 26 regression tests pass. Actual macOS sandbox calibration
+passes 11 observations including write/network denial and descendant cleanup;
+the deliberately timed-out fixture remains a failed execution, not product PASS.
+Preparation/source tests pass 7 cases and adapter/screening tests pass 17 cases.
+
+Original Studio and Foundry were read under a write-denying OS policy and captured
+without shared Git/dependencies. Before/after hashes and metadata matched. Initial
+captures remain quarantined. Screened immutable sources retain 2,504 Studio and
+7,458 Foundry files; historical evidence/customer-derived paths are excluded.
+This screening is not exhaustive privacy assurance or publication approval.
+
+The actual guarded campaign ran all eight PREP checks successfully with four
+worker slots. It includes fresh dev7 public Routing calculation/checker and a
+dev5 private Nurse historical-control solve. These eight preparation/smoke PASS
+results do not accept the 54 planned product cases. Their case-specific adapters
+remain NOT_IMPLEMENTED, and the selected latest Nurse must still be pinned from
+live API semantics before dev7 private packaging and full Studio/Foundry journeys.
+Model/human/publication executable bindings are rejected by this local campaign.
+No model calls, original product edits, commit/push, release or deployment occurred.
+
+## 2026-11-18 — Isolated product-lab foundation execution
+
+Fresh guarded `foundation-execution-03.json` passes PREP-01–08 and LAB00–05
+(14 selected cases; 48 other catalog cases remain NOT_IMPLEMENTED). LAB01 selects
+captured local Nurse envelope 3.0 / schema 2.0 / policy 1.3.0 / compiler 2.4.1,
+with actual solve/evaluate/repair observations. Two independent private dev7
+packages install offline and solve through stdio and authenticated HTTP; discovery
+retains exact descriptor semantics across restarts and transports. LAB05 executes
+8 same-engine native/generic pairs (16 calls) with unchanged canonical/compiled
+inputs, bounded independent oracles and within-call result/status/null preservation.
+Repeated medium cases use native defaults, not three independently chosen seeds.
+
+The runner now exports exact prerequisite receipt/artifact references and detects
+reference tampering. 28 runner regression checks and 13 actual OS calibration
+observations pass. A first HTTP cleanup failure is retained; signal permission is
+limited to self/children, and a controlled foreign-process signal remains denied.
+The original 307-file workspace verifier also passes, separately from product
+acceptance. Original Studio/Foundry checkout and Git writes remain prohibited.
+
+The latest Nurse engine has a reproduced P1: malformed result-style pins may be
+silently dropped before repair. A distinct one-file private parser patch passes
+87 scoped checks and actual in-process ASGI job tests; it is not applied to the
+fixed wheel, original source or public package. Both generic packages still lack
+registered official-file converters and independent checker callbacks; native
+repair/evaluation availability does not imply generic MCP exposure. Studio and
+Foundry adoption preparation runs separately and cannot substitute for LAB06/07.
+See `.private/product-lab-20261118/RESULTS.md` and the pinned raw attempts.
+No new model call, human acceptance, commit/push, release or deployment occurred.
+
+Studio's separate adoption preparation characterizes 49 behaviors using current
+mappers, Gantt builder and validators, and records a three-file private proposal.
+It reproduces unknown-to-feasible promotion, lost fixed cost, missing repair
+metadata and incompatible official workbook formats. Configured Python domain-app
+sources pin earlier API/catalog/compiler contracts; 184 supplemental source paths
+are inventoried under original write denial, not yet adopted as a new snapshot.
+This is not LAB06 registration, a whole-project typecheck or browser acceptance.
+Final selected source/Git state audit matches LAB00 for both original checkouts.
+
+## 2026-11-19 — First fresh Foundry Routing application generation
+
+Standalone R-A run06 executes public Builder inspect/scaffold/compile against the
+actual Routing HTTP facade and the exact LAB03 installed dev7 native API, then
+checks generated integrity, actual Product snapshot/lock validators and diagnostic
+in-memory compilation. It creates a new synthetic food-delivery app (12 visits,
+3 vehicles) in its own output directory; Product serving/browser and other apps
+remain NOT_RUN, so LAB07 remains unimplemented in the formal campaign.
+
+Earlier failures remain recorded: overly broad source-directory exclusions,
+Node IPC denial, an invalid synthetic depot-coincident delivery, and a comparison
+oracle that incorrectly required generated timestamps to match. Nine source-only
+TypeScript supplements match the captured Git HEAD; no original writes or new
+Git commit occurred. IPC permission is limited to this attempt's temporary path.
+Owned services and listener ports are closed. A final write-guarded source/Git
+comparison after R-A generation again passes for Studio and Foundry.
+
+## 2026-11-19 — Product-lab real host and consumer follow-through
+
+Fresh guarded execution passes PREP-01–08, LAB00–05 and HOST-01/02: 16 selected
+cases, including 8 product catalog cases; 46 catalog cases remain NOT_IMPLEMENTED.
+HOST-01 observes 107 stdio operations including four playbooks and nine real child
+jobs. HOST-02 observes 88 HTTP checks across auth/tenant/artifact, cancellation,
+idempotency and restart. Actual child exit/listener closure replaces constant
+cleanup claims. Earlier attempts, principal-label defects and seals remain intact.
+
+Separate Studio Hub experiments execute five real solves and two Nurse Gantt
+projections through an explicit bridge; full DB/storage/KG/repair/UI remains open.
+Versioned standard-file converter candidates pass 50 scoped checks without
+adding domain sheet names to Core. They are not adopted into frozen packages.
+
+Fresh Foundry R-A source Product consumes its official workbook, executes the real
+API and exports independently checked JSON/XLSX. Actual browser upload/solve shows
+12 assigned deliveries and no unassigned deliveries. A retired tenant header was
+fixed only in a private consumer copy. Missing travel-time enrichment explains the
+unknown distance/schedule; a separate bilingual empty-state correction passes 14
+mapper/rendering checks without fabricating data. Browser download and the new UI
+candidate's complete browser retest remain unverified after long automation waits
+outlasted bounded service holds. This is not full LAB07 or four-app acceptance.
+
+A further independent retry-policy candidate fixes the reproduced TENANT_REQUIRED
+three-submission loop. Actual JobService/adapter/file repository with synthetic
+transport passes 31 fault/recovery cases; the error now stops after one attempt.
+Existing regressions pass 97/97 after explicit header/policy expectation updates;
+all raw failures and test diffs remain recorded. Strict TypeScript passes. This
+synthetic fault test is distinct from real solver and browser success.
+
+Independent review rechecks 43 sealed files and 14,231 installed payloads and
+recomputes nine bounded oracles. The original Studio/Foundry source/Git audit
+passes; all candidate work stays in guarded independent copies. The legacy H00
+lane remains STALE and is not promoted by the separate product-lab results.
+See `.private/product-lab-20261118/RESULTS.md` and `RESULTS-round4.md` for exact scope,
+fix diffs and remaining cases. No original edits, paid model calls, human acceptance,
+commit/push, release or deployment occurred.
+
+## 2026-11-19 — Product-lab round 5 adoption and independent review
+
+The initial guarded closure in `foundry-foundation-execution-round5-03.json` passed 17
+selected cases: PREP-01–08, LAB00–05, LAB07 and HOST-01/02. Nine of 54 product
+catalog cases are implemented; 45 remain NOT_IMPLEMENTED. LAB07 now registers
+fresh customer-app generation/build/source-Product execution against the pinned
+installed Routing API. It does not approve an installed Foundry release or the
+four-app/full-product scope. Intermediate STALE/FAIL attempts are retained.
+
+Separate private content packages 0.1.0.dev2 adopt official-file converters and
+the strict Nurse pin parser, pass 161 scoped assertions and 12 real calls/jobs,
+and preserve the common dev7 runtime and old artifacts. A Studio API3 migration
+candidate exercises real PostgreSQL/app/engine paths, including infeasible,
+repair, best-effort successor evaluation, nonzero service time and null/zero.
+Independent review found and verified fixes for five consumer defects; 190
+candidate sources and 254 evidence files match. Complete Studio LAB06 is still
+open. The latest follow-through is tracked separately in the private lab.
+
+Foundry A/B source apps exercise actual API, independent assignment/capacity
+checks, restoration and JSON/XLSX export. Schedule-unavailable export wording is
+corrected in a separate freshly executed composition. Browser workbook upload
+and solve are observed; download remains unverified after the browser tool
+outlasted the bounded service lifetime. A wrapper status-name bug is preserved
+and its corrected separate runner passes fresh API/export execution.
+
+An optional provider-operation prototype keeps provider evaluation separate from
+the independent checker, with real stdio/HTTP evaluate and repair calls. Independent
+review reproduced and fixed escaped-result delivery failure, duplicate execution
+after delivery-policy changes, and opaque failure reading a large retained result.
+The final private candidate preserves the semantic namespace, rejects conflicting
+repeated keys, retains results without recomputation and reports delivery-policy
+changes explicitly. Its 219-file seal was independently verified; fresh actual
+Nurse stdio/HTTP calls passed. The design remains a proposal outside the pinned
+normative draft; public authoring/SDK/runtime adoption is not claimed.
+
+A further independent Studio stack runs actual PostgreSQL, Prisma migrations,
+local S3 and SMTP, better-auth OTP sessions, Next, Hub, the API3 app and installed
+native solver over TCP. Existing Hub registration is observed in the browser;
+an explicitly labelled experiment view renders its real stored result using the
+existing Gantt component. This does not establish the complete IDE workflow.
+Browser review found low-contrast labels and missing actual date labels. Private
+consumer fixes passed a fresh stack: auth6, Hub9, followup12, persistence8,
+renderer14 and date/projection8 checks. Native jobs are memory-backed; existing
+IDE workflow and final browser date rendering remain unverified. The browser
+tool could not attach a new webview although the actual server returned HTTP200.
+The 2,869-file fullstack seal was independently rehashed. Routing default startup
+and a freshly generated Foundry Nurse customer app are separate ongoing paths.
+
+The product runner passes 35 regressions and actual OS boundary checks for
+case-scoped Unix IPC, short temporary socket paths and read-only input-tree
+fingerprints. The legacy H00 lane remains STALE. Original Studio/Foundry and Git
+remain write-protected. No paid model calls, human acceptance or publication.
+See `.private/product-lab-20261118/RESULTS-round5.md` and `findings-round5.json`.
+
+### Round 5 follow-through: combined Studio and fresh Nurse authoring
+
+The subsequent controlled FN-N-01 registration supersedes the initial plan's
+receipts. `nurse-foundation-execution-round5-01.json` freshly passes 18 cases:
+eight preparations and ten of 54 product cases; 44 remain NOT_IMPLEMENTED.
+The new Nurse customer is generated through actual discovery/resolve/compile/
+create, followed by independent Product/AppKit/DTO wheel installation and a
+fresh production web build plus strict TypeScript including generated Next
+types. This is authoring/install/build evidence, not FN-N-02 runtime acceptance.
+
+A single isolated Studio now runs Routing and latest Nurse with one real OTP
+actor, Next/Prisma, separate app databases, local S3 and actual native solvers.
+The 38 scoped runtime/storage checks pass. Browser observations confirm both
+registrations in the existing IDE/Hub and final ISO dates, assignments and text
+contrast in an explicitly labelled view of the real Hub result. This resolves
+the new candidate's final-date browser question, while preserving the earlier
+browser failure and keeping the complete existing IDE workflow open. Its
+3,872-file seal was independently rehashed; owned services were stopped.
+
+The Routing consumer's missing-reference-time synthesis and result rewriting
+were corrected in an isolated candidate. Actual solve, repeated/concurrent
+reads, app/native restarts and bounded persistence faults pass 57 checks;
+3,281 sealed files and a six-file patch replay match. Completed-result storage
+is consumer policy; production backfill/retention and pending native-job
+durability are separate work.
+
+Two new Nurse customer compositions execute actual API3 tasks: N-A has eight
+nurses over 30 days, and N-B independently solves two wards. Source-preserving
+production web builds and independent types pass. Product HTTP/SQLite tests
+revealed a native-result retention gap; the isolated correction and independent
+raw-response/DB/restart/export review are recorded in the private round-5 ledger.
+Optional provider-operation package adoption is also being tested privately,
+including content removal and ordinary content reuse without its addon. Neither
+candidate is public adoption or an original-product change.
+
+### Round 5 final private corrections and browser boundary
+
+Nurse retention6 preserves original decoded native response and semantic metadata
+beside legacy projection, including actual success/infeasible jobs, DB restart,
+XLSX and tenant denial. Independent review verified 179 synthetic boundaries and
+85 actual-response/storage checks. The 837-file seal remains unchanged.
+
+Generic optional-operation dev4 removes its addon/config from stripped templates;
+ordinary content independently installs and solves with an independent checker.
+Content-only dev5 strengthens Nurse response schemas using pinned native models
+and exact outer-return source, preserving required nullable fields and advancing
+operation versions. Fresh stdio26/HTTP29, response32cases/66assertions and separate
+independent schema29/runtime16/transport36 checks pass. Candidate203 and reviewer57
+sealed files were rehashed. No public SDK/runtime or original consumer adoption.
+
+Nurse browser preparation initially omitted generated customer deployment settings.
+A fresh build uses the original release-runtime prepare output, with no UI edits.
+Strict generated types, original login/onboarding and unified workbook input UI
+pass. File chooser automation exceeded its timeout, returning after12191.789seconds
+with Network Error; browser upload/solve/edit/download remain NOT_VERIFIED.
+Earlier API/DB/Excel evidence is separate. Formal campaign remains18PASS/44
+NOT_IMPLEMENTED; legacy H00 is STALE. No model calls, publication or original edits.
+
+### Round 6 — exact dev2 migration and formal Studio registration
+
+The new private campaign execution-04 freshly passed 19 cases: eight preparations
+and eleven of the 54 product/acceptance cases; 43 remain NOT_IMPLEMENTED. LAB06
+now binds actual authenticated official-file HTTP ingress, canonical conversion,
+installed native execution, PG/S3 storage and fresh CUA Hub/result observations.
+Routing displays actual feasible status and Nurse preserves the observed D/OFF
+assignments and dates. A separate labelled validation view is not the full IDE.
+Fresh Foundry Routing authoring/runtime and Nurse creation/install/build/types
+also pass. Old dev1 evidence, obsolete manifest failures and PG startup failure
+remain preserved. The private results ledger contains exact hashes and receipts.
+
+Independent review rehashed 18 LAB06 artifacts and verified full normalized input
+preservation using the fresh installed Routing/Nurse environments, with no input
+differences and ten bounded result checks. Actual app/engine and dedicated DB
+cleanup is verified. Latest-run original-source/Git preservation matches; one
+additional Studio Codex capture ref relative to the older Nov18 baseline remains
+explicitly recorded instead of changing that historical audit to PASS.
+
+The browser file chooser still failed after unlock; browser upload remains
+unverified. Source-only Node dependency diagnostics/docs and Foundry application
+identity corrections are reviewed candidates requiring new package adoption.
+No original consumer edit, publication, extra model execution or human acceptance
+was performed. General OCP fields remain independent of Routing/Nurse content.
+
+Fresh Studio logs also confirm a separate P1: both logical domain IDs fall through
+legacy generic-agent endpoint resolution, producing nonexistent /mcp routes and
+404 responses. Hub manifest/command/solve success does not close this gap. Next
+isolated consumer work must distinguish domain identity and advertised transport,
+then verify real MCP initialization/tools and existing IDE behavior. The general
+OCP format must not mandate the obsolete Studio fallback URL.
+
+### Latest Studio dev alignment — autonomous implementation and harness plan
+
+Prepared `docs/plans/OCP_STUDIO_DEV_ALIGNMENT_PLAN.md` and
+`docs/plans/OCP_STUDIO_DEV_ALIGNMENT_HARNESS.md` against the reviewed Studio
+`9b056a50` source. The new private planning workspace is
+`.private/studio-dev-alignment-20261119/`; the prior round-6 campaign and receipts
+remain unchanged. Latest oi-auth/OIDC, developer local infrastructure and the
+configured LLM provider/access policy are the integration baseline. The earlier
+MCP404 must be reproduced on that baseline before being treated as a new defect.
+
+The plan defines 47 local technical cases, five separate external stages, ten
+requirements and a complete crosswalk for the prior 54 product cases. It reuses
+the existing runner with all adapters explicitly null. Structure/DAG/assignment
+and coverage validation passed; 16 malformed-plan controls were rejected. These
+are planning checks only: all 47 product/preparation adapters remain
+NOT_IMPLEMENTED, and no new runtime, model, human or publication result exists.
+
+Independent planning review prompted explicit stateful Nurse A/B pre-state and
+command-journal controls, supervisor-owned environment transitions, attach-only
+case execution, cross-workspace leases, live service freshness, failure-path
+finalization, a final all-branch preservation barrier, exclusive performance
+measurement and actual public no-key solve/checker requirements. These runtime
+mechanisms are planned, not already implemented. First implementation work is
+A00/A01 current H00/source preservation and the exact developer version set,
+then the developer-provided Routing/Nurse guided baseline. No original consumer
+source or environment was changed while preparing the plan.
+
+### 2026-11-20 — common completion and portable guarded Nurse continuation
+
+Private C5 `0.4.0.dev9+consolidated5` integrates the reviewed synchronous
+completion acknowledgement in the common runtime namespace. Installed Mac
+161/161 and offline Linux container 159/159 passed, including 19 completion
+regressions; two TypeScript cases are Mac-only. Core/native schemas remain
+unchanged. The integrated effectful Nurse query binding passed 29 tests.
+
+The pure official-file policy passed 26 tests. A separate portable Nurse content
+wheel `0.1.0a3` now composes that policy with server-owned preparation IDs, exact
+roster receipt matching, ward-wide invalidation within the same ledger, durable
+replay, current authorization, context-owned artifacts and local stored results.
+Its installed cohort passed 26/26, including actual MCP SDK 2.x stdio and official
+XLSX conversion with original/old-candidate/source reads denied. Independent
+adversarial review passed 14 cases on identical package source. Synthetic provider
+results are not actual engine or consumer acceptance.
+
+Source review found the provider requires Nurse solve `project_id` for pinned
+assignment scope, while the old Hub/manifest treat it as attribution. Only the
+new candidate adapter/description was corrected. Ambiguous work-hours and
+out-of-period source cells block execution rather than disappearing. Existing
+Studio/Foundry/Auth originals and six frozen predecessors were rechecked intact.
+
+H00/H01/H37 are currently PASS with the dependency Python environment. H64 is
+FAIL because the README links to `docs/users/SERVER_FORMAT_PREVIEW.md` outside
+the selected public export. The public allowlist was not expanded. No publication,
+paid model calls or new live provider run occurred. Next: fresh dedicated Nurse
+ward readback/materialization, shared-writer policy, then the exact same artifact
+through isolated Studio/Foundry consumers. Evidence and runnable cohorts are in
+`.private/studio-dev-alignment-20261119/continuation-20261120/`.
+
+### 2026-11-20 — actual guarded Nurse execution and independent result consumption
+
+The successor private continuation `continuation-20261120-r2` completed a real
+OTP/OIDC API login, exact Studio project authorization, official six-file Nurse
+preparation, one roster application/readback and one native Nurse solve using
+installed common C5 and Nurse `0.1.0a4`. The bounded 4-nurse/31-day result contains
+124 assignments. Provider-reported optimal, local solution unknown and null
+evaluation remain distinct. Positive native-lineage closure preceded shared
+coordination reconciliation; new preparation is now required. The stock engines
+were restored and checked separately. Five original repository/source snapshots
+match before/after. No browser-login, clinical or optimality-proof claim is made.
+
+Independent review replayed the actual input/result and closed lineage, and
+rejected eight deliberately changed captures. N2's earlier failed comparison
+and the subsequent authenticated readback/close records remain separate; no
+failed result was overwritten or uncertain roster command replayed.
+
+A frozen Studio operation-report consumer copy passed 23 Node cases and strict
+TypeScript checks. Official installed MCP stdio, the copied Studio Hub and the
+unchanged Foundry result reader then consumed the actual closed N3 capture in
+33 offline checks (12/9/12). An explicit lossless Foundry mapping preserves all
+124 cells and the full envelope; failed jobs and noncanonical dates are denied.
+That consumer replay used synthetic authorization and made zero provider/model
+calls. Actual app registration/UI/customer restore remain separate acceptance.
+
+A generic-only build successor passed fresh declared-dependency installation,
+16 installed checks, documented quickstart and an actual Routing solve/checker
+through the exact generated MCP configuration. A second independent install
+verified wheel and installed bytes without private catalog/native dependencies.
+The identical runtime wheel and template also generated a continuous-blending
+package: exact strip/reinjection, official CSV, two objective solutions and one
+analytically infeasible case passed 19 official-stdio checks with three real LP
+solves. These synthetic examples are not external-user acceptance.
+Current public allowlists, old frozen
+artifacts and original Studio/Foundry/Auth/provider code remain unchanged.
+See the private continuation `RESULTS.md` and `verify_n3_checkpoint.py` for exact
+artifacts and verification scope. The overall 47-case campaign is not complete;
+legacy H64 remains FAIL and stale legacy gates are not promoted by these results.
+
+### 2026-11-20 — independent packages and actual Studio persistence acceptance
+
+Private continuation only; no original Studio/Foundry/Auth/provider repository
+or Git metadata changes, publication, deployment, new model calls or allowlist
+expansion. `publicformat1` now has an independently installed Nurse content
+successor `0.1.0a5+publicruntime1`; internal bridge code belongs to the Nurse
+package rather than the generic runtime. Fresh functional/official MCP checks
+and independent installation review passed. Studio's generation-05 used that
+exact combination with existing OTP/OIDC authentication to read the earlier N3
+execution and render all 124 assignments on desktop and mobile. This was not a
+new a5 solve.
+
+A separate Foundry Product consumer implements an authenticated workspace
+saved-result read port, lossless typed projection and bounded official MCP child
+lifecycle. Its 26 tests used real MCP/ORM plus explicitly synthetic OIP/OpenFGA
+authority. Real Product auth/HTTP/UI/customer persistence remains NOT_RUN; the
+existing compatible OIP SDK, endpoint/service key, OpenFGA and Product DB/owner
+mapping must be supplied rather than replaced with Studio OIDC.
+
+The generation-06 Studio consumer adds trusted Run/RunResult snapshot storage,
+current project checks on reopening/export, stale-scope UI reset and a guard
+against bypass through legacy generic task routes. Six files, 21 route/ORM/Hub
+checks, ten React checks and TypeScript validation passed. The first actual
+attempt saved and reopened one record but failed during export; its repeated
+restore guard also failed before SQL. Both failures remain recorded. Exact
+one-pair recovery restored the baseline; an unidentified denied TLS startup
+attempt remains UNKNOWN, followed by a separately successful readiness probe.
+
+The next owner fixes repeated observations and uses an owned macOS Chromium
+temporary directory without relaxing the OS policy or changing product UI.
+Actual `studio-persistence-owner-prep-02/runs/run-01` completed real existing
+authentication, ten API success/rejection cases, desktop/mobile storage,
+new-Page DB reopen and exact JSON downloads of 101,831 bytes each. All 124x3 cells
+and original unknown/candidate/null semantics matched; engine-reported optimal
+remained separate. Five new official MCP reads closed positively and four prior
+records remained unchanged. No new solver/provider/model run was performed.
+
+Independent audit recomputed the two exact archive pairs and checked source,
+installed bytes, downloads and ordering. Both test-owned pairs were removed
+atomically only after child closure; the eight prior Run and seven RunResult
+rows matched the baseline before restoring stock. Full A04 readiness, original
+and Nurse/project preservation, pending removal and lease release passed.
+Private downloads and evidence remain; this is not a permanent archive deployment.
+
+Preparation for the original guided-flow baseline now preserves both test
+bodies and upstream helpers, adds the official per-user Marketplace install
+fixture, and rejects hidden 401 reauthentication. It records uncertain
+Tool/UserTool effects without automatic retry. This is an offline helper
+extension, not original full-test acceptance. Nurse sample IDs are global KG
+keys: the next actual guided cohort needs a separately owned database/service
+and identity lifecycle, not a replay against shared existing sample IDs.
+
+Exact artifacts, preserved failures and recorded-scope verification are in
+`.private/studio-dev-alignment-20261119/continuation-20261120-r2/`:
+`RESULTS.md`, `ADOPTION.md`, `NEXT_ACCEPTANCE.md`, and `verify_delivery.py`.
+New-input Studio execution, whole W2/W5 equivalence, real Foundry authority,
+external hosts/human acceptance and the complete 47-case campaign remain open.
+
+
+### 2026-11-20 — reviewed generic source integration and actual file-review acceptance
+
+The private combined 490-file candidate passed 504 macOS arm64/Python 3.12.15
+checks: 315 pre-build, 149 installed native, 22 inspection and 18 generic. This
+includes a fresh verbatim README setup and official MCP stdio Routing job/checker.
+Seven native source dependencies and generated wheel-name references were fixed;
+prior failed attempts remain. Root applied 24 modifications and 14 additions,
+verified all 490 hashes, and then separately corrected README verification prose
+and ignored generated quickstart state/venv. Product bytes and quickstart commands
+remain identical to the tested candidate. Historical publication allowlists and
+original consumer repositories were not changed; new selection approval is false.
+
+Routing's five-file isolated selection repair passed the actual original guided
+case and one native job. Explicit empty constraints and minsum weight survived
+through input/result projection; independent distance/cost recomputation matched
+112642. This is one bounded feasible result, not general optimality or all W2.
+
+Nurse owner06 passed existing OTP/OIDC and current project checks, five denied
+requests and three desktop/mobile file reviews with exact downloads, expandable
+findings and stale-result invalidation. Locale reload now preserves the form in
+the isolated Studio copy; the test scopes product alerts separately from Next's
+route announcer. All 16 ordered checks, three review chains, six host/server
+process roles, no provider/engine/model calls, unchanged DB inventory, original
+preservation, stock A04 restore and released lease were independently audited.
+Earlier failures are preserved. This is preparation only, not a new a5 solve.
+
+The user confirmed that no real Foundry OIP/OpenFGA/Product DB environment exists.
+FOUNDRY_ENVIRONMENT_REQUIREMENTS.md records exact settings, compatible SDK needs,
+A/B/C accounts, least-privilege workspace data, owner binding and acceptance/reset
+steps. Real Foundry authority remains NOT_RUN; the 26 fixture-authority tests do
+not substitute for it. Full W5/47-case campaign, other OS/TypeScript, external
+host UI/human acceptance and publication remain separate. See private RESULTS,
+NEXT_ACCEPTANCE, ADOPTION and local-source-application-01.json for exact evidence.
+
+### 2026-11-20 — IB-1 template baseline and fast integration handoff
+
+- Prioritized a fixed Python authoring/integration baseline separately from full consumer acceptance, following the user's request to accelerate delivery.
+- Kept runtime `0.4.0.dev10+publicformat1`, template `0.1.0-draft.3`, descriptor `0.1.0-draft.2`, optional operation extension `0.1.0-draft.2` and Routing package `0.1.0.dev1` unchanged. Independent review found no blocking defect in the scoped template freeze; 37 contract/implementation/test paths remained identical.
+- Updated the authoring and consumer guides, added `docs/development/TEMPLATE_INTEGRATION_BASELINE.md`, and selected 493 candidate source files without changing historical publication approvals.
+- Frozen local IB-1 kit: 493 source files, two newly built wheels, source lock, SHA256SUMS, installation guide and scoped validation report. Separate fresh installed/README/official MCP journey: 18 PASS. Verbatim kit install/check/doctor/host configuration: 1 PASS. Actual MCP Routing job: one attempt, independent checker PASS, duplicate request creates no extra job; all recorded groups closed, model calls zero.
+- The earlier 504-test combined source result remains historical evidence, not a rerun or promotion of the full product campaign. New Nurse end-to-end Studio execution, complete feature parity, actual Foundry OIP/OpenFGA/Product DB, other hosts/platforms and people acceptance remain separate work.
+- Local artifacts and evidence are retained in the private IB-1 delivery workspace. No original consumer repository, remote Git, registry, release or deployment was changed. This ledger entry follows the kit's immutable source freeze and does not replace its recorded TASKS bytes.
+
+
+### 2026-11-21 — IB-1.1 startup correction and current-consumer handoff
+
+Independent review reproduced false READY when advertised file converters are
+missing or version-mismatched, unusable host configurations emitted from blank
+settings, and generated package names ending in a hyphen rejected only at build.
+The local successor checks these before use, provides generic-only dependency
+advice, and clarifies runnable content configuration versus the blank template.
+Runtime is `0.4.0.dev11+publicformat2`, template `0.1.0-draft.4`, and Routing
+`0.1.0.dev2`; descriptor/operations/Core/native versions and domain content remain
+unchanged. Five installed regressions cover startup and authoring boundaries.
+The prior IB-1 delivery and consumer evidence remain immutable; no existing
+Nurse runtime dependency is overridden. Current verification, Foundry reader
+rebase and integration handoff are recorded under
+`.private/template-finalization-20261121/`. Results there identify the exact
+source/artifacts and completed checks; this entry alone is not a test result.
+Original consumer repositories, historical publication approvals and remote
+publication/deployment remain unchanged. Real Foundry authority is unavailable.
+
+### 2026-11-21 — packaging revision and actual Studio archive relocation
+
+The optional Node lane exposed two missing source dependencies in the 493-file
+candidate: the native SDK advertised knowledge/fingerprint exports but their
+implementations were absent from the selected source. The successor candidate
+includes those dependencies and verifies packed export targets before declaring
+a build successful. Runtime and wire versions are unchanged. Preserve the first
+kit and failed Node attempts; use the separately frozen packaging revision after
+its fresh Python/Node checks and installation rehearsal. Historical publication
+allowlists and their approval scope remain unchanged.
+
+The independently prepared Studio archive adapter now obtains its installed
+module from server-owned path/hash settings. The isolated actual archive journey
+passed current OTP/OIDC authority, DB save, new-context reauthentication, desktop
+and mobile reopen, and byte-identical export of 124 assignments. It added one
+synthetic Run/RunResult pair, preserved earlier rows and original repositories,
+made zero provider/model calls and restored the stock Studio. The login form,
+mobile table visual inspection, execution-bundle relocation and full feature
+parity are outside this result. The source execution remains the positively
+closed IB-1/a5 Nurse run; this archive journey does not claim a new execution.
+
+Foundry's exact IB-1/a5 saved reader passed 35 fixture-authority checks and seven
+independent checks, with an eight-file patch application verified. Actual OIP,
+OpenFGA and Product DB acceptance remains NOT_RUN. The private finalization
+report links the immutable source, scoped results and remaining integration work.

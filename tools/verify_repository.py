@@ -13,6 +13,7 @@ import re
 import subprocess
 import sys
 from ci_policy import WORKFLOW, validate as validate_ci
+from binary_fixture_policy import reviewed_fixture_text
 
 ROOT = Path(__file__).resolve().parents[1]
 SELECTION = "provenance/repository-selection.json"
@@ -78,7 +79,7 @@ def verify(index=False, selection_path=SELECTION):
             raise ValueError("Excluded file type: " + name)
         content = read(name)
         if len(content) > 1024 * 1024: raise ValueError("Unexpected source size: " + name)
-        text = content.decode("utf-8")
+        text = reviewed_fixture_text(name, content) if path.suffix.lower() == ".xlsx" else content.decode("utf-8")
         if name == WORKFLOW:
             validate_ci(text)
         for label, pattern in PATTERNS.items():

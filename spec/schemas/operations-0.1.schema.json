@@ -1,0 +1,444 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:operations:0.1.0-draft.2",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "version": {
+      "enum": [
+        "0.1.0-draft.1",
+        "0.1.0-draft.2"
+      ]
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?$"
+          },
+          "kind": {
+            "enum": [
+              "query",
+              "command",
+              "optimization"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "request_schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+          },
+          "response_schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+          },
+          "context_schema": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128,
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+          },
+          "effects": {
+            "enum": [
+              "none",
+              "optimization_context_write"
+            ]
+          },
+          "execution": {
+            "enum": [
+              "sync",
+              "existing_optimization_api"
+            ]
+          },
+          "binding": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "connector": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 128,
+                "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+              },
+              "api_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "api_version": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "capabilities": {
+            "type": "object",
+            "properties": {
+              "idempotency": {
+                "const": false
+              },
+              "reconciliation": {
+                "const": false
+              },
+              "cancel": {
+                "const": false
+              },
+              "atomic_precondition": {
+                "const": false
+              },
+              "snapshot": {
+                "const": false
+              }
+            },
+            "required": [
+              "idempotency",
+              "reconciliation",
+              "cancel",
+              "atomic_precondition",
+              "snapshot"
+            ],
+            "additionalProperties": false
+          },
+          "input_formats": {
+            "type": "array",
+            "maxItems": 100,
+            "items": {
+              "$ref": "#/$defs/format"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "kind",
+          "description",
+          "request_schema",
+          "response_schema",
+          "effects",
+          "execution",
+          "binding",
+          "capabilities"
+        ]
+      },
+      "minItems": 1,
+      "maxItems": 100
+    }
+  },
+  "required": [
+    "version",
+    "operations"
+  ],
+  "$defs": {
+    "format": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tables": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/table"
+          }
+        },
+        "max_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "converter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "encoding": {
+          "enum": [
+            "utf-8",
+            "utf-8-sig"
+          ]
+        },
+        "delimiter": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1
+        },
+        "max_rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_uncompressed_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "converter_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "media_type",
+        "tables",
+        "max_bytes"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "converter"
+            ]
+          },
+          "then": {
+            "required": [
+              "converter_version"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "converter_version"
+            ]
+          },
+          "then": {
+            "required": [
+              "converter"
+            ]
+          }
+        }
+      ]
+    },
+    "table": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sheet": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "mode": {
+          "enum": [
+            "array",
+            "object"
+          ]
+        },
+        "key": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "columns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/column"
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pointer": {
+                "type": "string",
+                "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+              },
+              "table": {
+                "type": "string",
+                "minLength": 1
+              },
+              "key": {
+                "type": "string",
+                "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+              }
+            },
+            "required": [
+              "pointer",
+              "table",
+              "key"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "target",
+        "mode",
+        "columns"
+      ],
+      "additionalProperties": false
+    },
+    "column": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "type": {
+          "enum": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "datetime",
+            "date"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "missing": {
+          "enum": [
+            "error",
+            "null",
+            "omit",
+            "default"
+          ]
+        },
+        "default": {},
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scale": {
+          "type": "number"
+        },
+        "offset": {
+          "type": "number"
+        },
+        "precision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "rounding": {
+          "enum": [
+            "half_even",
+            "half_up",
+            "floor",
+            "ceiling"
+          ]
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fold": {
+          "enum": [
+            0,
+            1
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "target",
+        "type"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "precision"
+            ]
+          },
+          "then": {
+            "required": [
+              "rounding"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "missing"
+            ],
+            "properties": {
+              "missing": {
+                "const": "default"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "default"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "version": {
+            "const": "0.1.0-draft.1"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "operations": {
+            "items": {
+              "not": {
+                "required": [
+                  "input_formats"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

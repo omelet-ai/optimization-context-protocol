@@ -34,14 +34,15 @@ class Registration:
 
 
 def reference_domains(names=None):
-    from .providers import PROVIDERS, make_provider
-    available = {profile.replace('.', '-'): profile for profile in PROVIDERS}
+    from .providers import PROVIDERS, OPTIONAL_PROVIDERS, make_provider
+    selected = PROVIDERS if names is None else {**PROVIDERS, **OPTIONAL_PROVIDERS}
+    available = {profile.replace('.', '-'): profile for profile in selected}
     if names is not None and (not isinstance(names, (list, tuple)) or not names
             or any(not isinstance(name, str) or name not in available for name in names)
             or len(set(names)) != len(names)):
         raise ValueError('INVALID_DOMAIN_SELECTION')
     return [Registration(ReferenceDomain(make_provider(profile), problem_type=profile.replace('.', '-')),
-                         partial(solve_reference, profile)) for profile in PROVIDERS
+                         partial(solve_reference, profile)) for profile in selected
             if names is None or profile.replace('.', '-') in names]
 
 

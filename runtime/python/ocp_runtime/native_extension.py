@@ -43,6 +43,8 @@ def main():
     parser.add_argument('--extension', required=True)
     parser.add_argument('--verification', action='store_true', help='Expose independent local job verification')
     parser.add_argument('--evidence', action='store_true', help='Expose preparation and checked explanation (requires --verification)')
+    parser.add_argument('--knowledge', action='store_true', help='Project the registered domain catalogs as queryable descriptions')
+    parser.add_argument('--snapshots', action='store_true', help='Retain the exact submitted input/configuration')
     parser.add_argument('--checker-factory', help='Trusted installed checker MODULE:FACTORY, used only with --verification')
     parser.add_argument('--evidence-factory', help='Trusted installed evidence MODULE:FACTORY, used only with --evidence')
     args = parser.parse_args()
@@ -69,7 +71,11 @@ def main():
             from .native_evidence_registry import load_evidence_registry
             evidence = EvidenceService(clients, local.app.state.native_store, registry=registry,
                                        evidence_registry=load_evidence_registry(args.evidence_factory))
-        create_native_mcp(clients, verifier=verifier, evidence=evidence).run(transport='stdio')
+        from .native_knowledge import KnowledgeService
+        from .native_snapshot import ExecutionSnapshots
+        create_native_mcp(clients, verifier=verifier, evidence=evidence,
+            knowledge=KnowledgeService(clients) if args.knowledge else None,
+            snapshots=ExecutionSnapshots(clients, local.app.state.native_store) if args.snapshots else None).run(transport='stdio')
 
 
 if __name__ == '__main__':

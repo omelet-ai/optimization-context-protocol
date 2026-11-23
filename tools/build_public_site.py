@@ -1,8 +1,8 @@
 """Build documentation-only public pages; never publish or include package assets.
 
-The existing review builder supplies the real synthetic illustration. Its kit,
-manifests and execution evidence stay in temporary local storage. This builder
-copies an explicit static-file selection and obtains CLI blocks from README.
+Build and install the current candidate only to compute synthetic illustrations.
+No private invitation kit or old package-version filename is needed. Package
+assets stay in temporary local storage; only explicit static files are copied.
 """
 import argparse
 import hashlib
@@ -12,16 +12,67 @@ import json
 from pathlib import Path
 import re
 import shutil
+import subprocess
 from string import Template
 import tempfile
 from urllib.parse import urlsplit
 
-from build_site import ROOT, CONTRACTS, SCHEMAS, build as build_review, source
+from build_site import ROOT, CONTRACTS, SCHEMAS, run_example, source
+from build_candidate import build as build_candidate
+from build_conformance import build as build_conformance
+from isolated_candidate import install
 
 REPO = "https://github.com/omelet-ai/optimization-context-protocol"
 ASSETS = ("site.css", "site.js", "mark.svg", "example.json", "basic-input.json")
 README_COMMANDS = ("readme-build", "readme-examples", "readme-mcp", "readme-native-build",
                    "readme-native-mcp", "readme-native-verify", "readme-native-install", "readme-routing-setup")
+
+
+def build_public_assets(target):
+    """Compute real examples without entering the private invitation exporter."""
+    target = Path(target)
+    assets = target / 'assets'
+    assets.mkdir(parents=True)
+    with tempfile.TemporaryDirectory(prefix='ocp-public-examples-') as directory:
+        scratch = Path(directory)
+        candidate = build_candidate(scratch / 'wheels')
+        checker = build_conformance(scratch / 'wheels')
+        installed = scratch / 'installed'
+        installed.mkdir()
+        python, env = install(installed, Path(candidate['wheel']))
+        checked = subprocess.run(
+            [str(python), '-B', '-m', 'pip', 'install', '--no-index', '--no-cache-dir',
+             '--no-compile', '--find-links', str(ROOT / '.harness/work/wheels'), checker['wheel']],
+            env=env, cwd=scratch, capture_output=True, text=True, timeout=60)
+        if checked.returncode:
+            raise RuntimeError('Public example checker installation failed')
+        for filename, case in [('basic-input.json', 'routing/basic-matrix.json'),
+                               ('worker-input.json', 'worker/small.json'),
+                               ('inventory-input.json', 'inventory/small.json')]:
+            problem = json.loads(source('cases/' + case).read_text())['input']
+            (scratch / filename).write_text(json.dumps(problem, allow_nan=False) + '\n')
+        example, timings = run_example(
+            [str(python), '-B', str(source('site/example.py')),
+             str(scratch / 'basic-input.json'), '--report-ready'], env=env, cwd=scratch)
+        if example.returncode:
+            raise RuntimeError('Public example execution failed: ' + example.stderr[-1500:])
+        demo = json.loads(example.stdout)
+        (assets / 'example.json').write_text(json.dumps(demo, ensure_ascii=False, allow_nan=False, indent=2) + '\n')
+        shutil.copyfile(scratch / 'basic-input.json', assets / 'basic-input.json')
+    for name in ('site.css', 'site.js', 'mark.svg'):
+        shutil.copyfile(source('site/assets/' + name), assets / name)
+    for name, destination in CONTRACTS.items():
+        path = target / 'contracts' / destination
+        path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source(name), path)
+    for name in SCHEMAS:
+        path = target / 'contracts/schemas' / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source('spec/schemas/' + name), path)
+    return {'candidate_wheel_sha256': candidate['sha256'],
+            'checker_wheel_sha256': checker['sha256'], 'example_timings': timings,
+            'scope': 'Installed local solvers and independent checkers on synthetic inputs',
+            'external_calls': 0, 'private_invitation_kit_built': False}
 
 
 def document_commands(path, marker):
@@ -73,7 +124,7 @@ def build(output, base_url):
         raise ValueError("Website output must be empty")
     with tempfile.TemporaryDirectory(prefix="ocp-public-site-") as scratch:
         review = Path(scratch).resolve() / "review"
-        build_review(review)
+        example_proof = build_public_assets(review)
         module_spec = importlib.util.spec_from_file_location("public_site_content", source("site/content.py"))
         content = importlib.util.module_from_spec(module_spec)
         module_spec.loader.exec_module(content)
@@ -129,7 +180,8 @@ def build(output, base_url):
     files = {p.relative_to(target).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(target.rglob("*")) if p.is_file()}
     # Returned proof is for private records, not copied into the deployed output.
     return {"directory": str(target), "base_url": base, "pages": len(pages), "files": files,
-            "packages_included": False, "trial_service_included": False, "deployed": False}
+            "packages_included": False, "trial_service_included": False, "deployed": False,
+            "example_proof": example_proof}
 
 
 if __name__ == "__main__":

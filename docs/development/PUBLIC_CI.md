@@ -6,6 +6,15 @@ a model, deploys a site, or posts a package. It does not run H00 or manufacture
 historical harness acceptance. H64 separately checks this implementation in the
 maintainer workspace after the current H00 baseline passes.
 
+The maintainer H64 gate explicitly checks the pending server-format candidate
+listed in `provenance/public-format-candidate-selection.json`. The historical
+release selection and publication approvals remain unchanged. To reproduce that
+candidate check, add `--selection provenance/public-format-candidate-selection.json`
+to the commands below. Its success verifies the selected local source; publication
+still requires review of that exact selection. The checker without `--selection`
+continues to use the historical release plan and can reject a working tree whose
+new documentation or dependencies are outside that older inventory.
+
 ## Matrix and evidence
 
 | Lane | Execution | Meaning of success |

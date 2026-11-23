@@ -1,0 +1,15 @@
+{
+  "adaptation": "Namespace only. The five worker source files are byte-identical to the published pinned SDK.",
+  "authority": "sdk/native-contracts/python",
+  "files": {
+    "jobs/__init__.py": "ec363429c6c64c574f5395c65b98fe871e779d9df5023e4481053f26c1b8f99d",
+    "jobs/memory.py": "7c1b4182d04a609c0023ba10f35684cb3a50ae1c1f48c10578dd9e8bf25d8a81",
+    "jobs/model.py": "82e26e78e5ff5d3786435e4309ac1c82eb5f09ded0f0f87601d688d3d18c9dea",
+    "jobs/worker.py": "e012cabd72695f10b6418920ecea817a169004a7f1c12412082f720a6d92aa27",
+    "runners.py": "e94207eac56c199961101ef18187c1cf998163e2b0f520855e4a54f009d54f30"
+  },
+  "package": "ocp-foundry-contracts-candidate",
+  "schema": "ocp-worker-source/v1",
+  "upstream_commit": "7547036d1bc9464d6c43a9bdf7cff0a78e8560d7",
+  "version": "0.0.0+foundry.7547036d1bc9.review1"
+}

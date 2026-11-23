@@ -15,6 +15,15 @@ def inventory():
 
 PROVIDERS={'routing.basic':routing,'worker.scheduling':worker,'inventory.replenishment':inventory}
 
+def coordinates():
+    from ocp_routing import ORToolsBackend
+    from ocp_routing.coordinates import CoordinatesAdapter, CoordinateLibraryBackend
+    return CoordinatesAdapter(CoordinateLibraryBackend(ORToolsBackend()))
+
+# Preserve the legacy default catalog; opt in with --domain routing-coordinates.
+OPTIONAL_PROVIDERS = {'routing.coordinates': coordinates}
+
 def make_provider(profile='routing.basic'):
-    if profile not in PROVIDERS:raise OCPError('UNSUPPORTED_PROFILE')
-    return PROVIDERS[profile]()
+    providers = {**PROVIDERS, **OPTIONAL_PROVIDERS}
+    if profile not in providers:raise OCPError('UNSUPPORTED_PROFILE')
+    return providers[profile]()

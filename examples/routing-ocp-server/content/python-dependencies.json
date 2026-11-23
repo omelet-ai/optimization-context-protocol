@@ -1,0 +1,6 @@
+{
+  "schema": "ocp-python-dependencies/v1",
+  "requires": [
+    "ortools==9.15.6755"
+  ]
+}

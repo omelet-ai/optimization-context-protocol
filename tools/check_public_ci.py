@@ -13,6 +13,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import tomllib
 
 from ci_policy import WORKFLOW, validate
 from verify_repository import verify
@@ -42,10 +43,14 @@ def require_success(label, result):
         raise RuntimeError(label + ' failed; inspect the diagnostic output or local log')
 
 
-def check(output, wheelhouses=(), with_typescript=False):
+def selected_path(explicit=None):
+    return explicit if explicit is not None else read_plan().get('source_selection', 'provenance/repository-selection.json')
+
+
+def check(output, wheelhouses=(), with_typescript=False, selection_path=None):
     if sys.version_info[:2] != (3, 12) or os.name != 'posix':
         raise ValueError('PYTHON_3_12_POSIX_REQUIRED')
-    selection_path = read_plan().get('source_selection', 'provenance/repository-selection.json')
+    selection_path = selected_path(selection_path)
     selection = verify(selection_path=selection_path)
     validate((ROOT / WORKFLOW).read_text())
     work = Path(output).resolve()
@@ -95,7 +100,14 @@ def check(output, wheelhouses=(), with_typescript=False):
     run('dependencies', [python, '-m', 'pip', 'install', '--no-index', '--no-compile', '--no-cache-dir',
                          '--find-links', wheels, '-r', 'tools/requirements-dev.lock',
                          'fastapi==0.135.1', 'annotated-doc==0.0.4'])
-    for name in UNIT_CHECKS:
+    selection_files = json.loads((source / selection_path).read_text())['files']
+    generic = 'spec/server-package/README.md' in selection_files
+    generic_checks = ['tools/tests/test_binary_fixture_policy.py', 'tools/tests/test_generic_candidate.py']
+    if generic and not set(generic_checks + ['tools/check_generic_candidate.py', 'tests/installed/test_generic_runtime.py',
+            'tests/installed/test_generic_quickstart.py', 'tests/installed/test_generic_mcp.py',
+            'tests/runtime/test_binding_authorization.py']).issubset(selection_files):
+        raise ValueError('GENERIC_SELECTED_WITHOUT_REQUIRED_CHECKS')
+    for name in UNIT_CHECKS + (generic_checks if generic else []):
         run(Path(name).stem, [python, '-B', name], report=True)
     build = [python, '-B', 'tools/build_native_candidate.py', '--output', work / 'kit']
     if with_typescript: build.append('--with-typescript')
@@ -109,10 +121,15 @@ def check(output, wheelhouses=(), with_typescript=False):
     run('installed-native', argv, timeout=900, report=True)
     run('inspection', [python, '-B', 'tools/check_inspection_candidate.py', '--kit', work / 'kit',
                        '--wheelhouse', wheels, '--output', work / 'inspection'], timeout=900, report=True)
+    if generic:
+        version = tomllib.loads((source / 'sdk/python/pyproject.toml').read_text())['project']['version']
+        run('installed-generic', [python, '-B', 'tools/check_generic_candidate.py', '--source', source,
+            '--selection', selection_path, '--expected-version', version, '--wheelhouse', wheels,
+            '--output', work / 'generic'], timeout=900, report=True)
     report = {'status': 'PASS', 'tests_run': sum(r['tests_run'] for r in reports.values()),
               'errors': 0, 'failures': 0, 'skipped': 0, 'platform': platform.platform(),
               'machine': platform.machine(), 'python': platform.python_version(),
-              'node_checked': with_typescript, 'model_calls': 0, 'human_acceptance': 'NOT_RUN',
+              'node_checked': with_typescript, 'generic_checked': generic, 'model_calls': 0, 'human_acceptance': 'NOT_RUN',
               'scope': 'Public source and installed synthetic consumers; no historical gate promotion',
               'source_selection': selection_path,
               'publication_authorized': False,
@@ -126,10 +143,10 @@ def check(output, wheelhouses=(), with_typescript=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output'); parser.add_argument('--wheelhouse', action='append', default=[])
-    parser.add_argument('--with-typescript', action='store_true'); args = parser.parse_args()
+    parser.add_argument('--with-typescript', action='store_true'); parser.add_argument('--selection'); args = parser.parse_args()
     output = args.output or str(Path(tempfile.mkdtemp(prefix='ocp-public-ci-')) / 'run')
     try:
-        print(json.dumps(check(output, args.wheelhouse, args.with_typescript)))
+        print(json.dumps(check(output, args.wheelhouse, args.with_typescript, args.selection)))
     except (ValueError, OSError, RuntimeError, subprocess.SubprocessError) as error:
         print(json.dumps({'status': 'FAIL', 'code': type(error).__name__, 'reason': str(error)}))
         raise SystemExit(1)

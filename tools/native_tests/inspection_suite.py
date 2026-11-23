@@ -4,16 +4,20 @@ import asyncio
 import contextlib
 from copy import deepcopy
 import importlib.util
+import hashlib
+from email.parser import BytesParser
 import io
 import json
 from pathlib import Path
 import re
 import runpy
 import shutil
+import shlex
 import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 from unittest.mock import patch
 from types import SimpleNamespace
 
@@ -23,6 +27,30 @@ ROOT=Path.cwd()
 def module(name):
     spec=importlib.util.spec_from_file_location(name,ROOT/(name+'.py'))
     value=importlib.util.module_from_spec(spec);spec.loader.exec_module(value);return value
+
+
+def worker_example_wheel(root=ROOT):
+    """Select the exact manifest artifact, verify bytes and distribution identity."""
+    root = Path(root)
+    manifest = json.loads((root / 'manifest.json').read_text())
+    name = manifest.get('example_wheels', {}).get('worker_greedy')
+    if not isinstance(name, str) or not re.fullmatch(r'ocp_worker_greedy_example-[A-Za-z0-9_.+]+-py3-none-any\.whl', name):
+        raise ValueError('WORKER_WHEEL_IDENTITY_MISMATCH')
+    path = root / name
+    if path.is_symlink() or not path.is_file():
+        raise ValueError('WORKER_WHEEL_MISSING')
+    if hashlib.sha256(path.read_bytes()).hexdigest() != manifest.get('files', {}).get(name):
+        raise ValueError('WORKER_WHEEL_HASH_MISMATCH')
+    with zipfile.ZipFile(path) as wheel:
+        entries = [entry for entry in wheel.namelist() if entry.endswith('.dist-info/METADATA')]
+        if len(entries) != 1:
+            raise ValueError('WORKER_WHEEL_IDENTITY_MISMATCH')
+        metadata = BytesParser().parsebytes(wheel.read(entries[0]))
+    package = re.sub(r'[-_.]+', '-', metadata.get('Name', '')).lower()
+    if (package != 'ocp-worker-greedy-example'
+            or name != 'ocp_worker_greedy_example-' + metadata.get('Version', '') + '-py3-none-any.whl'):
+        raise ValueError('WORKER_WHEEL_IDENTITY_MISMATCH')
+    return path
 
 
 class Inspection(unittest.TestCase):
@@ -43,7 +71,8 @@ class Inspection(unittest.TestCase):
         cls.app=module('inspection');cls.project=module('project')
         cls.base=cls.documented('inspection-baseline')
         cls.original=cls.project.read(ROOT/'scenarios/baseline/input.json')
-        cls.command('.native/bin/python -I -B -m pip install --no-index --no-deps --no-compile ./ocp_worker_greedy_example-0.1.1-py3-none-any.whl')
+        wheel = worker_example_wheel()
+        cls.command('.native/bin/python -I -B -m pip install --no-index --no-deps --no-compile ' + shlex.quote('./' + wheel.name))
 
     def temp(self):
         path=Path(tempfile.mkdtemp(prefix='inspection-case-',dir=ROOT))

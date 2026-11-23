@@ -19,7 +19,11 @@ class RepositorySelectionTests(unittest.TestCase):
         self.directory = tempfile.TemporaryDirectory(prefix="ocp-public-selection-")
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)
-        self.selection = json.loads((ROOT / 'provenance/routing-preview-selection.json').read_text())
+        # Test the current complete source closure in temporary synthetic grants.
+        # Historical real grants remain unchanged and are never expanded here.
+        fixture_selection = ROOT / 'provenance/public-format-candidate-selection.json'
+        if not fixture_selection.exists(): fixture_selection = ROOT / 'provenance/routing-preview-selection.json'
+        self.selection = json.loads(fixture_selection.read_text())
         for name in self.selection["files"]:
             target = self.root / name
             target.parent.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,938 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:ocp:server-package:0.1.0-draft.2",
+  "type": "object",
+  "properties": {
+    "format_version": {
+      "enum": [
+        "0.1.0-draft.1",
+        "0.1.0-draft.2"
+      ]
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+    },
+    "profile": {
+      "$ref": "#/$defs/reference"
+    },
+    "api": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "input_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "configuration_schema": {
+          "type": "string",
+          "minLength": 1
+        },
+        "result_schema": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "input_schema",
+        "configuration_schema",
+        "result_schema"
+      ],
+      "additionalProperties": false
+    },
+    "schemas": {
+      "type": "object",
+      "minProperties": 3,
+      "additionalProperties": {
+        "type": [
+          "object",
+          "boolean"
+        ]
+      }
+    },
+    "default_locale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "localizations": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "title",
+          "summary"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "definition": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dimension": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "definition",
+          "dimension"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "objectives": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/objective"
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/constraint"
+          }
+        },
+        "execution": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "sync",
+                "async"
+              ]
+            },
+            "cancel": {
+              "type": "boolean"
+            },
+            "durable": {
+              "type": "boolean"
+            },
+            "evaluate": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "mode",
+            "cancel",
+            "durable",
+            "evaluate"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "objectives",
+        "constraints",
+        "execution"
+      ],
+      "additionalProperties": false
+    },
+    "configuration_defaults": {
+      "type": "object"
+    },
+    "configuration_rules": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/binding"
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/metric"
+      }
+    },
+    "input_formats": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/format"
+      }
+    },
+    "playbooks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/playbook"
+      }
+    },
+    "required_extensions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "extensions": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "format_version",
+    "id",
+    "version",
+    "profile",
+    "api",
+    "schemas",
+    "default_locale",
+    "localizations",
+    "units",
+    "capabilities",
+    "configuration_defaults",
+    "configuration_rules",
+    "bindings",
+    "metrics",
+    "input_formats",
+    "playbooks",
+    "required_extensions",
+    "extensions"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "version"
+      ],
+      "additionalProperties": false
+    },
+    "binding": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+        },
+        "target": {
+          "enum": [
+            "input",
+            "configuration"
+          ]
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "operation": {
+          "enum": [
+            "replace",
+            "select_by_id"
+          ]
+        },
+        "value_schema": {
+          "type": [
+            "object",
+            "boolean"
+          ]
+        },
+        "id_field": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "target",
+        "pointer",
+        "operation",
+        "value_schema"
+      ],
+      "additionalProperties": false
+    },
+    "metric": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "definition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "value_type": {
+          "enum": [
+            "number",
+            "integer",
+            "string",
+            "boolean"
+          ]
+        },
+        "direction": {
+          "enum": [
+            "minimize",
+            "maximize",
+            "none"
+          ]
+        },
+        "comparison_basis": {
+          "enum": [
+            "invariant",
+            "same_configuration"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "pointer",
+        "definition",
+        "unit",
+        "value_type",
+        "direction"
+      ],
+      "additionalProperties": false
+    },
+    "objective": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+        },
+        "definition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "direction": {
+          "enum": [
+            "minimize",
+            "maximize"
+          ]
+        },
+        "role": {
+          "enum": [
+            "optimized",
+            "reported"
+          ]
+        },
+        "weight_binding": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "definition",
+        "unit",
+        "direction",
+        "role"
+      ],
+      "additionalProperties": false
+    },
+    "constraint": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+        },
+        "definition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "unit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "oneOf": [
+            {
+              "enum": [
+                "hard",
+                "soft",
+                null
+              ]
+            },
+            {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "hard",
+                  "soft"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 2,
+              "uniqueItems": true
+            }
+          ]
+        },
+        "role": {
+          "enum": [
+            "enforced",
+            "evaluated"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "definition",
+        "unit",
+        "kind",
+        "role"
+      ],
+      "additionalProperties": false
+    },
+    "preserve": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "enum": [
+            "input",
+            "configuration"
+          ]
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        }
+      },
+      "required": [
+        "target",
+        "pointer"
+      ],
+      "additionalProperties": false
+    },
+    "budget": {
+      "type": "object",
+      "properties": {
+        "max_calls": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "concurrency": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "required": [
+        "max_calls",
+        "timeout_seconds",
+        "concurrency"
+      ],
+      "additionalProperties": false
+    },
+    "variable": {
+      "type": "object",
+      "properties": {
+        "binding": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+        },
+        "values": {
+          "type": "array",
+          "minItems": 1
+        }
+      },
+      "required": [
+        "binding",
+        "values"
+      ],
+      "additionalProperties": false
+    },
+    "recipe": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "independent_variations",
+            "grid"
+          ]
+        },
+        "variables": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/variable"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "variables"
+      ],
+      "additionalProperties": false
+    },
+    "playbook": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "localizations": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "title": {
+                "type": "string",
+                "minLength": 1
+              },
+              "summary": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "title",
+              "summary"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "status": {
+          "enum": [
+            "explanation",
+            "executable"
+          ]
+        },
+        "binding_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+          },
+          "uniqueItems": true
+        },
+        "metric_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+          },
+          "uniqueItems": true
+        },
+        "preserve": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/preserve"
+          }
+        },
+        "recipe": {
+          "$ref": "#/$defs/recipe"
+        },
+        "budget": {
+          "$ref": "#/$defs/budget"
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "localizations",
+        "status",
+        "binding_ids",
+        "metric_ids",
+        "preserve"
+      ],
+      "additionalProperties": false
+    },
+    "format": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-zA-Z][a-zA-Z0-9_.-]*$"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?$"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tables": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/table"
+          }
+        },
+        "max_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "converter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "encoding": {
+          "enum": [
+            "utf-8",
+            "utf-8-sig"
+          ]
+        },
+        "delimiter": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1
+        },
+        "max_rows": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_uncompressed_bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "converter_version": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "version",
+        "media_type",
+        "tables",
+        "max_bytes"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "converter"
+            ]
+          },
+          "then": {
+            "required": [
+              "converter_version"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "converter_version"
+            ]
+          },
+          "then": {
+            "required": [
+              "converter"
+            ]
+          }
+        }
+      ]
+    },
+    "rule": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "allowed_set"
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "pointer",
+        "values"
+      ],
+      "additionalProperties": false
+    },
+    "column": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "type": {
+          "enum": [
+            "string",
+            "number",
+            "integer",
+            "boolean",
+            "datetime",
+            "date"
+          ]
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "missing": {
+          "enum": [
+            "error",
+            "null",
+            "omit",
+            "default"
+          ]
+        },
+        "default": {},
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scale": {
+          "type": "number"
+        },
+        "offset": {
+          "type": "number"
+        },
+        "precision": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 12
+        },
+        "rounding": {
+          "enum": [
+            "half_even",
+            "half_up",
+            "floor",
+            "ceiling"
+          ]
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fold": {
+          "enum": [
+            0,
+            1
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "target",
+        "type"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "precision"
+            ]
+          },
+          "then": {
+            "required": [
+              "rounding"
+            ]
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "missing"
+            ],
+            "properties": {
+              "missing": {
+                "const": "default"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "default"
+            ]
+          }
+        }
+      ]
+    },
+    "table": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sheet": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "mode": {
+          "enum": [
+            "array",
+            "object"
+          ]
+        },
+        "key": {
+          "type": "string",
+          "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+        },
+        "columns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/column"
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pointer": {
+                "type": "string",
+                "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+              },
+              "table": {
+                "type": "string",
+                "minLength": 1
+              },
+              "key": {
+                "type": "string",
+                "pattern": "^(?:/(?:[^~]|~[01])*)*$"
+              }
+            },
+            "required": [
+              "pointer",
+              "table",
+              "key"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "target",
+        "mode",
+        "columns"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "format_version": {
+            "const": "0.1.0-draft.1"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "capabilities": {
+            "properties": {
+              "constraints": {
+                "items": {
+                  "properties": {
+                    "kind": {
+                      "enum": [
+                        "hard",
+                        "soft"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
