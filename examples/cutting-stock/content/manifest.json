@@ -1,0 +1,164 @@
+{
+  "format_version": "0.1.0-draft.2",
+  "id": "cutplan",
+  "version": "1.0.0",
+  "profile": {
+    "id": "cutplan.single-stock",
+    "version": "1.0.0"
+  },
+  "api": {
+    "id": "cutplan.api",
+    "version": "1.0.0",
+    "input_schema": "input",
+    "configuration_schema": "configuration",
+    "result_schema": "result"
+  },
+  "schemas": {
+    "input": {
+      "type": "object",
+      "description": "One-dimensional cutting order. One available stock length and no price information.",
+      "properties": {
+        "stock_length_cm": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000,
+          "description": "Required stock bar length in cm. All bars are identical. Obtain it from the order."
+        },
+        "pieces_cm": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100000,
+            "description": "Length in whole centimetres (cm)."
+          },
+          "description": "One entry per ordered piece, including every duplicate, in centimetres."
+        },
+        "kerf_cm": {
+          "type": "integer",
+          "const": 0,
+          "description": "Cutting loss in cm. This version supports explicitly zero loss only."
+        }
+      },
+      "required": [
+        "stock_length_cm",
+        "pieces_cm",
+        "kerf_cm"
+      ],
+      "additionalProperties": false
+    },
+    "configuration": {
+      "type": "object",
+      "description": "Fixed objective: minimize the number of identical stock bars.",
+      "properties": {},
+      "required": [],
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "description": "Each row lists the pieces cut from a single stock bar.",
+      "properties": {
+        "stock_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 12
+        },
+        "cuts_cm": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 12,
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 12,
+            "items": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100000,
+              "description": "Length in whole centimetres (cm)."
+            }
+          }
+        }
+      },
+      "required": [
+        "stock_count",
+        "cuts_cm"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "default_locale": "ko",
+  "localizations": {
+    "ko": {
+      "title": "원자재 절단 발주 최적화",
+      "summary": "동일한 길이의 원자재를 주문 규격대로 잘라 최소 발주 개수와 원자재별 절단 배치를 계산·검산합니다. 원자재 길이, 조각 길이 목록, 절단 손실 0cm를 확인합니다. 서로 다른 규격·단가의 혼합 구매는 지원 범위 밖입니다."
+    },
+    "en": {
+      "title": "Cutting stock order planner",
+      "summary": "Find and independently verify the minimum number of identical bars and a cutting layout. Requires stock length, ordered whole-centimetre pieces, and zero kerf; multiple stock sizes and prices are unsupported."
+    }
+  },
+  "units": {
+    "cm": {
+      "dimension": "length",
+      "definition": "Whole centimetres"
+    },
+    "bar": {
+      "dimension": "count",
+      "definition": "Number of stock bars ordered"
+    }
+  },
+  "capabilities": {
+    "objectives": [
+      {
+        "id": "min_bars",
+        "definition": "Minimize the count of identical purchased stock bars",
+        "unit": "bar",
+        "direction": "minimize",
+        "role": "optimized"
+      }
+    ],
+    "constraints": [
+      {
+        "id": "every_piece",
+        "definition": "Fulfill every requested piece exactly once, including duplicates",
+        "unit": null,
+        "kind": "hard",
+        "role": "enforced"
+      },
+      {
+        "id": "stock_capacity",
+        "definition": "Sum of assigned lengths in each bar is at most the supplied stock length with zero cutting loss",
+        "unit": "cm",
+        "kind": "hard",
+        "role": "enforced"
+      }
+    ],
+    "execution": {
+      "mode": "sync",
+      "cancel": false,
+      "durable": false,
+      "evaluate": true
+    }
+  },
+  "configuration_defaults": {},
+  "configuration_rules": [],
+  "bindings": [],
+  "metrics": [
+    {
+      "id": "stock_count",
+      "pointer": "/stock_count",
+      "definition": "Minimum number of equal-length bars needed for all ordered pieces",
+      "unit": "bar",
+      "value_type": "integer",
+      "direction": "minimize",
+      "comparison_basis": "invariant"
+    }
+  ],
+  "input_formats": [],
+  "playbooks": [],
+  "required_extensions": [],
+  "extensions": {}
+}

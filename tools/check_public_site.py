@@ -143,6 +143,28 @@ class PublicSite(unittest.TestCase):
         self.assertIn('Run locally', self.html['index.html'])
         self.assertIn('Public trial enrollment is not open', self.html['start/omelet/index.html'])
 
+    def test_public_server_authoring_and_job_lookup_are_reachable_in_both_languages(self):
+        walkthrough = REPO + '/blob/main/examples/cutting-stock/README.md'
+        for prefix, prompt in [('', 'Use the connected cutting-stock server'),
+                               ('ko/', '연결된 절단 서버에 실제로 제출해 줘')]:
+            home = self.html[prefix + 'index.html']
+            hero = home.split('class="wrap hero"', 1)[1].split('</section>', 1)[0]
+            self.assertIn('start/routing/index.html', hero)
+            self.assertIn('start/engine/index.html#build-a-server', hero)
+            engine = self.pages[prefix + 'start/engine/index.html']
+            self.assertIn('build-a-server', engine.ids)
+            self.assertIn(walkthrough, engine.links)
+            self.assertTrue(any(link.endswith('guides/apps/index.html#verify-a-job') for link in engine.links))
+            apps = prefix + 'guides/apps/index.html'
+            self.assertIn('verify-a-job', self.pages[apps].ids)
+            self.assertIn(prompt, self.html[apps])
+            self.assertIn(walkthrough + '#4-ask-a-desktop-client', self.pages[apps].links)
+            spec = self.pages[prefix + 'reference/index.html']
+            self.assertIn('server-contract', spec.ids)
+            self.assertIn(REPO + '/blob/main/spec/server-package/README.md', spec.links)
+            self.assertIn(REPO + '/blob/main/docs/development/TEMPLATE_INTEGRATION_BASELINE_IB12.md', spec.links)
+            self.assertIn(walkthrough, self.pages[prefix + 'examples/index.html'].links)
+
     def test_09_planning_examples_preserve_actual_evidence(self):
         demo = json.loads((self.directory / 'assets/example.json').read_text())
         for key, profile, cost in (('worker', 'worker.scheduling', 7), ('inventory', 'inventory.replenishment', 16)):

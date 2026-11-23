@@ -6,6 +6,9 @@ needed for local use. These are locally built developer-preview artifacts, not p
 README.md lists prerequisites, platform verification scope and offline options.
 한국어 시작 안내와 초대 trial 절차는 README.md 아래에 있습니다.
 
+If your goal is to turn an existing algorithm into a new OCP Server, follow the
+[cutting-stock tutorial in the public source](https://github.com/omelet-ai/optimization-context-protocol/blob/main/examples/cutting-stock/README.md). It builds a domain package and verifies a submitted order by job ID.
+
 ## 1. Install and get a real result
 
 ```sh

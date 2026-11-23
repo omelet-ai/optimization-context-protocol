@@ -7,7 +7,7 @@ REPOSITORY = 'https://github.com/omelet-ai/optimization-context-protocol'
 
 
 def diagram():
-    return '''<div class="protocol-art" aria-label="Apps and agents connect through OCP to independent engines"><div class="art-title"><span><i class="live-dot"></i> ONE CONTRACT. YOUR STACK.</span><span>v0.1 / CANDIDATE</span></div>
+    return '''<div class="protocol-art" aria-label="Apps and agents connect through OCP to independent engines"><div class="art-title"><span><i class="live-dot"></i> ONE CONTRACT. YOUR STACK.</span><span>Core 0.1</span></div>
 <svg class="protocol-diagram" viewBox="0 0 460 350" role="img" aria-labelledby="diagram-title"><title id="diagram-title">An application and an AI agent share the OCP interface with a local solver, Omelet, or your engine.</title><defs><pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".8" fill="var(--art-line)"/></pattern></defs><rect width="460" height="350" fill="url(#dots)"/>
 <g fill="none" stroke="var(--accent)" stroke-width="1.4"><path d="M115 70v40q0 12 12 12h91v28M345 70v40q0 12-12 12h-91v28M230 219v33M80 295v-27q0-12 12-12h276q12 0 12 12v27M230 256v39"/></g>
 <g fill="var(--white)" stroke="var(--art-line)"><rect x="40" y="20" width="150" height="50" rx="6"/><rect x="270" y="20" width="150" height="50" rx="6"/><rect x="20" y="295" width="120" height="42" rx="5"/><rect x="170" y="295" width="120" height="42" rx="5"/><rect x="320" y="295" width="120" height="42" rx="5"/></g>
@@ -128,7 +128,7 @@ def agent_flow():
 def public_home():
     return f'''<section class="wrap hero"><div><p class="eyebrow">Optimization Context Protocol · Developer preview</p><h1>Your app.<br>Your engine.<br><em>Shared meaning.</em></h1>
 <p class="lead">Connect applications and AI agents to optimization engines. Discover supported constraints, validate the problem, and independently check what the result means.</p>
-<div class="buttons"><a class="button" href="./start/local/index.html">Run locally ↗</a><a class="button secondary" href="./guides/apps/index.html#mcp">Connect your AI agent →</a></div>
+<div class="buttons"><a class="button" href="./start/routing/index.html">Run an existing solver</a><a class="button secondary" href="./start/engine/index.html#build-a-server">Build a server for your algorithm</a></div>
 <p class="small-note">No account or key for local use. Have an invitation? <a href="./start/omelet/index.html">Try Omelet — recommended when invited.</a></p></div>{diagram()}</section>
 <section class="wrap section section-tint" id="why-ocp"><p class="eyebrow">Why use OCP?</p><h2>Less integration guesswork.<br><em>Results you can inspect.</em></h2><p class="lead">A direct solver API can be enough for one app. OCP adds a shared boundary when another application, agent or compatible engine enters the picture.</p>{why_ocp()}<p class="small-note">Engine substitution requires a compatible profile intersection. It does not promise identical solutions, performance or support for every problem.</p></section>
 <section class="wrap section" id="domains"><div class="section-heading"><div><p class="eyebrow">Three problems. One application flow.</p><h2>Route. Assign.<br><em>Replenish.</em></h2></div><p>Discover → validate → execute → evaluate → independently check. Use the same app and MCP tools across three bounded reference profiles.</p></div>
@@ -158,7 +158,7 @@ def planning_example(demo, key, title, description):
 def edition_notice(root, *, korean=False):
     if korean:
         return f'''<div class="notice" data-edition-status><strong>Core 0.1과 native v1 후보를 공개 소스로 제공합니다.</strong><p>Core 설치 경로와 native 프리릴리스 ZIP 또는 소스 빌드 경로를 선택하세요. 모두 Apache-2.0 개발자 프리뷰입니다. Native ZIP은 GitHub Releases에서 제공하며 PyPI/npm 패키지는 아직 게시하지 않았습니다. <a href="{root}/reference/index.html#core-native">두 경로의 차이와 공개 상태 →</a></p></div>'''
-    return f'''<div class="notice" data-edition-status><strong>Core 0.1 and the native v1 candidate are public source previews.</strong><p>Start with the native prerelease ZIP; choose a Core or native source build for development. All use Apache-2.0. The native ZIP is available on GitHub Releases; PyPI/npm releases are not offered. <a href="{root}/reference/index.html#core-native">Compare formats and availability →</a> · <a href="{root}/start/local/index.html#native">Build native v1 →</a></p></div>'''
+    return f'''<div class="notice" data-edition-status><strong>Core 0.1 and the native v1 candidate are public source previews.</strong><p>The Native ZIP runs the bundled examples. For a new server, build the generic template and runtime from the same public source commit. <a href="{root}/start/engine/index.html#build-a-server">Generic server walkthrough →</a> · <a href="{root}/reference/index.html#core-native">Compare formats and availability →</a> · <a href="{root}/start/local/index.html#native">Build native v1 →</a></p></div>'''
 
 
 def native_protocol(comparison):
@@ -411,6 +411,41 @@ def public_pages(commands, demo, command_blocks, comparison):
     )
     rendered[routing_path] = {'title': routing_title, 'description': routing_intro,
         'body': docs(routing_path, 'Routing', routing_title, routing_intro, routing_body), 'lang': 'en'}
+    walkthrough = 'examples/cutting-stock/README.md'
+    authoring = (
+        '<section id="build-a-server"><h2>Package your own solver</h2>'
+        '<p>Start with a small cutting-stock algorithm. Describe its inputs and limits, connect the function, and supply a checker that can verify the result independently.</p>'
+        '<p>The walkthrough generates a server from the public template, builds it with Python 3.12 and connects it to a local MCP client. A 200 cm order takes two 100 cm bars. Change one piece by 1 cm and the order takes three.</p><p>'
+        + link(walkthrough, 'Build and run the cutting-stock server →') + '</p><p>'
+        + link('docs/users/SERVER_FORMAT_PREVIEW.md', 'Server authoring guide')
+        + ' · <a href="../../guides/apps/index.html#verify-a-job">Verify a job from an AI client</a></p></section>'
+    )
+    desktop = (
+        '<section id="verify-a-job"><h2>Confirm the server handled your order</h2>'
+        '<p>After installing the cutting-stock server, enable its local MCP tools in the conversation. Try this request in a desktop client that supports local stdio MCP.</p>'
+        '<blockquote><p>Use the connected cutting-stock server to submit my order. Stock bars are 100 cm, and I need pieces of 60, 50, 30, 20, 20 and 20 cm with zero kerf. Give me the server job ID, minimum bar count, layout and independent checks.</p></blockquote>'
+        '<p>Use the ID in the answer to look up the saved job. Compare the bar count, layout and checker result. In a macOS exercise, ChatGPT Work/Codex and Claude Desktop both returned a matching job when explicitly asked to submit. Both also answered a plain math question without calling the solver.</p><p>'
+        + link(walkthrough + '#4-ask-a-desktop-client', 'Get the local host configuration and job lookup command →') + '</p></section>'
+    )
+    contract = (
+        '<section id="server-contract"><h2>Generic server contract</h2>'
+        '<p>The server package descriptor declares the problem, supported actions and result shapes. Integration Baseline IB-1.2 pins the matching descriptor, template and runtime versions. Core semantics, domain profiles and optional bindings keep their own versions.</p><p>'
+        + link('spec/README.md', 'Specification index') + ' · '
+        + link('spec/server-package/README.md', 'Server package descriptor') + ' · '
+        + link('docs/development/TEMPLATE_INTEGRATION_BASELINE_IB12.md', 'IB-1.2 version table') + '</p></section>'
+    )
+    for path, section in [('start/engine/index.html', authoring), ('guides/apps/index.html', desktop),
+                          ('reference/index.html', contract)]:
+        rendered[path]['body'] = rendered[path]['body'].replace('<article class="prose">', '<article class="prose">' + section, 1)
+    mcp_heading = '<h2 id="mcp">MCP: provide context before solving</h2>'
+    apps = rendered['guides/apps/index.html']
+    apps['body'] = apps['body'].replace(mcp_heading, mcp_heading +
+        '<p><a href="#verify-a-job">Verify a job from an AI client</a></p>', 1)
+    rendered['examples/index.html']['body'] += (
+        '<section class="wrap section" id="cutting-stock"><h2>Run a cutting-stock order locally</h2>'
+        '<p>Build this fourth example from source and submit your own order. Each run returns a job ID and an independently checked layout.</p><p>'
+        + link(walkthrough, 'Build and run the cutting-stock server →') + '</p></section>'
+    )
     for path in ('index.html', 'start/index.html', 'start/local/index.html', 'guides/apps/index.html'):
         root = ('../' * path.count('/')).rstrip('/') or '.'
         card = ('<section class="wrap section" data-routing-preview><h2>Connect a routing solver</h2>'

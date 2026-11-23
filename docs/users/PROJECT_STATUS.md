@@ -8,8 +8,10 @@ an independently adopted industry standard.
 | Source | Public at [GitHub](https://github.com/omelet-ai/optimization-context-protocol); original code is Apache-2.0, with separate third-party notices |
 | Documentation site | Public on [GitHub Pages](https://omelet-ai.github.io/optimization-context-protocol/) |
 | Native v1 | Public source candidate aligned with pinned Capability Contract v1; explicit native SDK/MCP entrypoints; not stable v1 or the full gateway/ocps1 profile |
+| Build a server for a new problem | [Public template and runtime](SERVER_FORMAT_PREVIEW.md), built together from source. [IB-1.2](../development/TEMPLATE_INTEGRATION_BASELINE_IB12.md) pins their versions and the server descriptor. |
 | Installation | [Routing-first prerelease ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2) or source build; no PyPI/npm release |
 | Runtime examples | Routing, fixed-time worker assignment and deterministic inventory replenishment; bounded reference profiles |
+| Bring your own algorithm | [Cutting-stock walkthrough](../../examples/cutting-stock/README.md) generates a server for a fourth problem and verifies its result with an independent algorithm. |
 | Omelet trial | Separate invitation, environment and operating limits; no public self-service signup |
 | Compatibility | Preview contracts, explicit profile versions and artifact hashes; not a frozen stable API |
 | Verification | Public-source CI checks macOS arm64 and native Linux x64 Python/Node consumers; exact ZIP acceptance and local rehearsals are separate |
@@ -20,6 +22,12 @@ calculated and independently checked during its build. It runs no live solver in
 the browser. Source installation executes real engines locally. MCP SDK connections
 verify protocol behavior; actual LLM behavior needs a separately scoped model
 evaluation. Provider evaluation and independent checking are different operations.
+
+In the local cutting-stock exercise, ChatGPT Work/Codex and Claude Desktop each
+returned a server job ID for an explicitly submitted order. Looking up that ID
+reproduced the layout and four passing checks. Both clients also answered the
+plain calculation questions without submitting a job. This was an agent-operated
+exercise on macOS using synthetic data. Independent human adoption is still unmeasured.
 
 The constraints in a profile are part of its current contract. Small reference
 limits do not promise production-scale scheduling, uncertain-demand inventory,

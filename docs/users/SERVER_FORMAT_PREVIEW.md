@@ -1,20 +1,19 @@
 # OCP Server format preview
 
 Use an optimization API from an MCP host, or package your own API using the same
-template. This draft includes a working Routing example and a small continuous
-blending example. The common runtime handles discovery, official input files,
+template. The public source includes working Routing and cutting-stock examples.
+The common runtime handles discovery, official input files,
 validation, jobs, independent checks and bounded playbook comparisons.
 
-**Integration candidate:** descriptor `0.1.0-draft.2`, template
-`0.1.0-draft.5`, runtime `0.4.0.dev12+publicformat3`, Routing package `0.1.0.dev3`.
-Use these pinned versions for integration. The package is a local review candidate,
-not a published registry release. Core 0.1 and Native v1 retain their existing
-entrypoints. See the [integration baseline](../development/TEMPLATE_INTEGRATION_BASELINE_IB12.md)
-for the frozen scope and consumer work.
+The [IB-1.2 integration baseline](../development/TEMPLATE_INTEGRATION_BASELINE_IB12.md)
+lists the compatible versions. Build the generic template and runtime from public
+source. For a new problem type, start with [the cutting-stock walkthrough](../../examples/cutting-stock/README.md).
+It shows the solver, descriptor, adapter and independent checker, then follows an order
+from a desktop prompt to a saved job. For Native v1 use its [separate ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2).
 
 ## Start with the working example
 
-Run the [generic quickstart in the repository README](../../README.md#author-a-server-for-your-optimization-api--local-review-candidate)
+Run the [generic Routing quickstart](../../README.md#build-an-ocp-server-for-your-algorithm)
 from the reviewed source checkout. That exact command block builds the runtime and
 Routing wheels, installs them into `.quickstart-venv`, checks the API agreement
 and writes `.quickstart/host-config.json`. It needs Python 3.12 and no Omelet

@@ -1,6 +1,6 @@
 # OCP source developer preview
 
-Independent optimization contracts and optional implementations. The original source is available under [Apache-2.0](LICENSE); see [NOTICE](NOTICE) and [third-party notices](THIRD_PARTY_NOTICES.md). Locally built artifacts remain evaluation candidates. Registry packages, immutable release assets and hosted services have not been published.
+Independent optimization contracts and optional implementations. The original source is available under [Apache-2.0](LICENSE); see [NOTICE](NOTICE) and [third-party notices](THIRD_PARTY_NOTICES.md). Download the [versioned Native routing preview](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2) for a first run. To package your own algorithm, follow the [generic server walkthrough in the public repository](https://github.com/omelet-ai/optimization-context-protocol/blob/main/examples/cutting-stock/README.md). This kit is built from source. OCP does not currently offer PyPI/npm releases or public hosted solver signup.
 
 Start with [Getting started](docs/users/GETTING_STARTED.md), [Compatibility](docs/users/COMPATIBILITY.md), [Contribution and support](docs/users/CONTRIBUTING_SUPPORT.md), and [BYO authoring](authoring/README.md).
 

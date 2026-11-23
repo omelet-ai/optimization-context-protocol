@@ -220,3 +220,19 @@ remains NOT_RUN. No participant invitation is sent. Package registries, a new
 hosted solver/remote MCP service, additional paid model calls, and any changes to
 existing Foundry repositories are outside this publication. The host-independent
 interface remains the product boundary; routing is the initial evaluation case.
+
+## 2026-11-24 public server authoring example and bilingual guides
+
+The project owner confirmed company distribution rights, Apache-2.0 source
+publication and patent disclosure clearance for the new cutting-stock example
+and its documentation. The approved destination is the public main branch of
+`omelet-ai/optimization-context-protocol` and its existing GitHub Pages site.
+The source baseline is `37115a3a1e40f292397e4e3832c4fee121192fcf`.
+
+The seven new files under `examples/cutting-stock/` are `README.md`, `order.py`,
+`content/__init__.py`, `content/adapter.py`, `content/algorithm.py`,
+`content/checker.py` and `content/manifest.json`. The update aligns the public
+README, specification index, installation and integration guides, English and
+Korean site, and their checks. The [source inventory](public-format-candidate-selection.json)
+enumerates the 504 files in this revision. This approval covers source and
+documentation on Pages. The existing Native prerelease retains its own version.

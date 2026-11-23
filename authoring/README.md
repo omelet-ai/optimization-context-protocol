@@ -1,5 +1,9 @@
 # Bring your engine
 
+내 알고리즘으로 새 OCP Server를 만들려면 [원자재 절단 예제](../examples/cutting-stock/README.md)에서 시작한다.
+공개 템플릿으로 패키지를 만들고 AI 앱이 돌려준 작업 ID로 실제 계산과 검산 결과를 조회할 수 있다.
+기존 Core 라우팅 프로파일에 라이브러리를 연결하는 방법은 아래와 같다.
+
 `byo_library.py`는 실제 작은 순열 탐색 library를 routing.basic adapter에 연결한 독립 실행 예제다. 기본 Python wheel만 설치하면 되며 OR-Tools·Omelet 계정·Foundry가 필요하지 않다. 입력은 App A와 같다.
 
 ```sh

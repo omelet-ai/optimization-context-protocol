@@ -6,9 +6,11 @@ can change after the server starts. Domain content supplies the policy; the
 runtime supplies the enforcement points. No project, hospital, ward, identity
 provider or cloud service becomes mandatory in the common format.
 
-This is a local review candidate. The published preview remains separate.
-IB-1.1 artifacts and their [baseline document](TEMPLATE_INTEGRATION_BASELINE.md)
-remain unchanged; install successor artifacts by version **and** checksum.
+This is the **public source integration baseline** for generic OCP Servers. Build
+the runtime and the domain wheel from the same source revision. This table is the
+version reference for the authoring and integration guides. The [Native ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2)
+has its own installation path. When upgrading from [IB-1.1](TEMPLATE_INTEGRATION_BASELINE.md),
+match the package versions and checksums.
 
 | Component | Version |
 | --- | --- |

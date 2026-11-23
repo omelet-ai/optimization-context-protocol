@@ -2,6 +2,8 @@
 
 현재는 Apache-2.0 공개 개발자 프리뷰다. 설명 사이트도 공개되었으며 Omelet trial 발급·운영은 별도다. 공개 registry에 존재한다고 가정해 `pip install ocp-candidate`를 실행하지 않는다. 검증한 로컬 wheel/tarball을 사용한다. Python 3.12/macOS arm64, Node 24에서 검사했다.
 
+자기 알고리즘을 새 OCP Server로 만들어 AI 클라이언트에서 호출하려면 [절단 최적화 예제](https://github.com/omelet-ai/optimization-context-protocol/blob/main/examples/cutting-stock/README.md)부터 시작한다. 공개 소스와 Python 3.12로 서버를 생성하고, 주문 제출과 작업 ID 재조회까지 따라갈 수 있다. 기존 솔버를 바로 실행하려면 [Native 라우팅 ZIP](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2)을 사용한다.
+
 ## Try Omelet
 
 권장 첫 체험은 제한된 실제 Omelet Routing Engine이다. 승인된 로컬 비운영 환경에서는 [좌표 profile](../../spec/profiles/ROUTING_COORDINATES_0_1.md)의 실제 엔진을 별도 trial key와 한도 정책으로 연결한다. 운영자가 endpoint와 안전한 key 전달 경로를 제공한 경우 App A의 `--endpoint` 또는 App B의 endpoint 인자와 `OCP_TRIAL_TOKEN` 환경변수로 사용한다. key 값을 명령행·URL·로그에 넣지 않는다. 공개 가입·외부 사용자 운영은 아직 제공하지 않는다. 키 만료·한도 초과 시 다른 엔진으로 자동 전환하지 않는다. 상세 범위는 [로컬 연결 계약](../../spec/environments/OMELET_LOCAL_TRIAL_0_1.md)을 따른다.

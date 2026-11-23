@@ -5,23 +5,21 @@ connect it to your application or MCP host.** The same contract supplies discove
 input preparation, validation, jobs and results. Customer data integration,
 identity, permissions and visualization remain in the application.
 
-This guide targets the [frozen integration candidate](../development/TEMPLATE_INTEGRATION_BASELINE_IB12.md).
-Use its exact artifacts and hashes together. It is a local development baseline;
-the published `v0.2.0-preview.2` native ZIP is a separate delivery.
+This guide targets the [public source integration baseline](../development/TEMPLATE_INTEGRATION_BASELINE_IB12.md).
+Build its runtime and domain package from the same revision. The Native ZIP has a
+separate release and installation path.
 
 ## 1. Start with the working example or your own API
 
 | Component | Integration candidate |
 | --- | --- |
 | Python | 3.12; verified locally on macOS arm64 |
-| Runtime | `ocp-candidate[server]==0.4.0.dev12+publicformat3` |
-| Template | `0.1.0-draft.5` |
-| Server descriptor | `0.1.0-draft.2` |
+| Runtime, template and descriptor | [Pinned versions in IB-1.2](../development/TEMPLATE_INTEGRATION_BASELINE_IB12.md) |
 | Routing example | `routing-ocp-server==0.1.0.dev3` |
 | Routing API / profile | `routing.matrix.api` / `routing.matrix.weighted`, `1.0.0-draft.1` |
 | MCP SDK | `2.3.0` |
 
-Run the [source installation quickstart](../../README.md#author-a-server-for-your-optimization-api--local-review-candidate)
+Run the [source installation quickstart](../../README.md#build-an-ocp-server-for-your-algorithm)
 first. It builds the runtime and Routing package, checks the descriptor and prints
 an MCP launch configuration. This generic installation does not require the
 legacy native-contract package, an Omelet account or a key.
@@ -126,6 +124,12 @@ Application workflows and adaptive searches can use separate versioned extension
 
 ## Integration acceptance
 
+For a first desktop solve, ask the connected server to submit an order and return
+the job ID, layout and independent checks. Read **that ID** using the same local
+configuration and compare the two receipts. The [cutting-stock walkthrough](../../examples/cutting-stock/README.md#4-ask-a-desktop-client)
+includes the prompt and lookup command. A correct numerical answer alone cannot
+show whether the host submitted the order.
+
 Start with one real input-to-result path in an isolated consumer, then add its
 other supported features. Record the exact package, engine, input and result
 hashes. Check missing/unsupported input, duplicate submission, timeout/cancellation,
@@ -135,6 +139,7 @@ Keep the prior registration and state available for rollback.
 | Latest local evidence | Remaining acceptance |
 | --- | --- |
 | Generic runtime/example: independent build/install, official MCP stdio Routing solve and independent checker; loopback HTTP API exercise. | External host UI, Internet deployment and other platform/package combinations. |
+| Cutting stock on macOS: ChatGPT Work/Codex and Claude Desktop each returned a saved job ID when explicitly asked to submit. A separate lookup reproduced two bars and four passing checks. Plain calculation prompts produced no submitted job. | Human-led onboarding, other client editions and remote MCP transports for this example. |
 | Studio with IB-1: actual Routing guided execution; Nurse workbook preparation, apply, submit, execution and result; a separate authenticated continuation saved that result, logged in again, reopened it at desktop/mobile sizes and exported identical JSON. | One uninterrupted Nurse execute-to-save journey; complete existing-feature parity, including repair/playbooks; IB-1.2 domain package migration and consumer validation. |
 | Foundry: saved-result consumer with actual MCP/ORM and explicit fixture authorization. | Real OIP/OpenFGA/Product DB environment, product authorization and customer-app workflow. |
 

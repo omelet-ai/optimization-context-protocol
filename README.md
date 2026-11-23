@@ -6,24 +6,30 @@ OCP describes what an engine supports, what an application requests, what was
 actually enforced, and how to check the result. Applications can use their own
 engines independently of Omelet, Foundry, Studio, or a particular transport.
 
-**Published release: open-source developer preview, licensed under [Apache-2.0](LICENSE).**
-This document is a local integration draft. New generic candidate content is
-identified below; its exact-file publication and package metadata review is pending.
-Source code is available in this GitHub repository. Visit the
-[public documentation site](https://omelet-ai.github.io/optimization-context-protocol/)
-and [한국어](https://omelet-ai.github.io/optimization-context-protocol/ko/).
-Package-registry releases and open trial enrollment are not available yet.
-A passing local check is not engine certification
-or evidence of unaided external adoption.
+**Public developer preview · [Apache-2.0](LICENSE).** You can run an existing
+solver or build an OCP Server around your own algorithm. Local execution is
+available without an Omelet account or key.
 
-See [project status and verification boundaries](docs/users/PROJECT_STATUS.md)
-and the [immutable preview plan](docs/development/PREVIEW_RELEASE.md).
+| What do you want to do? | Start here |
+| --- | --- |
+| Run an existing solver | [Download the Native preview](https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2) and [solve a routing problem](docs/users/NATIVE_ROUTING_QUICKSTART.md). |
+| Build an OCP Server for your algorithm | [Package a cutting-stock solver](examples/cutting-stock/README.md), submit an order from an AI client and look up its job ID. |
 
-## Author a server for your optimization API — local review candidate
+The generic template and runtime are **public source** that you build from a checkout.
+The **Native ZIP** is a separate versioned GitHub download. OCP has no PyPI/npm
+release. See the [protocol and compatibility map](spec/README.md), [project status](docs/users/PROJECT_STATUS.md)
+and documentation in [English](https://omelet-ai.github.io/optimization-context-protocol/)
+or [한국어](https://omelet-ai.github.io/optimization-context-protocol/ko/).
 
-**Integration starting point: [IB-1.2 template baseline](docs/development/TEMPLATE_INTEGRATION_BASELINE_IB12.md).**
-Use its pinned interfaces, [authoring steps](docs/users/SERVER_FORMAT_PREVIEW.md)
-and [consumer integration guide](docs/users/SERVER_FORMAT_INTEGRATION.md).
+<a id="author-a-server-for-your-optimization-api--local-review-candidate"></a>
+
+## Build an OCP Server for your algorithm
+
+Use the [public IB-1.2 integration baseline](docs/development/TEMPLATE_INTEGRATION_BASELINE_IB12.md)
+for component pins. Follow the [authoring guide](docs/users/SERVER_FORMAT_PREVIEW.md)
+to create a package and the [integration guide](docs/users/SERVER_FORMAT_INTEGRATION.md)
+to connect a host. The [cutting-stock example](examples/cutting-stock/README.md)
+includes a ready-to-copy chat prompt and a command to read the job that the host created.
 
 Put API schemas, capability descriptions, an engine connector, official file
 formats and optional optimization playbooks into `content/`. The generic template
@@ -32,11 +38,11 @@ and result visualization stay in the application.
 
 | Route | Version and verified scope |
 | --- | --- |
-| Released native download below | `v0.2.0-preview.2`; Python `0.2.0a2`. Its existing installation instructions remain unchanged. |
-| Generic authoring candidate in this review | Runtime `0.4.0.dev12+publicformat3`, Routing example `0.1.0.dev3`; standalone local build/install and official SDK stdio solve/checker verified. Not published. |
+| Native download | `v0.2.0-preview.2` contains the routing-first kit and Python `0.2.0a2`. |
+| Generic server from source | Build the IB-1.2 runtime with the template in this checkout. Both the Routing and cutting-stock examples use this path. |
 | Native source-build route below | The existing builder pins Python `0.3.0.dev1`; 149 native and 22 inspection checks passed on the combined source candidate on macOS arm64 / Python 3.12.15. |
 
-For the generic candidate, start with Python 3.12 in the reviewed source tree.
+For the generic Routing example, start with Python 3.12 in the public source tree.
 The following block was run verbatim in a fresh minimal environment using cached
 public dependencies. It builds and installs the runtime and Routing example;
 no native-contract package, account, key or running service is needed.
@@ -72,8 +78,8 @@ routing-ocp-server host-config --config "$PWD/.quickstart/local-config.json" > .
 calls; it checks metadata without solving. `host-config.json` contains a local
 stdio MCP launch configuration. Add it to a host that supports local server
 processes, then use discovery, prepare/validate, submit, job/result and evaluate.
-The independent test used the official MCP SDK and a real local OR-Tools solve;
-it did not validate Claude/ChatGPT UI or a remotely hosted server.
+The Routing quickstart uses the official MCP SDK and a real local OR-Tools solve.
+For a desktop acceptance check, use the [cutting-stock order and job lookup](examples/cutting-stock/README.md#4-ask-a-desktop-client).
 
 The [Routing content guide](examples/routing-ocp-server/content/README.md) contains
 synthetic matrix/coordinate inputs and fleet/weight/budget playbooks. Coordinates
@@ -81,8 +87,7 @@ use spherical distances; this example does not provide road travel times or time
 windows. Private `.quickstart` state/configuration stays outside source control.
 See [the package format](spec/server-package/README.md), [official inputs](spec/input-formats/README.md),
 [playbooks](spec/playbooks/README.md) and [optional operations](spec/operations/README.md)
-for the authoring contract. Core/native wire meanings remain unchanged. The
-operations extension and the new source bytes are pending exact publication review.
+for the authoring contract. Core 0.1 and Native v1 retain their documented wire contracts.
 
 ## Connect a routing solver
 
@@ -196,7 +201,7 @@ public issues and initial inquiries.
 | Starting point | Use it for | Verified scope |
 | --- | --- | --- |
 | **Recommended download: `v0.2.0-preview.2` native ZIP** | First run, three-domain examples, MCP, independent project and optional BYO/profile examples | Exact native ZIP: macOS arm64 Python/MCP; Linux amd64 Python/MCP in Docker emulation; TypeScript is a separate source build |
-| **Source checkout: pin a commit** | Developing OCP or taking newer fixes; Core 0.1 or native v1 | [Public CI](https://github.com/omelet-ai/optimization-context-protocol/actions/workflows/public-ci.yml) tests macOS arm64 and native Linux x64 with Python 3.12 and Node 24; inspect the run for your commit |
+| **Source checkout: pin a commit** | Build your own server using [IB-1.2](docs/development/TEMPLATE_INTEGRATION_BASELINE_IB12.md), develop Core 0.1 or Native v1, or take newer fixes | [Public CI](https://github.com/omelet-ai/optimization-context-protocol/actions/workflows/public-ci.yml) tests selected source on macOS arm64 and native Linux x64; inspect the run for your commit |
 
 The immutable ZIP and moving `main` are separate deliveries. A successful source
 CI run does **not** update or retest the published ZIP. Use the docs bundled with
@@ -265,6 +270,8 @@ See the [native build and verification guide](docs/development/NATIVE_SOURCE_REV
 and [source license and origin](sdk/native-contracts/LICENSE_SCOPE.md). The source
 selection and Apache-2.0 notices were approved on 2026-10-28; registry and hosted
 trial publication remain separate.
+
+<a id="native-v1-from-public-source"></a>
 
 ## Native v1 from source — existing build route
 
@@ -359,7 +366,7 @@ bound model size so optimality/infeasibility can be checked independently.
 | --- | --- | --- |
 | Try Omelet | **Recommended when invited**; public signup is not open | [Invited trial](docs/users/INVITED_TRIAL.md) |
 | Run locally | **Start now** without an invitation, account or key | [Developer quickstart](docs/users/DEVELOPER_QUICKSTART.md) |
-| Bring your engine | Implement an existing profile, or define a new problem profile | [Engine authoring](https://omelet-ai.github.io/optimization-context-protocol/start/engine/) |
+| Bring your engine | Package a new algorithm as a server, or implement an existing profile | [Build a server](examples/cutting-stock/README.md) · [Engine authoring](https://omelet-ai.github.io/optimization-context-protocol/start/engine/) |
 | Connect your AI agent | Give your host explicit context through the optional MCP binding | [MCP setup](#connect-mcp-without-calling-a-model) |
 
 Omelet trial is the recommended introduction when an invitation is available.

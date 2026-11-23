@@ -6,6 +6,11 @@ its own account and usage terms: **no OCP key does not mean free model usage**.
 The commands below call no model. Use synthetic data only when you later choose
 to send tasks and tool responses to a model provider.
 
+For a newly authored domain server, use the [cutting-stock desktop walkthrough](https://github.com/omelet-ai/optimization-context-protocol/blob/main/examples/cutting-stock/README.md#4-ask-a-desktop-client).
+It includes the local MCP launch configuration, a concrete order and a read-only
+command to check the exact job ID returned by the app. The commands below use
+the Core routing kit.
+
 ## Install and check the connection
 
 For source installation, follow the [README](https://github.com/omelet-ai/optimization-context-protocol#first-success-from-github): Python/MCP setup needs no Node/npm and already installs MCP.

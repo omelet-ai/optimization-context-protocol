@@ -1,5 +1,8 @@
 # Examples
 
+- [Cutting stock](cutting-stock/README.md) — package an independent algorithm, submit an order through a desktop host and check its job ID.
+- [Routing server](routing-ocp-server/content/README.md) — use the generic format with OR-Tools, official files and fleet comparisons.
+
 - [App A](app-a/README.md): 독립 Python client와 실제 OR-Tools.
 - [App B](app-b/README.md): TypeScript client와 loopback HTTP.
 - [Bring your engine](../authoring/README.md): 계정·OR-Tools 없이 실행하는 작은 실제 library 예제.
