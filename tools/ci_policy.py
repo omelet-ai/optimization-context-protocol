@@ -28,7 +28,7 @@ def validate(content):
     public = jobs['public-source']
     if public.get('strategy') != {'fail-fast': False, 'matrix': {'include': [
             {'os': 'ubuntu-24.04', 'python': '3.12.15'},
-            {'os': 'macos-14', 'python': '3.12.10'}]}}:
+            {'os': 'macos-15', 'python': '3.12.10'}]}}:
         raise ValueError('CI_MATRIX')
     if public['runs-on'] != '${{ matrix.os }}' or jobs['windows-boundary']['runs-on'] != 'windows-2022':
         raise ValueError('CI_RUNNER')

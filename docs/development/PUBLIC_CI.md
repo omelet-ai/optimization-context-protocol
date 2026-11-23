@@ -20,7 +20,7 @@ new documentation or dependencies are outside that older inventory.
 | Lane | Execution | Meaning of success |
 | --- | --- | --- |
 | `ubuntu-24.04` | Python 3.12.15, Node 24.22.0, native Linux x64 runner | Public build, fresh installation, real three-domain jobs/MCP, independent checker, optional Node consumer, inspection CSV regressions |
-| `macos-14` | Python 3.12.10, Node 24.22.0, macOS arm64 runner | Same checks on macOS |
+| `macos-15` | Python 3.12.10, Node 24.22.0, macOS arm64 runner | Same checks on macOS |
 | `windows-2022` | Python 3.12.10, no dependencies installed | Both installers reject the unsupported platform before creating output and preserve existing files |
 
 Python patch versions are pinned per platform. The official
