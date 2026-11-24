@@ -29,3 +29,14 @@ This list is not a claim that the entire dependency graph uses one license.
 The local SDK, independent-checker wheel and TypeScript tarball include OCP's
 LICENSE, NOTICE and this document. Building them does not publish a registry
 package, GitHub Release, hosted trial or website.
+
+## Documentation site assets
+
+The documentation site bundles the Regular and SemiBold Korean subsets of
+Pretendard v1.3.9, copyright 2021 Kil Hyung-jin. The source and published site
+include the complete SIL Open Font License in `assets/Pretendard-LICENSE.txt`
+under the respective site root. [Upstream font license](https://github.com/orioncactus/pretendard/blob/v1.3.9/LICENSE)
+
+Omelet authorized the reproduction of the three illustrated sample results from
+its OI Studio walkthrough on delivery routing, nurse rostering and inventory
+replenishment. [Original illustrations](https://www.omelet.ai/#demo)

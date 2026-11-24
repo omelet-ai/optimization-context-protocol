@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 150">
+  <style>text{font:8px ui-monospace,SFMono-Regular,Consolas,monospace;fill:#1e2a24}.sf-chart-empty{fill:#eef2ec}.sf-chart-cells{stroke:#eef2ec}.sf-chart-line{stroke:#d7dfd6}</style>
+  <rect width="320" height="150" fill="#f2f3f0" />
+  <path d="M0 126C60 112 96 150 170 134S270 118 320 132V150H0Z" fill="#c2c8ca" />
+  <path d="M14 84h70v40H14Z" fill="#dce0dc" />
+  <path d="M0 60H320M0 100H320M100 0V150M220 0V150" stroke="#f9faf7" stroke-width="4" fill="none" />
+  <path d="M160 78 118 52 74 62 40 34" fill="none" stroke="#f9faf7" stroke-width="5.5" stroke-linecap="round" />
+  <path d="M160 78 118 52 74 62 40 34" fill="none" stroke="#4182c5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="118" cy="52" r="4" fill="#f9faf7" stroke="#4182c5" stroke-width="1.5" />
+  <circle cx="74" cy="62" r="4" fill="#f9faf7" stroke="#4182c5" stroke-width="1.5" />
+  <circle cx="40" cy="34" r="7" fill="#f9faf7" stroke="#4182c5" stroke-width="1.5" />
+  <text x="40" y="37" text-anchor="middle">1</text>
+  <path d="M160 78 208 48 252 60 288 30" fill="none" stroke="#f9faf7" stroke-width="5.5" stroke-linecap="round" />
+  <path d="M160 78 208 48 252 60 288 30" fill="none" stroke="#c75d70" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="208" cy="48" r="4" fill="#f9faf7" stroke="#c75d70" stroke-width="1.5" />
+  <circle cx="252" cy="60" r="4" fill="#f9faf7" stroke="#c75d70" stroke-width="1.5" />
+  <circle cx="288" cy="30" r="7" fill="#f9faf7" stroke="#c75d70" stroke-width="1.5" />
+  <text x="288" y="33" text-anchor="middle">2</text>
+  <path d="M160 78 196 112 244 104 284 124" fill="none" stroke="#f9faf7" stroke-width="5.5" stroke-linecap="round" />
+  <path d="M160 78 196 112 244 104 284 124" fill="none" stroke="#3f8b6a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="196" cy="112" r="4" fill="#f9faf7" stroke="#3f8b6a" stroke-width="1.5" />
+  <circle cx="244" cy="104" r="4" fill="#f9faf7" stroke="#3f8b6a" stroke-width="1.5" />
+  <circle cx="284" cy="124" r="7" fill="#f9faf7" stroke="#3f8b6a" stroke-width="1.5" />
+  <text x="284" y="127" text-anchor="middle">3</text>
+  <rect x="154" y="72" width="12" height="12" rx="2" fill="#1e2a24" />
+</svg>

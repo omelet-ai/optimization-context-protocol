@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 150">
+  <style>text{font:8px ui-monospace,SFMono-Regular,Consolas,monospace;fill:#1e2a24}.sf-chart-empty{fill:#eef2ec}.sf-chart-cells{stroke:#eef2ec}.sf-chart-line{stroke:#d7dfd6}</style>
+  <text x="12" y="14">SKU</text>
+  <text x="64" y="14">REORDER POINT</text>
+  <text x="308" y="14" text-anchor="end">ORDER QTY</text>
+  <path class="sf-chart-line" d="M12 20H308" />
+  <text x="12" y="38">P-01</text>
+  <rect class="sf-chart-empty" x="64" y="31" width="180" height="8" rx="4" />
+  <rect x="64" y="31" width="129.6" height="8" rx="4" fill="#4182c5" />
+  <text x="308" y="38" text-anchor="end">120</text>
+  <text x="12" y="58">P-02</text>
+  <rect class="sf-chart-empty" x="64" y="51" width="180" height="8" rx="4" />
+  <rect x="64" y="51" width="86.4" height="8" rx="4" fill="#c75d70" />
+  <text x="308" y="58" text-anchor="end">80</text>
+  <text x="12" y="78">P-03</text>
+  <rect class="sf-chart-empty" x="64" y="71" width="180" height="8" rx="4" />
+  <rect x="64" y="71" width="154.8" height="8" rx="4" fill="#3f8b6a" />
+  <text x="308" y="78" text-anchor="end">200</text>
+  <text x="12" y="98">P-04</text>
+  <rect class="sf-chart-empty" x="64" y="91" width="180" height="8" rx="4" />
+  <rect x="64" y="91" width="61.2" height="8" rx="4" fill="#4182c5" />
+  <text x="308" y="98" text-anchor="end">60</text>
+  <text x="12" y="118">P-05</text>
+  <rect class="sf-chart-empty" x="64" y="111" width="180" height="8" rx="4" />
+  <rect x="64" y="111" width="108" height="8" rx="4" fill="#c75d70" />
+  <text x="308" y="118" text-anchor="end">100</text>
+  <text x="12" y="138">P-06</text>
+  <rect class="sf-chart-empty" x="64" y="131" width="180" height="8" rx="4" />
+  <rect x="64" y="131" width="93.6" height="8" rx="4" fill="#3f8b6a" />
+  <text x="308" y="138" text-anchor="end">90</text>
+</svg>
