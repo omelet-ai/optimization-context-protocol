@@ -125,17 +125,68 @@ def agent_flow():
 <p class="small-note">This is a recommended agent workflow, not a recorded model conversation. Local server and smoke checks do not establish correct behavior for every model or host. Provider evaluation and independent verification are separate steps.</p>'''
 
 
+def studio_showcase():
+    """Illustrated sample results from the OI Studio walkthrough on omelet.ai."""
+    cases = (
+        ("routing", "Delivery routes", "Plan tomorrow’s deliveries.",
+         "Keep vehicle loads and delivery windows within their limits.",
+         "Map of three numbered delivery routes branching from one depot.",
+         (("Routes", "3"), ("Stops", "10"), ("Unassigned", "0"))),
+        ("nurse", "Nurse roster", "Build next month’s nurse roster.",
+         "Balance the workload while respecting time off and rest between shifts.",
+         "A roster for ten nurses showing day, evening and night shifts.",
+         (("Nurses", "10"), ("Unmet demand", "0"), ("Rule violations", "0"))),
+        ("inventory", "Stock replenishment", "Set a reorder policy for each product.",
+         "Choose reorder points and order quantities to meet the service target.",
+         "Reorder points and order quantities for six of the twelve products in the sample.",
+         (("Products", "12"), ("Policies", "12"), ("Horizon", "30 days"))),
+    )
+    choices, panels = [], []
+    for key, label, title, description, alt, metrics in cases:
+        checked = ' checked' if key == 'routing' else ''
+        choices.append(f'<input id="pick-{key}" type="radio" name="studio-case" value="{key}" '
+                       f'aria-controls="studio-{key}"{checked}><label for="pick-{key}">{label}</label>')
+        figures = ''.join(f'<div><dt>{name}</dt><dd>{value}</dd></div>' for name, value in metrics)
+        panels.append(f'<section class="studio-case" id="studio-{key}" aria-labelledby="title-{key}">'
+                      f'<div class="case-intro"><h2 id="title-{key}">{title}</h2><p>{description}</p></div>'
+                      f'<a class="case-figure-link" href="./assets/studio-{key}.svg">'
+                      f'<img class="case-art" src="./assets/studio-{key}.svg" width="320" height="150" alt="{alt}"><span class="sr-only">Open the full-size figure</span><span class="enlarge-icon" aria-hidden="true">⤢</span></a>'
+                      f'<dl class="case-metrics">{figures}</dl></section>')
+    return f'''<figure class="studio-showcase" data-studio-showcase>
+<figcaption class="studio-heading"><div><a href="https://www.omelet.ai/#demo" aria-label="View the OI Studio walkthrough on omelet.ai">OI Studio <span aria-hidden="true">↗</span></a><span class="sample-note">Sample data</span></div>
+<button class="rotation-toggle" type="button" data-rotate hidden><span data-pause><i aria-hidden="true">Ⅱ</i> Pause</span><span data-play><i aria-hidden="true">▷</i> Play</span></button></figcaption>
+<fieldset class="case-picker"><legend class="sr-only">Choose an OI Studio example</legend>{''.join(choices)}</fieldset>
+<div class="case-views">{''.join(panels)}</div></figure>'''
+
+
 def public_home():
-    return f'''<section class="wrap hero"><div><p class="eyebrow">Optimization Context Protocol · Developer preview</p><h1>Your app.<br>Your engine.<br><em>Shared meaning.</em></h1>
-<p class="lead">Connect applications and AI agents to optimization engines. Discover supported constraints, validate the problem, and independently check what the result means.</p>
-<div class="buttons"><a class="button" href="./start/routing/index.html">Run an existing solver</a><a class="button secondary" href="./start/engine/index.html#build-a-server">Build a server for your algorithm</a></div>
-<p class="small-note">No account or key for local use. Have an invitation? <a href="./start/omelet/index.html">Try Omelet — recommended when invited.</a></p></div>{diagram()}</section>
-<section class="wrap section section-tint" id="why-ocp"><p class="eyebrow">Why use OCP?</p><h2>Less integration guesswork.<br><em>Results you can inspect.</em></h2><p class="lead">A direct solver API can be enough for one app. OCP adds a shared boundary when another application, agent or compatible engine enters the picture.</p>{why_ocp()}<p class="small-note">Engine substitution requires a compatible profile intersection. It does not promise identical solutions, performance or support for every problem.</p></section>
-<section class="wrap section" id="domains"><div class="section-heading"><div><p class="eyebrow">Three problems. One application flow.</p><h2>Route. Assign.<br><em>Replenish.</em></h2></div><p>Discover → validate → execute → evaluate → independently check. Use the same app and MCP tools across three bounded reference profiles.</p></div>
-<div class="principles"><article><h3>Routing</h3><p>Assign visits to vehicles using explicit distances and weight capacities. Run OR-Tools or the separate teaching engine.</p><a href="./examples/index.html#routing">Inspect the routing example →</a></article><article><h3>Worker scheduling</h3><p>Assign fixed-time tasks to eligible, available workers while avoiding overlap and limiting workload.</p><a href="./examples/index.html#worker">Inspect the worker example →</a></article><article><h3>Inventory replenishment</h3><p>Plan orders against given demand, lead time and storage limits with a bounded exact reference solver.</p><a href="./examples/index.html#inventory">Inspect the inventory example →</a></article></div><p class="small-note"><a href="./reference/index.html#profile-limits">Check profile limits and unsupported features →</a></p></section>
-<section class="wrap section section-tint" id="agent-workflow"><p class="eyebrow">Context before calculation</p><h2>Give your agent<br><em>the contract first.</em></h2>{agent_flow()}<a class="button" href="./guides/apps/index.html#mcp">Set up MCP →</a></section>
-<section class="wrap section" id="start"><div class="section-heading"><div><p class="eyebrow">Start where you are</p><h2>Three ways in.<br><em>Your choice of engine.</em></h2></div><p>Omelet is the recommended experience when you have an invitation. Without one, start locally now or connect your own engine.</p></div>{routes('.')}</section>
-<section class="wrap"><div class="closing"><div><p class="eyebrow" >Apache-2.0 · Open-source developer preview</p><h2>Start with a checked example.</h2><p>Source and documentation are public. Package registry releases and public trial signup are not open.</p></div><a class="button" href="./start/local/index.html">Run locally ↗</a></div></section>'''
+    return f'''<section class="wrap hero" data-home-hero data-routing-preview>
+<div class="hero-copy"><a class="release-line" href="{REPOSITORY}/releases/tag/v0.4.0-preview.1"><i aria-hidden="true"></i>Server format · v0.4.0-preview.1 <span aria-hidden="true">↗</span></a>
+<h1>Give your solver<br>a playbook.</h1>
+<p class="lead">Package your engine’s inputs, constraints and analysis steps in one open format. Apps and AI agents can follow the same playbook and check the result.</p>
+<div class="buttons"><a class="button" href="./start/routing/index.html">Run an existing solver <span aria-hidden="true">→</span></a>
+<a class="text-link" href="./start/engine/index.html#build-a-server">Build your own server <span aria-hidden="true">↗</span></a></div></div>
+{studio_showcase()}</section>
+<section class="home-band" id="domains"><div class="wrap home-section">
+<div class="home-heading"><h2>Run the local examples</h2><a class="text-link" href="./examples/index.html">All examples <span aria-hidden="true">→</span></a></div>
+<div class="domain-list">
+<a class="domain-card" href="./examples/index.html#routing"><span class="domain-icon routing-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M8 34 16 13 37 21 28 37"/><circle cx="8" cy="34" r="3.4"/><circle cx="16" cy="13" r="3.4"/><circle cx="37" cy="21" r="3.4"/><circle cx="28" cy="37" r="3.4"/></svg></span><h3>Routing</h3><p>Assign four deliveries to two vehicles and check distance and load.</p><span class="domain-arrow" aria-hidden="true">↗</span></a>
+<a class="domain-card" href="./examples/index.html#worker"><span class="domain-icon worker-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 12h34M7 24h34M7 36h34"/><path class="bars" d="M9 12h12m4 12h10M15 36h13"/></svg></span><h3>Worker scheduling</h3><p>Assign timed tasks to available workers and check for overlaps.</p><span class="domain-arrow" aria-hidden="true">↗</span></a>
+<a class="domain-card" href="./examples/index.html#inventory"><span class="domain-icon inventory-icon" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M7 38h34"/><rect x="9" y="22" width="6" height="13" rx="1"/><rect x="21" y="9" width="6" height="26" rx="1"/><rect x="33" y="17" width="6" height="18" rx="1"/></svg></span><h3>Inventory replenishment</h3><p>Plan orders over four days and check demand and storage limits.</p><span class="domain-arrow" aria-hidden="true">↗</span></a></div></div></section>
+<section class="wrap home-section protocol-section" id="why-ocp">
+<div><h2>What an OCP server shares</h2><p class="section-intro">The developer who knows the engine describes how to use it. Each client can read the same description.</p><a class="text-link" href="{REPOSITORY}/blob/main/docs/users/SERVER_FORMAT_PREVIEW.md">Read the server authoring guide <span aria-hidden="true">↗</span></a></div>
+<dl class="contract-list"><div><dt>Engine interface</dt><dd>Declare accepted inputs, units, objectives and supported constraints.</dd></div>
+<div><dt>Analysis playbooks</dt><dd>Describe which scenarios to run and which metrics to compare on a common basis.</dd></div>
+<div><dt>Result checks</dt><dd>Return the status and measured values so a separate checker can verify the solution.</dd></div></dl></section>
+<section class="workflow-band" id="agent-workflow"><div class="wrap home-section">
+<div class="home-heading"><h2>How an agent uses OCP</h2><a class="text-link" href="./guides/apps/index.html#mcp">Connect an AI agent <span aria-hidden="true">→</span></a></div>
+<ol class="workflow-steps"><li><strong>Discover</strong><p>Read the engine’s capabilities and input schema.</p></li><li><strong>Validate</strong><p>Ask for missing inputs and check constraints.</p></li><li><strong>Execute</strong><p>Run the solver or the selected playbook.</p></li><li><strong>Evaluate</strong><p>Inspect feasibility, cost and the scope of verification.</p></li></ol></div></section>
+<section class="wrap home-section home-start" id="start"><div><h2>Choose a starting point</h2><p class="section-intro">Local examples work without an account or key.</p><a id="tms-integration" class="text-link tms-link" href="./project/index.html#tms-integration">Evaluate a TMS integration <span aria-hidden="true">→</span></a></div>
+<div class="start-links"><a href="./start/local/index.html"><strong>Run locally</strong><span>Install and run the checked examples.</span><b aria-hidden="true">→</b></a>
+<a href="./start/engine/index.html#build-a-server"><strong>Bring your engine</strong><span>Package a solver with the public template.</span><b aria-hidden="true">→</b></a>
+<a href="./start/omelet/index.html"><strong>Try Omelet</strong><span>Invitation only · Recommended when invited</span><b aria-hidden="true">→</b></a></div></section>
+<section class="release-band"><div class="wrap home-section" data-edition-status><h2>Preview downloads</h2><div><p>Core 0.1 and the native v1 candidate are public source previews.</p>
+<p><a href="{REPOSITORY}/releases/tag/v0.4.0-preview.1">Server format preview</a> · <a href="{REPOSITORY}/releases/tag/v0.2.0-preview.2">Native ZIP &amp; SHA256SUMS</a> · <a href="./start/local/index.html#native">Build native v1</a> · <a href="./reference/index.html#core-native">Compare formats</a></p></div></div></section>'''
 
 
 def planning_example(demo, key, title, description):
@@ -201,9 +252,10 @@ def public_pages(commands, demo, command_blocks, comparison):
     intro = '''<p>OCP is an Apache-2.0 open-source developer preview. Start with the native ZIP, or choose a source build for development. No account, trial key or model call is required. Package registries and hosted trial enrollment are not open.</p>'''
     domains = domain_scope()
     source_link = f'<p><a class="button" href="{REPOSITORY}">View source on GitHub ↗</a></p>'
-    rendered["index.html"].update(title="Your app. Your engine. Shared meaning.",
-                                  description="Connect apps and AI agents to optimization engines with explicit capabilities, validation and independent checking.",
-                                  body=public_home())
+    rendered["index.html"].update(
+        title="Give your solver a playbook.",
+        description="Package your engine’s inputs, constraints and analysis steps in one open format. Apps and AI agents can follow the same playbook and check the result.",
+        body=public_home())
     example_page = rendered["examples/index.html"]
     example_page["title"] = "Three optimization examples you can inspect"
     example_page["description"] = "Inspect real routing, worker assignment and inventory results with separate independent checks."
@@ -255,19 +307,17 @@ def public_pages(commands, demo, command_blocks, comparison):
     rendered['guides/apps/index.html']['body'] = rendered['guides/apps/index.html']['body'].replace('</article></div>', verification + '</article></div>')
     # State the installed edition at each entry point, including saved examples.
     for path, page in rendered.items():
-        if path == 'start/omelet/index.html':
+        if path in ('index.html', 'start/omelet/index.html'):
             continue
         root = ('../' * path.count('/')).rstrip('/') or '.'
         notice = edition_notice(root, korean=path == 'ko/index.html')
         if '<article class="prose">' in page['body']:
             page['body'] = page['body'].replace('<article class="prose">', '<article class="prose">' + notice, 1)
-        elif path == 'index.html':
-            page['body'] = page['body'].replace('</section>', '</section><div class="wrap">' + notice + '</div>', 1)
         else:
             page['body'] = page['body'].replace('<section class="wrap" data-example', '<div class="wrap">' + notice + '</div><section class="wrap" data-example', 1)
 
     preview_link = '<section class="wrap section"><h2>Start without a source build</h2><p><a class="button" href="https://github.com/omelet-ai/optimization-context-protocol/releases/tag/v0.2.0-preview.2">Download native preview ↗</a></p><p>Get ocp-native-v0.2.0-preview.2.zip and SHA256SUMS. Verify the checksum, extract, and follow START_HERE.md: Python 3.12 → install.py → demo.py → MCP configuration. No Git, Node, Omelet key or model call is needed for Python/MCP. Public PyPI access is needed for dependencies. Preview scope: macOS arm64; Linux amd64 Python/MCP under Docker emulation.</p></section>'
-    for name in ['index.html', 'start/index.html', 'start/local/index.html']:
+    for name in ['start/index.html', 'start/local/index.html']:
         body = rendered[name]['body']
         rendered[name]['body'] = (body.replace('</section>', '</section>' + preview_link, 1)
                                  if '</section>' in body else body + preview_link)
@@ -371,7 +421,6 @@ def public_pages(commands, demo, command_blocks, comparison):
         'feature availability. The OCP trial remains recommended when invited; '
         'local and BYO-engine use require no Omelet account.</p>'
     )
-    rendered['index.html']['body'] += '<section class="wrap section" id="tms-integration">' + tms + '</section>'
     for path in ('start/omelet/index.html', 'project/index.html'):
         rendered[path]['body'] = rendered[path]['body'].replace(
             '</article></div>', '<section id="tms-integration">' + tms + '</section></article></div>')
@@ -446,7 +495,7 @@ def public_pages(commands, demo, command_blocks, comparison):
         '<p>Build this fourth example from source and submit your own order. Each run returns a job ID and an independently checked layout.</p><p>'
         + link(walkthrough, 'Build and run the cutting-stock server →') + '</p></section>'
     )
-    for path in ('index.html', 'start/index.html', 'start/local/index.html', 'guides/apps/index.html'):
+    for path in ('start/index.html', 'start/local/index.html', 'guides/apps/index.html'):
         root = ('../' * path.count('/')).rstrip('/') or '.'
         card = ('<section class="wrap section" data-routing-preview><h2>Connect a routing solver</h2>'
             '<p>Download the routing preview. Discover, solve and independently check routing through local MCP.</p>'

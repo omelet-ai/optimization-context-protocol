@@ -77,7 +77,7 @@ run an engine in the browser. Preserve any blocked interaction checks as blocked
 ## Publication boundary
 
 The generated review edition has `noindex`, a disallow-all robots file, no analytics,
-no forms, and no third-party fonts or scripts. Its artifact is marked local-review-only.
+no forms, and no externally hosted fonts or scripts. Its artifact is marked local-review-only.
 Trial access is described as pending; no inactive URL or credential is embedded.
 
 Before publishing, approve the exact destination and artifact, settle the rights
@@ -125,21 +125,21 @@ by documenting them. Do not link to unpublished repository files or packages.
 
 ## Visual language
 
-The website uses a small, locally defined palette aligned with the shared design
-kit. It does not import a private UI library or require a Foundry runtime.
+The OCP site follows the Omelet web design kit. Paper (`#f9faf7`), dark ink
+(`#1e2a24`), muted text (`#5d6b62`) and hairlines (`#d7dfd6`) form the
+reading surface. Sage (`#486c58`) and lavender (`#78608e`) identify routes
+and links. A solid ink pill marks the primary action. Section headings,
+44 px controls and text links use the same scale on overview and guide pages.
 
-| Role | Token reference | Color | Use |
-| --- | --- | --- | --- |
-| Navy | `color.text.main` / `color.gray.900` | `#101828` | Text, primary actions, code blocks, closing panel |
-| Light green | `color.green.100` | `#C2F0E9` | Invitation accents, highlights, action on dark surfaces |
-| Light purple | `color.purple.100` | `#D6CCFF` | Heading emphasis, illustration, secondary accents |
-| Soft surfaces | `color.green.50` / `color.purple.50` | `#E6F9F6` / `#F2EFFF` | Large tinted areas |
-| Supporting text | `color.gray.600` | `#475467` | Descriptions on light surfaces |
+The Korean subsets of [Pretendard v1.3.9](https://github.com/orioncactus/pretendard/tree/v1.3.9/packages/pretendard/dist/web/static/woff2-subset) (Regular and SemiBold, 524 KiB combined) are served locally. Keep the unmodified fonts
+together with the upstream [SIL Open Font License](https://github.com/orioncactus/pretendard/blob/v1.3.9/LICENSE),
+also distributed in `assets/Pretendard-LICENSE.txt`.
 
-Pastels are surfaces or accents, not small text on white. Body text and controls
-use navy; text on navy uses light tokens. Keep keyboard focus visible on both
-light and dark surfaces. Route labels and invitation limits remain explicit, so
-color never carries access policy or solver status by itself.
+The landing page uses the three published result illustrations from the
+[OI Studio walkthrough](https://www.omelet.ai/#demo). Delivery routing, nurse rosters
+and inventory policies display the original sample figures and metrics. The
+seven-second rotation pauses on manual selection and respects reduced motion.
+The separate local examples below the showcase still use independently checked solver output.
 
 Check the homepage, setup commands, examples and Korean introduction at desktop,
 tablet and mobile widths after palette changes. Compare rendered text contrast,

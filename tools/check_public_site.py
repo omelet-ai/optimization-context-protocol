@@ -128,6 +128,25 @@ class PublicSite(unittest.TestCase):
         for name in ("LICENSE", "NOTICE", "THIRD_PARTY_NOTICES.md"):
             self.assertEqual((ROOT / name).read_bytes(), (self.directory / (name.removesuffix(".md") + ".txt")).read_bytes())
 
+    def test_home_showcases_the_three_studio_sample_figures(self):
+        cases = {"routing": ("3", "10", "0"), "nurse": ("10", "0", "0"), "inventory": ("12", "12", "30 days")}
+        for path, sample, walkthrough in (("index.html", "Sample data", "https://www.omelet.ai/#demo"),
+                                          ("ko/index.html", "샘플 데이터", "https://www.omelet.ai/ko/#demo")):
+            page = self.pages[path]
+            self.assertIn(walkthrough, page.links)
+            self.assertIn(sample, self.html[path])
+            radios = [a for tag, a in page.tags if tag == "input" and a.get("name") == "studio-case"]
+            self.assertEqual([a["value"] for a in radios], list(cases))
+            self.assertEqual([a["value"] for a in radios if "checked" in a], ["routing"])
+            self.assertTrue(all(a["aria-controls"] in page.ids for a in radios))
+            for key, values in cases.items():
+                source = "assets/studio-" + key + ".svg"
+                self.assertEqual((self.directory / source).read_bytes(), (ROOT / "site" / source).read_bytes())
+                panel = self.html[path].split(f'id="studio-{key}"', 1)[1].split("</section>", 1)[0]
+                self.assertIn(source, panel)
+                self.assertEqual(re.findall(r"<dd>([^<]+)</dd>", panel),
+                                 ["30일" if path.startswith("ko/") and v == "30 days" else v for v in values])
+
     def test_07_base_url_rejects_unsafe_or_ambiguous_input(self):
         self.assertEqual(canonical_base("https://ocp.omelet.ai"), "https://ocp.omelet.ai/")
         for invalid in ("http://ocp.omelet.ai", "https://key@ocp.omelet.ai", "https://ocp.omelet.ai/?key=x", "https://ocp.omelet.ai/#x", "https://ocp.omelet.ai/../x", 'https://ocp.omelet.ai/\"x'):

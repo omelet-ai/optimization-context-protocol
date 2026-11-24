@@ -57,6 +57,8 @@ class KoreanPage(HTMLParser):
         return value[:len(value) - len(value.lstrip())] + result + value[len(value.rstrip()):]
 
     def local_url(self, value):
+        if value == "https://www.omelet.ai/#demo":
+            return "https://www.omelet.ai/ko/#demo"
         parsed = urlsplit(value)
         if parsed.scheme or parsed.netloc or not parsed.path:
             return value

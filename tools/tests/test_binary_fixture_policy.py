@@ -151,6 +151,32 @@ class SelectionIntegration(unittest.TestCase):
         with patch.object(verifier, "ROOT", self.root):
             return verifier.verify(selection_path="provenance/candidate-selection.json")
 
+    def test_site_fonts_require_exact_upstream_bytes_paths_and_license(self):
+        license_name = verifier.SITE_FONT_LICENSE
+        fonts = list(verifier.SITE_FONTS)
+        for name in [license_name, *fonts]:
+            (self.root / name).parent.mkdir(parents=True, exist_ok=True)
+            (self.root / name).write_bytes((ROOT / name).read_bytes())
+            self.files.append(name)
+        self.save()
+        self.assertEqual(self.check()["status"], "PASS")
+        original = (self.root / fonts[0]).read_bytes()
+        (self.root / fonts[0]).write_bytes(original + b"x")
+        with self.assertRaisesRegex(ValueError, "Unexpected site font"):
+            self.check()
+        (self.root / fonts[0]).write_bytes(original)
+        alias = "site/assets/another.woff2"
+        (self.root / alias).write_bytes(original)
+        self.files.append(alias)
+        self.save()
+        with self.assertRaisesRegex(ValueError, "Unexpected site font"):
+            self.check()
+        self.files.remove(alias)
+        self.save()
+        (self.root / license_name).write_text("changed")
+        with self.assertRaisesRegex(ValueError, "Missing or changed site font license"):
+            self.check()
+
     def test_complete_candidate_selection_accepts_exact_workbooks_without_approval(self):
         result = self.check()
         self.assertEqual(result["status"], "PASS")

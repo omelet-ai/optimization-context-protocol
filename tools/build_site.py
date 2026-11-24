@@ -22,8 +22,11 @@ from build_invitation_kit import build as build_kit
 from isolated_candidate import install
 
 ROOT=Path(__file__).resolve().parents[1]
+STATIC_ASSETS = ("site.css", "site.js", "mark.svg", "Pretendard-Regular.subset.woff2",
+                 "Pretendard-SemiBold.subset.woff2", "Pretendard-LICENSE.txt",
+                 "studio-routing.svg", "studio-nurse.svg", "studio-inventory.svg")
 SOURCE_FILES=["site/content.py","site/commands.json","site/example.py","site/versioning.txt",
-              "site/templates/page.html","site/assets/site.css","site/assets/site.js","site/assets/mark.svg"]
+              "site/templates/page.html", *("site/assets/" + name for name in STATIC_ASSETS)]
 CONTRACTS={"spec/core/CORE_0_1.md":"core.txt","spec/profiles/ROUTING_BASIC_0_1.md":"routing-basic.txt",
            "spec/profiles/ROUTING_COORDINATES_0_1.md":"routing-coordinates.txt","site/versioning.txt":"versioning.txt"}
 SCHEMAS=["core-0.1.schema.json","routing-input-0.1.schema.json","routing-solution-0.1.schema.json",
@@ -121,7 +124,8 @@ def build(output):
         path=target/name;path.parent.mkdir(parents=True,exist_ok=True)
         path.write_text(template.substitute(lang=page['lang'],title=escape(page['title']),description=escape(page['description'],quote=True),
                                            root=prefix,nav=''.join(nav),language_switch='',body=page['body'],skip='본문으로 바로가기' if page['lang']=='ko' else 'Skip to content'))
-    for name in ("site.css","site.js","mark.svg"):shutil.copyfile(source("site/assets/"+name),target/"assets"/name)
+    for name in STATIC_ASSETS:
+        shutil.copyfile(source("site/assets/" + name), target / "assets" / name)
     for name,dest in CONTRACTS.items():shutil.copyfile(source(name),target/"contracts"/dest)
     for name in SCHEMAS:shutil.copyfile(source("spec/schemas/"+name),target/"contracts/schemas"/name)
     (target/"robots.txt").write_text("User-agent: *\nDisallow: /\n")

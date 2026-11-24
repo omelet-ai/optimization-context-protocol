@@ -236,3 +236,18 @@ README, specification index, installation and integration guides, English and
 Korean site, and their checks. The [source inventory](public-format-candidate-selection.json)
 enumerates the 504 files in this revision. This approval covers source and
 documentation on Pages. The existing Native prerelease retains its own version.
+
+## OCP website redesign, 2026-11-25
+
+The project owner authorized reuse of the three sample result illustrations in
+Omelet's public OI Studio walkthrough and requested a commit, push and deployment
+of the reviewed bilingual OCP website. The destinations are the public
+`omelet-ai/optimization-context-protocol` repository on `main` and its existing
+GitHub Pages site on `gh-pages`. The public source baseline is
+`19714f67c33ce66daf28f7bace73722c59b1264b`.
+
+The six new site assets are the delivery routing, nurse roster and stock policy
+SVGs, two unmodified Pretendard v1.3.9 Korean font subsets and their SIL Open Font
+License. The [source inventory](public-format-candidate-selection.json) lists
+the files used by public CI. The authorization covers the site source, its build
+and verification changes, and the generated static documentation.

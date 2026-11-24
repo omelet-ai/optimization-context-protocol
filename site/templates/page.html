@@ -6,7 +6,7 @@
 <title>$title · OCP</title>
 <meta name="description" content="$description">
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#faf9fd">
+<meta name="theme-color" content="#f9faf7">
 <meta property="og:title" content="$title · Optimization Context Protocol">
 <meta property="og:description" content="$description">
 <meta property="og:type" content="website">
@@ -16,14 +16,18 @@
 </head>
 <body>
 <a class="skip-link" href="#main">$skip</a>
-<header class="site-header">
-<a class="brand" href="$root/index.html" aria-label="OCP home"><img src="$root/assets/mark.svg" width="33" height="33" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
-<button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">Menu <span aria-hidden="true">☰</span></button>
+<header class="site-header"><div class="wrap masthead">
+<a class="brand" href="$root/index.html" aria-label="OCP home"><img src="$root/assets/mark.svg" width="34" height="34" alt=""><strong>OCP</strong><span>Optimization Context Protocol</span></a>
 <nav id="primary-nav" aria-label="Main navigation">$nav</nav>
 $language_switch
-</header>
+<button class="menu-toggle" aria-expanded="false" aria-controls="primary-nav">Menu <i aria-hidden="true"></i></button>
+</div></header>
 <main id="main" tabindex="-1">$body</main>
-<footer class="site-footer"><div><a class="footer-brand" href="$root/index.html">OCP<span class="dot">●</span></a><p>A common language for optimization.</p></div><div><a href="$root/reference/index.html">Protocol & compatibility</a><a href="$root/project/index.html">Project status & access</a><a href="$root/ko/index.html" lang="ko">한국어 소개</a></div><p class="footer-note">0.1 candidate · Initiated by Omelet<br>Local review edition. Public distribution is pending.</p></footer>
+<footer class="site-footer"><div class="wrap footer-inner">
+<div><a class="footer-brand" href="$root/index.html"><img src="$root/assets/mark.svg" width="29" height="29" alt="">OCP</a><p>Initiated by Omelet</p></div>
+<div class="footer-links"><a href="$root/reference/index.html">Protocol &amp; compatibility</a><a href="$root/project/index.html">Project status &amp; access</a><a href="$root/assets/Pretendard-LICENSE.txt">Font license</a></div>
+<div class="footer-meta"><a href="$root/ko/index.html" lang="ko">한국어 소개</a><p>Local review edition. Public distribution is pending.</p></div>
+</div></footer>
 <p id="copy-status" class="sr-only" aria-live="polite"></p>
 </body>
 </html>

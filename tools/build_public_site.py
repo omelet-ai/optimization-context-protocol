@@ -17,13 +17,13 @@ from string import Template
 import tempfile
 from urllib.parse import urlsplit
 
-from build_site import ROOT, CONTRACTS, SCHEMAS, run_example, source
+from build_site import ROOT, CONTRACTS, SCHEMAS, STATIC_ASSETS, run_example, source
 from build_candidate import build as build_candidate
 from build_conformance import build as build_conformance
 from isolated_candidate import install
 
 REPO = "https://github.com/omelet-ai/optimization-context-protocol"
-ASSETS = ("site.css", "site.js", "mark.svg", "example.json", "basic-input.json")
+ASSETS = (*STATIC_ASSETS, "example.json", "basic-input.json")
 README_COMMANDS = ("readme-build", "readme-examples", "readme-mcp", "readme-native-build",
                    "readme-native-mcp", "readme-native-verify", "readme-native-install", "readme-routing-setup")
 
@@ -59,7 +59,7 @@ def build_public_assets(target):
         demo = json.loads(example.stdout)
         (assets / 'example.json').write_text(json.dumps(demo, ensure_ascii=False, allow_nan=False, indent=2) + '\n')
         shutil.copyfile(scratch / 'basic-input.json', assets / 'basic-input.json')
-    for name in ('site.css', 'site.js', 'mark.svg'):
+    for name in STATIC_ASSETS:
         shutil.copyfile(source('site/assets/' + name), assets / name)
     for name, destination in CONTRACTS.items():
         path = target / 'contracts' / destination

@@ -1,6 +1,7 @@
 """Check an explicit repository source selection and, optionally, Git's index.
 
-Only selected UTF-8 source is read. This is a bounded pre-push check,
+Selected text, reviewed spreadsheet fixtures and pinned site fonts are checked.
+This is a bounded pre-push check,
 not a complete secret-detection or rights audit.
 """
 
@@ -17,6 +18,13 @@ from binary_fixture_policy import reviewed_fixture_text
 
 ROOT = Path(__file__).resolve().parents[1]
 SELECTION = "provenance/repository-selection.json"
+# Unmodified Korean subsets from the Pretendard v1.3.9 release.
+SITE_FONTS = {
+    "site/assets/Pretendard-Regular.subset.woff2": "01dd73155fdfab7ce9b25224523e85a96927e21aef97f21957d41f1bfa7e3878",
+    "site/assets/Pretendard-SemiBold.subset.woff2": "4247dc5e260b92640c2cbd0e75091154647b71e1d5884116655e2903468c54cc",
+}
+SITE_FONT_LICENSE = "site/assets/Pretendard-LICENSE.txt"
+SITE_FONT_LICENSE_SHA256 = "d31ddd9f2bed32fd7e302a205cf2380ba0de6529152d239ef99cfb6f261bfc04"
 FORBIDDEN = (
     ".private/", "reference/", ".harness/", ".github/workflows/", "docs/plans/", "docs/reference/",
     "docs/development/EXTERNAL_GATE_REQUEST.md", "docs/development/FOUNDRY_TRIAL_PREFLIGHT.md",
@@ -79,7 +87,16 @@ def verify(index=False, selection_path=SELECTION):
             raise ValueError("Excluded file type: " + name)
         content = read(name)
         if len(content) > 1024 * 1024: raise ValueError("Unexpected source size: " + name)
-        text = reviewed_fixture_text(name, content) if path.suffix.lower() == ".xlsx" else content.decode("utf-8")
+        if path.suffix.lower() == ".woff2":
+            if hashlib.sha256(content).hexdigest() != SITE_FONTS.get(name):
+                raise ValueError("Unexpected site font: " + name)
+            if (SITE_FONT_LICENSE not in files
+                    or hashlib.sha256(read(SITE_FONT_LICENSE)).hexdigest() != SITE_FONT_LICENSE_SHA256):
+                raise ValueError("Missing or changed site font license")
+            # The byte-for-byte upstream font is binary and carries no project-authored text.
+            text = ""
+        else:
+            text = reviewed_fixture_text(name, content) if path.suffix.lower() == ".xlsx" else content.decode("utf-8")
         if name == WORKFLOW:
             validate_ci(text)
         for label, pattern in PATTERNS.items():

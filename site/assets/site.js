@@ -16,10 +16,11 @@ for (const link of document.querySelectorAll('[data-language-link]')) {
 }
 const menu = document.querySelector('.menu-toggle');
 const nav = document.querySelector('#primary-nav');
-menu.addEventListener('click', () => {
+menu.addEventListener('click', event => {
   const open = menu.getAttribute('aria-expanded') !== 'true';
   menu.setAttribute('aria-expanded', String(open));
   nav.classList.toggle('is-open', open);
+  if (open && event.detail === 0) nav.querySelector('a')?.focus();
 });
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && menu.getAttribute('aria-expanded') === 'true') {
@@ -82,4 +83,59 @@ if (explorer) {
     });
   }
   render();
+}
+
+// The sample figures come from OI Studio. The radio group also works without JavaScript.
+const showcase = document.querySelector('[data-studio-showcase]');
+if (showcase) {
+  const choices = [...showcase.querySelectorAll('input[name="studio-case"]')];
+  const toggle = showcase.querySelector('[data-rotate]');
+  const pauseLabel = toggle.querySelector('[data-pause]');
+  const playLabel = toggle.querySelector('[data-play]');
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let enabled = !motion.matches;
+  let inView = false;
+  let timer;
+
+  function updateRotation() {
+    clearTimeout(timer);
+    pauseLabel.hidden = !enabled;
+    playLabel.hidden = enabled;
+    if (!enabled || !inView || document.hidden) return;
+    timer = setTimeout(() => {
+      const current = choices.findIndex(choice => choice.checked);
+      choices[(current + 1) % choices.length].checked = true;
+      updateRotation();
+    }, 7000);
+  }
+
+  function pause() {
+    enabled = false;
+    updateRotation();
+  }
+  toggle.addEventListener('click', () => {
+    enabled = !enabled;
+    updateRotation();
+  });
+  // Keep the selected illustration in place while a reader uses its links or picker.
+  const picker = showcase.querySelector('.case-picker');
+  showcase.addEventListener('focusin', event => {
+    if (event.target !== toggle) pause();
+  });
+  picker.addEventListener('change', pause);
+  document.addEventListener('visibilitychange', updateRotation);
+  motion.addEventListener('change', () => {
+    if (motion.matches) pause();
+  });
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      updateRotation();
+    }, { threshold: 0.2 });
+    observer.observe(showcase);
+  } else {
+    inView = true;
+  }
+  toggle.hidden = false;
+  updateRotation();
 }
